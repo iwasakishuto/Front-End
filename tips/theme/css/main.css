@@ -74,7 +74,7 @@ h2 {
   background: #fffff4;
 }
 h2:before {
-  font-family: "Font Awesome 5 Free";/*忘れずに*/
+  font-family: "FontAwesome";/*忘れずに*/
   content: "\f138";/*アイコンのユニコード*/
   position: absolute;/*絶対位置*/
   font-size: 1em;/*サイズ*/
@@ -90,7 +90,7 @@ h3 {
 }
 h3:before {
   position: absolute;
-  font-family: "Font Awesome 5 Free";
+  font-family: "FontAwesome";
   content: "\f121";
   background: #c9e2ff;
   color: #153c6e;
