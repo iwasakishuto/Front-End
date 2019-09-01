@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
         <meta charset="utf-8" />
+        <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/front-end.png" />
         <title>JS.13 GASでslackにメッセージを送る</title>
         <link rel="stylesheet" href="https://iwasakishuto.github.io/front-end/tips/theme/css/main.css" />
 
@@ -16,7 +17,15 @@
                 <nav><ul>
                     <li class="active"><a href="https://iwasakishuto.github.io/front-end/tips/category/javascript.html">JavaScript</a></li>
                 </ul>
+<form id="search" action"#" onsubmit="javascript:window.open('https://duckduckgo.com/?q='+document.getElementById('keywords').value+'+site:https://iwasakishuto.github.io/front-end/tips');">
+                        <input id="keywords" type="text" />
+                    </form>
                 </nav>
+<div id="submenu">
+                    <ul>
+                            <li class="active"><a href="https://iwasakishuto.github.io/front-end/tips/category/javascript.html">JavaScript</a></li>
+                    </ul>
+                <div>
         </header><!-- /#banner -->
 <section id="content" class="body">
   <article>
@@ -37,7 +46,7 @@
 <p>シェアハウスのslackで必要だと感じた<b>「予定を共有すること」</b>と<b>「家事の役割分担をすること」</b>を自動化しました。</p>
 <h3>その日の予定を共有する関数</h3>
 <p>以下のようなものができます。</p>
-<p><img src="theme/img/SPICE/kanna.png" alt="Look at 'https://github.com/iwasakishuto/iwasakishuto.github.io/blob/master/study/notes/theme/img/SPICE/kanna.png'"></p>
+<p><img alt="" src="https://iwasakishuto.github.io/images/SPICE/kanna.png"></p>
 <h4><code>listupEvent</code></h4>
 <p>gmailアドレスを受け取り、その日にある予定を全て取得する関数</p>
 <div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">listupEvent</span><span class="p">(</span><span class="nx">cal_id</span><span class="p">){</span>
@@ -118,7 +127,7 @@
 
 <h3>朝、その日の夜に洗濯物を取り込む人を決める関数</h3>
 <p>以下のようなものができます。</p>
-<p><img src="theme/img/SPICE/mikuri.png" alt="Look at 'https://github.com/iwasakishuto/iwasakishuto.github.io/blob/master/study/notes/theme/img/SPICE/mikuri.png'"></p>
+<p><img alt="" src="https://iwasakishuto.github.io/images/SPICE/mikuri.png"></p>
 <h4><code>getWeatherData</code></h4>
 <p><a href="http://www.jma.go.jp/jp/yoho/319.html">気象庁 | 天気予報：東京都</a> のサイトをスクレイピングして、欲しい情報を取得します。</p>
 <div class="highlight"><pre><span></span><span class="c1">// 天気を取得する</span>
