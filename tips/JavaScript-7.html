@@ -64,8 +64,7 @@
 <footer class="post-info">
         <span>2019-06-09(日)</span>
 <span>| tags: <a href="https://iwasakishuto.github.io/front-end/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->      <h1>JS.7 Webカメラの映像で遊んでみる-1</h1>
-<p>やっぱり機械学習エンジニア、それも現在<a href="https://www.neuralpocket.com/en/">Neural Pocket</a>で画像認識をしているとなると、やはりWebカメラの映像を使って遊んでみたくなります。</p>
+</footer><!-- /.post-info -->      <p>やっぱり機械学習エンジニア、それも現在<a href="https://www.neuralpocket.com/en/">Neural Pocket</a>で画像認識をしているとなると、やはりWebカメラの映像を使って遊んでみたくなります。</p>
 <p>ここでは、以下の流れでやっていきます。</p>
 <ol>
 <li>Webカメラの映像をそのままブラウザに表示する。</li>
@@ -75,7 +74,6 @@
 <li>どちらもサーバーにあげる。（セキュリティの問題ですぐには厳しそう。）</li>
 </ol>
 <h2>Webカメラの映像をそのままブラウザに表示する。</h2>
-<h3>サンプル</h3>
 <p><font color="red">※ GitHub Pages は静的サイトなので、映像が僕の元に送信される心配はありません。</font></p>
 <div class="video-streaming">
   <!--サイズの初期値は640×480(4:3)-->
@@ -138,11 +136,15 @@
   }
 </style>
 
-<h3>コード</h3>
+<h2>コード</h2>
+<h3><code>html</code></h3>
 <div class="highlight"><pre><span></span><span class="c">&lt;!--サイズの初期値は640×480(4:3)--&gt;</span>
 <span class="p">&lt;</span><span class="nt">video</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;video&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;640&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;480&quot;</span> <span class="na">autoplay</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;border: 1px solid; margin: 0 auto&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">video</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="c1">//動画流す準備</span>
+</pre></div>
+
+
+<h3><code>JavaScript</code></h3>
+<div class="highlight"><pre><span></span><span class="c1">//動画流す準備</span>
 <span class="kd">var</span> <span class="nx">video</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;video&quot;</span><span class="p">);</span>
 <span class="c1">// getUserMedia によるカメラ映像の取得</span>
 <span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">mediaDevices</span><span class="p">.</span><span class="nx">getUserMedia</span><span class="p">({</span>
@@ -156,7 +158,35 @@
 <span class="nx">media</span><span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">stream</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
     <span class="nx">video</span><span class="p">.</span><span class="nx">srcObject</span> <span class="o">=</span> <span class="nx">stream</span><span class="p">;</span>
 <span class="p">});</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</pre></div>
+
+
+<h3><code>css</code></h3>
+<div class="highlight"><pre><span></span><span class="p">.</span><span class="nc">video-streaming</span> <span class="p">{</span>  
+  <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+  <span class="k">margin</span><span class="p">:</span> <span class="mi">30</span><span class="kt">px</span> <span class="kc">auto</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">#</span><span class="nn">video</span> <span class="p">{</span>
+  <span class="k">border</span><span class="p">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="kc">solid</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">btn-blue</span> <span class="p">{</span>
+  <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="mi">68</span><span class="p">,</span> <span class="mi">122</span><span class="p">,</span> <span class="mi">178</span><span class="p">);</span>
+  <span class="k">color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">border-radius</span><span class="p">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">btn-red</span> <span class="p">{</span>
+  <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="mi">252</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">84</span><span class="p">);</span>
+  <span class="k">color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">border-radius</span><span class="p">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">@</span><span class="k">media</span> <span class="nt">only</span> <span class="nt">screen</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">max-width</span><span class="o">:</span> <span class="nt">640px</span><span class="o">)</span> <span class="p">{</span>
+  <span class="p">#</span><span class="nn">video</span> <span class="p">{</span>
+    <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+    <span class="k">height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
     </div><!-- /.entry-content -->
 

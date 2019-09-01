@@ -64,15 +64,13 @@
 <footer class="post-info">
         <span>2019-06-18(火)</span>
 <span>| tags: <a href="https://iwasakishuto.github.io/front-end/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->      <h1>JS.13 GASでslackにメッセージを送る</h1>
-<h2>GASとは</h2>
+</footer><!-- /.post-info -->      <h2>GASとは</h2>
 <p><font color="red"><b>Google Apps Script(GAS, ガス)</b></font>とは、Googleが提供するサーバーサイド・スクリプト環境です。<code>JavaScript</code> じゃないやんって感じかもしれませんが、<code>JavaScript</code> っぽいなと思ったのでかなり前から使っていたのですが一度まとめることにしました。</p>
-<h2>作ったもの</h2>
 <p>シェアハウスのslackで必要だと感じた<b>「予定を共有すること」</b>と<b>「家事の役割分担をすること」</b>を自動化しました。</p>
-<h3>その日の予定を共有する関数</h3>
+<h2>その日の予定を共有する関数</h2>
 <p>以下のようなものができます。</p>
 <p><img alt="環奈日報" src="https://iwasakishuto.github.io/images/SPICE/kanna.png"></p>
-<h4><code>listupEvent</code></h4>
+<h3><code>listupEvent</code></h3>
 <p>gmailアドレスを受け取り、その日にある予定を全て取得する関数</p>
 <div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">listupEvent</span><span class="p">(</span><span class="nx">cal_id</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
@@ -94,7 +92,7 @@
 </pre></div>
 
 
-<h4><code>CalcuDaySpan</code></h4>
+<h3><code>CalcuDaySpan</code></h3>
 <p>特定の日からの経過時間、特定の日までの残り時間を計算する関数。エモい。</p>
 <div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">CalcuDaySpan</span><span class="p">(){</span>
   <span class="kd">var</span> <span class="nx">start</span> <span class="o">=</span> <span class="nx">Moment</span><span class="p">.</span><span class="nx">moment</span><span class="p">(</span><span class="s1">&#39;YYYY/MM/DD&#39;</span><span class="p">);</span> <span class="c1">// 開始日（ −１日 ）</span>
@@ -106,7 +104,7 @@
 </pre></div>
 
 
-<h4><code>postSlack</code></h4>
+<h3><code>postSlack</code></h3>
 <p>JSON形式で <code>payload</code> にslackに送信する際の情報を渡せば、slackにうまく送信されます。</p>
 <div class="highlight"><pre><span></span><span class="c1">// slackに送信する</span>
 <span class="kd">function</span> <span class="nx">postSlack</span><span class="p">(</span><span class="nx">payload</span><span class="p">){</span>
@@ -123,7 +121,7 @@
 </pre></div>
 
 
-<h4><code>shareCalendar</code></h4>
+<h3><code>shareCalendar</code></h3>
 <p>上記の関数を駆使してslackにメッセージを送る関数。みんな大好き橋本環奈のアイコンで送信することで、朝の気分を少しでも良くします。</p>
 <div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">shareCalendar</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
@@ -150,10 +148,10 @@
 </pre></div>
 
 
-<h3>朝、その日の夜に洗濯物を取り込む人を決める関数</h3>
+<h2>朝、その日の夜に洗濯物を取り込む人を決める関数</h2>
 <p>以下のようなものができます。</p>
 <p><img alt="みくり洗濯選択" src="https://iwasakishuto.github.io/images/SPICE/mikuri.png"></p>
-<h4><code>getWeatherData</code></h4>
+<h3><code>getWeatherData</code></h3>
 <p><a href="http://www.jma.go.jp/jp/yoho/319.html">気象庁 | 天気予報：東京都</a> のサイトをスクレイピングして、欲しい情報を取得します。</p>
 <div class="highlight"><pre><span></span><span class="c1">// 天気を取得する</span>
 <span class="kd">function</span> <span class="nx">getWeatherData</span><span class="p">()</span> <span class="p">{</span>
@@ -211,7 +209,7 @@
 </pre></div>
 
 
-<h4><code>getDayOfWeek</code></h4>
+<h3><code>getDayOfWeek</code></h3>
 <p><code>date.getDay()</code> がインデックスで曜日を返すので、それを単純に日本語に直すだけの関数です。</p>
 <div class="highlight"><pre><span></span><span class="c1">// 曜日を取得する</span>
 <span class="kd">function</span> <span class="nx">getDayOfWeek</span><span class="p">(</span><span class="nx">date</span><span class="p">)</span> <span class="p">{</span>
@@ -222,7 +220,7 @@
 </pre></div>
 
 
-<h4><code>getDayOfToday</code></h4>
+<h3><code>getDayOfToday</code></h3>
 <p>今日の日付と曜日を取得する関数です。</p>
 <div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">getDayOfTomorrow</span><span class="p">(){</span>
   <span class="c1">// 明日の日付取得</span>
@@ -235,7 +233,7 @@
 </pre></div>
 
 
-<h4><code>assignRole</code></h4>
+<h3><code>assignRole</code></h3>
 <p>洗濯物を取り込む人を決める<font color="red"><b>重要な</b></font>関数です。</p>
 <div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">assignRole</span><span class="p">(){</span>
   <span class="c1">// 洗濯物を取り込む人を決定</span>
@@ -258,7 +256,7 @@
 </pre></div>
 
 
-<h3>明日の朝洗濯物を干す人を決める関数</h3>
+<h2>明日の朝洗濯物を干す人を決める関数</h2>
 <p>基本的には上と同じです笑</p>
 <p>大きな変更点といえば、今回はランダムで<font color="red"><b>2人アサインしている</b></font>ということです。朝洗濯物を干すのは大変ですからね。</p>
 <p>あと、平匡さんにしてます。わかりづらくなってしまうので。</p>

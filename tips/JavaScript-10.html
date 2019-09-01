@@ -64,8 +64,7 @@
 <footer class="post-info">
         <span>2019-06-13(木)</span>
 <span>| tags: <a href="https://iwasakishuto.github.io/front-end/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->      <h1>JS.10 OpenCVで遊ぶ</h1>
-<h3>作ったもの</h3>
+</footer><!-- /.post-info -->      <h2>作ったもの</h2>
 <p>画像にいくつかの処理を（一度に一つだけ）加えることのできるアプリケーションです。線画化が意外といい感じに仕上がるので、試してみてください。</p>
 <!--画像を表示-->
 
@@ -79,8 +78,8 @@
   <tbody>
     <tr>
       <td>
-        <img id="src-image" src="../../images/icon/apple-touch-icon-152x152.png" />
-        <img id="hidden-image" src="../../images/icon/apple-touch-icon-152x152.png" style="display: none;" />
+        <img id="src-image" src="https://iwasakishuto.github.io/images/apple-touch-icon/base.png" />
+        <img id="hidden-image" src="https://iwasakishuto.github.io/images/apple-touch-icon/base.png" style="display: none;" />
       </td>
       <td>
         <canvas id="dest-canvas"></canvas>
@@ -232,7 +231,7 @@
   }
 </style>
 
-<h3>動機</h3>
+<h2>動機</h2>
 <p>色々と覚えてきたので、最後に</p>
 <ul>
 <li><a href="https://github.com/ucisysarch/opencvjs"><code>OpenCV.js</code></a></li>
@@ -242,6 +241,172 @@
 </ul>
 <p>あたりを使って<b>静的サイトで機械学習のWebアプリケーションを動かし</b>、<code>JavaScript</code> の勉強は一旦終了にしようと思いました。そこで、まずは <code>OpenCV.js</code> から使ってみようと思い、上記のアプリケーションを作りました。</p>
 <p>あと、地味に毎回 <code>Python</code> やシェルでコード書いたり、 <code>PowerPoint</code> 使って画像のリサイズするのが面倒だったので意外と重宝しています笑</p>
+<h2>コード</h2>
+<h3><code>html</code></h3>
+<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">table</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">thead</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">th</span> <span class="na">align</span><span class="o">=</span><span class="s">&quot;center&quot;</span><span class="p">&gt;</span>Source<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">th</span> <span class="na">align</span><span class="o">=</span><span class="s">&quot;center&quot;</span><span class="p">&gt;</span>Output<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">thead</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">tbody</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">img</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;src-image&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://iwasakishuto.github.io/images/apple-touch-icon/base.png&quot;</span> <span class="p">/&gt;</span>
+        <span class="p">&lt;</span><span class="nt">img</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;hidden-image&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://iwasakishuto.github.io/images/apple-touch-icon/base.png&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;display: none;&quot;</span> <span class="p">/&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;dest-canvas&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;hidden-canvas&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;display: none;&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">align</span><span class="o">=</span><span class="s">&quot;center&quot;</span><span class="p">&gt;</span>
+        <span class="c">&lt;!-- 入力ファイル選択 --&gt;</span>
+        <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;file&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;input-file&quot;</span> <span class="p">/&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">align</span><span class="o">=</span><span class="s">&quot;center&quot;</span><span class="p">&gt;</span>
+        <span class="c">&lt;!-- ダウンロード --&gt;</span>
+        <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;download-btn&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;button&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;ダウンロード&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
+
+<span class="c">&lt;!-- 処理方法を選択 --&gt;</span>
+<span class="p">&lt;</span><span class="nt">form</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;Processing Method&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;#&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>処理方法<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;radio&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;method&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;gray-scale-btn&quot;</span> <span class="na">onClick</span><span class="o">=</span><span class="s">&quot;changeDisabled()&quot;</span><span class="p">&gt;&lt;</span><span class="nt">label</span> <span class="na">for</span><span class="o">=</span><span class="s">&quot;gray-scale-btn&quot;</span><span class="p">&gt;</span>グレースケール化<span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;radio&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;method&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;linedraw-btn&quot;</span> <span class="na">onClick</span><span class="o">=</span><span class="s">&quot;changeDisabled()&quot;</span><span class="p">&gt;&lt;</span><span class="nt">label</span> <span class="na">for</span><span class="o">=</span><span class="s">&quot;linedraw-btn&quot;</span><span class="p">&gt;</span>線画化<span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;radio&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;method&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;resize-btn&quot;</span> <span class="na">onClick</span><span class="o">=</span><span class="s">&quot;changeDisabled()&quot;</span><span class="p">&gt;&lt;</span><span class="nt">label</span> <span class="na">for</span><span class="o">=</span><span class="s">&quot;resize-btn&quot;</span><span class="p">&gt;</span>リサイズ化<span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">label</span> <span class="na">for</span><span class="o">=</span><span class="s">&quot;gray-scale-btn&quot;</span><span class="p">&gt;</span>横幅<span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;display:inline;&quot;</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;number&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;resize-width&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;resizeSize&quot;</span> <span class="na">step</span><span class="o">=</span><span class="s">&quot;10&quot;</span> <span class="na">min</span><span class="o">=</span><span class="s">&quot;10&quot;</span> <span class="na">max</span><span class="o">=</span><span class="s">&quot;1000&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;400&quot;</span><span class="p">&gt;</span>px<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">label</span> <span class="na">for</span><span class="o">=</span><span class="s">&quot;gray-scale-btn&quot;</span><span class="p">&gt;</span>縦幅<span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;&lt;</span><span class="nt">p</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;display:inline;&quot;</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;number&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;resize-height&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;resizeSize&quot;</span> <span class="na">step</span><span class="o">=</span><span class="s">&quot;10&quot;</span> <span class="na">min</span><span class="o">=</span><span class="s">&quot;10&quot;</span> <span class="na">max</span><span class="o">=</span><span class="s">&quot;1000&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;400&quot;</span><span class="p">&gt;</span>px<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;execute-btn&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;button&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;実行&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://docs.opencv.org/3.4/opencv.js&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</pre></div>
+
+
+<h3><code>JavaScript</code></h3>
+<div class="highlight"><pre><span></span><span class="kr">const</span> <span class="nx">srcImg</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;src-image&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">hiddenImg</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;hidden-image&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">fileInput</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;input-file&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;dest-canvas&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">hiddenCanvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;hidden-canvas&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">grayScaleBtn</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;gray-scale-btn&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">lineDrawBtn</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;linedraw-btn&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">downloadBtn</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;download-btn&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">resizeBtn</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;resize-btn&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">executeBtn</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;execute-btn&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">resizeSize</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByName</span><span class="p">(</span><span class="s1">&#39;resizeSize&#39;</span><span class="p">);</span>
+
+<span class="c1">// OpenCVメソッドを全て引き受ける</span>
+<span class="kd">function</span> <span class="nx">EventHandler</span><span class="p">(</span><span class="nx">func</span><span class="p">,</span> <span class="p">...</span><span class="nx">args</span><span class="p">){</span>
+  <span class="kr">const</span> <span class="nx">src</span> <span class="o">=</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">imread</span><span class="p">(</span><span class="nx">srcImg</span><span class="p">);</span>
+  <span class="kr">const</span> <span class="nx">dst</span> <span class="o">=</span> <span class="nx">func</span><span class="p">(</span><span class="nx">src</span><span class="p">,</span> <span class="p">...</span><span class="nx">args</span><span class="p">);</span>
+  <span class="nx">cv</span><span class="p">.</span><span class="nx">imshow</span><span class="p">(</span><span class="s1">&#39;dest-canvas&#39;</span><span class="p">,</span> <span class="nx">dst</span><span class="p">);</span>
+  <span class="nx">src</span><span class="p">.</span><span class="k">delete</span><span class="p">();</span>
+  <span class="nx">dst</span><span class="p">.</span><span class="k">delete</span><span class="p">();</span>
+
+  <span class="kr">const</span> <span class="nx">hiddenSrc</span> <span class="o">=</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">imread</span><span class="p">(</span><span class="nx">hiddenImg</span><span class="p">);</span>
+  <span class="kr">const</span> <span class="nx">hiddenDst</span> <span class="o">=</span> <span class="nx">func</span><span class="p">(</span><span class="nx">hiddenSrc</span><span class="p">,</span> <span class="p">...</span><span class="nx">args</span><span class="p">);</span>
+  <span class="nx">cv</span><span class="p">.</span><span class="nx">imshow</span><span class="p">(</span><span class="s1">&#39;hidden-canvas&#39;</span><span class="p">,</span> <span class="nx">hiddenDst</span><span class="p">);</span>
+  <span class="nx">hiddenSrc</span><span class="p">.</span><span class="k">delete</span><span class="p">();</span>
+  <span class="nx">hiddenDst</span><span class="p">.</span><span class="k">delete</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">convertImageToGray</span><span class="p">(</span><span class="nx">img</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">dst</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">Mat</span><span class="p">();</span>
+  <span class="nx">cv</span><span class="p">.</span><span class="nx">cvtColor</span><span class="p">(</span><span class="nx">img</span><span class="p">,</span> <span class="nx">dst</span><span class="p">,</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">COLOR_RGBA2GRAY</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">dst</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">convertImageToLineDrawing</span><span class="p">(</span><span class="nx">img</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">kernel</span> <span class="o">=</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">getStructuringElement</span><span class="p">(</span><span class="nx">cv</span><span class="p">.</span><span class="nx">MORPH_RECT</span><span class="p">,</span><span class="k">new</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">Size</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">));</span>
+
+    <span class="kr">const</span> <span class="nx">imgGray</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">Mat</span><span class="p">();</span>
+    <span class="nx">cv</span><span class="p">.</span><span class="nx">cvtColor</span><span class="p">(</span><span class="nx">img</span><span class="p">,</span> <span class="nx">imgGray</span><span class="p">,</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">COLOR_RGBA2GRAY</span><span class="p">);</span>
+
+    <span class="kr">const</span> <span class="nx">imgDilated</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">Mat</span><span class="p">();</span>
+    <span class="nx">cv</span><span class="p">.</span><span class="nx">dilate</span><span class="p">(</span><span class="nx">imgGray</span><span class="p">,</span> <span class="nx">imgDilated</span><span class="p">,</span> <span class="nx">kernel</span><span class="p">,</span> <span class="k">new</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">Point</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">1</span><span class="p">);</span>
+
+    <span class="kr">const</span> <span class="nx">imgDiff</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">Mat</span><span class="p">();</span>
+    <span class="nx">cv</span><span class="p">.</span><span class="nx">absdiff</span><span class="p">(</span><span class="nx">imgDilated</span><span class="p">,</span> <span class="nx">imgGray</span><span class="p">,</span> <span class="nx">imgDiff</span><span class="p">);</span>
+
+    <span class="kr">const</span> <span class="nx">contour</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">Mat</span><span class="p">();</span>
+    <span class="nx">cv</span><span class="p">.</span><span class="nx">bitwise_not</span><span class="p">(</span><span class="nx">imgDiff</span><span class="p">,</span> <span class="nx">contour</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">contour</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">convertImageRisze</span><span class="p">(</span><span class="nx">img</span><span class="p">,</span> <span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">dst</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">Mat</span><span class="p">();</span>
+  <span class="kd">let</span> <span class="nx">dsize</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">Size</span><span class="p">(</span><span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">);</span>
+  <span class="nx">cv</span><span class="p">.</span><span class="nx">resize</span><span class="p">(</span><span class="nx">img</span><span class="p">,</span> <span class="nx">dst</span><span class="p">,</span> <span class="nx">dsize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">INTER_AREA</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">dst</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// Execute Button</span>
+<span class="nx">executeBtn</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">radios</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByName</span><span class="p">(</span><span class="s2">&quot;method&quot;</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">radios</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">checked</span><span class="p">)</span> <span class="nx">EventHandler</span><span class="p">(</span><span class="nx">convertImageToGray</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">radios</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">checked</span><span class="p">)</span> <span class="nx">EventHandler</span><span class="p">(</span><span class="nx">convertImageToLineDrawing</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">radios</span><span class="p">[</span><span class="mi">2</span><span class="p">].</span><span class="nx">checked</span><span class="p">)</span> <span class="nx">EventHandler</span><span class="p">(</span>
+    <span class="nx">convertImageRisze</span><span class="p">,</span>
+    <span class="nb">parseInt</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;resize-width&quot;</span><span class="p">).</span><span class="nx">value</span><span class="p">),</span>
+    <span class="nb">parseInt</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;resize-height&quot;</span><span class="p">).</span><span class="nx">value</span><span class="p">)</span>
+  <span class="p">);</span>
+<span class="p">});</span>
+
+<span class="c1">// Input Button</span>
+<span class="nx">fileInput</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+  <span class="nx">srcImg</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">URL</span><span class="p">.</span><span class="nx">createObjectURL</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+  <span class="nx">hiddenImg</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">URL</span><span class="p">.</span><span class="nx">createObjectURL</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+  <span class="kr">const</span> <span class="nx">src</span> <span class="o">=</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">imread</span><span class="p">(</span><span class="nx">hiddenImg</span><span class="p">);</span>
+<span class="p">},</span> <span class="kc">false</span><span class="p">);</span>
+
+<span class="c1">// Make URL for Download</span>
+<span class="kd">function</span> <span class="nx">dataUriToBlob</span><span class="p">(</span><span class="nx">dataUri</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">b64</span> <span class="o">=</span> <span class="nx">atob</span><span class="p">(</span><span class="nx">dataUri</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]);</span>
+  <span class="kr">const</span> <span class="nx">u8</span> <span class="o">=</span> <span class="nx">Uint8Array</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="nx">b64</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">),</span> <span class="nx">e</span> <span class="p">=&gt;</span> <span class="nx">e</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">());</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nx">Blob</span><span class="p">([</span><span class="nx">u8</span><span class="p">],</span> <span class="p">{</span><span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;image/png&#39;</span><span class="p">});</span>
+<span class="p">}</span>
+
+<span class="c1">// Download Button</span>
+<span class="nx">downloadBtn</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+  <span class="kd">let</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">hiddenCanvas</span><span class="p">.</span><span class="nx">toDataURL</span><span class="p">();</span>
+  <span class="kd">let</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">URL</span><span class="p">.</span><span class="nx">createObjectURL</span><span class="p">(</span><span class="nx">dataUriToBlob</span><span class="p">(</span><span class="nx">data</span><span class="p">));</span>
+  <span class="kd">let</span> <span class="nx">link</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">);</span>
+  <span class="nx">link</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">url</span><span class="p">;</span>
+  <span class="nx">link</span><span class="p">.</span><span class="nx">download</span> <span class="o">=</span> <span class="s2">&quot;processed.png&quot;</span><span class="p">;</span>
+  <span class="nx">link</span><span class="p">.</span><span class="nx">click</span><span class="p">();</span>
+<span class="p">})</span>
+
+<span class="kd">function</span> <span class="nx">changeDisabled</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByName</span><span class="p">(</span><span class="s2">&quot;method&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">].</span><span class="nx">checked</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">resizeSize</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="nx">resizeSize</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">resizeSize</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="nx">resizeSize</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nb">window</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="nx">changeDisabled</span><span class="p">();</span>
+</pre></div>
+
+
+<h3><code>css</code></h3>
+<div class="highlight"><pre><span></span><span class="nt">ul</span> <span class="p">{</span>
+  <span class="k">list-style</span><span class="p">:</span> <span class="kc">none</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nt">label</span> <span class="p">{</span>
+  <span class="k">display</span><span class="p">:</span> <span class="kc">inline-flex</span><span class="p">;</span>
+  <span class="k">margin-bottom</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
     </div><!-- /.entry-content -->
 
   </article>
