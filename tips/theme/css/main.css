@@ -48,7 +48,7 @@ h3, h4, h5, h6 { margin-top: .8em; }
 hr { border: 2px solid #EEEEEE; }
 
 /* ↓Add by Shuto Iwasaki. */
-.article-content img {
+img {
     border: 2px solid #EEE;
     padding: 5px;
     text-align: center;
@@ -411,7 +411,7 @@ img.left, figure.left {float: left; margin: 0 2em 2em 0;}
 #extras ul {list-style: none; margin: 0;}
 /*#extras li {border-bottom: 1px solid #fff;}*/
 #extras li {margin-top: 0;}
-#extras h2 {
+#extras h4 {
 	color: #008db8;
 	font-size: 1.429em;
 	margin-bottom: .25em;
