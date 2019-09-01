@@ -15,7 +15,8 @@ __pycache__
 
 # Icon
 Icon?
-! */*icon*
+!*/*icon*
+!icons
 
 ## Mac OS X
 .DS_Store
