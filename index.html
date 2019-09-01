@@ -1,5 +1,98 @@
-<html>
-  <body>
-    <h1>front-end portfolio</h1>
-  </body>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/front-end.png" />
+  <title>Front-End</title>
+  <link rel="stylesheet" href="https://iwasakishuto.github.io/front-end/tips/theme/css/main.css" />
+  <!-- Use fontawesome Icon -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  <!-- Syntax highlight -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/github.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- LaTex -->
+  <!-- Github env -->
+  <!--<script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>-->
+  <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"></script>
+  <script type="text/x-mathjax-config">
+  	MathJax.Hub.Config({
+  		tex2jax: {
+  			inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+  			displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+  		}
+  	});
+  </script>
+  <!-- Mermaid -->
+  <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad:true
+    });
+  </script>
+</head>
+
+<body id="index" class="home">
+  <section id="content" class="body">
+    <h1>Front-End Portfolio</h1>
+    <table>
+      <thead>
+        <tr>
+          <th align="center"></th>
+          <th align="center"></th>
+          <th align="center"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="img-block" align="center"><a href="https://iwasakishuto.github.io/front-end/tips/category/html.html"><img src="https://iwasakishuto.github.io/front-end/tips/theme/images/language/html.png"></a></td>
+          <td class="img-block" align="center"><a href="https://iwasakishuto.github.io/front-end/tips/category/css.html"><img src="https://iwasakishuto.github.io/front-end/tips/theme/images/language/css.png"></a></td>
+          <td class="img-block" align="center"><a href="https://iwasakishuto.github.io/front-end/tips/category/js.html"><img src="https://iwasakishuto.github.io/front-end/tips/theme/images/language/js.png"></a></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  <style>
+  .img-block {
+    overflow: hidden;
+  }
+  .img-block img {
+    transition: 0.5s;
+  }
+  .img-block img:hover {
+    -moz-transform: scale(1.1,1.1);
+    -webkit-transform: scale(1.1,1.1);
+    -o-transform: scale(1.1,1.1);
+    -ms-transform: scale(1.1,1.1);
+  }
+  </style>
+
+  <section id="extras" class="body">
+    <div class="blogroll">
+      <h5>blogroll</h5>
+      <ul>
+        <li><a href="https://iwasakishuto.github.io">Home</a></li>
+        <li><a href="https://iwasakishuto.github.io/blog/articles/index.html">Blog</a></li>
+        <li><a href="https://iwasakishuto.github.io/University/index.html">University</a></li>
+        <li><a href="https://iwasakishuto.github.io/Kerasy/doc/index.html">Kerasy</a></li>
+        <li><a href="https://iwasakishuto.github.io/front-end/tips/index.html">Front-End</a></li>
+      </ul>
+    </div><!-- /.blogroll -->
+    <div class="social">
+      <h5>social</h5>
+      <ul>
+        <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
+        <li><a href="https://github.com/iwasakishuto">github</a></li>
+        <li><a href="https://www.facebook.com/iwasakishuto">facebook</a></li>
+      </ul>
+    </div><!-- /.social -->
+  </section><!-- /#extras -->
+
+  <footer id="contentinfo" class="body">
+    <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
+  </footer><!-- /#contentinfo -->
+
+</body>
 </html>
