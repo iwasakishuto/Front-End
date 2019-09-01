@@ -64,7 +64,7 @@ code {
   white-space: nowrap;
 }
 
-h3 {
+h2 {
   position: relative;/*相対位置*/
   padding: 0.5em 0.5em 0.5em 1.5em;/*アイコン分のスペース*/
   line-height: 1.4;/*行高*/
@@ -73,7 +73,7 @@ h3 {
   border-bottom: dotted 1px gray;
   background: #fffff4;
 }
-h3:before {
+h2:before {
   font-family: "Font Awesome 5 Free";/*忘れずに*/
   content: "\f138";/*アイコンのユニコード*/
   position: absolute;/*絶対位置*/
@@ -83,12 +83,12 @@ h3:before {
   color: #0082af; /*アイコン色*/
 }
 
-h4 {
+h3 {
   position: relative;
   padding-left: 30px;
   color:#153c6e;
 }
-h4:before {
+h3:before {
   position: absolute;
   font-family: "Font Awesome 5 Free";
   content: "\f121";
