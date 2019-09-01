@@ -52,6 +52,15 @@ img {
     border: 2px solid #EEE;
     padding: 5px;
     text-align: center;
+    width: 100%;
+    height: auto;
+}
+code {
+  padding: 2px 4px;
+  color: #d14;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  white-space: nowrap;
 }
 /* ↑Add by Shuto Iwasaki. */
 
