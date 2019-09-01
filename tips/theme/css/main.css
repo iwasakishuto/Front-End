@@ -75,10 +75,13 @@ h2 {
 
 h3 {
   position: relative;
-  line-height: 1.4;
-  padding:0.25em 1em;
+  line-height: 1;
+  padding: 0em 1em;
   display: inline-block;
-  top:0;
+  top: 0;
+  border-bottom:double;
+  border-color:#FF0000;
+  border-width:3px;
 }
 
 h3:before, h3:after {
@@ -105,10 +108,13 @@ h3:after {
 
 h4 {
   position: relative;
-  line-height: 1.4;
-  padding:0.25em 1em;
+  line-height: 1;
+  padding: 0em 1em;
   display: inline-block;
-  top:0;
+  top: 0;
+  border-bottom:solid;
+  border-color:#FF0000;
+  border-width:3px;
 }
 
 h4:before, h4:after {
