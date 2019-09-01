@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+        <meta charset="utf-8" />
+        <title>JS.7 Webカメラの映像で遊んでみる-1</title>
+        <link rel="stylesheet" href="https://iwasakishuto.github.io/front-end/tips/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="https://iwasakishuto.github.io/front-end/tips/">Front-End </a></h1>
+                <nav><ul>
+                    <li class="active"><a href="https://iwasakishuto.github.io/front-end/tips/category/javascript.html">JavaScript</a></li>
+                </ul>
+                </nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="https://iwasakishuto.github.io/front-end/tips/JavaScript-7.html" rel="bookmark"
+           title="Permalink to JS.7 Webカメラの映像で遊んでみる-1">JS.7 Webカメラの映像で遊んでみる-1</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <span>2019-06-09(日)</span>
+<span>| tags: <a href="https://iwasakishuto.github.io/front-end/tips/tag/javascript.html">JavaScript</a></span>
+</footer><!-- /.post-info -->      <h1>JS.7 Webカメラの映像で遊んでみる-1</h1>
+<p>やっぱり機械学習エンジニア、それも現在<a href="https://www.neuralpocket.com/en/">Neural Pocket</a>で画像認識をしているとなると、やはりWebカメラの映像を使って遊んでみたくなります。</p>
+<p>ここでは、以下の流れでやっていきます。</p>
+<ol>
+<li>Webカメラの映像をそのままブラウザに表示する。</li>
+<li>Webカメラの動画のフレームをCanvasに描画する。</li>
+<li>ローカルでPythonファイルを実行し、Webカメラの映像にモデルを適用する。</li>
+<li>ローカルホストで取得したWebカメラの映像を機械学習モデルのあるサーバーに送り、結果を受け取って表示する。</li>
+<li>どちらもサーバーにあげる。（セキュリティの問題ですぐには厳しそう。）</li>
+</ol>
+<h2>Webカメラの映像をそのままブラウザに表示する。</h2>
+<h3>サンプル</h3>
+<p><font color="red">※ GitHub Pages は静的サイトなので、映像が僕の元に送信される心配はありません。</font></p>
+<div class="video-streaming">
+  <!--サイズの初期値は640×480(4:3)-->
+  <video id="video" width="640" height="480" playsinline muted autoplay></video><br>
+  <button id="start_stop" class="btn-red">STOP</button>
+</div>
+
+<script>
+  var video = document.getElementById("video");
+  var media = navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: false,
+  });
+  media.then((stream) => {
+      video.srcObject = stream;
+  });
+  document.getElementById('start_stop').addEventListener('click', function() {
+    var video = document.getElementById('video');
+    if (this.innerHTML === 'START'){
+      // ボタン操作
+      this.innerHTML = 'STOP';
+      this.classList.remove('btn-blue');
+      this.classList.add('btn-red');
+      // ビデオ操作
+      video.play()
+    } else {
+      this.innerHTML = "START";
+      this.classList.remove('btn-red');
+      this.classList.add('btn-blue');
+      video.pause()
+    }
+  });
+</script>
+
+<style>
+  .video-streaming {  
+    text-align: center;
+    margin: 30px auto;
+  }
+  #video {
+    border: 1px solid;
+  }
+  .btn-blue {
+    background-color: rgb(68, 122, 178);
+    color: #fff;
+    padding: 10px;
+    border-radius: 3px;
+  }
+  .btn-red {
+    background-color: rgb(252, 92, 84);
+    color: #fff;
+    padding: 10px;
+    border-radius: 3px;
+  }
+  @media only screen and (max-width: 640px) {
+    #video {
+      width: 100%;
+      height: 100%;
+    }
+  }
+</style>
+
+<h3>コード</h3>
+<div class="highlight"><pre><span></span><span class="c">&lt;!--サイズの初期値は640×480(4:3)--&gt;</span>
+<span class="p">&lt;</span><span class="nt">video</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;video&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;640&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;480&quot;</span> <span class="na">autoplay</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;border: 1px solid; margin: 0 auto&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">video</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="c1">//動画流す準備</span>
+<span class="kd">var</span> <span class="nx">video</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;video&quot;</span><span class="p">);</span>
+<span class="c1">// getUserMedia によるカメラ映像の取得</span>
+<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">mediaDevices</span><span class="p">.</span><span class="nx">getUserMedia</span><span class="p">({</span>
+    <span class="nx">video</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span><span class="c1">//ビデオを取得する</span>
+    <span class="c1">//使うカメラをインカメラか背面カメラかを指定する場合には</span>
+    <span class="c1">//video: { facingMode: &quot;environment&quot; },//背面カメラ</span>
+    <span class="c1">//video: { facingMode: &quot;user&quot; },//インカメラ</span>
+    <span class="nx">audio</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span><span class="c1">//音声が必要な場合はture</span>
+<span class="p">});</span>
+<span class="c1">//リアルタイムに再生（ストリーミング）させるためにビデオタグに流し込む</span>
+<span class="nx">media</span><span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">stream</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+    <span class="nx">video</span><span class="p">.</span><span class="nx">srcObject</span> <span class="o">=</span> <span class="nx">stream</span><span class="p">;</span>
+<span class="p">});</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</pre></div>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                            <li><a href="https://iwasakishuto.github.io">Home</a></li>
+                            <li><a href="https://iwasakishuto.github.io/blog/articles/index.html">Blog</a></li>
+                            <li><a href="https://iwasakishuto.github.io/University/index.html">Notes</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Kerasy/doc/index.html">Kerasy</a></li>
+                            <li><a href="https://iwasakishuto.github.io/front-end/tips/index.html">front-end</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
+                            <li><a href="https://github.com/iwasakishuto">github</a></li>
+                            <li><a href="https://www.facebook.com/iwasakishuto">facebook</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

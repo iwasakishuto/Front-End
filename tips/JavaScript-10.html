@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+        <meta charset="utf-8" />
+        <title>JS.10 OpenCVで遊ぶ</title>
+        <link rel="stylesheet" href="https://iwasakishuto.github.io/front-end/tips/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="https://iwasakishuto.github.io/front-end/tips/">Front-End </a></h1>
+                <nav><ul>
+                    <li class="active"><a href="https://iwasakishuto.github.io/front-end/tips/category/javascript.html">JavaScript</a></li>
+                </ul>
+                </nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="https://iwasakishuto.github.io/front-end/tips/JavaScript-10.html" rel="bookmark"
+           title="Permalink to JS.10 OpenCVで遊ぶ">JS.10 OpenCVで遊ぶ</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <span>2019-06-13(木)</span>
+<span>| tags: <a href="https://iwasakishuto.github.io/front-end/tips/tag/javascript.html">JavaScript</a></span>
+</footer><!-- /.post-info -->      <h1>JS.10 OpenCVで遊ぶ</h1>
+<h3>作ったもの</h3>
+<p>画像にいくつかの処理を（一度に一つだけ）加えることのできるアプリケーションです。線画化が意外といい感じに仕上がるので、試してみてください。</p>
+<!--画像を表示-->
+
+<table>
+  <thead>
+    <tr>
+      <th align="center">Source</th>
+      <th align="center">Output</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <img id="src-image" src="../../images/icon/apple-touch-icon-152x152.png" />
+        <img id="hidden-image" src="../../images/icon/apple-touch-icon-152x152.png" style="display: none;" />
+      </td>
+      <td>
+        <canvas id="dest-canvas"></canvas>
+        <canvas id="hidden-canvas" style="display: none;"></canvas>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+        <!-- 入力ファイル選択 -->
+        <input type="file" id="input-file" />
+      </td>
+      <td align="center">
+        <!-- ダウンロード -->
+        <input id="download-btn" type="button" value="ダウンロード">
+      </td>
+  </tbody>
+</table>
+
+<!-- 処理方法を選択 -->
+
+<form name="Processing Method" action="#">
+  <h2>処理方法</h2>
+  <ul>
+    <li><input type="radio" name="method" id="gray-scale-btn" onClick="changeDisabled()"><label for="gray-scale-btn">グレースケール化</label></li>
+    <li><input type="radio" name="method" id="linedraw-btn" onClick="changeDisabled()"><label for="linedraw-btn">線画化</label></li>
+    <li><input type="radio" name="method" id="resize-btn" onClick="changeDisabled()"><label for="resize-btn">リサイズ化</label>
+    <label for="gray-scale-btn">横幅</label><p style="display:inline;"><input type="number" id="resize-width" name="resizeSize" step="10" min="10" max="1000" value="400">px</p>
+    <label for="gray-scale-btn">縦幅</label><p style="display:inline;"><input type="number" id="resize-height" name="resizeSize" step="10" min="10" max="1000" value="400">px</p></li>
+  </ul>
+  <input id="execute-btn" type="button" value="実行">
+</form>
+
+<script src="https://docs.opencv.org/3.4/opencv.js" type="text/javascript"></script>
+
+<script>
+  const srcImg = document.getElementById('src-image');
+  const hiddenImg = document.getElementById('hidden-image');
+  const fileInput = document.getElementById('input-file');
+  const canvas = document.getElementById('dest-canvas');
+  const hiddenCanvas = document.getElementById('hidden-canvas');
+  const grayScaleBtn = document.getElementById('gray-scale-btn');
+  const lineDrawBtn = document.getElementById('linedraw-btn');
+  const downloadBtn = document.getElementById('download-btn');
+  const resizeBtn = document.getElementById('resize-btn');
+  const executeBtn = document.getElementById('execute-btn');
+  const resizeSize = document.getElementsByName('resizeSize');
+
+  // OpenCVメソッドを全て引き受ける
+  function EventHandler(func, ...args){
+    const src = cv.imread(srcImg);
+    const dst = func(src, ...args);
+    cv.imshow('dest-canvas', dst);
+    src.delete();
+    dst.delete();
+
+    const hiddenSrc = cv.imread(hiddenImg);
+    const hiddenDst = func(hiddenSrc, ...args);
+    cv.imshow('hidden-canvas', hiddenDst);
+    hiddenSrc.delete();
+    hiddenDst.delete();
+  }
+
+  function convertImageToGray(img) {
+    let dst = new cv.Mat();
+    cv.cvtColor(img, dst, cv.COLOR_RGBA2GRAY, 0);
+    return dst;
+  }
+
+  function convertImageToLineDrawing(img) {
+      const kernel = cv.getStructuringElement(cv.MORPH_RECT,new cv.Size(5,5));
+
+      const imgGray = new cv.Mat();
+      cv.cvtColor(img, imgGray, cv.COLOR_RGBA2GRAY);
+
+      const imgDilated = new cv.Mat();
+      cv.dilate(imgGray, imgDilated, kernel, new cv.Point(-1, 1), 1);
+
+      const imgDiff = new cv.Mat();
+      cv.absdiff(imgDilated, imgGray, imgDiff);
+
+      const contour = new cv.Mat();
+      cv.bitwise_not(imgDiff, contour);
+      return contour;
+  }
+
+  function convertImageRisze(img, width, height) {
+    let dst = new cv.Mat();
+    let dsize = new cv.Size(width, height);
+    cv.resize(img, dst, dsize, 0, 0, cv.INTER_AREA);
+    return dst;
+  }
+
+  // Execute Button
+  executeBtn.addEventListener('click', function(){
+    var radios = document.getElementsByName("method");
+    if (radios[0].checked) EventHandler(convertImageToGray);
+    if (radios[1].checked) EventHandler(convertImageToLineDrawing);
+    if (radios[2].checked) EventHandler(
+      convertImageRisze,
+      parseInt(document.getElementById("resize-width").value),
+      parseInt(document.getElementById("resize-height").value)
+    );
+  });
+
+  // Input Button
+  fileInput.addEventListener('change', function(e){
+    srcImg.src = URL.createObjectURL(e.target.files[0]);
+    hiddenImg.src = URL.createObjectURL(e.target.files[0]);
+    const src = cv.imread(hiddenImg);
+  }, false);
+
+  // Make URL for Download
+  function dataUriToBlob(dataUri) {
+    const b64 = atob(dataUri.split(',')[1]);
+    const u8 = Uint8Array.from(b64.split(''), e => e.charCodeAt());
+    return new Blob([u8], {type: 'image/png'});
+  }
+
+  // Download Button
+  downloadBtn.addEventListener('click', function(e){
+    let data = hiddenCanvas.toDataURL();
+    let url = URL.createObjectURL(dataUriToBlob(data));
+    let link = document.createElement("a");
+    link.href = url;
+    link.download = "processed.png";
+    link.click();
+  })
+
+  function changeDisabled() {
+    if (document.getElementsByName("method")[2].checked ) {
+      resizeSize[0].disabled = false;
+      resizeSize[1].disabled = false;
+    } else {
+      resizeSize[0].disabled = true;
+      resizeSize[1].disabled = true;
+    }
+  }
+
+  window.onload = changeDisabled();
+</script>
+
+<style>
+  ul {
+    list-style: none;
+  }
+  label {
+    display: inline-flex;
+    margin-bottom: 0;
+  }
+</style>
+
+<h3>動機</h3>
+<p>色々と覚えてきたので、最後に</p>
+<ul>
+<li><a href="https://github.com/ucisysarch/opencvjs"><code>OpenCV.js</code></a></li>
+<li>Webカメラ</li>
+<li><code>Canvas</code></li>
+<li><a href="https://www.tensorflow.org/js"><code>TensorFlow.js</code></a></li>
+</ul>
+<p>あたりを使って<b>静的サイトで機械学習のWebアプリケーションを動かし</b>、<code>JavaScript</code> の勉強は一旦終了にしようと思いました。そこで、まずは <code>OpenCV.js</code> から使ってみようと思い、上記のアプリケーションを作りました。</p>
+<p>あと、地味に毎回 <code>Python</code> やシェルでコード書いたり、 <code>PowerPoint</code> 使って画像のリサイズするのが面倒だったので意外と重宝しています笑</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                            <li><a href="https://iwasakishuto.github.io">Home</a></li>
+                            <li><a href="https://iwasakishuto.github.io/blog/articles/index.html">Blog</a></li>
+                            <li><a href="https://iwasakishuto.github.io/University/index.html">Notes</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Kerasy/doc/index.html">Kerasy</a></li>
+                            <li><a href="https://iwasakishuto.github.io/front-end/tips/index.html">front-end</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
+                            <li><a href="https://github.com/iwasakishuto">github</a></li>
+                            <li><a href="https://www.facebook.com/iwasakishuto">facebook</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+        <meta charset="utf-8" />
+        <title>JS.14 Slack用の文字スタンプを作る</title>
+        <link rel="stylesheet" href="https://iwasakishuto.github.io/front-end/tips/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="https://iwasakishuto.github.io/front-end/tips/">Front-End </a></h1>
+                <nav><ul>
+                    <li class="active"><a href="https://iwasakishuto.github.io/front-end/tips/category/javascript.html">JavaScript</a></li>
+                </ul>
+                </nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="https://iwasakishuto.github.io/front-end/tips/JavaScript-14.html" rel="bookmark"
+           title="Permalink to JS.14 Slack用の文字スタンプを作る">JS.14 Slack用の文字スタンプを作る</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <span>2019-07-22(月)</span>
+<span>| tags: <a href="https://iwasakishuto.github.io/front-end/tips/tag/javascript.html">JavaScript</a></span>
+</footer><!-- /.post-info -->      <h1>JS.14 Slack用の文字スタンプを作る</h1>
+<p><b>Google Chrome</b> の開発者ツールを使うことで、各サイトのネットワーク通信の中身（どのようなパラメータでリクエストを投げ、どのようなリスポンスが返ってきているのか）を調べることができます。</p>
+<p>その内容を調べることで業務を効率化したり、スクレイピングを行なったりするのですが、今回はこの知識を応用して、<font color="red"><b>静的サイトにも関わらずSlackのスタンプを作る</b></font>という機能を実現したいと思います。</p>
+<h2>作ったもの</h2>
+<p>Special thanks go to "<a href="https://emoji-gen.ninja/">絵文字ジェネレーター - Slack 向け絵文字を無料で簡単生成</a>"</p>
+<div class="display">
+  <img id="emoji" src="https://dashboard.snapcraft.io/site_media/appmedia/2019/01/Snapcraft_256x256.png" width="128" height="128" onerror="this.src='https://dashboard.snapcraft.io/site_media/appmedia/2019/01/Snapcraft_256x256.png';" />
+</div>
+
+<div class="container">
+  <div class="col">
+    <label for="text">text</label><br>
+    <input id="text" type="text" placeholder="例）熱盛">
+  </div>
+  <div class="col">
+    <label for="font">font</label><br>
+    <select id="font" size="6">
+      <option selected value="notosans-mono-bold">Noto Sans Mono CJK JP Bold</option>
+      <option value="mplus-1p-black">M+ 1p black</option>
+      <option value="rounded-x-mplus-1p-black">Rounded M+ 1p black</option>
+      <option value="ipamjm">IPAmj明朝</option>
+      <option value="aoyagireisyoshimo">青柳隷書しも</option>
+      <option value="LinLibertine_RBah">LinLibertine Bold</option>
+    </select>
+  </div>
+  <div class="col-color">
+    <label for="color">text color: </label><input type="color" id="color" value="#EC71A1"><br>
+    <label for="bgcolor">background color: </label><input type="color" id="bgcolor" value="#FFFFFF">
+  </div>
+</div>
+
+<script>
+window.addEventListener('DOMContentLoaded',
+  function() {
+    if (HTMLVideoElement) {
+
+      // ページ上の要素を取得
+      var emoji = document.querySelector('#emoji');
+      var text  = document.querySelector('#text');
+      var font  = document.querySelector('#font');
+      var color = document.querySelector('#color');
+      var bgcolor = document.querySelector('#bgcolor');
+
+      // フォーム内の要素に変更があると発火
+      text.addEventListener('change', function (e) {
+        changeSRC(emoji, text, font, color, bgcolor);
+      });
+      font.addEventListener('change', function (e) {
+        changeSRC(emoji, text, font, color, bgcolor);
+      });
+      color.addEventListener('change', function (e) {
+        changeSRC(emoji, text, font, color, bgcolor);
+      });
+      bgcolor.addEventListener('change', function (e) {
+        changeSRC(emoji, text, font, color, bgcolor);
+      });
+    }
+  }
+);
+var changeSRC = function(emoji, text, font, color, bgcolor){
+  const base = "https://emoji-gen.ninja/emoji_download?align=center&size_fixed=false&stretch=true&public_fg=true&locale=ja";
+  var url = base + "&text=" + text.value + "&font=" + font.value + "&color=" + color.value.substring(1,7) + "FF" + "&back_color=" + bgcolor.value.substring(1,7) + "FF";
+  emoji.setAttribute('src', url)
+  //download.setAttribute('href', url)
+}
+</script>
+
+<style>
+.display{
+  text-align: center;
+  margin: 20px auto;
+}
+.container{
+  text-align: center;
+  width: 100%;
+}
+.col{
+  font-size: 1.2em;
+  font-weight: bold;
+  display: table-cell;
+  width: 33%;
+  padding: 8px;
+}
+.col-color{
+  text-align: left;
+  font-size: 1.2em;
+  font-weight: bold;
+  display: table-cell;
+  width: 33%;
+  padding: 8px;
+}
+label {
+  color: #80273F;
+}
+#text {
+    border: 0;
+    border-bottom: 1px solid #d1d1d1;
+    font-size: 1.2em;
+    padding: 8px;
+}
+</style>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                            <li><a href="https://iwasakishuto.github.io">Home</a></li>
+                            <li><a href="https://iwasakishuto.github.io/blog/articles/index.html">Blog</a></li>
+                            <li><a href="https://iwasakishuto.github.io/University/index.html">Notes</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Kerasy/doc/index.html">Kerasy</a></li>
+                            <li><a href="https://iwasakishuto.github.io/front-end/tips/index.html">front-end</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
+                            <li><a href="https://github.com/iwasakishuto">github</a></li>
+                            <li><a href="https://www.facebook.com/iwasakishuto">facebook</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

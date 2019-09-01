@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+        <meta charset="utf-8" />
+        <title>JS.1 今日の日付を表示する</title>
+        <link rel="stylesheet" href="https://iwasakishuto.github.io/front-end/tips/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="https://iwasakishuto.github.io/front-end/tips/">Front-End </a></h1>
+                <nav><ul>
+                    <li class="active"><a href="https://iwasakishuto.github.io/front-end/tips/category/javascript.html">JavaScript</a></li>
+                </ul>
+                </nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="https://iwasakishuto.github.io/front-end/tips/JavaScript-1.html" rel="bookmark"
+           title="Permalink to JS.1 今日の日付を表示する">JS.1 今日の日付を表示する</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <span>2019-06-08(土)</span>
+<span>| tags: <a href="https://iwasakishuto.github.io/front-end/tips/tag/javascript.html">JavaScript</a><a href="https://iwasakishuto.github.io/front-end/tips/tag/udemy.html">Udemy</a></span>
+</footer><!-- /.post-info -->      <h1>JS.1 今日の日付を表示する</h1>
+<ul>
+<li>講座：<a href="https://www.udemy.com/html-css-js/">[HTML/CSS/JavaScript] フロントエンドエンジニアになりたい人の Webプログラミング入門</a></li>
+<li>講師：<a href="https://www.udemy.com/user/taniguchi-makoto/">Taniguchi Makoto</a></li>
+</ul>
+<h2>はじめに</h2>
+<p>まずはじめに断っておくと、おそらくプログラミング系の記事は<b>「誰かに説明する」</b>と言うよりは、<b>「自分の備忘録」</b>として書きます :man-bowing:</p>
+<p>突然 <code>JavaScript</code> の勉強始めた一番の理由は<font color="red"><b>「<a href="https://lgtm.tech/">LGTM</a>の活動の中で力不足を感じたから」</b></font>です。</p>
+<p>2019/6/1,2に、<a href="https://company.finc.com/">FiNC Technologies</a>とハッカソンをさせていただいたのですが、僕ができたのは下の部分だけで、機械学習のAPIを作ったものの、<font color="red"><b>正直魅せ方ととして芸がないな</b></font>と感じてしまいました。</p>
+<p><img src="https://cdn-images-1.medium.com/max/1600/1*L4_SuPkWy1wZlGe-NQn59w.png"></p>
+<p>この思いは前からずっと感じていたことだったので、<b>「良いキッカケをもらった」</b>と思い、早速一から勉強することにしました。</p>
+<h2>作ったもの</h2>
+<p>今日の日付を<code>JavaScript</code>を使って表示します。</p>
+<script>
+  var today = new Date();
+  var todayHtml = today.getFullYear() + '/' + (today.getMonth()+1) + '/' + today.getDate();
+  // getMonth は、1月を0としているので、+1をしている。
+  // document は、ブラウザが準備してくれたインスタンス。
+  document.write('<p class="date" style="font-size:300%; text-align: center; color: rgb(128,22,14);">today: ' + todayHtml + '</p>');
+</script>
+
+<h2>コード</h2>
+<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="kd">var</span> <span class="nx">today</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">todayHtml</span> <span class="o">=</span> <span class="nx">today</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="nx">today</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="nx">today</span><span class="p">.</span><span class="nx">getDate</span><span class="p">();</span>
+  <span class="c1">// getMonth は、1月を0としているので、+1をしている。</span>
+  <span class="c1">// document は、ブラウザが準備してくれたインスタンス。</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s1">&#39;&lt;p class=&quot;date&quot;&gt;today: &#39;</span> <span class="o">+</span> <span class="nx">todayHtml</span> <span class="o">+</span> <span class="s1">&#39;&lt;/p&gt;&#39;</span><span class="p">);</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="p">.</span><span class="nc">date</span> <span class="p">{</span>
+  <span class="k">font-size</span><span class="p">:</span> <span class="mi">300</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">color</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span><span class="mi">22</span><span class="p">,</span><span class="mi">14</span><span class="p">);</span>
+  <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</pre></div>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>blogroll</h2>
+                        <ul>
+                            <li><a href="https://iwasakishuto.github.io">Home</a></li>
+                            <li><a href="https://iwasakishuto.github.io/blog/articles/index.html">Blog</a></li>
+                            <li><a href="https://iwasakishuto.github.io/University/index.html">Notes</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Kerasy/doc/index.html">Kerasy</a></li>
+                            <li><a href="https://iwasakishuto.github.io/front-end/tips/index.html">front-end</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
+                            <li><a href="https://github.com/iwasakishuto">github</a></li>
+                            <li><a href="https://www.facebook.com/iwasakishuto">facebook</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

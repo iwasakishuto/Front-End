@@ -1,2 +1,2 @@
 # front-end
-Front-end geek portfolio.
+This repository is for my front-end portfolio.
