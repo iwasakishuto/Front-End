@@ -55,12 +55,55 @@ img {
     width: 100%;
     height: auto;
 }
+
 code {
   padding: 2px 4px;
   color: #d14;
   background-color: #f7f7f9;
   border: 1px solid #e1e1e8;
   white-space: nowrap;
+}
+
+h3 {
+  position: relative;/*相対位置*/
+  padding: 0.5em 0.5em 0.5em 1.5em;/*アイコン分のスペース*/
+  line-height: 1.4;/*行高*/
+  color: #0082af;/*文字色*/
+  border-top: dotted 1px gray;
+  border-bottom: dotted 1px gray;
+  background: #fffff4;
+}
+h3:before {
+  font-family: "Font Awesome 5 Free";/*忘れずに*/
+  content: "\f138";/*アイコンのユニコード*/
+  position: absolute;/*絶対位置*/
+  font-size: 1em;/*サイズ*/
+  left: 0.25em;/*アイコンの位置*/
+  top: 0.5em;/*アイコンの位置*/
+  color: #0082af; /*アイコン色*/
+}
+
+h4 {
+  position: relative;
+  padding-left: 30px;
+  color:#153c6e;
+}
+h4:before {
+  position: absolute;
+  font-family: "Font Awesome 5 Free";
+  content: "\f121";
+  background: #c9e2ff;
+  color: #153c6e;
+  font-size: 15px;
+  border-radius: 50%;
+  left: 0;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
 }
 /* ↑Add by Shuto Iwasaki. */
 
