@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+        <meta charset="utf-8" />
+        <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/front-end.png" />
+        <title>Front-End Portfolio - css</title>
+        <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
+
+        <!-- Added by Shuto Iwasaki. -->
+        <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/front-end.png" type="image/png" />
+        <!-- Use fontawesome Icon -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+        <!-- Syntax highlight -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/github.min.css">
+        <!-- Custom CSS -->
+        <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script>
+        <!-- LaTex -->
+        <!-- Github env -->
+        <!--<script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>-->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"></script>
+        <script type="text/x-mathjax-config">
+        	MathJax.Hub.Config({
+        		tex2jax: {
+        			inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+        			displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+        		}
+        	});
+        </script>
+        <!-- Mermaid -->
+        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
+        <script>
+          mermaid.initialize({
+            startOnLoad:true
+          });
+        </script>
+
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="https://iwasakishuto.github.io/Front-End/tips/">Front-End Portfolio </a></h1>
+                <nav><ul>
+                    <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html">CSS</a></li>
+                    <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html">HTML</a></li>
+                    <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
+                </ul>
+<form id="search" action"#" onsubmit="javascript:window.open('https://duckduckgo.com/?q='+document.getElementById('keywords').value+'+site:https://iwasakishuto.github.io/Front-End/tips');">
+                        <input id="keywords" type="text" />
+                    </form>
+                </nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/css-1.html">css.1 蛍光ペンを引く</a></h1>
+<footer class="post-info">
+        <span>2019-09-02(月)</span>
+<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/css.html">css</a></span>
+</footer><!-- /.post-info --><p>ここでは、大学の講義ノート<a href="https://iwasakishuto.github.io/University/3S/%E7%94%9F%E7%89%A9%E6%83%85%E5%A0%B1%E7%A7%91%E5%AD%A6%E7%89%B9%E5%88%A5%E8%AC%9B%E7%BE%A9%E2%85%A2-part1-1.html">（例）</a>で使っている、<span class="marker-pink">蛍光ペンでマークしたかのようなスタイル</span>を記述しておきます。</p>
+<h3>赤いマーカー</h3>
+<p>赤いマーカーは、単純に重要なことをマークする時に使っています。</p>
+<ul>
+<li><font color="#c45a5a">「色がついて」</font></li>
+<li><span style="background: linear-gradient(transparent 70%, #ff66ff 60%);">「線が引いてあって」</style></li>
+<li><span style="font-weight: bold;">「文字が太い」</span></li>
+</ul>
+<p>の三点を組み合わせています。</p>
+<div class="highlight"><pre><span></span><span class="p">.</span><span class="nc">marker-pink</span> <span class="p">{</span>
+  <span class="k">color</span><span class="p">:</span> <span class="mh">#c45a5a</span><span class="p">;</span>
+  <span class="k">background</span><span class="p">:</span> <span class="nb">linear-gradient</span><span class="p">(</span><span class="kc">transparent</span> <span class="mi">70</span><span class="kt">%</span><span class="p">,</span> <span class="mh">#ff66ff</span> <span class="mi">60</span><span class="kt">%</span><span class="p">);</span>
+  <span class="k">font-weight</span><span class="p">:</span> <span class="kc">bold</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h3>青いマーカー</h3>
+<p>青いマーカーは、知識の補足が必要な時に用いています。特に生物系の用語はわからなくなることが多いので、<span class="marker-info" aria-label="これのこと！">ホバーした時に一言説明が出る</span>ようにしています。</p>
+<div class="highlight"><pre><span></span><span class="p">.</span><span class="nc">marker-info</span> <span class="p">{</span>
+    <span class="k">color</span><span class="p">:</span> <span class="mh">#5C7DC4</span><span class="p">;</span>
+    <span class="k">background</span><span class="p">:</span> <span class="nb">linear-gradient</span><span class="p">(</span><span class="kc">transparent</span> <span class="mi">70</span><span class="kt">%</span><span class="p">,</span> <span class="mh">#66FFCC</span> <span class="mi">60</span><span class="kt">%</span><span class="p">);</span>
+    <span class="k">font-weight</span><span class="p">:</span> <span class="kc">bold</span><span class="p">;</span>
+    <span class="k">position</span><span class="p">:</span> <span class="kc">relative</span><span class="p">;</span>
+    <span class="k">cursor</span><span class="p">:</span> <span class="kc">pointer</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">marker-info</span><span class="p">:</span><span class="nd">hover</span><span class="p">:</span><span class="nd">before</span> <span class="p">{</span>
+    <span class="k">opacity</span><span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">marker-info</span><span class="p">:</span><span class="nd">before</span> <span class="p">{</span>
+  <span class="k">content</span><span class="p">:</span> <span class="nb">attr</span><span class="p">(</span><span class="n">aria</span><span class="o">-</span><span class="n">label</span><span class="p">);</span>
+  <span class="k">opacity</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">position</span><span class="p">:</span> <span class="kc">absolute</span><span class="p">;</span>
+  <span class="k">top</span><span class="p">:</span> <span class="mi">30</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">right</span><span class="p">:</span> <span class="mi">-90</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">font-size</span><span class="p">:</span> <span class="mi">14</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">width</span><span class="p">:</span> <span class="mi">300</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+  <span class="k">background-color</span><span class="p">:</span> <span class="mh">#555</span><span class="p">;</span>
+  <span class="k">border-radius</span><span class="p">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
+  <span class="n">pointer-events</span><span class="p">:</span> <span class="kc">none</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>                </article>
+<p class="paginator">
+    Page 1 / 1
+</p>
+            </aside><!-- /#featured -->
+            </ol><!-- /#posts-list -->
+            </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h5>blogroll</h5>
+                        <ul>
+                            <li><a href="https://iwasakishuto.github.io">Home</a></li>
+                            <li><a href="https://iwasakishuto.github.io/blog/articles/index.html">Blog</a></li>
+                            <li><a href="https://iwasakishuto.github.io/University/index.html">University</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Kerasy/doc/index.html">Kerasy</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Front-End/index.html">Front-End</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h5>social</h5>
+                        <ul>
+
+                            <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
+                            <li><a href="https://github.com/iwasakishuto">github</a></li>
+                            <li><a href="https://www.facebook.com/iwasakishuto">facebook</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <p>Powered by <a href="http://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
