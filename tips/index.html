@@ -57,356 +57,285 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/html-1.html">html.1 テーブルについて理解する。</a></h1>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/css-2.html">css.2 ::befere & ::after</a></h1>
 <footer class="post-info">
-        <span>2019-09-02(月)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/html.html">html</a></span>
-</footer><!-- /.post-info --><p>普段 <code>markdown</code> で文章を書いているのですが、その場合、（おそらく）<b>テーブル内の特定の位置だけ複数列用いてセルを作る</b>、といったことができません。</p>
-<p>しかし、<code>html</code> のタグを用いて <code>&lt;table&gt;</code> 要素を作れば、問題なくそのようなテーブルを作ることができたので、ここではその方法を記載します。</p>
-<h3>TL;DR</h3>
-<p><code>&lt;td&gt;</code> 要素内に</p>
-<ul>
-<li><code>rowspan="N"</code> とかけばN行1列のセル</li>
-<li><code>colspan="M"</code> とかけば1行M列のセル</li>
-<li><code>rowspan="N" colspan="M"</code> とかけばN行M列のセル</li>
-</ul>
-<h3>サンプル</h3>
-<p><div contentEditable="true">
-  <table>
-    <tr>
-      <td rowspan="3" bgcolor="red">1</td>
-      <td>2</td>
-      <td>3</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td colspan="2" bgcolor="blue">5</td>
-      <td>6</td>
-    </tr>
-    <tr>
-      <td>7</td>
-      <td colspan="2" bgcolor="green">8</td>
-    </tr>
-  </table>
-</div></p>
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">table</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">td</span> <span class="na">rowspan</span><span class="o">=</span><span class="s">&quot;3&quot;</span> <span class="na">bgcolor</span><span class="o">=</span><span class="s">&quot;red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;</span>2<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;</span>3<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;</span>4<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">bgcolor</span><span class="o">=</span><span class="s">&quot;blue&quot;</span><span class="p">&gt;</span>5<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;</span>6<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;</span>7<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">bgcolor</span><span class="o">=</span><span class="s">&quot;green&quot;</span><span class="p">&gt;</span>8<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
+        <span>2019-09-03(火)</span>
+<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/css.html">css</a></span>
+</footer><!-- /.post-info --><p><code>::before</code> や <code>::after</code> は<span class="marker-pink">擬似要素(Pseudo-elements)</span>と呼ばれるもので、HTMLに直接書くことなく、選択された要素の<b>後</b>・<b>前</b>にスタイル付けすることができます。</p>
+<h2>作ったもの</h2>
+<h3>ポイント</h3>
+<p class="ex1">重要な何か。</p>
+
+<style>
+p.ex1::before {
+  content: "point";
+  background: #f00;
+  color: white;
+  margin-right: 2px;
+  padding: 1px;
+  font-weight: bold;
+}
+</style>
+
+<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex1&quot;</span><span class="p">&gt;</span>重要な何か。<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="nt">p</span><span class="p">.</span><span class="nc">ex1</span><span class="p">::</span><span class="nd">before</span> <span class="p">{</span>
+  <span class="k">content</span><span class="p">:</span> <span class="s2">&quot;point&quot;</span><span class="p">;</span>
+  <span class="k">background</span><span class="p">:</span> <span class="mh">#f00</span><span class="p">;</span>
+  <span class="k">color</span><span class="p">:</span> <span class="kc">white</span><span class="p">;</span>
+  <span class="k">margin-right</span><span class="p">:</span> <span class="mi">2</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mi">1</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">font-weight</span><span class="p">:</span> <span class="kc">bold</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
 </pre></div>
 
 
-<h3>今後</h3>
-<p><a href="https://iwasakishuto.github.io/University/index.html">Timetable</a>のページですが、セルの幅を一定にすることは可能なのですが、文字の量が多すぎるとセルの高さが大きくなってしまい、美しくありません…。<span class="marker-pink">（上の各セルに文字を入力するとサイズが変わることが確認できます。）</span>とはいえ、両方固定して科目名が全てはいらないのも美しくありません。</p>
-<p>そこで、<span class="marker-pink">各セルごとに</span>フォントサイズ・文字の量を <code>JavaScript</code> で取得し、セルのサイズを変える必要がなくなるまでフォントサイズを小さくする、といったことをしてこの問題を解決したいと考えています。（時間のある時にやります。）</p>
-<h3>おまけ</h3>
-<p>自由に使ってください笑</p>
-<table width="240px" height="320px">
-  <thead>
-        <tr>
-      <th class="M__white">1</th>
-      <th class="M__white">1</th>
-      <th class="M__white">1</th>
-      <th class="M__red">1</th>
-      <th class="M__red">1</th>
-      <th class="M__red">1</th>
-      <th class="M__red">1</th>
-      <th class="M__red">1</th>
-      <th class="M__white">1</th>
-      <th class="M__white">1</th>
-      <th class="M__white">1</th>
-      <th class="M__white">1</th>
-        </tr>
-    </thead>
-  <tbody>
-    <tr>
-      <td colspan="2" class="M__white">1</td>
-      <td colspan="9" class="M__red">1</td>
-      <td colspan="1" class="M__white">1</td>
-    </tr>
-    <tr>
-      <td colspan="2" class="M__white">1</td>
-      <td colspan="3" class="M__black">1</td>
-      <td colspan="2" class="M__body">1</td>
-      <td colspan="1" class="M__black">1</td>
-      <td colspan="1" class="M__body">1</td>
-      <td colspan="3" class="M__white">1</td>
-    </tr>
-    <tr>
-      <td colspan="1" class="M__white">1</td>
-      <td colspan="1" class="M__black">1</td>
-      <td colspan="1" class="M__body">1</td>
-      <td colspan="1" class="M__black">1</td>
-      <td colspan="3" class="M__body">1</td>
-      <td colspan="1" class="M__black">1</td>
-      <td colspan="3" class="M__body">1</td>
-      <td colspan="1" class="M__white">1</td>
-    </tr>
-    <tr>
-      <td colspan="1" class="M__white">1</td>
-      <td colspan="1" class="M__black">1</td>
-      <td colspan="1" class="M__body">1</td>
-      <td colspan="2" class="M__black">1</td>
-      <td colspan="3" class="M__body">1</td>
-      <td colspan="1" class="M__black">1</td>
-      <td colspan="3" class="M__body">1</td>
-    </tr>
-    <tr>
-      <td colspan="1" class="M__white">1</td>
-      <td colspan="2" class="M__black">1</td>
-      <td colspan="4" class="M__body">1</td>
-      <td colspan="4" class="M__black">1</td>
-      <td colspan="1" class="M__white">1</td>
-    </tr>
-    <tr>
-      <td colspan="3" class="M__white">1</td>
-      <td colspan="7" class="M__body">1</td>
-      <td colspan="2" class="M__white">1</td>
-    </tr>
-    <tr>
-      <td colspan="2" class="M__white">1</td>
-      <td colspan="2" class="M__black">1</td>
-      <td colspan="1" class="M__red">1</td>
-      <td colspan="3" class="M__black">1</td>
-      <td colspan="4" class="M__white">1</td>
-    </tr>
-    <tr>
-      <td colspan="1" class="M__white">1</td>
-      <td colspan="3" class="M__black">1</td>
-      <td colspan="1" class="M__red">1</td>
-      <td colspan="2" class="M__black">1</td>
-      <td colspan="1" class="M__red">1</td>
-      <td colspan="3" class="M__black">1</td>
-      <td colspan="1" class="M__white">1</td>
-    </tr>
-    <tr>
-      <td colspan="4" class="M__black">1</td>
-      <td colspan="4" class="M__red">1</td>
-      <td colspan="4" class="M__black">1</td>
-    </tr>
-    <tr>
-      <td colspan="2" class="M__body">1</td>
-      <td colspan="1" class="M__black">1</td>
-      <td colspan="1" class="M__red">1</td>
-      <td colspan="1" class="M__body">1</td>
-      <td colspan="2" class="M__red">1</td>
-      <td colspan="1" class="M__body">1</td>
-      <td colspan="1" class="M__red">1</td>
-      <td colspan="1" class="M__black">1</td>
-      <td colspan="2" class="M__body">1</td>
-    </tr>
-    <tr>
-      <td colspan="3" class="M__body">1</td>
-      <td colspan="6" class="M__red">1</td>
-      <td colspan="3" class="M__body">1</td>
-    </tr>
-    <tr>
-      <td colspan="2" class="M__body">1</td>
-      <td colspan="8" class="M__red">1</td>
-      <td colspan="2" class="M__body">1</td>
-    </tr>
-    <tr>
-      <td colspan="2" class="M__white">1</td>
-      <td colspan="3" class="M__red">1</td>
-      <td colspan="2" class="M__white">1</td>
-      <td colspan="3" class="M__red">1</td>
-      <td colspan="2" class="M__white">1</td>
-    </tr>
-    <tr>
-      <td colspan="1" class="M__white">1</td>
-      <td colspan="3" class="M__black">1</td>
-      <td colspan="4" class="M__white">1</td>
-      <td colspan="3" class="M__black">1</td>
-      <td colspan="1" class="M__white">1</td>
-    </tr>
-    <tr>
-      <td colspan="4" class="M__black">1</td>
-      <td colspan="4" class="M__white">1</td>
-      <td colspan="4" class="M__black">1</td>
-    </tr>
-  </tbody>
-</table>
+<h3>チェック事項</h3>
+<p class="ex2">チェック事項的な何か。</p>
 
 <style>
-  .M__white {
-    background-color: white;
-    color: white;
-  }
-  .M__body {
-    background-color: #F6BC52;
-    color: #F6BC52;
-  }
-  .M__red {
-    background-color: #CC4220;
-    color: #CC4220;
-  }
-  .M__black {
-    background-color: #867724;
-    color: #867724;
-  }
+p.ex2::before {
+  font-family: FontAwesome;
+  content: "\f00c";
+  margin-right: 3px;
+}
 </style>
 
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">table</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;240px&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;320px&quot;</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">thead</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">th</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">th</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">th</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">th</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">th</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">th</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">th</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">th</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">th</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">th</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">th</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">th</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">thead</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">tbody</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;9&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;3&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;3&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;3&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;3&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;3&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;3&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;4&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;4&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;3&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;7&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;3&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;4&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;3&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;3&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;4&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;4&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;4&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;3&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;6&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;3&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;8&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__body&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;3&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;3&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__red&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;2&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;3&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;4&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;3&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;4&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;4&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__white&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;4&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;M__black&quot;</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex2&quot;</span><span class="p">&gt;</span>チェック事項的な何か。<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
 
 <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
-  <span class="p">.</span><span class="nc">M__white</span> <span class="p">{</span>
-    <span class="k">background-color</span><span class="p">:</span> <span class="kc">white</span><span class="p">;</span>
-    <span class="k">color</span><span class="p">:</span> <span class="kc">white</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="p">.</span><span class="nc">M__body</span> <span class="p">{</span>
-    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#F6BC52</span><span class="p">;</span>
-    <span class="k">color</span><span class="p">:</span> <span class="mh">#F6BC52</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="p">.</span><span class="nc">M__red</span> <span class="p">{</span>
-    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#CC4220</span><span class="p">;</span>
-    <span class="k">color</span><span class="p">:</span> <span class="mh">#CC4220</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="p">.</span><span class="nc">M__black</span> <span class="p">{</span>
-    <span class="k">background-color</span><span class="p">:</span> <span class="mh">#867724</span><span class="p">;</span>
-    <span class="k">color</span><span class="p">:</span> <span class="mh">#867724</span><span class="p">;</span>
-  <span class="p">}</span>
+<span class="nt">p</span><span class="p">.</span><span class="nc">ex2</span><span class="p">::</span><span class="nd">before</span> <span class="p">{</span>
+  <span class="k">font-family</span><span class="p">:</span> <span class="n">FontAwesome</span><span class="p">;</span>
+  <span class="k">content</span><span class="p">:</span> <span class="s2">&quot;\f00c&quot;</span><span class="p">;</span>
+  <span class="k">margin-right</span><span class="p">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</pre></div>
+
+
+<h3>フローチャート</h3>
+<ul class="ex3">
+  <li>手順１</li>
+  <li>手順２</li>
+  <li>手順３</li>
+</ul>
+
+<style>
+.ex3 {
+  text-align: center;
+  list-style: none; /*黒ぽちを消す*/
+}
+.ex3 li::after{
+  content: '↓';
+  display: block; /*改行*/
+  padding: 0.3em;/*余白*/
+}
+</style>
+
+<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">ul</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex3&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>手順１<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>手順２<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>手順３<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="p">.</span><span class="nc">ex3</span> <span class="p">{</span>
+  <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+  <span class="k">list-style</span><span class="p">:</span> <span class="kc">none</span><span class="p">;</span> <span class="c">/*黒ぽちを消す*/</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">ex3</span> <span class="nt">li</span><span class="p">::</span><span class="nd">after</span><span class="p">{</span>
+  <span class="k">content</span><span class="p">:</span> <span class="s1">&#39;↓&#39;</span><span class="p">;</span>
+  <span class="k">display</span><span class="p">:</span> <span class="kc">block</span><span class="p">;</span> <span class="c">/*改行*/</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mf">0.3</span><span class="kt">em</span><span class="p">;</span> <span class="c">/*余白*/</span>
+<span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</pre></div>
+
+
+<p>ただし、これだと最後の矢印が余計になってしまいます。</p>
+<p>そこで、<code>XXX:not(YYY)</code> という、<span class="marker-pink">「XXXに適用するが、YYYは除く」</span>意味を持つ<span class="marker-pink">否定擬似クラス</span>を用いることで、この問題に対処します。（<b>擬似クラス</b>は<b>擬似要素</b>とは違い、コロンは1つです。）</p>
+<p>なお、並んでいる要素のうち最後のものを指すには <code>:last-child</code> という<span class="marker-pink">擬似クラス</span>を用います。</p>
+<h3>フローチャート（改良版）</h3>
+<ul class="ex4">
+  <li>風邪ひきーの</li>
+  <li>医者行きーの</li>
+  <li>受付済ませーの</li>
+  <li>待ちーの</li>
+  <li>名前呼ばれーの</li>
+  <li style="font-family: Impact,Charcoal; font-size: 2em;">トツギーノ</li>
+</ul>
+
+<style>
+.ex4 {
+  text-align: center;
+  list-style: none;
+}
+.ex4 li:not(:last-child)::after{
+  content: '↓';
+  display: block;
+  padding: 0.3em;
+}
+</style>
+
+<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">ul</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex4&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>風邪ひきーの<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>医者行きーの<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>受付済ませーの<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>待ちーの<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>名前呼ばれーの<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">li</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;font-family: Impact,Charcoal; font-size: 2em;&quot;</span><span class="p">&gt;</span>トツギーノ<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="p">.</span><span class="nc">ex4</span> <span class="p">{</span>
+  <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+  <span class="k">list-style</span><span class="p">:</span> <span class="kc">none</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">ex4</span> <span class="nt">li</span><span class="p">:</span><span class="nd">not</span><span class="o">(</span><span class="p">:</span><span class="nd">last-child</span><span class="o">)</span><span class="p">::</span><span class="nd">after</span><span class="p">{</span>
+  <span class="k">content</span><span class="p">:</span> <span class="s1">&#39;↓&#39;</span><span class="p">;</span>
+  <span class="k">display</span><span class="p">:</span> <span class="kc">block</span><span class="p">;</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mf">0.3</span><span class="kt">em</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</pre></div>
+
+
+<h3>吹き出し</h3>
+<div class="ex5">
+  <div class="ex5__img"><img src="https://rr.img.naver.jp/mig?src=http%3A%2F%2Fblog.kitamura.jp%2F03%2F4664%2Fimages%2Fm464dc8h5363e5i3_060405totugino.gif&twidth=1200&theight=1200&qlt=80&res_format=jpg&op=r"></div>
+  <div class="ex5__callout">ピン芸人になったバカリズム（マセキ芸能社所属）の代表作。厳格な表情でフリップをめくり、そこに描かれた絵に適した解説を「○○ーの」と厳格な口調で発するネタ。でも、オチは必ず「トツギーノ」（「嫁ぎーの」という意）<br>引用：<a href="http://d.hatena.ne.jp/keyword/%A5%C8%A5%C4%A5%AE%A1%BC%A5%CE">はてなキーワード</a></div>
+</div>
+
+<style>
+.ex5 {
+  display: table;
+  width: 100%;
+}
+.ex5__img {
+  display: table-cell;
+  vertical-align: middle;
+  width: 50%;
+  padding-right: 10px;
+}
+/* ここから */
+.ex5__img::before {
+  content: 'トツギーノ';
+  text-align: center;
+  display: block;
+  font-family: Impact,Charcoal;
+}
+.ex5__img::after {
+  content: '出典：https://matome.naver.jp/odai/2142518805695473601';
+  text-align: center;
+  display: block;
+  font-size: 0.5em;
+}
+/* ここまでは余計 */
+.ex5__callout {
+  border: #0082af solid 4px;
+  position: relative;
+  background: #fff;
+  padding: 12px;
+  border-radius: 13px;
+}
+.ex5__callout::before {
+  content: "";
+  position: absolute;
+  border-right: 23px solid #0082af;
+  border-bottom: 20px solid transparent;
+  border-top: 20px solid transparent;
+  top: 30%;
+  left: -23px;
+}
+.ex5__callout::after {
+  content: "";
+  position: absolute;
+  border-right: 24px solid #fff;
+  border-bottom: 20px solid transparent;
+  border-top: 20px solid transparent;
+  top: 30%;
+  left: -17px;
+}
+</style>
+
+<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex5&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex5__img&quot;</span><span class="p">&gt;&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://rr.img.naver.jp/mig?src=http%3A%2F%2Fblog.kitamura.jp%2F03%2F4664%2Fimages%2Fm464dc8h5363e5i3_060405totugino.gif&amp;twidth=1200&amp;theight=1200&amp;qlt=80&amp;res_format=jpg&amp;op=r&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex5__callout&quot;</span><span class="p">&gt;</span>ピン芸人になったバカリズム（マセキ芸能社所属）の代表作。厳格な表情でフリップをめくり、そこに描かれた絵に適した解説を「○○ーの」と厳格な口調で発するネタ。でも、オチは必ず「トツギーノ」（「嫁ぎーの」という意）<span class="p">&lt;</span><span class="nt">br</span><span class="p">&gt;</span>引用：<span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;http://d.hatena.ne.jp/keyword/%A5%C8%A5%C4%A5%AE%A1%BC%A5%CE&quot;</span><span class="p">&gt;</span>はてなキーワード<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="p">.</span><span class="nc">ex5</span> <span class="p">{</span>
+  <span class="k">display</span><span class="p">:</span> <span class="kc">table</span><span class="p">;</span>
+  <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">ex5__img</span> <span class="p">{</span>
+  <span class="k">display</span><span class="p">:</span> <span class="kc">table-cell</span><span class="p">;</span>
+  <span class="k">vertical-align</span><span class="p">:</span> <span class="kc">middle</span><span class="p">;</span>
+  <span class="k">width</span><span class="p">:</span> <span class="mi">50</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">padding-right</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c">/* ここから */</span>
+<span class="p">.</span><span class="nc">ex5__img</span><span class="p">::</span><span class="nd">before</span> <span class="p">{</span>
+  <span class="k">content</span><span class="p">:</span> <span class="s1">&#39;トツギーノ&#39;</span><span class="p">;</span>
+  <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+  <span class="k">display</span><span class="p">:</span> <span class="kc">block</span><span class="p">;</span>
+  <span class="k">font-family</span><span class="p">:</span> <span class="n">Impact</span><span class="p">,</span><span class="n">Charcoal</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">ex5__img</span><span class="p">::</span><span class="nd">after</span> <span class="p">{</span>
+  <span class="k">content</span><span class="p">:</span> <span class="s1">&#39;出典：https://matome.naver.jp/odai/2142518805695473601&#39;</span><span class="p">;</span>
+  <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+  <span class="k">display</span><span class="p">:</span> <span class="kc">block</span><span class="p">;</span>
+  <span class="k">font-size</span><span class="p">:</span> <span class="mf">0.5</span><span class="kt">em</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c">/* ここまでは余計 */</span>
+<span class="p">.</span><span class="nc">ex5__callout</span> <span class="p">{</span>
+  <span class="k">border</span><span class="p">:</span> <span class="mh">#0082af</span> <span class="kc">solid</span> <span class="mi">4</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">position</span><span class="p">:</span> <span class="kc">relative</span><span class="p">;</span>
+  <span class="k">background</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mi">12</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">border-radius</span><span class="p">:</span> <span class="mi">13</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">ex5__callout</span><span class="p">::</span><span class="nd">before</span> <span class="p">{</span>
+  <span class="k">content</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+  <span class="k">position</span><span class="p">:</span> <span class="kc">absolute</span><span class="p">;</span>
+  <span class="k">border-right</span><span class="p">:</span> <span class="mi">23</span><span class="kt">px</span> <span class="kc">solid</span> <span class="mh">#0082af</span><span class="p">;</span>
+  <span class="k">border-bottom</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span> <span class="kc">solid</span> <span class="kc">transparent</span><span class="p">;</span>
+  <span class="k">border-top</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span> <span class="kc">solid</span> <span class="kc">transparent</span><span class="p">;</span>
+  <span class="k">top</span><span class="p">:</span> <span class="mi">30</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">left</span><span class="p">:</span> <span class="mi">-23</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">ex5__callout</span><span class="p">::</span><span class="nd">after</span> <span class="p">{</span>
+  <span class="k">content</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+  <span class="k">position</span><span class="p">:</span> <span class="kc">absolute</span><span class="p">;</span>
+  <span class="k">border-right</span><span class="p">:</span> <span class="mi">24</span><span class="kt">px</span> <span class="kc">solid</span> <span class="mh">#fff</span><span class="p">;</span>
+  <span class="k">border-bottom</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span> <span class="kc">solid</span> <span class="kc">transparent</span><span class="p">;</span>
+  <span class="k">border-top</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span> <span class="kc">solid</span> <span class="kc">transparent</span><span class="p">;</span>
+  <span class="k">top</span><span class="p">:</span> <span class="mi">30</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">left</span><span class="p">:</span> <span class="mi">-17</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
 <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
 </pre></div>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
                     <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/html-1.html" rel="bookmark"
+                           title="Permalink to html.1 テーブルについて理解する。">html.1 テーブルについて理解する。</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <span>2019-09-02(月)</span>
+<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/html.html">html</a></span>
+</footer><!-- /.post-info -->                <p>テーブルについて理解する。</p>
+                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/html-1.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -525,21 +454,6 @@
 <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
 </footer><!-- /.post-info -->                <p>ブロック崩しを作る</p>
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-9.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-8.html" rel="bookmark"
-                           title="Permalink to JS.8 Webカメラの映像で遊んでみる-2">JS.8 Webカメラの映像で遊んでみる-2</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-06-09(日)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>Webカメラの映像で遊んでみる-2</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-8.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
             </ol><!-- /#posts-list -->
