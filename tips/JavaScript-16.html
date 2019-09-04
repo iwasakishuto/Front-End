@@ -72,6 +72,7 @@
   <li>画像サイズを「固定」 or 「可変」で選べるようにする。</li>
   <li>バウンディングボックスを取り消せるようにする。</li>
   <li>Semantic Segmentationのデータ作成ツールを作る。</li>
+  <li><code>width</code> が負の値を取るとデータの整形時に面倒なので、<code>to</code>,<code>right</code>,<code>bottom</code>,<code>left</code> の形にする。</li>
 </div>
 
 <h2>作ったもの</h2>
@@ -220,8 +221,6 @@
     ImgTag.width = WidthInputTag.value;
     ImgTag.height = HeightInputTag.value;
 
-    Canvas.style.width = WidthInputTag.value;
-    Canvas.style.height = HeightInputTag.value;
     Canvas.width = WidthInputTag.value;
     Canvas.height = HeightInputTag.value;
 
