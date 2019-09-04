@@ -3,7 +3,7 @@
 <head>
         <meta charset="utf-8" />
         <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/front-end.png" />
-        <title>Front-End Portfolio - JavaScript</title>
+        <title>JS.16 アノテーションデータ（バウンディングボックス）作成ツールを作成する。</title>
         <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
 
         <!-- Added by Shuto Iwasaki. -->
@@ -47,21 +47,26 @@
                 <nav><ul>
                     <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html">CSS</a></li>
                     <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html">HTML</a></li>
-                    <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
+                    <li class="active"><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
                 </ul>
 <form id="search" action"#" onsubmit="javascript:window.open('https://duckduckgo.com/?q='+document.getElementById('keywords').value+'+site:https://iwasakishuto.github.io/Front-End/tips');">
                         <input id="keywords" type="text" />
                     </form>
                 </nav>
         </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-16.html" rel="bookmark"
+           title="Permalink to JS.16 アノテーションデータ（バウンディングボックス）作成ツールを作成する。">JS.16 アノテーションデータ（バウンディングボックス）作成ツールを作成する。</a></h1>
+    </header>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-16.html">JS.16 アノテーションデータ（バウンディングボックス）作成ツールを作成する。</a></h1>
+    <div class="entry-content">
 <footer class="post-info">
         <span>2019-09-04(水)</span>
 <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info --><p><a href="https://github.com/iwasakishuto/ML-From-Paper/tree/master/Biology/U-Net">U-Net</a>で大腸菌カウンターを作るなど、<span class="marker-pink">Object Detection</span> や <span class="marker-pink">Semantic Segmentation</span> のモデルを実際に作ってみたいなと思ったので、まずは<b>バウンディングボックス</b>のアノテーションデータ作成ツールを作りました。</p>
+</footer><!-- /.post-info -->      <p><a href="https://github.com/iwasakishuto/ML-From-Paper/tree/master/Biology/U-Net">U-Net</a>で大腸菌カウンターを作るなど、<span class="marker-pink">Object Detection</span> や <span class="marker-pink">Semantic Segmentation</span> のモデルを実際に作ってみたいなと思ったので、まずは<b>バウンディングボックス</b>のアノテーションデータ作成ツールを作りました。</p>
 <div class="frame">
   <h3>今後やるべきこと</h3>
   <li>画像サイズを「固定」 or 「可変」で選べるようにする。</li>
@@ -540,152 +545,11 @@
 </pre></div>
 
 
-<p>あとは、バウンディングボックスの情報を保持して、最後にラベルデータや <code>width</code>,<code>height</code> と一緒に <code>JSON.stringify</code> で <code>json</code> データにしてダウンロードすれば終了です。</p>                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <ol id="posts-list" class="hfeed">
+<p>あとは、バウンディングボックスの情報を保持して、最後にラベルデータや <code>width</code>,<code>height</code> と一緒に <code>JSON.stringify</code> で <code>json</code> データにしてダウンロードすれば終了です。</p>
+    </div><!-- /.entry-content -->
 
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-15.html" rel="bookmark"
-                           title="Permalink to JS.15 ポケモン自己分析を分析してみる">JS.15 ポケモン自己分析を分析してみる</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-07-30(火)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>ポケモン自己分析を分析してみた。</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-15.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-14.html" rel="bookmark"
-                           title="Permalink to JS.14 Slack用の文字スタンプを作る">JS.14 Slack用の文字スタンプを作る</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-07-22(月)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>Slack用の文字スタンプを作る</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-14.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-13.html" rel="bookmark"
-                           title="Permalink to JS.13 GASでslackにメッセージを送る">JS.13 GASでslackにメッセージを送る</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-06-18(火)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>GASでslackにメッセージを送る。</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-13.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-12.html" rel="bookmark"
-                           title="Permalink to JS.12 Node.jsでコマンドメモアプリケーション">JS.12 Node.jsでコマンドメモアプリケーション</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-06-17(月)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a><a href="https://iwasakishuto.github.io/Front-End/tips/tag/udemy.html">Udemy</a></span>
-</footer><!-- /.post-info -->                <p>Node.jsでコマンドメモアプリケーション</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-12.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-11.html" rel="bookmark"
-                           title="Permalink to JS.11 TensorFlow.jsでMNIST">JS.11 TensorFlow.jsでMNIST</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-06-14(金)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>TensorFlow.jsでMNIST</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-11.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-10.html" rel="bookmark"
-                           title="Permalink to JS.10 OpenCVで遊ぶ">JS.10 OpenCVで遊ぶ</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-06-13(木)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>OpenCVで遊ぶ</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-10.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-9.html" rel="bookmark"
-                           title="Permalink to JS.9 ブロック崩しを作る">JS.9 ブロック崩しを作る</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-06-12(水)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>ブロック崩しを作る</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-9.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-8.html" rel="bookmark"
-                           title="Permalink to JS.8 Webカメラの映像で遊んでみる-2">JS.8 Webカメラの映像で遊んでみる-2</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-06-09(日)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>Webカメラの映像で遊んでみる-2</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-8.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-7.html" rel="bookmark"
-                           title="Permalink to JS.7 Webカメラの映像で遊んでみる-1">JS.7 Webカメラの映像で遊んでみる-1</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-06-09(日)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>Webカメラの映像で遊んでみる-1</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-7.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-            </ol><!-- /#posts-list -->
-<p class="paginator">
-    Page 1 / 2
-        <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript2.html">&raquo;</a>
-</p>
-            </section><!-- /#content -->
+  </article>
+</section>
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h5>blogroll</h5>

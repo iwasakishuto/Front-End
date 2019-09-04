@@ -11,9 +11,9 @@ This repository is for my front-end portfolio.
   </thead>
   <tbody>
     <tr>
-      <td class="img-block" align="center"><a href="https://iwasakishuto.github.io/front-end/tips/category/html.html"><img src="https://iwasakishuto.github.io/front-end/tips/theme/images/language/html.png"></a></td>
-      <td class="img-block" align="center"><a href="https://iwasakishuto.github.io/front-end/tips/category/css.html"><img src="https://iwasakishuto.github.io/front-end/tips/theme/images/language/css.png"></a></td>
-      <td class="img-block" align="center"><a href="https://iwasakishuto.github.io/front-end/tips/category/javascript.html"><img src="https://iwasakishuto.github.io/front-end/tips/theme/images/language/js.png"></a></td>
+      <td class="img-block" align="center"><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/language/html.png"></a></td>
+      <td class="img-block" align="center"><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/language/css.png"></a></td>
+      <td class="img-block" align="center"><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/language/js.png"></a></td>
     </tr>
   </tbody>
 </table>
