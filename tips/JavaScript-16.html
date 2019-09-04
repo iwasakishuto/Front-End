@@ -66,7 +66,11 @@
 <footer class="post-info">
         <span>2019-09-04(水)</span>
 <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->      <p><a href="https://github.com/iwasakishuto/ML-From-Paper/tree/master/Biology/U-Net">U-Net</a>で大腸菌カウンターを作るなど、<span class="marker-pink">Object Detection</span> や <span class="marker-pink">Semantic Segmentation</span> のモデルを実際に作ってみたいなと思ったので、まずは<b>バウンディングボックス</b>のアノテーションデータ作成ツールを作りました。</p>
+</footer><!-- /.post-info -->      <style>
+  img{}
+</style>
+
+<p><a href="https://github.com/iwasakishuto/ML-From-Paper/tree/master/Biology/U-Net">U-Net</a>で大腸菌カウンターを作るなど、<span class="marker-pink">Object Detection</span> や <span class="marker-pink">Semantic Segmentation</span> のモデルを実際に作ってみたいなと思ったので、まずは<b>バウンディングボックス</b>のアノテーションデータ作成ツールを作りました。</p>
 <div class="frame">
   <h3>今後やるべきこと</h3>
   <li>画像サイズを「固定」 or 「可変」で選べるようにする。</li>
@@ -332,7 +336,7 @@
     <span class="nx">Context</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="s2">&quot;#0082af&quot;</span><span class="p">;</span>
     <span class="nx">Context</span><span class="p">.</span><span class="nx">lineWidth</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 
-    <span class="kd">function</span> <span class="nx">draw</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">){</span>
+    <span class="kd">function</span> <span class="nx">ex2draw</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">){</span>
       <span class="nx">Context</span><span class="p">.</span><span class="nx">clearRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">Canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">Canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
 
       <span class="c1">// Draw Indicator.</span>
@@ -349,7 +353,7 @@
     <span class="p">}</span>
 
     <span class="nx">Canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;mousemove&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">draw</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">layerX</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">layerY</span><span class="p">);</span>
+      <span class="nx">ex2draw</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">layerX</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">layerY</span><span class="p">);</span>
     <span class="p">});</span>
   <span class="p">});</span>
 <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
@@ -378,25 +382,25 @@
     var startPosition = { x: null, y: null };
     var isDrag;
 
-    function dragStart(x,y){
+    function ex3dragStart(x,y){
       isDrag=true;
       startPosition.x = x;
       startPosition.y = y;
     }
 
-    function dragEnd(x,y){
+    function ex3dragEnd(x,y){
       if (isDrag){
         ex3DrawingMemory[ex3index] = { x: startPosition.x, y: startPosition.y, w: x-startPosition.x, h: y-startPosition.y };
         ex3index+=1;
-        drawFromMemory();
+        ex3ex3drawFromMemory();
       }else{
-        clear();
-        drawFromMemory();
+        ex3clear();
+        ex3ex3drawFromMemory();
       }
       isDrag=false;
     }
 
-    function drawFromMemory(){
+    function ex3ex3drawFromMemory(){
       ex3Context.strokeStyle = ex3RectEdgeColor;
       for (i=0; i<ex3index; i++){
         ex3Context.fillRect(ex3DrawingMemory[i].x, ex3DrawingMemory[i].y, ex3DrawingMemory[i].w, ex3DrawingMemory[i].h);
@@ -407,9 +411,9 @@
       ex3Context.strokeStyle = ex3IndicatorColor;
     }
 
-    function draw(x,y){
-      clear(); // Initialization.
-      drawFromMemory(); // Draw Bounding Boxes.
+    function ex3draw(x,y){
+      ex3clear(); // Initialization.
+      ex3ex3drawFromMemory(); // Draw Bounding Boxes.
 
       // Draw Indicator.
       ex3Context.beginPath();
@@ -429,25 +433,25 @@
       }
     }
 
-    function mouseHandler(){
+    function ex3mouseHandler(){
       ex3Canvas.addEventListener('mousedown', function(e){
-        dragStart(e.layerX, e.layerY);
+        ex3dragStart(e.layerX, e.layerY);
       });
       ex3Canvas.addEventListener('mouseup', function(e){
-        dragEnd(e.layerX, e.layerY);
+        ex3dragEnd(e.layerX, e.layerY);
       });
       ex3Canvas.addEventListener('mouseout', function(e){
-        dragEnd(e.layerX, e.layerY);
+        ex3dragEnd(e.layerX, e.layerY);
       });
       ex3Canvas.addEventListener('mousemove', function(e) {
-        draw(e.layerX, e.layerY);
+        ex3draw(e.layerX, e.layerY);
       });
     }
-    mouseHandler();
+    ex3mouseHandler();
   });
 
-  function clear(){
-    ex3Context.clearRect(0, 0, ex3Canvas.width, ex3Canvas.height);
+  function ex3clear(){
+    ex3Context.ex3clearRect(0, 0, ex3Canvas.width, ex3Canvas.height);
   }
 </script>
 
