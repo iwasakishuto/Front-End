@@ -57,18 +57,17 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-16.html">JS.16 アノテーションデータ（バウンディングボックス）作成ツールを作成する。</a></h1>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-16.html">JS.16 アノテーションデータ（バウンディングボックス）作成ツール</a></h1>
 <footer class="post-info">
         <span>2019-09-04(水)</span>
 <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
 </footer><!-- /.post-info --><style>
-  img{
-    border: initial;
-    padding: initial;
-    text-align: initial;
-    width: initial;
-    height: initial;
-  }
+img {
+  border: 0;
+  padding: 0;
+  width: auto;
+  height: auto;
+}
 </style>
 
 <p><a href="https://github.com/iwasakishuto/ML-From-Paper/tree/master/Biology/U-Net">U-Net</a>で大腸菌カウンターを作るなど、<span class="marker-pink">Object Detection</span> や <span class="marker-pink">Semantic Segmentation</span> のモデルを実際に作ってみたいなと思ったので、まずは<b>バウンディングボックス</b>のアノテーションデータ作成ツールを作りました。</p>
@@ -93,8 +92,8 @@
 </div>
 
 <div >
-  <img class="canvas" id="preview" width="224px" height="224px">
-  <canvas class="canvas" id="canvas" width="224px" height="224px"></canvas>
+  <img class="canvas" id="preview" width="224px" height="224px" >
+  <canvas class="canvas" id="canvas" width="224px" height="224px" style="border: 0.5px solid #0082af;"></canvas>
 </div>
 
 <div id="space"></div>
@@ -278,11 +277,28 @@
     link.download = dirname + "_AnnotatedData.json";
     link.click();
   }
-</script>                </article>
+</script>
+
+<p>なお、コードは<a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-17.html">ここ</a>で簡単に解説しています。</p>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
                     <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-17.html" rel="bookmark"
+                           title="Permalink to JS.17 アノテーションデータ（バウンディングボックス）作成ツールのコード">JS.17 アノテーションデータ（バウンディングボックス）作成ツールのコード</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <span>2019-09-04(水)</span>
+<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+</footer><!-- /.post-info -->                <p>アノテーションデータ（バウンディングボックス）作成ツールのコード</p>
+                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-17.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -401,21 +417,6 @@
 <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
 </footer><!-- /.post-info -->                <p>TensorFlow.jsでMNIST</p>
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-11.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-10.html" rel="bookmark"
-                           title="Permalink to JS.10 OpenCVで遊ぶ">JS.10 OpenCVで遊ぶ</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-06-13(木)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>OpenCVで遊ぶ</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-10.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
             </ol><!-- /#posts-list -->

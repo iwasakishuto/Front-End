@@ -3,7 +3,7 @@
 <head>
         <meta charset="utf-8" />
         <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/front-end.png" />
-        <title>JS.16 アノテーションデータ（バウンディングボックス）作成ツールを作成する。</title>
+        <title>JS.16 アノテーションデータ（バウンディングボックス）作成ツール</title>
         <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
 
         <!-- Added by Shuto Iwasaki. -->
@@ -59,7 +59,7 @@
     <header>
       <h1 class="entry-title">
         <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-16.html" rel="bookmark"
-           title="Permalink to JS.16 アノテーションデータ（バウンディングボックス）作成ツールを作成する。">JS.16 アノテーションデータ（バウンディングボックス）作成ツールを作成する。</a></h1>
+           title="Permalink to JS.16 アノテーションデータ（バウンディングボックス）作成ツール">JS.16 アノテーションデータ（バウンディングボックス）作成ツール</a></h1>
     </header>
 
     <div class="entry-content">
@@ -67,13 +67,12 @@
         <span>2019-09-04(水)</span>
 <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
 </footer><!-- /.post-info -->      <style>
-  img{
-    border: initial;
-    padding: initial;
-    text-align: initial;
-    width: initial;
-    height: initial;
-  }
+img {
+  border: 0;
+  padding: 0;
+  width: auto;
+  height: auto;
+}
 </style>
 
 <p><a href="https://github.com/iwasakishuto/ML-From-Paper/tree/master/Biology/U-Net">U-Net</a>で大腸菌カウンターを作るなど、<span class="marker-pink">Object Detection</span> や <span class="marker-pink">Semantic Segmentation</span> のモデルを実際に作ってみたいなと思ったので、まずは<b>バウンディングボックス</b>のアノテーションデータ作成ツールを作りました。</p>
@@ -98,8 +97,8 @@
 </div>
 
 <div >
-  <img class="canvas" id="preview" width="224px" height="224px">
-  <canvas class="canvas" id="canvas" width="224px" height="224px"></canvas>
+  <img class="canvas" id="preview" width="224px" height="224px" >
+  <canvas class="canvas" id="canvas" width="224px" height="224px" style="border: 0.5px solid #0082af;"></canvas>
 </div>
 
 <div id="space"></div>
@@ -284,6 +283,8 @@
     link.click();
   }
 </script>
+
+<p>なお、コードは<a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-17.html">ここ</a>で簡単に解説しています。</p>
     </div><!-- /.entry-content -->
 
   </article>
