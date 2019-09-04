@@ -167,25 +167,25 @@
     ex3Context.fillStyle = ex3RectInnerColor;
     ex3Context.lineWidth = 1;
 
-    var startPosition = { x: null, y: null };
-    var isDrag;
+    var ex3startPosition = { x: null, y: null };
+    var ex3isDrag;
 
     function ex3dragStart(x,y){
-      isDrag=true;
-      startPosition.x = x;
-      startPosition.y = y;
+      ex3isDrag=true;
+      ex3startPosition.x = x;
+      ex3startPosition.y = y;
     }
 
     function ex3dragEnd(x,y){
-      if (isDrag){
-        ex3DrawingMemory[ex3index] = { x: startPosition.x, y: startPosition.y, w: x-startPosition.x, h: y-startPosition.y };
+      if (ex3isDrag){
+        ex3DrawingMemory[ex3index] = { x: ex3startPosition.x, y: ex3startPosition.y, w: x-ex3startPosition.x, h: y-ex3startPosition.y };
         ex3index+=1;
         ex3ex3drawFromMemory();
       }else{
         ex3clear();
         ex3ex3drawFromMemory();
       }
-      isDrag=false;
+      ex3isDrag=false;
     }
 
     function ex3ex3drawFromMemory(){
@@ -213,10 +213,10 @@
       ex3Context.stroke();
 
       // Draw the current Bounding Box.
-      if(isDrag){
+      if(ex3isDrag){
         ex3Context.strokeStyle = ex3RectEdgeColor;
-        ex3Context.fillRect(startPosition.x, startPosition.y, x-startPosition.x, y-startPosition.y);
-        ex3Context.strokeRect(startPosition.x, startPosition.y, x-startPosition.x, y-startPosition.y);
+        ex3Context.fillRect(ex3startPosition.x, ex3startPosition.y, x-ex3startPosition.x, y-ex3startPosition.y);
+        ex3Context.strokeRect(ex3startPosition.x, ex3startPosition.y, x-ex3startPosition.x, y-ex3startPosition.y);
         ex3Context.strokeStyle = ex3IndicatorColor;
       }
     }
@@ -239,7 +239,7 @@
   });
 
   function ex3clear(){
-    ex3Context.ex3clearRect(0, 0, ex3Canvas.width, ex3Canvas.height);
+    ex3Context.clearRect(0, 0, ex3Canvas.width, ex3Canvas.height);
   }
 </script>
 
