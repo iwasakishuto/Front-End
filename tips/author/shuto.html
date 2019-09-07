@@ -57,285 +57,130 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-17.html">JS.17 アノテーションデータ（バウンディングボックス）作成ツールのコード</a></h1>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-18.html">JS.18 ディレクトリ内の画像を全て表示する。</a></h1>
 <footer class="post-info">
-        <span>2019-09-04(水)</span>
+        <span>2019-09-07(土)</span>
 <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info --><p><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-16.html">アノテーションデータ（バウンディングボックス）作成ツール</a>のコードを簡単に解説します。</p>
-<h2>ディレクトリを受け取る</h2>
-<p>これは非常に簡単で、<code>&lt;input&gt;</code> タグに <code>webkitdirectory</code> と書けばそれで終了です。</p>
-<p><input id="" type="file" webkitdirectory></p>
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;ex1&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;file&quot;</span> <span class="na">webkitdirectory</span><span class="p">&gt;</span>
-</pre></div>
+</footer><!-- /.post-info --><p>ディレクトリ内部の画像を全て表示します。</p>
+<p>今後 <code>focus</code> などを用いてラベル付けが楽にできるようにしたいと思います。</p>
+<div style='text-align: center;'>
+  <label for='InputFiles'>
+    ディレクトリを選択してください。
+    <input id="InputFiles" type="file" webkitdirectory style='display:none;'>
+  </label>
+</div>
 
+<ul id="gallery" class="galleryCover">
+</ul>
 
-<p>なお、以下のようにすれば、ディレクトリの各種情報を得ることができます。</p>
-<div class="highlight"><pre><span></span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;ex1&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
-  <span class="nx">dir</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span><span class="p">;</span> <span class="c1">// これでディレクトリを受け取る。</span>
-  <span class="nx">dirname</span> <span class="o">=</span> <span class="nx">dir</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">webkitRelativePath</span><span class="p">;</span> <span class="c1">// 一つめのファイルのパス</span>
-  <span class="nx">filenum</span> <span class="o">=</span> <span class="nx">dir</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="c1">// ファイルの数</span>
-<span class="p">});</span>
-</pre></div>
-
-
-<h2>マウスの座標を可視化する。</h2>
-<canvas id="ex2" width="200px" height="200px" style="border: 1.5px solid #000; background-color: #eee"></canvas>
-
-<script>
-  window.addEventListener('load', function() {
-    var ex2Canvas = document.getElementById('ex2');
-    var ex2Context = ex2Canvas.getContext('2d');
-    ex2Context.strokeStyle = "#0082af";
-    ex2Context.lineWidth = 1;
-
-    function draw(x,y){
-      ex2Context.clearRect(0, 0, ex2Canvas.width, ex2Canvas.height);
-
-      // Draw Indicator.
-      ex2Context.beginPath();
-
-      ex2Context.moveTo(0, y);
-      ex2Context.lineTo(ex2Canvas.width, y);
-
-      ex2Context.moveTo(x, 0);
-      ex2Context.lineTo(x, ex2Canvas.height);
-
-      ex2Context.closePath();
-      ex2Context.stroke();
-    }
-
-    ex2Canvas.addEventListener('mousemove', function(e) {
-      draw(e.layerX, e.layerY);
-    });
-  });
-</script>
-
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;ex2&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;200px&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;200px&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;border: 1.5px solid #000; background-color: #eee&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-  <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;load&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">Canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;ex2&#39;</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">Context</span> <span class="o">=</span> <span class="nx">Canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">&#39;2d&#39;</span><span class="p">);</span>
-    <span class="nx">Context</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="s2">&quot;#0082af&quot;</span><span class="p">;</span>
-    <span class="nx">Context</span><span class="p">.</span><span class="nx">lineWidth</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-
-    <span class="kd">function</span> <span class="nx">ex2draw</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">){</span>
-      <span class="nx">Context</span><span class="p">.</span><span class="nx">clearRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">Canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">Canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
-
-      <span class="c1">// Draw Indicator.</span>
-      <span class="nx">Context</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
-
-      <span class="nx">Context</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">y</span><span class="p">);</span>
-      <span class="nx">Context</span><span class="p">.</span><span class="nx">lineTo</span><span class="p">(</span><span class="nx">Canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">y</span><span class="p">);</span>
-
-      <span class="nx">Context</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-      <span class="nx">Context</span><span class="p">.</span><span class="nx">lineTo</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">Canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
-
-      <span class="nx">Context</span><span class="p">.</span><span class="nx">closePath</span><span class="p">();</span>
-      <span class="nx">Context</span><span class="p">.</span><span class="nx">stroke</span><span class="p">();</span>
-    <span class="p">}</span>
-
-    <span class="nx">Canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;mousemove&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">ex2draw</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">layerX</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">layerY</span><span class="p">);</span>
-    <span class="p">});</span>
-  <span class="p">});</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</pre></div>
-
-
-<p><code>&lt;canvas&gt;</code> には、<code>Context.beginPath()</code> から <code>Context.closePath()</code> までに描いたものが <code>Context.stroke()</code> によって描かれます。</p>
-<h2>バウンディングボックスを描く</h2>
-<canvas id="ex3" width="200px" height="200px" style="border: 1.5px solid #000; background-color: #fff"></canvas>
-
-<script>
-  var ex3Canvas;
-  var ex3Context;
-  var ex3RectEdgeColor = "#FB0";
-  var ex3RectInnerColor = "rgba(255,230,174,0.3)";
-  var ex3IndicatorColor = "#0082af";
-  var ex3index=0;
-  var ex3DrawingMemory = { 0: { x: null, y: null, w: null, h: null} };
-  window.addEventListener('load', function() {
-    ex3Canvas = document.getElementById('ex3');
-    ex3Context = ex3Canvas.getContext('2d');
-    ex3Context.strokeStyle = ex3IndicatorColor;
-    ex3Context.fillStyle = ex3RectInnerColor;
-    ex3Context.lineWidth = 1;
-
-    var ex3startPosition = { x: null, y: null };
-    var ex3isDrag;
-
-    function ex3dragStart(x,y){
-      ex3isDrag=true;
-      ex3startPosition.x = x;
-      ex3startPosition.y = y;
-    }
-
-    function ex3dragEnd(x,y){
-      if (ex3isDrag){
-        ex3DrawingMemory[ex3index] = { x: ex3startPosition.x, y: ex3startPosition.y, w: x-ex3startPosition.x, h: y-ex3startPosition.y };
-        ex3index+=1;
-        ex3ex3drawFromMemory();
-      }else{
-        ex3clear();
-        ex3ex3drawFromMemory();
-      }
-      ex3isDrag=false;
-    }
-
-    function ex3ex3drawFromMemory(){
-      ex3Context.strokeStyle = ex3RectEdgeColor;
-      for (i=0; i<ex3index; i++){
-        ex3Context.fillRect(ex3DrawingMemory[i].x, ex3DrawingMemory[i].y, ex3DrawingMemory[i].w, ex3DrawingMemory[i].h);
-      }
-      for (i=0; i<ex3index; i++){
-        ex3Context.strokeRect(ex3DrawingMemory[i].x, ex3DrawingMemory[i].y, ex3DrawingMemory[i].w, ex3DrawingMemory[i].h);
-      }
-      ex3Context.strokeStyle = ex3IndicatorColor;
-    }
-
-    function ex3draw(x,y){
-      ex3clear(); // Initialization.
-      ex3ex3drawFromMemory(); // Draw Bounding Boxes.
-
-      // Draw Indicator.
-      ex3Context.beginPath();
-      ex3Context.moveTo(0, y); // start
-      ex3Context.lineTo(ex3Canvas.width, y); // end
-      ex3Context.moveTo(x, 0); // start
-      ex3Context.lineTo(x, ex3Canvas.height); // end
-      ex3Context.closePath();
-      ex3Context.stroke();
-
-      // Draw the current Bounding Box.
-      if(ex3isDrag){
-        ex3Context.strokeStyle = ex3RectEdgeColor;
-        ex3Context.fillRect(ex3startPosition.x, ex3startPosition.y, x-ex3startPosition.x, y-ex3startPosition.y);
-        ex3Context.strokeRect(ex3startPosition.x, ex3startPosition.y, x-ex3startPosition.x, y-ex3startPosition.y);
-        ex3Context.strokeStyle = ex3IndicatorColor;
-      }
-    }
-
-    function ex3mouseHandler(){
-      ex3Canvas.addEventListener('mousedown', function(e){
-        ex3dragStart(e.layerX, e.layerY);
-      });
-      ex3Canvas.addEventListener('mouseup', function(e){
-        ex3dragEnd(e.layerX, e.layerY);
-      });
-      ex3Canvas.addEventListener('mouseout', function(e){
-        ex3dragEnd(e.layerX, e.layerY);
-      });
-      ex3Canvas.addEventListener('mousemove', function(e) {
-        ex3draw(e.layerX, e.layerY);
-      });
-    }
-    ex3mouseHandler();
-  });
-
-  function ex3clear(){
-    ex3Context.clearRect(0, 0, ex3Canvas.width, ex3Canvas.height);
+<style>
+  label {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 1.6em;
+    color: white;
+    background-color: red;
+    padding: 6px;
+    border-radius: 15px;
   }
+  .galleryCover .galleryElements {
+    text-align: center;
+    display: inline;
+  }
+  .galleryCover {
+    text-align: left;
+  }
+  img.__canvas {
+    width: 12%;
+    height: auto;
+    margin: 3px;
+    border: 5;
+  }
+</style>
+
+<script>
+  var DirInputTag = document.getElementById('InputFiles');
+  var GalleryTag = document.getElementById('gallery');
+  var files;
+  var file;
+
+  DirInputTag.addEventListener('change', function(e){
+    files = e.target.files;
+
+    var img
+    var div;
+    for (var i=0; i<files.length; i++) {
+      let reader = new FileReader();
+      reader.onload = function(e) {
+        img = document.createElement('img');
+        img.setAttribute('src', e.target.result);
+        img.className = "__canvas"
+        li = document.createElement('li');
+        li.appendChild(img);
+        li.className = 'galleryElements';
+        GalleryTag.appendChild(li)
+      }
+      reader.readAsDataURL(files[i]);
+    }
+  });
 </script>
 
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;ex3&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;200px&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;200px&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;border: 1.5px solid #000; background-color: #fff&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-  <span class="kd">var</span> <span class="nx">Canvas</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">Context</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">RectEdgeColor</span> <span class="o">=</span> <span class="s2">&quot;#FB0&quot;</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">RectInnerColor</span> <span class="o">=</span> <span class="s2">&quot;rgba(255,230,174,0.3)&quot;</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">IndicatorColor</span> <span class="o">=</span> <span class="s2">&quot;#0082af&quot;</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">index</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">DrawingMemory</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="o">:</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">w</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">h</span><span class="o">:</span> <span class="kc">null</span><span class="p">}</span> <span class="p">};</span>
-  <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;load&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">Canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;ex3&#39;</span><span class="p">);</span>
-    <span class="nx">Context</span> <span class="o">=</span> <span class="nx">Canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">&#39;2d&#39;</span><span class="p">);</span>
-    <span class="nx">Context</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="nx">IndicatorColor</span><span class="p">;</span>
-    <span class="nx">Context</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="nx">RectInnerColor</span><span class="p">;</span>
-    <span class="nx">Context</span><span class="p">.</span><span class="nx">lineWidth</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-
-    <span class="kd">var</span> <span class="nx">startPosition</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="kc">null</span> <span class="p">};</span>
-    <span class="kd">var</span> <span class="nx">isDrag</span><span class="p">;</span>
-
-    <span class="kd">function</span> <span class="nx">dragStart</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">){</span>
-      <span class="nx">isDrag</span><span class="o">=</span><span class="kc">true</span><span class="p">;</span>
-      <span class="nx">startPosition</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">x</span><span class="p">;</span>
-      <span class="nx">startPosition</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="nx">y</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="kd">function</span> <span class="nx">dragEnd</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">){</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">isDrag</span><span class="p">){</span>
-        <span class="nx">DrawingMemory</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="nx">startPosition</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="nx">startPosition</span><span class="p">.</span><span class="nx">y</span><span class="p">,</span> <span class="nx">w</span><span class="o">:</span> <span class="nx">x</span><span class="o">-</span><span class="nx">startPosition</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">h</span><span class="o">:</span> <span class="nx">y</span><span class="o">-</span><span class="nx">startPosition</span><span class="p">.</span><span class="nx">y</span> <span class="p">};</span>
-        <span class="nx">index</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span>
-        <span class="nx">drawFromMemory</span><span class="p">();</span>
-      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-        <span class="nx">clear</span><span class="p">();</span>
-        <span class="nx">drawFromMemory</span><span class="p">();</span>
-      <span class="p">}</span>
-      <span class="nx">isDrag</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="kd">function</span> <span class="nx">drawFromMemory</span><span class="p">(){</span>
-      <span class="nx">Context</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="nx">RectEdgeColor</span><span class="p">;</span>
-      <span class="k">for</span> <span class="p">(</span><span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">index</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-        <span class="nx">Context</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="nx">DrawingMemory</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">x</span><span class="p">,</span> <span class="nx">DrawingMemory</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">y</span><span class="p">,</span> <span class="nx">DrawingMemory</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">w</span><span class="p">,</span> <span class="nx">DrawingMemory</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">h</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="k">for</span> <span class="p">(</span><span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">index</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-        <span class="nx">Context</span><span class="p">.</span><span class="nx">strokeRect</span><span class="p">(</span><span class="nx">DrawingMemory</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">x</span><span class="p">,</span> <span class="nx">DrawingMemory</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">y</span><span class="p">,</span> <span class="nx">DrawingMemory</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">w</span><span class="p">,</span> <span class="nx">DrawingMemory</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">h</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="nx">Context</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="nx">IndicatorColor</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="kd">function</span> <span class="nx">draw</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">){</span>
-      <span class="nx">clear</span><span class="p">();</span> <span class="c1">// Initialization.</span>
-      <span class="nx">drawFromMemory</span><span class="p">();</span> <span class="c1">// Draw Bounding Boxes.</span>
-
-      <span class="c1">// Draw Indicator.</span>
-      <span class="nx">Context</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
-      <span class="nx">Context</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">y</span><span class="p">);</span> <span class="c1">// start</span>
-      <span class="nx">Context</span><span class="p">.</span><span class="nx">lineTo</span><span class="p">(</span><span class="nx">Canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">y</span><span class="p">);</span> <span class="c1">// end</span>
-      <span class="nx">Context</span><span class="p">.</span><span class="nx">moveTo</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// start</span>
-      <span class="nx">Context</span><span class="p">.</span><span class="nx">lineTo</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">Canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span> <span class="c1">// end</span>
-      <span class="nx">Context</span><span class="p">.</span><span class="nx">closePath</span><span class="p">();</span>
-      <span class="nx">Context</span><span class="p">.</span><span class="nx">stroke</span><span class="p">();</span>
-
-      <span class="c1">// Draw the current Bounding Box.</span>
-      <span class="k">if</span><span class="p">(</span><span class="nx">isDrag</span><span class="p">){</span>
-        <span class="nx">Context</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="nx">RectEdgeColor</span><span class="p">;</span>
-        <span class="nx">Context</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="nx">startPosition</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">startPosition</span><span class="p">.</span><span class="nx">y</span><span class="p">,</span> <span class="nx">x</span><span class="o">-</span><span class="nx">startPosition</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="o">-</span><span class="nx">startPosition</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span>
-        <span class="nx">Context</span><span class="p">.</span><span class="nx">strokeRect</span><span class="p">(</span><span class="nx">startPosition</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">startPosition</span><span class="p">.</span><span class="nx">y</span><span class="p">,</span> <span class="nx">x</span><span class="o">-</span><span class="nx">startPosition</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="o">-</span><span class="nx">startPosition</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span>
-        <span class="nx">Context</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="nx">IndicatorColor</span><span class="p">;</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="kd">function</span> <span class="nx">mouseHandler</span><span class="p">(){</span>
-      <span class="nx">Canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;mousedown&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
-        <span class="nx">dragStart</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">layerX</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">layerY</span><span class="p">);</span>
-      <span class="p">});</span>
-      <span class="nx">Canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;mouseup&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
-        <span class="nx">dragEnd</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">layerX</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">layerY</span><span class="p">);</span>
-      <span class="p">});</span>
-      <span class="nx">Canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;mouseout&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
-        <span class="nx">dragEnd</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">layerX</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">layerY</span><span class="p">);</span>
-      <span class="p">});</span>
-      <span class="nx">Canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;mousemove&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">draw</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">layerX</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">layerY</span><span class="p">);</span>
-      <span class="p">});</span>
-    <span class="p">}</span>
-    <span class="nx">mouseHandler</span><span class="p">();</span>
-  <span class="p">});</span>
-
-  <span class="kd">function</span> <span class="nx">clear</span><span class="p">(){</span>
-    <span class="nx">Context</span><span class="p">.</span><span class="nx">clearRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">Canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">Canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<h2>コード</h2>
+<h3><code>html</code></h3>
+<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&#39;text-align: center;&#39;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">label</span> <span class="na">for</span><span class="o">=</span><span class="s">&#39;InputFiles&#39;</span><span class="p">&gt;</span>
+    ディレクトリを選択してください。
+    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;InputFiles&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;file&quot;</span> <span class="na">webkitdirectory</span> <span class="na">style</span><span class="o">=</span><span class="s">&#39;display:none;&#39;</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">ul</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;gallery&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;galleryCover&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
 </pre></div>
 
 
-<p>あとは、バウンディングボックスの情報を保持して、最後にラベルデータや <code>width</code>,<code>height</code> と一緒に <code>JSON.stringify</code> で <code>json</code> データにしてダウンロードすれば終了です。</p>                </article>
+<h3><code>js</code></h3>
+<div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">DirInputTag</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;InputFiles&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">GalleryTag</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;gallery&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">files</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">file</span><span class="p">;</span>
+
+<span class="nx">DirInputTag</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+  <span class="nx">files</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span><span class="p">;</span>
+
+  <span class="kd">var</span> <span class="nx">img</span>
+  <span class="kd">var</span> <span class="nx">div</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">files</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">reader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FileReader</span><span class="p">();</span>
+    <span class="nx">reader</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">img</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">);</span>
+      <span class="nx">img</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">result</span><span class="p">);</span>
+      <span class="nx">li</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">);</span>
+      <span class="nx">li</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">img</span><span class="p">);</span>
+      <span class="nx">li</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;galleryElements&#39;</span><span class="p">;</span>
+      <span class="nx">GalleryTag</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">li</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">reader</span><span class="p">.</span><span class="nx">readAsDataURL</span><span class="p">(</span><span class="nx">files</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
                     <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-17.html" rel="bookmark"
+                           title="Permalink to JS.17 アノテーションデータ（バウンディングボックス）作成ツールのコード">JS.17 アノテーションデータ（バウンディングボックス）作成ツールのコード</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <span>2019-09-04(水)</span>
+<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+</footer><!-- /.post-info -->                <p>アノテーションデータ（バウンディングボックス）作成ツールのコード</p>
+                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-17.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -456,24 +301,9 @@
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-12.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-11.html" rel="bookmark"
-                           title="Permalink to JS.11 TensorFlow.jsでMNIST">JS.11 TensorFlow.jsでMNIST</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-06-14(金)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>TensorFlow.jsでMNIST</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-11.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
             </ol><!-- /#posts-list -->
 <p class="paginator">
-    Page 1 / 2
+    Page 1 / 3
         <a href="https://iwasakishuto.github.io/Front-End/tips/author/shuto2.html">&raquo;</a>
 </p>
             </section><!-- /#content -->
