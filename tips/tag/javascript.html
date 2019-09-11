@@ -70,6 +70,10 @@
   </label>
 </div>
 
+<div style="padding: 10px; text-align: center;">
+  画像サイズ：5% <input id="sizeRange" type="range" min="5" max="100" step="1" value="12" />100%
+</div>
+
 <ul id="gallery" class="galleryCover">
 </ul>
 
@@ -100,8 +104,17 @@
 <script>
   var DirInputTag = document.getElementById('InputFiles');
   var GalleryTag = document.getElementById('gallery');
+  var sizeRange = document.getElementById('sizeRange');
   var files;
   var file;
+
+  sizeRange.addEventListener('change', function (e) {
+    let size = sizeRange.value + "%";
+    let target = document.getElementsByClassName("__canvas");
+    for (var i = 0; i < target.length; i++) {
+      target[i].style.width = size;
+    }
+  });
 
   DirInputTag.addEventListener('change', function(e){
     files = e.target.files;
