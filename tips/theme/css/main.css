@@ -75,34 +75,31 @@ h2 {
 }
 
 h3 {
-  font-weight: bold;
-  position: relative;
-  line-height: 1;
-  padding: 0em 1em;
+  color:#153c6e;
   display: inline-block;
+  position: relative;
+  padding-left: 30px;
+  font-weight: bold;
+  line-height: 1;
   top: 0;
 }
 
-h3:before, h3:after {
-  position: absolute;
-  top: 0;
-  content:'';
-  width: 8px;
-  height: 100%;
-  display: inline-block;
-}
 h3:before {
-  border-left: solid 1px black;
-  border-top: solid 1px black;
-  border-bottom: solid 1px black;
+  position: absolute;
+  font-family: "Font Awesome 5 Free";
+  content: "\f121";
+  background: #c9e2ff;
+  color: #153c6e;
+  font-size: 15px;
+  border-radius: 50%;
   left: 0;
-}
-h3:after {
-  content: '';
-  border-top: solid 1px black;
-  border-right: solid 1px black;
-  border-bottom: solid 1px black;
-  right: 0;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
 }
 
 h4 {
@@ -406,7 +403,7 @@ img.left, figure.left {float: left; margin: 0 2em 2em 0;}
 }
 #featured figure img {display: block; float: right;}
 
-#featured h2 {color: #008DB8; font-size: 1.714em; margin-bottom: 0.333em;}
+#featured h2 {color: #83274e; font-size: 1.714em; margin-bottom: 0.333em;}
 #featured h3 {font-size: 1.429em; margin-bottom: .5em;}
 
 #featured h3 a:link, #featured h3 a:visited {color: #000305; text-decoration: none;}
