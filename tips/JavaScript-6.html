@@ -2,12 +2,12 @@
 <html lang="ja">
 <head>
         <meta charset="utf-8" />
-        <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/front-end.png" />
+        <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
         <title>JS.6 隠しコマンドで遊ぶ</title>
         <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
 
         <!-- Added by Shuto Iwasaki. -->
-        <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/front-end.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
         <!-- Use fontawesome Icon -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
         <!-- Syntax highlight -->
@@ -64,7 +64,7 @@
 
     <div class="entry-content">
 <footer class="post-info">
-        <span>2019-06-09(日)</span>
+        <span>2019-06-09(Sun)</span>
 <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
 </footer><!-- /.post-info -->      <p><code>JavaScript</code>を使うと隠しコマンドで遊べると聞いたので、試しに遊んで見ました。</p>
 <p>また、<a href="https://fontbomb.ilex.ca/"><code>fontBomb</code></a>という、テキスト（フォント）を時限爆弾で爆発させるスクリプトを使って遊んでも見たので、隠しコマンドがわかった人はそれでも遊んでみてください！！</p>
@@ -218,15 +218,15 @@
 
 <h2>コード</h2>
 <h3><code>html</code></h3>
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;shape-of-you&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;visibility: hidden;&quot;</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;shape-of-you&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;visibility: hidden;&quot;</span><span class="p">&gt;</span>
   <span class="c">&lt;!-- ここに隠しコマンド後に表示させる要素をかく --&gt;</span>
 <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</pre></div>
+</code></pre></div>
 
 
 <h3><code>JavaScript</code></h3>
-<div class="highlight"><pre><span></span><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">inputKey</span> <span class="o">=</span> <span class="p">[];</span>
   <span class="kd">var</span> <span class="nx">Command</span> <span class="o">=</span> <span class="p">[</span><span class="mi">73</span><span class="p">,</span><span class="mi">87</span><span class="p">,</span><span class="mi">65</span><span class="p">,</span><span class="mi">83</span><span class="p">,</span><span class="mi">65</span><span class="p">,</span><span class="mi">75</span><span class="p">,</span><span class="mi">73</span><span class="p">,</span><span class="mi">83</span><span class="p">,</span><span class="mi">72</span><span class="p">,</span><span class="mi">85</span><span class="p">,</span><span class="mi">84</span><span class="p">,</span><span class="mi">79</span><span class="p">];</span>
 
@@ -252,16 +252,16 @@
     <span class="nx">inputKey</span> <span class="o">=</span> <span class="p">[];</span>
   <span class="p">}</span>
 <span class="p">});</span>
-</pre></div>
+</code></pre></div>
 
 
 <h3><code>css</code></h3>
-<div class="highlight"><pre><span></span><span class="p">.</span><span class="nc">shape-of-you</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="p">.</span><span class="nc">shape-of-you</span> <span class="p">{</span>
   <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="mi">170</span><span class="p">,</span> <span class="mi">220</span><span class="p">,</span> <span class="mi">230</span><span class="p">);</span>
   <span class="k">background-size</span><span class="p">:</span><span class="kc">contain</span><span class="p">;</span>
   <span class="k">width</span><span class="p">:</span><span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
     </div><!-- /.entry-content -->
 
   </article>
@@ -273,8 +273,9 @@
                             <li><a href="https://iwasakishuto.github.io">Home</a></li>
                             <li><a href="https://iwasakishuto.github.io/blog/articles/index.html">Blog</a></li>
                             <li><a href="https://iwasakishuto.github.io/University/index.html">University</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Kerasy/doc/index.html">Kerasy</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Front-End/index.html">Front-End</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Kerasy/index.html">Kerasy</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html">Python-Charmers</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html">Translation-Gummy</a></li>
                         </ul>
                 </div><!-- /.blogroll -->
                 <div class="social">
@@ -283,7 +284,6 @@
 
                             <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
                             <li><a href="https://github.com/iwasakishuto">github</a></li>
-                            <li><a href="https://www.facebook.com/iwasakishuto">facebook</a></li>
                         </ul>
                 </div><!-- /.social -->
         </section><!-- /#extras -->

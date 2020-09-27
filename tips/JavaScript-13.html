@@ -2,12 +2,12 @@
 <html lang="ja">
 <head>
         <meta charset="utf-8" />
-        <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/front-end.png" />
+        <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
         <title>JS.13 GASでslackにメッセージを送る</title>
         <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
 
         <!-- Added by Shuto Iwasaki. -->
-        <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/front-end.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
         <!-- Use fontawesome Icon -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
         <!-- Syntax highlight -->
@@ -64,7 +64,7 @@
 
     <div class="entry-content">
 <footer class="post-info">
-        <span>2019-06-18(火)</span>
+        <span>2019-06-18(Tue)</span>
 <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
 </footer><!-- /.post-info -->      <h2>GASとは</h2>
 <p><font color="red"><b>Google Apps Script(GAS, ガス)</b></font>とは、Googleが提供するサーバーサイド・スクリプト環境です。<code>JavaScript</code> じゃないやんって感じかもしれませんが、<code>JavaScript</code> っぽいなと思ったのでかなり前から使っていたのですが一度まとめることにしました。</p>
@@ -74,7 +74,7 @@
 <p><img alt="環奈日報" src="https://iwasakishuto.github.io/images/SPICE/kanna.png"></p>
 <h3><code>listupEvent</code></h3>
 <p>gmailアドレスを受け取り、その日にある予定を全て取得する関数</p>
-<div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">listupEvent</span><span class="p">(</span><span class="nx">cal_id</span><span class="p">){</span>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">listupEvent</span><span class="p">(</span><span class="nx">cal_id</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
   <span class="kd">var</span> <span class="nx">cal</span> <span class="o">=</span> <span class="nx">CalendarApp</span><span class="p">.</span><span class="nx">getCalendarById</span><span class="p">(</span><span class="nx">cal_id</span><span class="p">);</span>
   <span class="kd">var</span> <span class="nx">events</span> <span class="o">=</span> <span class="nx">cal</span><span class="p">.</span><span class="nx">getEventsForDay</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">());</span>
@@ -91,24 +91,24 @@
   <span class="p">}</span>
   <span class="k">return</span> <span class="nx">list</span><span class="p">;</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
 
 
 <h3><code>CalcuDaySpan</code></h3>
 <p>特定の日からの経過時間、特定の日までの残り時間を計算する関数。エモい。</p>
-<div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">CalcuDaySpan</span><span class="p">(){</span>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">CalcuDaySpan</span><span class="p">(){</span>
   <span class="kd">var</span> <span class="nx">start</span> <span class="o">=</span> <span class="nx">Moment</span><span class="p">.</span><span class="nx">moment</span><span class="p">(</span><span class="s1">&#39;YYYY/MM/DD&#39;</span><span class="p">);</span> <span class="c1">// 開始日（ −１日 ）</span>
   <span class="kd">var</span> <span class="nx">end</span>   <span class="o">=</span> <span class="nx">Moment</span><span class="p">.</span><span class="nx">moment</span><span class="p">(</span><span class="s1">&#39;YYYY/MM/DD&#39;</span><span class="p">).</span><span class="nx">add</span><span class="p">(</span><span class="s1">&#39;years&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
   <span class="kd">var</span> <span class="nx">now</span>   <span class="o">=</span> <span class="nx">Moment</span><span class="p">.</span><span class="nx">moment</span><span class="p">();</span>
   <span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="s1">&#39;おはよう！〇〇から今日で *&#39;</span> <span class="o">+</span> <span class="nx">now</span><span class="p">.</span><span class="nx">diff</span><span class="p">(</span><span class="nx">start</span><span class="p">,</span> <span class="s1">&#39;days&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;日* だね。××まであと *&#39;</span> <span class="o">+</span> <span class="o">-</span><span class="nx">now</span><span class="p">.</span><span class="nx">diff</span><span class="p">(</span><span class="nx">end</span><span class="p">,</span> <span class="s1">&#39;days&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;日* 、今日も濃い一日を！！\n&#39;</span><span class="p">;</span>
   <span class="k">return</span> <span class="nx">message</span><span class="p">;</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
 
 
 <h3><code>postSlack</code></h3>
 <p>JSON形式で <code>payload</code> にslackに送信する際の情報を渡せば、slackにうまく送信されます。</p>
-<div class="highlight"><pre><span></span><span class="c1">// slackに送信する</span>
+<div class="highlight"><pre><span></span><code><span class="c1">// slackに送信する</span>
 <span class="kd">function</span> <span class="nx">postSlack</span><span class="p">(</span><span class="nx">payload</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;method&quot;</span> <span class="o">:</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
@@ -120,12 +120,12 @@
   <span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
   <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">getContentText</span><span class="p">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">);</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
 
 
 <h3><code>shareCalendar</code></h3>
 <p>上記の関数を駆使してslackにメッセージを送る関数。みんな大好き橋本環奈のアイコンで送信することで、朝の気分を少しでも良くします。</p>
-<div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">shareCalendar</span><span class="p">()</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">shareCalendar</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">list</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
   <span class="kd">var</span> <span class="nx">s</span><span class="p">;</span>
 
@@ -147,7 +147,7 @@
     <span class="nx">postSlack</span><span class="p">(</span><span class="nx">payload</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
 
 
 <h2>朝、その日の夜に洗濯物を取り込む人を決める関数</h2>
@@ -155,7 +155,7 @@
 <p><img alt="みくり洗濯選択" src="https://iwasakishuto.github.io/images/SPICE/mikuri.png"></p>
 <h3><code>getWeatherData</code></h3>
 <p><a href="http://www.jma.go.jp/jp/yoho/319.html">気象庁 | 天気予報：東京都</a> のサイトをスクレイピングして、欲しい情報を取得します。</p>
-<div class="highlight"><pre><span></span><span class="c1">// 天気を取得する</span>
+<div class="highlight"><pre><span></span><code><span class="c1">// 天気を取得する</span>
 <span class="kd">function</span> <span class="nx">getWeatherData</span><span class="p">()</span> <span class="p">{</span>
 
   <span class="c1">// データ取得</span>
@@ -194,11 +194,11 @@
 
   <span class="kd">var</span> <span class="nx">weather_str</span> <span class="o">=</span> <span class="s2">&quot;*&quot;</span> <span class="o">+</span> <span class="nx">weather</span> <span class="o">+</span> <span class="s2">&quot;*\n&quot;</span> <span class="o">+</span>  <span class="nx">img_url</span> <span class="o">+</span> <span class="s2">&quot;\n`【降水確率】`\n&quot;</span> <span class="o">+</span> <span class="nx">str_pop</span> <span class="o">+</span> <span class="s2">&quot;\n`【気温】`\n&quot;</span> <span class="o">+</span> <span class="nx">str_temp</span> <span class="o">+</span> <span class="s2">&quot;\n&quot;</span><span class="p">;</span>
   <span class="k">return</span> <span class="nx">weather_str</span><span class="p">;</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>具体的には、以下の内容を返します。</p>
-<div class="highlight"><pre><span></span><span class="err">*曇り時々晴れ*</span>
+<div class="highlight"><pre><span></span><code><span class="err">*曇り時々晴れ*</span>
 <span class="c">http://www.jma.go.jp/jp/yoho/img/201.png</span>
 <span class="err">`【降水確率】`</span>
 <span class="err">00-06：0%</span>
@@ -208,23 +208,23 @@
 <span class="err">`【気温】`</span>
 <span class="err">朝の最低気温　：19度</span>
 <span class="err">日中の最高気温：28度</span>
-</pre></div>
+</code></pre></div>
 
 
 <h3><code>getDayOfWeek</code></h3>
 <p><code>date.getDay()</code> がインデックスで曜日を返すので、それを単純に日本語に直すだけの関数です。</p>
-<div class="highlight"><pre><span></span><span class="c1">// 曜日を取得する</span>
+<div class="highlight"><pre><span></span><code><span class="c1">// 曜日を取得する</span>
 <span class="kd">function</span> <span class="nx">getDayOfWeek</span><span class="p">(</span><span class="nx">date</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">dayOfWeek</span> <span class="o">=</span> <span class="nx">date</span><span class="p">.</span><span class="nx">getDay</span><span class="p">();</span>
   <span class="kd">var</span> <span class="nx">dayOfWeekStr</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&quot;日&quot;</span><span class="p">,</span> <span class="s2">&quot;月&quot;</span><span class="p">,</span> <span class="s2">&quot;火&quot;</span><span class="p">,</span> <span class="s2">&quot;水&quot;</span><span class="p">,</span> <span class="s2">&quot;木&quot;</span><span class="p">,</span> <span class="s2">&quot;金&quot;</span><span class="p">,</span> <span class="s2">&quot;土&quot;</span> <span class="p">][</span><span class="nx">dayOfWeek</span><span class="p">];</span>
   <span class="k">return</span> <span class="nx">dayOfWeekStr</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
 
 
 <h3><code>getDayOfToday</code></h3>
 <p>今日の日付と曜日を取得する関数です。</p>
-<div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">getDayOfTomorrow</span><span class="p">(){</span>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">getDayOfTomorrow</span><span class="p">(){</span>
   <span class="c1">// 明日の日付取得</span>
   <span class="kd">var</span> <span class="nx">date</span>  <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
   <span class="kd">var</span> <span class="nx">today</span> <span class="o">=</span> <span class="nx">Utilities</span><span class="p">.</span><span class="nx">formatDate</span><span class="p">(</span> <span class="nx">date</span><span class="p">,</span> <span class="s1">&#39;Asia/Tokyo&#39;</span><span class="p">,</span> <span class="s1">&#39;MM月dd日&#39;</span><span class="p">);</span>
@@ -232,12 +232,12 @@
   <span class="kd">var</span> <span class="nx">str_date</span>  <span class="o">=</span> <span class="nx">today</span> <span class="o">+</span> <span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="nx">youbi</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">;</span>
   <span class="k">return</span> <span class="nx">str_date</span><span class="p">;</span> <span class="c1">// 06月19日(水) など。</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
 
 
 <h3><code>assignRole</code></h3>
 <p>洗濯物を取り込む人を決める<font color="red"><b>重要な</b></font>関数です。</p>
-<div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">assignRole</span><span class="p">(){</span>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">assignRole</span><span class="p">(){</span>
   <span class="c1">// 洗濯物を取り込む人を決定</span>
   <span class="c1">// 各メンバーのID</span>
   <span class="kd">var</span> <span class="nx">Members</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&quot;&lt;@UAAAAAAAA&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;@UBBBBBBBB&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;@UCCCCCCCC&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;@UDDDDDDDD&gt;&quot;</span><span class="p">];</span>
@@ -255,14 +255,14 @@
   <span class="p">}</span>
   <span class="nx">postSlack</span><span class="p">(</span><span class="nx">payload</span><span class="p">);</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
 
 
 <h2>明日の朝洗濯物を干す人を決める関数</h2>
 <p>基本的には上と同じです笑</p>
 <p>大きな変更点といえば、今回はランダムで<font color="red"><b>2人アサインしている</b></font>ということです。朝洗濯物を干すのは大変ですからね。</p>
 <p>あと、平匡さんにしてます。わかりづらくなってしまうので。</p>
-<div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">assignRole</span><span class="p">(){</span>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">assignRole</span><span class="p">(){</span>
   <span class="c1">// 洗濯物を干す人を決定</span>
   <span class="kd">var</span> <span class="nx">Members</span> <span class="o">=</span> <span class="p">[</span> <span class="s2">&quot;&lt;@UAAAAAAAA&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;@UBBBBBBBB&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;@UCCCCCCCC&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;@UDDDDDDDD&gt;&quot;</span><span class="p">];</span>
   <span class="kd">var</span> <span class="nx">num</span> <span class="o">=</span> <span class="nx">Members</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="c1">// 人数</span>
@@ -286,7 +286,7 @@
   <span class="p">}</span>
   <span class="nx">postSlack</span><span class="p">(</span><span class="nx">payload</span><span class="p">);</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
     </div><!-- /.entry-content -->
 
   </article>
@@ -298,8 +298,9 @@
                             <li><a href="https://iwasakishuto.github.io">Home</a></li>
                             <li><a href="https://iwasakishuto.github.io/blog/articles/index.html">Blog</a></li>
                             <li><a href="https://iwasakishuto.github.io/University/index.html">University</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Kerasy/doc/index.html">Kerasy</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Front-End/index.html">Front-End</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Kerasy/index.html">Kerasy</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html">Python-Charmers</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html">Translation-Gummy</a></li>
                         </ul>
                 </div><!-- /.blogroll -->
                 <div class="social">
@@ -308,7 +309,6 @@
 
                             <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
                             <li><a href="https://github.com/iwasakishuto">github</a></li>
-                            <li><a href="https://www.facebook.com/iwasakishuto">facebook</a></li>
                         </ul>
                 </div><!-- /.social -->
         </section><!-- /#extras -->

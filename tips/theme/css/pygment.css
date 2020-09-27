@@ -4,6 +4,8 @@
     color: #f8f8f2;
     border: 1px solid #272822;
     /*border-radius: 5px;*/
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+    font-size: 13px;
 }
 .highlight .hll { background-color: #49483e }
 .highlight .c { color: #75715e } /* Comment */

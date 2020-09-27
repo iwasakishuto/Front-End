@@ -2,12 +2,12 @@
 <html lang="ja">
 <head>
         <meta charset="utf-8" />
-        <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/front-end.png" />
+        <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
         <title>JS.17 アノテーションデータ（バウンディングボックス）作成ツールのコード</title>
         <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
 
         <!-- Added by Shuto Iwasaki. -->
-        <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/front-end.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
         <!-- Use fontawesome Icon -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
         <!-- Syntax highlight -->
@@ -64,23 +64,23 @@
 
     <div class="entry-content">
 <footer class="post-info">
-        <span>2019-09-04(水)</span>
+        <span>2019-09-04(Wed)</span>
 <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
 </footer><!-- /.post-info -->      <p><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-16.html">アノテーションデータ（バウンディングボックス）作成ツール</a>のコードを簡単に解説します。</p>
 <h2>ディレクトリを受け取る</h2>
 <p>これは非常に簡単で、<code>&lt;input&gt;</code> タグに <code>webkitdirectory</code> と書けばそれで終了です。</p>
 <p><input id="" type="file" webkitdirectory></p>
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;ex1&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;file&quot;</span> <span class="na">webkitdirectory</span><span class="p">&gt;</span>
-</pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;ex1&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;file&quot;</span> <span class="na">webkitdirectory</span><span class="p">&gt;</span>
+</code></pre></div>
 
 
 <p>なお、以下のようにすれば、ディレクトリの各種情報を得ることができます。</p>
-<div class="highlight"><pre><span></span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;ex1&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+<div class="highlight"><pre><span></span><code><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;ex1&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
   <span class="nx">dir</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span><span class="p">;</span> <span class="c1">// これでディレクトリを受け取る。</span>
   <span class="nx">dirname</span> <span class="o">=</span> <span class="nx">dir</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">webkitRelativePath</span><span class="p">;</span> <span class="c1">// 一つめのファイルのパス</span>
   <span class="nx">filenum</span> <span class="o">=</span> <span class="nx">dir</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="c1">// ファイルの数</span>
 <span class="p">});</span>
-</pre></div>
+</code></pre></div>
 
 
 <h2>マウスの座標を可視化する。</h2>
@@ -115,7 +115,7 @@
   });
 </script>
 
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;ex2&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;200px&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;200px&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;border: 1.5px solid #000; background-color: #eee&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;ex2&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;200px&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;200px&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;border: 1.5px solid #000; background-color: #eee&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
   <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;load&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">Canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;ex2&#39;</span><span class="p">);</span>
@@ -144,7 +144,7 @@
     <span class="p">});</span>
   <span class="p">});</span>
 <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</pre></div>
+</code></pre></div>
 
 
 <p><code>&lt;canvas&gt;</code> には、<code>Context.beginPath()</code> から <code>Context.closePath()</code> までに描いたものが <code>Context.stroke()</code> によって描かれます。</p>
@@ -242,7 +242,7 @@
   }
 </script>
 
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;ex3&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;200px&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;200px&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;border: 1.5px solid #000; background-color: #fff&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;ex3&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;200px&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;200px&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;border: 1.5px solid #000; background-color: #fff&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
   <span class="kd">var</span> <span class="nx">Canvas</span><span class="p">;</span>
   <span class="kd">var</span> <span class="nx">Context</span><span class="p">;</span>
@@ -333,7 +333,7 @@
     <span class="nx">Context</span><span class="p">.</span><span class="nx">clearRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">Canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">Canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>あとは、バウンディングボックスの情報を保持して、最後にラベルデータや <code>width</code>,<code>height</code> と一緒に <code>JSON.stringify</code> で <code>json</code> データにしてダウンロードすれば終了です。</p>
@@ -348,8 +348,9 @@
                             <li><a href="https://iwasakishuto.github.io">Home</a></li>
                             <li><a href="https://iwasakishuto.github.io/blog/articles/index.html">Blog</a></li>
                             <li><a href="https://iwasakishuto.github.io/University/index.html">University</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Kerasy/doc/index.html">Kerasy</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Front-End/index.html">Front-End</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Kerasy/index.html">Kerasy</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html">Python-Charmers</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html">Translation-Gummy</a></li>
                         </ul>
                 </div><!-- /.blogroll -->
                 <div class="social">
@@ -358,7 +359,6 @@
 
                             <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
                             <li><a href="https://github.com/iwasakishuto">github</a></li>
-                            <li><a href="https://www.facebook.com/iwasakishuto">facebook</a></li>
                         </ul>
                 </div><!-- /.social -->
         </section><!-- /#extras -->

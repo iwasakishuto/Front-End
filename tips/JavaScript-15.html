@@ -2,12 +2,12 @@
 <html lang="ja">
 <head>
         <meta charset="utf-8" />
-        <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/front-end.png" />
+        <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
         <title>JS.15 ポケモン自己分析を分析してみる</title>
         <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
 
         <!-- Added by Shuto Iwasaki. -->
-        <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/front-end.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
         <!-- Use fontawesome Icon -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
         <!-- Syntax highlight -->
@@ -64,7 +64,7 @@
 
     <div class="entry-content">
 <footer class="post-info">
-        <span>2019-07-30(火)</span>
+        <span>2019-07-30(Tue)</span>
 <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
 </footer><!-- /.post-info -->      <style>
 body {
@@ -80,53 +80,53 @@ body {
 <p>まずは<code>html</code>(https://www.pokemon.co.jp/corporate/job/pokemoncenter/special/question/)の中身を開発者ツールで覗きます。</p>
 <p>すると、質問の度にページ遷移することなく、<code>JavaScript</code>(https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/js/common.js) で要素の書き換えを行なっていることがわかりました。</p>
 <p>また、質問を答えるボタンには以下の <code>class</code> が割り当てられており、これは問題番号に依存していませんでした。</p>
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;answers&quot;</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;answers&quot;</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;answer-yes&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;yes&quot;</span><span class="p">&gt;</span>はい<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;answer-no&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;no&quot;</span><span class="p">&gt;</span>いいえ<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;answer-neither-yes&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;neither-yes&quot;</span><span class="p">&gt;</span>どちらかといえばはい<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;answer-neither-no&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;neither-no&quot;</span><span class="p">&gt;</span>どちらかといえばいいえ<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</pre></div>
+</code></pre></div>
 
 
 <h2>jsの中身を見る。</h2>
 <h3>問題文</h3>
 <p>先ほど特定した <code>JavaScript</code> の中身を見たところ、まず問題文が見つかりました。</p>
-<div class="highlight"><pre><span></span><span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
   <span class="nx">A</span><span class="o">:</span> <span class="p">{</span><span class="nx">quest</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;データや　すうじを　みることが　すき。&quot;</span><span class="p">,</span> <span class="s2">&quot;じぜんの　じゅんびは　しっかりする。&quot;</span><span class="p">,</span> <span class="s2">&quot;おおざっぱな　ひとを　みると　イライラする。&quot;</span><span class="p">,</span> <span class="s2">&quot;ふかく　かんがえることが　すきだと　おもう。&quot;</span><span class="p">]},</span>
   <span class="nx">B</span><span class="o">:</span> <span class="p">{</span><span class="nx">quest</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;かんがえる　より　さきに　こうどう　する。&quot;</span><span class="p">,</span> <span class="s2">&quot;けつろん　から　はなす　ほうが　すき。&quot;</span><span class="p">,</span> <span class="s2">&quot;つめたいと　いわれることが　よくある。&quot;</span><span class="p">,</span> <span class="s2">&quot;ムダな　ことが　きらい。&quot;</span><span class="p">]},</span>
   <span class="nx">C</span><span class="o">:</span> <span class="p">{</span><span class="nx">quest</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;じぶんは　うけみ　スタンスだ。&quot;</span><span class="p">,</span> <span class="s2">&quot;ひとの　ためになる　ことであれば　なんでもできる。&quot;</span><span class="p">,</span> <span class="s2">&quot;ひとから　やさしいと　いわれる　ことが　よくある。&quot;</span><span class="p">,</span> <span class="s2">&quot;いつも　そのばの　くうきを　よんで　こうどうする。&quot;</span><span class="p">]},</span>
   <span class="nx">D</span><span class="o">:</span> <span class="p">{</span><span class="nx">quest</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;しょたいめんでも　せっきょくてきに　はなしかける。&quot;</span><span class="p">,</span> <span class="s2">&quot;いつのまにか　はなしの　ちゅうしんに　なっている。&quot;</span><span class="p">,</span> <span class="s2">&quot;ひとから　あかるいね　と　いわれる。&quot;</span><span class="p">,</span> <span class="s2">&quot;おもった　ことが　かおに　よくでる。&quot;</span><span class="p">]}</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>どうやら、<span class="marker-pink">質問にはA~Dのグループが分けられており、それぞれ4種類の問題文がある</span>ようです。</p>
 <h3>解答ボタンに対する処理</h3>
 <p>続いて、ボタンに対する処理を見つけました。</p>
 <p>必要な部分だけ取り出すために少しプログラムを書き換えていますが、内容は同じです。</p>
-<div class="highlight"><pre><span></span><span class="k">if</span> <span class="p">((</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s2">&quot;answer-yes&quot;</span><span class="p">))</span> <span class="nx">s</span><span class="p">[</span><span class="nx">n</span><span class="p">[</span><span class="nx">r</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">3</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="p">((</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s2">&quot;answer-yes&quot;</span><span class="p">))</span> <span class="nx">s</span><span class="p">[</span><span class="nx">n</span><span class="p">[</span><span class="nx">r</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">3</span><span class="p">;</span>
 <span class="k">else</span> <span class="k">if</span> <span class="p">((</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s2">&quot;answer-neither-yes&quot;</span><span class="p">))</span> <span class="nx">s</span><span class="p">[</span><span class="nx">n</span><span class="p">[</span><span class="nx">r</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="k">else</span> <span class="k">if</span> <span class="p">((</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s2">&quot;answer-neither-no&quot;</span><span class="p">))</span> <span class="nx">s</span><span class="p">[</span><span class="nx">n</span><span class="p">[</span><span class="nx">r</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="k">else</span> <span class="p">((</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s2">&quot;answer-no&quot;</span><span class="p">))</span> <span class="nx">s</span><span class="p">[</span><span class="nx">n</span><span class="p">[</span><span class="nx">r</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">0</span><span class="p">;</span>
-</pre></div>
+</code></pre></div>
 
 
 <p><span class="marker-pink">「はい」に近いほど点数が高く「いいえ」に近いほど点数が低い</span>ようです。</p>
 <p>この点数を、先ほどのグループごとに足し合わせているようです。（<code>s[n[r]]</code>は各グループの得点を意味。）つまり、<span class="marker-pink">同じグループの問題は（広義）同じことを聞いている問題</span>であったと言うことです。</p>
 <h3>得点に対する処理</h3>
 <p>その後、得点を0~4に圧縮しています。以下の関数がこの役割を担います。</p>
-<div class="highlight"><pre><span></span><span class="kd">function</span> <span class="nx">u</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">u</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">return</span> <span class="nx">e</span> <span class="o">&lt;=</span> <span class="mi">3</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="nx">e</span> <span class="o">&lt;=</span> <span class="mi">7</span> <span class="o">?</span> <span class="mi">2</span> <span class="o">:</span> <span class="nx">e</span> <span class="o">&lt;=</span> <span class="mi">10</span> <span class="o">?</span> <span class="mi">3</span> <span class="o">:</span> <span class="nx">e</span> <span class="o">&lt;=</span> <span class="mi">12</span> <span class="o">?</span> <span class="mi">4</span> <span class="o">:</span> <span class="k">void</span> <span class="mi">0</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>ここまでで、グループAの圧縮された得点(1-4),..,グループDの圧縮された得点(1-4)が求められます。</p>
 <h3>得点をポケモンと結びつける</h3>
-<div class="highlight"><pre><span></span><span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nx">f</span><span class="p">.</span><span class="k">default</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">u</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">A</span><span class="p">),</span> <span class="s2">&quot;B&quot;</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">u</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">B</span><span class="p">),</span> <span class="s2">&quot;C&quot;</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">u</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">C</span><span class="p">),</span> <span class="s2">&quot;D&quot;</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">u</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">D</span><span class="p">))].</span><span class="nx">name</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nx">f</span><span class="p">.</span><span class="k">default</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">u</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">A</span><span class="p">),</span> <span class="s2">&quot;B&quot;</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">u</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">B</span><span class="p">),</span> <span class="s2">&quot;C&quot;</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">u</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">C</span><span class="p">),</span> <span class="s2">&quot;D&quot;</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">u</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">D</span><span class="p">))].</span><span class="nx">name</span><span class="p">;</span>
 <span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="s2">&quot;../result/&quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="k">default</span><span class="p">[</span><span class="nx">e</span><span class="p">],</span> <span class="s2">&quot;.html&quot;</span><span class="p">);</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>ここでは、各種グループ記号（<code>A</code>など）と圧縮された得点（<code>u(s.A)</code>など）を連結して、文字列を作っています。（<code>A1B1C1D1</code>などができる。）</p>
@@ -910,7 +910,7 @@ body {
 <p>ここまででポケモンの名前に変換できました。続いて、以下で英語に変換します。</p>
 <p>この処理は不要と言えば不要ですが、日本語より英語（アルファベット）の方が何かと便利です。</p>
 <p>※ちなみに、ここを見れば全部で20種類のポケモンがいたこともわかります。</p>
-<div class="highlight"><pre><span></span><span class="nx">t</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="nx">t</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="s2">&quot;ピカチュウ&quot;</span><span class="o">:</span> <span class="s2">&quot;pikachu&quot;</span><span class="p">,</span>
   <span class="s2">&quot;ニャース&quot;</span><span class="o">:</span> <span class="s2">&quot;meowth&quot;</span><span class="p">,</span>
   <span class="s2">&quot;イーブイ&quot;</span><span class="o">:</span> <span class="s2">&quot;eevee&quot;</span><span class="p">,</span>
@@ -932,7 +932,7 @@ body {
   <span class="s2">&quot;メタモン&quot;</span><span class="o">:</span> <span class="s2">&quot;ditto&quot;</span><span class="p">,</span>
   <span class="s2">&quot;コイキング&quot;</span><span class="o">:</span> <span class="s2">&quot;magikarp&quot;</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>以上で、得点をポケモン名に変換することができました。</p>
@@ -998,7 +998,7 @@ label {
 </style>
 
 <h3>再掲(ポケモンの名前)</h3>
-<div class="highlight"><pre><span></span><span class="nx">t</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="nx">t</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
   <span class="s2">&quot;ピカチュウ&quot;</span><span class="o">:</span> <span class="s2">&quot;pikachu&quot;</span><span class="p">,</span>
   <span class="s2">&quot;ニャース&quot;</span><span class="o">:</span> <span class="s2">&quot;meowth&quot;</span><span class="p">,</span>
   <span class="s2">&quot;イーブイ&quot;</span><span class="o">:</span> <span class="s2">&quot;eevee&quot;</span><span class="p">,</span>
@@ -1020,16 +1020,16 @@ label {
   <span class="s2">&quot;メタモン&quot;</span><span class="o">:</span> <span class="s2">&quot;ditto&quot;</span><span class="p">,</span>
   <span class="s2">&quot;コイキング&quot;</span><span class="o">:</span> <span class="s2">&quot;magikarp&quot;</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
 
 
 <h2>ちなみに…</h2>
 <p>以下のようにすることで、<a href="https://www.pokemon.co.jp/corporate/job/pokemoncenter/special/">ポケモン自己分析</a>(Pokémon Self-analysis)のサイトを真似ていました。</p>
-<div class="highlight"><pre><span></span><span class="nt">body</span> <span class="p">{</span>
+<div class="highlight"><pre><span></span><code><span class="nt">body</span> <span class="p">{</span>
  <span class="k">background-image</span><span class="p">:</span> <span class="nb">url</span><span class="p">(</span><span class="s2">&quot;https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/img/special/common/bg.png&quot;</span><span class="p">);</span>
  <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="mi">246</span><span class="p">,</span><span class="mi">224</span><span class="p">,</span><span class="mi">105</span><span class="p">);</span>
 <span class="p">}</span>
-</pre></div>
+</code></pre></div>
     </div><!-- /.entry-content -->
 
   </article>
@@ -1041,8 +1041,9 @@ label {
                             <li><a href="https://iwasakishuto.github.io">Home</a></li>
                             <li><a href="https://iwasakishuto.github.io/blog/articles/index.html">Blog</a></li>
                             <li><a href="https://iwasakishuto.github.io/University/index.html">University</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Kerasy/doc/index.html">Kerasy</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Front-End/index.html">Front-End</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Kerasy/index.html">Kerasy</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html">Python-Charmers</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html">Translation-Gummy</a></li>
                         </ul>
                 </div><!-- /.blogroll -->
                 <div class="social">
@@ -1051,7 +1052,6 @@ label {
 
                             <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
                             <li><a href="https://github.com/iwasakishuto">github</a></li>
-                            <li><a href="https://www.facebook.com/iwasakishuto">facebook</a></li>
                         </ul>
                 </div><!-- /.social -->
         </section><!-- /#extras -->

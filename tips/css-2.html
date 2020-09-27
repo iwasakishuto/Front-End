@@ -2,12 +2,12 @@
 <html lang="ja">
 <head>
         <meta charset="utf-8" />
-        <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/front-end.png" />
+        <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
         <title>css.2 ::befere & ::after</title>
         <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
 
         <!-- Added by Shuto Iwasaki. -->
-        <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/front-end.png" type="image/png" />
+        <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
         <!-- Use fontawesome Icon -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
         <!-- Syntax highlight -->
@@ -64,7 +64,7 @@
 
     <div class="entry-content">
 <footer class="post-info">
-        <span>2019-09-03(火)</span>
+        <span>2019-09-03(Tue)</span>
 <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/css.html">css</a></span>
 </footer><!-- /.post-info -->      <p><code>::before</code> や <code>::after</code> は<span class="marker-pink">擬似要素(Pseudo-elements)</span>と呼ばれるもので、HTMLに直接書くことなく、選択された要素の<b>後</b>・<b>前</b>にスタイル付けすることができます。</p>
 <h2>作ったもの</h2>
@@ -82,7 +82,7 @@ p.ex1::before {
 }
 </style>
 
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex1&quot;</span><span class="p">&gt;</span>重要な何か。<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex1&quot;</span><span class="p">&gt;</span>重要な何か。<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
 
 <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
 <span class="nt">p</span><span class="p">.</span><span class="nc">ex1</span><span class="p">::</span><span class="nd">before</span> <span class="p">{</span>
@@ -94,7 +94,7 @@ p.ex1::before {
   <span class="k">font-weight</span><span class="p">:</span> <span class="kc">bold</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
-</pre></div>
+</code></pre></div>
 
 
 <h3>チェック事項</h3>
@@ -108,7 +108,7 @@ p.ex2::before {
 }
 </style>
 
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex2&quot;</span><span class="p">&gt;</span>チェック事項的な何か。<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex2&quot;</span><span class="p">&gt;</span>チェック事項的な何か。<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
 
 <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
 <span class="nt">p</span><span class="p">.</span><span class="nc">ex2</span><span class="p">::</span><span class="nd">before</span> <span class="p">{</span>
@@ -117,7 +117,7 @@ p.ex2::before {
   <span class="k">margin-right</span><span class="p">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
-</pre></div>
+</code></pre></div>
 
 
 <h3>フローチャート</h3>
@@ -139,7 +139,7 @@ p.ex2::before {
 }
 </style>
 
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">ul</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex3&quot;</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">ul</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex3&quot;</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>手順１<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>手順２<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>手順３<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
@@ -156,7 +156,7 @@ p.ex2::before {
   <span class="k">padding</span><span class="p">:</span> <span class="mf">0.3</span><span class="kt">em</span><span class="p">;</span> <span class="c">/*余白*/</span>
 <span class="p">}</span>
 <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
-</pre></div>
+</code></pre></div>
 
 
 <p>ただし、これだと最後の矢印が余計になってしまいます。</p>
@@ -184,7 +184,7 @@ p.ex2::before {
 }
 </style>
 
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">ul</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex4&quot;</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">ul</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex4&quot;</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>風邪ひきーの<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>医者行きーの<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>受付済ませーの<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
@@ -204,7 +204,7 @@ p.ex2::before {
   <span class="k">padding</span><span class="p">:</span> <span class="mf">0.3</span><span class="kt">em</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
-</pre></div>
+</code></pre></div>
 
 
 <h3>吹き出し</h3>
@@ -265,7 +265,7 @@ p.ex2::before {
 }
 </style>
 
-<div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex5&quot;</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex5&quot;</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex5__img&quot;</span><span class="p">&gt;&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://rr.img.naver.jp/mig?src=http%3A%2F%2Fblog.kitamura.jp%2F03%2F4664%2Fimages%2Fm464dc8h5363e5i3_060405totugino.gif&amp;twidth=1200&amp;theight=1200&amp;qlt=80&amp;res_format=jpg&amp;op=r&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;ex5__callout&quot;</span><span class="p">&gt;</span>ピン芸人になったバカリズム（マセキ芸能社所属）の代表作。厳格な表情でフリップをめくり、そこに描かれた絵に適した解説を「○○ーの」と厳格な口調で発するネタ。でも、オチは必ず「トツギーノ」（「嫁ぎーの」という意）<span class="p">&lt;</span><span class="nt">br</span><span class="p">&gt;</span>引用：<span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;http://d.hatena.ne.jp/keyword/%A5%C8%A5%C4%A5%AE%A1%BC%A5%CE&quot;</span><span class="p">&gt;</span>はてなキーワード<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
@@ -321,7 +321,7 @@ p.ex2::before {
   <span class="k">left</span><span class="p">:</span> <span class="mi">-17</span><span class="kt">px</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
-</pre></div>
+</code></pre></div>
     </div><!-- /.entry-content -->
 
   </article>
@@ -333,8 +333,9 @@ p.ex2::before {
                             <li><a href="https://iwasakishuto.github.io">Home</a></li>
                             <li><a href="https://iwasakishuto.github.io/blog/articles/index.html">Blog</a></li>
                             <li><a href="https://iwasakishuto.github.io/University/index.html">University</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Kerasy/doc/index.html">Kerasy</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Front-End/index.html">Front-End</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Kerasy/index.html">Kerasy</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html">Python-Charmers</a></li>
+                            <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html">Translation-Gummy</a></li>
                         </ul>
                 </div><!-- /.blogroll -->
                 <div class="social">
@@ -343,7 +344,6 @@ p.ex2::before {
 
                             <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
                             <li><a href="https://github.com/iwasakishuto">github</a></li>
-                            <li><a href="https://www.facebook.com/iwasakishuto">facebook</a></li>
                         </ul>
                 </div><!-- /.social -->
         </section><!-- /#extras -->
