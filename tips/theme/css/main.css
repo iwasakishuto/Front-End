@@ -11,7 +11,7 @@
 
 /* Imports */
 @import url("reset.css");
-@import url("pygment.css");
+@import url("monokai.css");
 @import url("typogrify.css");
 @import url(//fonts.googleapis.com/css?family=Yanone+Kaffeesatz&subset=latin);
 
@@ -228,20 +228,20 @@ div.note {
 /* Tables */
 table {margin: .5em auto 1.5em auto; width: 98%;}
 
-	/* Thead */
-	thead th {padding: .5em .4em; text-align: left;}
-	thead td {}
+/* Thead */
+thead th {padding: .5em .4em; text-align: left;}
+thead td {}
 
-	/* Tbody */
-	tbody td {padding: .5em .4em;}
-	tbody th {}
+/* Tbody */
+tbody td {padding: .5em .4em;}
+tbody th {}
 
-	tbody .alt td {}
-	tbody .alt th {}
+tbody .alt td {}
+tbody .alt th {}
 
-	/* Tfoot */
-	tfoot th {}
-	tfoot td {}
+/* Tfoot */
+tfoot th {}
+tfoot td {}
 
 /* HTML5 tags */
 header, section, footer,
