@@ -18,7 +18,7 @@
         <script>hljs.initHighlightingOnLoad();</script>
         <!-- LaTex -->
         <!-- Github env -->
-        <!--<script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>-->
+        <script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
         <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"></script>
         <script type="text/x-mathjax-config">
         	MathJax.Hub.Config({
@@ -67,7 +67,7 @@
         <span>2019-06-12(Wed)</span>
 <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
 </footer><!-- /.post-info -->      <h2>作ったもの</h2>
-<p><div class="breakout">
+<div class="breakout">
   <header>BREAKOUT</header>
   <canvas id="canvas" width="480" height="500"></canvas>
   <a id="start" onclick="gameButton();startTimer()" class="btn-circle-border-double">START</a>
@@ -76,6 +76,7 @@
   <audio id="soundFail"  src="https://taira-komori.jpn.org/sfxr/sfxrse/04powerup/powerdown02.mp3" type="audio/mp3" preload="auto"></audio>
   <audio id="soundUp"    src="https://taira-komori.jpn.org/sfxr/sfxrse/04powerup/powerup05.mp3"   type="audio/mp3" preload="auto"></audio>
 </div>
+
 <script>
   var canvas = document.getElementById("canvas");
   var ctx = canvas.getContext("2d");
@@ -105,10 +106,10 @@
   // スコアを記録する。
   var score = 0;
   var maxscore = 0;
-  for(var r=0; r&lt;brickRowCount; r++) {
-  for(var c=0; c&lt;brickColumnCount; c++) {
-    maxscore += 3-Math.floor(r/2);
-  }
+  for(var r=0; r<brickRowCount; r++) {
+    for(var c=0; c<brickColumnCount; c++) {
+      maxscore += 3-Math.floor(r/2);
+    }
   }
   // ライフを記録する。
   var lives = 3;
@@ -117,33 +118,33 @@
   var timer=0;
   // 3桁の数字で表示するため
   var addZero = function(value){
-  if (value&lt;10) {
-    value = '00' + value;
-  }else if (value&lt;100){
-    value = '0' + value;
-  }
-  return value;
+    if (value<10) {
+      value = '00' + value;
+    }else if (value<100){
+      value = '0' + value;
+    }
+    return value;
   }
   // イベント開始の関数
   function startTimer(){
-  start_time = new Date();
-  setInterval(goTimer, 10);
+    start_time = new Date();
+    setInterval(goTimer, 10);
   }
   // この関数をループさせる。
   function goTimer(){
-  var milli = new Date() - start_time;
-  var seconds = Math.floor(milli / 1000);
-  seconds = addZero(seconds);
-  timer = seconds;
+    var milli = new Date() - start_time;
+    var seconds = Math.floor(milli / 1000);
+    seconds = addZero(seconds);
+    timer = seconds;
   }
   // ブロックが当たった後に消えるようにする。
   var bricks = [];
-  for(var r=0; r&lt;brickRowCount; r++) {
-  bricks[r] = [];
-  for(var c=0; c<brickColumnCount; c++) {
-    // statusでブロックが崩されたかを記憶する。
-    bricks[r][c] = { x: 0, y: 0, status: 1 };
-  }
+  for(var r=0; r<brickRowCount; r++) {
+    bricks[r] = [];
+    for(var c=0; c<brickColumnCount; c++) {
+      // statusでブロックが崩されたかを記憶する。
+      bricks[r][c] = { x: 0, y: 0, status: 1 };
+    }
   }
   // ボタンの処理で制御する
   document.addEventListener("keydown", keyDownHandler, false);
@@ -151,19 +152,19 @@
   // ボタンが押された時のイベント(変数をTrueにする)
   function keyDownHandler(e) {
     if(e.key == "Right" || e.key == "ArrowRight") {
-        rightPressed = true;
+      rightPressed = true;
     }
     else if(e.key == "Left" || e.key == "ArrowLeft") {
-        leftPressed = true;
+      leftPressed = true;
     }
   }
   // ボタンが押されなくなった時のイベント(変数をfalseに戻す)
   function keyUpHandler(e) {
     if(e.key == "Right" || e.key == "ArrowRight") {
-        rightPressed = false;
+      rightPressed = false;
     }
     else if(e.key == "Left" || e.key == "ArrowLeft") {
-        leftPressed = false;
+      leftPressed = false;
     }
   }
   // マウスの位置で制御する
@@ -171,43 +172,44 @@
   // マウスが動いた時のイベント。マウスのx座標がキャンバスのx座標内にあれば、その位置に持ってくる。
   function mouseMoveHandler(e) {
   var relativeX = e.clientX - canvas.offsetLeft;
-  if(relativeX>0){
-    if(relativeX&lt;canvas.width) {
-      paddleX = relativeX - paddleWidth/2;
+    if(relativeX>0){
+      if(relativeX<canvas.width) {
+        paddleX = relativeX - paddleWidth/2;
+      }
     }
-  }
   }
   // 音を鳴らす。
   function sound(tag){
-  document.getElementById(tag).currentTime = 0;
-  document.getElementById(tag).play();
+    document.getElementById(tag).currentTime = 0;
+    document.getElementById(tag).play();
   }
   // 衝突を検知する。
   function collisionDetection() {
-  for(var r=0; r&lt;brickRowCount; r++) {
-    for(var c=0; c<brickColumnCount; c++) {
-      var b = bricks[r][c];
-      if(b.status == 1) { // ブロックが存在しているかを確認する。
-        if(x>b.x){
-          if (x<b.x+brickWidth){
-            if (y>b.y){
-              if (y<b.y+brickHeight){
-                dy = -dy;
-                if (Math.floor(Math.random() * Math.floor(8)) == 0){
-                  sound("soundUp");
-                  if (dy>0){
-                    dy += 1;
-                  }else{
-                    dy -= 1;
+    for(var r=0; r<brickRowCount; r++) {
+      for(var c=0; c<brickColumnCount; c++) {
+        var b = bricks[r][c];
+        if(b.status == 1) { // ブロックが存在しているかを確認する。
+          if(x>b.x){
+            if (x<b.x+brickWidth){
+              if (y>b.y){
+                if (y<b.y+brickHeight){
+                  dy = -dy;
+                  if (Math.floor(Math.random() * Math.floor(8)) == 0){
+                    sound("soundUp");
+                    if (dy>0){
+                      dy += 1;
+                    }else{
+                      dy -= 1;
+                    }
                   }
-                }
-                b.status = 0;
-                score+=3-Math.floor(r/2);
-                sound("soundBrick");
-                // 全てのブロックを崩した場合
-                if(score == maxscore) {
-                  alert("YOU WIN\nYour Time is " + timer);
-                  document.location.reload();
+                  b.status = 0;
+                  score+=3-Math.floor(r/2);
+                  sound("soundBrick");
+                  // 全てのブロックを崩した場合
+                  if(score == maxscore) {
+                    alert("YOU WIN\nYour Time is " + timer);
+                    document.location.reload();
+                  }
                 }
               }
             }
@@ -216,135 +218,135 @@
       }
     }
   }
-  }
   function drawBall() {
-  ctx.beginPath();
-  ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-  ctx.fillStyle = "#ffffff";
-  ctx.fill();
-  ctx.closePath();
+    ctx.beginPath();
+    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+    ctx.closePath();
   }
   function drawPaddle() {
-  ctx.beginPath();
-  ctx.rect(paddleX, canvas.height-paddleHeight-paddleOffsetBottom, paddleWidth, paddleHeight);
-  ctx.fillStyle = "#ffffff";
-  ctx.fill();
-  ctx.closePath();
+    ctx.beginPath();
+    ctx.rect(paddleX, canvas.height-paddleHeight-paddleOffsetBottom, paddleWidth, paddleHeight);
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+    ctx.closePath();
   }
   // ブロックを1つずつ描画する。
   function drawBricks() {
-  for(var r=0; r&lt;brickRowCount; r++) {
-    for(var c=0; c<brickColumnCount; c++) {
-      if(bricks[r][c].status == 1) {
-        var brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
-        var brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
-        bricks[r][c].x = brickX;
-        bricks[r][c].y = brickY;
-        ctx.beginPath();
-        ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        ctx.fillStyle = brickColors[Math.floor(r/2)];
-        ctx.fill();
-        ctx.closePath();
-      }
-    }
-  }
-  }
-  function drawScore() {
-  ctx.font = "30px 'Comic Sans MS'";
-  ctx.fillStyle = "#ffffff";
-  ctx.fillText(score, 30, 40);
-  }
-  function drawTime() {
-  ctx.font = "30px 'Comic Sans MS'";
-  ctx.fillStyle = "#ffffff";
-  ctx.fillText(timer, canvas.width/2-30, 40);
-  }
-  function drawLives() {
-  ctx.font = "30px 'Comic Sans MS'";
-  ctx.fillStyle = "#ffffff";
-  ctx.fillText(lives, canvas.width-65, 40);
-  }
-  function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height); // 毎フレームごとに削除
-  drawBricks();
-  drawBall();
-  drawPaddle();
-  drawScore();
-  drawTime();
-  drawLives();
-  collisionDetection();
-  // 左端と右端で弾ませる(ボールの半径を考える)
-  if(x + dx>canvas.width-ballRadius || x + dx&lt;ballRadius) {
-    sound("soundBar");
-    dx = -dx;
-  }
-  // 上端で弾ませる(ボールの半径を考える)
-  if(y + dy<ballRadius) {
-    sound("soundBar");
-    dy = -dy;
-  }
-  // ボールがパドルの位置に到達した時
-  else if(y+dy>canvas.height-paddleOffsetBottom-ballRadius){
-    if (y+dy<canvas.height-paddleOffsetBottom-ballRadius+brickHeight) {
-      // ボールのx座標がパドル上にあれば、跳ね返る
-      if(x>paddleX){
-        if(x<paddleX + paddleWidth){
-          sound("soundBar");
-          dy = -dy;
+    for(var r=0; r<brickRowCount; r++) {
+      for(var c=0; c<brickColumnCount; c++) {
+        if(bricks[r][c].status == 1) {
+          var brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
+          var brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
+          bricks[r][c].x = brickX;
+          bricks[r][c].y = brickY;
+          ctx.beginPath();
+          ctx.rect(brickX, brickY, brickWidth, brickHeight);
+          ctx.fillStyle = brickColors[Math.floor(r/2)];
+          ctx.fill();
+          ctx.closePath();
         }
       }
     }
-    // ボールが下端に到達した時
-    if(y + dy>canvas.height-ballRadius){
-      sound("soundFail");
-      lives--;
-      // 残機がなくなれば失敗する。
-      if(!lives) {
-        alert("YOU LOSE");
-        document.location.reload();
+  }
+  function drawScore() {
+    ctx.font = "30px 'Comic Sans MS'";
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText(score, 30, 40);
+  }
+  function drawTime() {
+    ctx.font = "30px 'Comic Sans MS'";
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText(timer, canvas.width/2-30, 40);
+  }
+  function drawLives() {
+    ctx.font = "30px 'Comic Sans MS'";
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText(lives, canvas.width-65, 40);
+  }
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // 毎フレームごとに削除
+    drawBricks();
+    drawBall();
+    drawPaddle();
+    drawScore();
+    drawTime();
+    drawLives();
+      collisionDetection();
+    // 左端と右端で弾ませる(ボールの半径を考える)
+    if(x + dx>canvas.width-ballRadius || x + dx<ballRadius) {
+      sound("soundBar");
+      dx = -dx;
+    }
+    // 上端で弾ませる(ボールの半径を考える)
+    if(y + dy<ballRadius) {
+      sound("soundBar");
+      dy = -dy;
+    }
+    // ボールがパドルの位置に到達した時
+    else if(y+dy>canvas.height-paddleOffsetBottom-ballRadius){
+      if (y+dy<canvas.height-paddleOffsetBottom-ballRadius+brickHeight) {
+        // ボールのx座標がパドル上にあれば、跳ね返る
+        if(x>paddleX){
+          if(x<paddleX + paddleWidth){
+            sound("soundBar");
+            dy = -dy;
+          }
+        }
       }
-      else {
-        x = canvas.width/2;
-        y = canvas.height-paddleOffsetBottom-brickHeight;
-        dx = 3;
-        dy = -3;
-        paddleX = (canvas.width-paddleWidth)/2;
+      // ボールが下端に到達した時
+      if(y + dy>canvas.height-ballRadius){
+        sound("soundFail");
+        lives--;
+        // 残機がなくなれば失敗する。
+        if(!lives) {
+          alert("YOU LOSE");
+          document.location.reload();
+        }
+        else {
+          x = canvas.width/2;
+          y = canvas.height-paddleOffsetBottom-brickHeight;
+          dx = 3;
+          dy = -3;
+          paddleX = (canvas.width-paddleWidth)/2;
+        }
       }
     }
-  }
-  // パドルの移動指定されたピクセルだけ動く
-  if(rightPressed){
-    if(paddleX<canvas.width-paddleWidth) {
-      paddleX += 5;
+    // パドルの移動指定されたピクセルだけ動く
+    if(rightPressed){
+      if(paddleX<canvas.width-paddleWidth) {
+        paddleX += 5;
+      }
     }
-  }
-  else if(leftPressed){
-    if (paddleX>0) {
-      paddleX -= 5;
+    else if(leftPressed){
+      if (paddleX>0) {
+        paddleX -= 5;
+      }
     }
-  }
-  x += dx;
-  y += dy;
-  requestAnimationFrame(draw);
+    x += dx;
+    y += dy;
+    requestAnimationFrame(draw);
   }
   function setCanvas() {
-  drawBricks();
-  drawBall();
-  drawPaddle();
-  drawScore();
-  drawTime();
-  drawLives();
+    drawBricks();
+    drawBall();
+    drawPaddle();
+    drawScore();
+    drawTime();
+    drawLives();
   }
   // 初期状態を描いて待機
   setCanvas();
   function gameButton() {
-  draw();
-  document.getElementById("start").innerHTML = "SPEED UP";
-  document.getElementById("start").style.fontSize = "10px";
+    draw();
+    document.getElementById("start").innerHTML = "SPEED UP";
+    document.getElementById("start").style.fontSize = "10px";
   }
 </script>
+
 <style>
-  @import url('https://fonts.googleapis.com/css?family=Press+Start+2P&amp;display=swap');
+  @import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
   .breakout {
     text-align: center;
     margin: 0 auto;
@@ -373,7 +375,8 @@
     -webkit-transform: rotateY(360deg);
     transform: rotateY(360deg);
   }
-</style></p>
+</style>
+
 <h2>動機</h2>
 <p>「ゲームを作る」ということが <code>JavaScript</code> の熟達度合いを測る良い指標になると聞いたので、試しにブロック崩しを作ってみた。見た目は1979年に任天堂が発売したブロック崩しを参考にしている。当時のゲームのように、5種類作ることも考えたが、とりあえずシンプルなものだけ作成した。</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/0FVHG6KmFV4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -430,9 +433,9 @@
 <span class="kd">var</span> <span class="nx">score</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">maxscore</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">r</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">r</span><span class="o">&lt;</span><span class="nx">brickRowCount</span><span class="p">;</span> <span class="nx">r</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">c</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">c</span><span class="o">&lt;</span><span class="nx">brickColumnCount</span><span class="p">;</span> <span class="nx">c</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">maxscore</span> <span class="o">+=</span> <span class="mi">3</span><span class="o">-</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">r</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
-<span class="p">}</span>
+  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">c</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">c</span><span class="o">&lt;</span><span class="nx">brickColumnCount</span><span class="p">;</span> <span class="nx">c</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">maxscore</span> <span class="o">+=</span> <span class="mi">3</span><span class="o">-</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">r</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
+  <span class="p">}</span>
 <span class="p">}</span>
 <span class="c1">// ライフを記録する。</span>
 <span class="kd">var</span> <span class="nx">lives</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
@@ -441,33 +444,33 @@
 <span class="kd">var</span> <span class="nx">timer</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
 <span class="c1">// 3桁の数字で表示するため</span>
 <span class="kd">var</span> <span class="nx">addZero</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
-<span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;00&#39;</span> <span class="o">+</span> <span class="nx">value</span><span class="p">;</span>
-<span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="o">&lt;</span><span class="mi">100</span><span class="p">){</span>
-  <span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span> <span class="o">+</span> <span class="nx">value</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;00&#39;</span> <span class="o">+</span> <span class="nx">value</span><span class="p">;</span>
+  <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="o">&lt;</span><span class="mi">100</span><span class="p">){</span>
+    <span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span> <span class="o">+</span> <span class="nx">value</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="c1">// イベント開始の関数</span>
 <span class="kd">function</span> <span class="nx">startTimer</span><span class="p">(){</span>
-<span class="nx">start_time</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
-<span class="nx">setInterval</span><span class="p">(</span><span class="nx">goTimer</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+  <span class="nx">start_time</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+  <span class="nx">setInterval</span><span class="p">(</span><span class="nx">goTimer</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
 <span class="p">}</span>
 <span class="c1">// この関数をループさせる。</span>
 <span class="kd">function</span> <span class="nx">goTimer</span><span class="p">(){</span>
-<span class="kd">var</span> <span class="nx">milli</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()</span> <span class="o">-</span> <span class="nx">start_time</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">seconds</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">milli</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">);</span>
-<span class="nx">seconds</span> <span class="o">=</span> <span class="nx">addZero</span><span class="p">(</span><span class="nx">seconds</span><span class="p">);</span>
-<span class="nx">timer</span> <span class="o">=</span> <span class="nx">seconds</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">milli</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">()</span> <span class="o">-</span> <span class="nx">start_time</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">seconds</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">milli</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">);</span>
+  <span class="nx">seconds</span> <span class="o">=</span> <span class="nx">addZero</span><span class="p">(</span><span class="nx">seconds</span><span class="p">);</span>
+  <span class="nx">timer</span> <span class="o">=</span> <span class="nx">seconds</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="c1">// ブロックが当たった後に消えるようにする。</span>
 <span class="kd">var</span> <span class="nx">bricks</span> <span class="o">=</span> <span class="p">[];</span>
 <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">r</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">r</span><span class="o">&lt;</span><span class="nx">brickRowCount</span><span class="p">;</span> <span class="nx">r</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<span class="nx">bricks</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
-<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">c</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">c</span><span class="o">&lt;</span><span class="nx">brickColumnCount</span><span class="p">;</span> <span class="nx">c</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-  <span class="c1">// statusでブロックが崩されたかを記憶する。</span>
-  <span class="nx">bricks</span><span class="p">[</span><span class="nx">r</span><span class="p">][</span><span class="nx">c</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">status</span><span class="o">:</span> <span class="mi">1</span> <span class="p">};</span>
-<span class="p">}</span>
+  <span class="nx">bricks</span><span class="p">[</span><span class="nx">r</span><span class="p">]</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">c</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">c</span><span class="o">&lt;</span><span class="nx">brickColumnCount</span><span class="p">;</span> <span class="nx">c</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// statusでブロックが崩されたかを記憶する。</span>
+    <span class="nx">bricks</span><span class="p">[</span><span class="nx">r</span><span class="p">][</span><span class="nx">c</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">status</span><span class="o">:</span> <span class="mi">1</span> <span class="p">};</span>
+  <span class="p">}</span>
 <span class="p">}</span>
 <span class="c1">// ボタンの処理で制御する</span>
 <span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;keydown&quot;</span><span class="p">,</span> <span class="nx">keyDownHandler</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
@@ -475,19 +478,19 @@
 <span class="c1">// ボタンが押された時のイベント(変数をTrueにする)</span>
 <span class="kd">function</span> <span class="nx">keyDownHandler</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">&quot;Right&quot;</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">&quot;ArrowRight&quot;</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">rightPressed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="nx">rightPressed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
   <span class="p">}</span>
   <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">&quot;Left&quot;</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">&quot;ArrowLeft&quot;</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">leftPressed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="nx">leftPressed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
   <span class="p">}</span>
 <span class="p">}</span>
 <span class="c1">// ボタンが押されなくなった時のイベント(変数をfalseに戻す)</span>
 <span class="kd">function</span> <span class="nx">keyUpHandler</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">&quot;Right&quot;</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">&quot;ArrowRight&quot;</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">rightPressed</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="nx">rightPressed</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
   <span class="p">}</span>
   <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">&quot;Left&quot;</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">&quot;ArrowLeft&quot;</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">leftPressed</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="nx">leftPressed</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
   <span class="p">}</span>
 <span class="p">}</span>
 <span class="c1">// マウスの位置で制御する</span>
@@ -495,43 +498,44 @@
 <span class="c1">// マウスが動いた時のイベント。マウスのx座標がキャンバスのx座標内にあれば、その位置に持ってくる。</span>
 <span class="kd">function</span> <span class="nx">mouseMoveHandler</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
 <span class="kd">var</span> <span class="nx">relativeX</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">clientX</span> <span class="o">-</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">offsetLeft</span><span class="p">;</span>
-<span class="k">if</span><span class="p">(</span><span class="nx">relativeX</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">){</span>
-  <span class="k">if</span><span class="p">(</span><span class="nx">relativeX</span><span class="o">&lt;</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">paddleX</span> <span class="o">=</span> <span class="nx">relativeX</span> <span class="o">-</span> <span class="nx">paddleWidth</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">relativeX</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">relativeX</span><span class="o">&lt;</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">paddleX</span> <span class="o">=</span> <span class="nx">relativeX</span> <span class="o">-</span> <span class="nx">paddleWidth</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
   <span class="p">}</span>
-<span class="p">}</span>
 <span class="p">}</span>
 <span class="c1">// 音を鳴らす。</span>
 <span class="kd">function</span> <span class="nx">sound</span><span class="p">(</span><span class="nx">tag</span><span class="p">){</span>
-<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">tag</span><span class="p">).</span><span class="nx">currentTime</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">tag</span><span class="p">).</span><span class="nx">play</span><span class="p">();</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">tag</span><span class="p">).</span><span class="nx">currentTime</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">tag</span><span class="p">).</span><span class="nx">play</span><span class="p">();</span>
 <span class="p">}</span>
 <span class="c1">// 衝突を検知する。</span>
 <span class="kd">function</span> <span class="nx">collisionDetection</span><span class="p">()</span> <span class="p">{</span>
-<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">r</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">r</span><span class="o">&lt;</span><span class="nx">brickRowCount</span><span class="p">;</span> <span class="nx">r</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">c</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">c</span><span class="o">&lt;</span><span class="nx">brickColumnCount</span><span class="p">;</span> <span class="nx">c</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">bricks</span><span class="p">[</span><span class="nx">r</span><span class="p">][</span><span class="nx">c</span><span class="p">];</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// ブロックが存在しているかを確認する。</span>
-      <span class="k">if</span><span class="p">(</span><span class="nx">x</span><span class="o">&gt;</span><span class="nx">b</span><span class="p">.</span><span class="nx">x</span><span class="p">){</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">x</span><span class="o">&lt;</span><span class="nx">b</span><span class="p">.</span><span class="nx">x</span><span class="o">+</span><span class="nx">brickWidth</span><span class="p">){</span>
-          <span class="k">if</span> <span class="p">(</span><span class="nx">y</span><span class="o">&gt;</span><span class="nx">b</span><span class="p">.</span><span class="nx">y</span><span class="p">){</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">y</span><span class="o">&lt;</span><span class="nx">b</span><span class="p">.</span><span class="nx">y</span><span class="o">+</span><span class="nx">brickHeight</span><span class="p">){</span>
-              <span class="nx">dy</span> <span class="o">=</span> <span class="o">-</span><span class="nx">dy</span><span class="p">;</span>
-              <span class="k">if</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
-                <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundUp&quot;</span><span class="p">);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">dy</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">){</span>
-                  <span class="nx">dy</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
-                <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-                  <span class="nx">dy</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">r</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">r</span><span class="o">&lt;</span><span class="nx">brickRowCount</span><span class="p">;</span> <span class="nx">r</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">c</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">c</span><span class="o">&lt;</span><span class="nx">brickColumnCount</span><span class="p">;</span> <span class="nx">c</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">bricks</span><span class="p">[</span><span class="nx">r</span><span class="p">][</span><span class="nx">c</span><span class="p">];</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// ブロックが存在しているかを確認する。</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">x</span><span class="o">&gt;</span><span class="nx">b</span><span class="p">.</span><span class="nx">x</span><span class="p">){</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">x</span><span class="o">&lt;</span><span class="nx">b</span><span class="p">.</span><span class="nx">x</span><span class="o">+</span><span class="nx">brickWidth</span><span class="p">){</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">y</span><span class="o">&gt;</span><span class="nx">b</span><span class="p">.</span><span class="nx">y</span><span class="p">){</span>
+              <span class="k">if</span> <span class="p">(</span><span class="nx">y</span><span class="o">&lt;</span><span class="nx">b</span><span class="p">.</span><span class="nx">y</span><span class="o">+</span><span class="nx">brickHeight</span><span class="p">){</span>
+                <span class="nx">dy</span> <span class="o">=</span> <span class="o">-</span><span class="nx">dy</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+                  <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundUp&quot;</span><span class="p">);</span>
+                  <span class="k">if</span> <span class="p">(</span><span class="nx">dy</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">){</span>
+                    <span class="nx">dy</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+                  <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                    <span class="nx">dy</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+                  <span class="p">}</span>
                 <span class="p">}</span>
-              <span class="p">}</span>
-              <span class="nx">b</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-              <span class="nx">score</span><span class="o">+=</span><span class="mi">3</span><span class="o">-</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">r</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
-              <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundBrick&quot;</span><span class="p">);</span>
-              <span class="c1">// 全てのブロックを崩した場合</span>
-              <span class="k">if</span><span class="p">(</span><span class="nx">score</span> <span class="o">==</span> <span class="nx">maxscore</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;YOU WIN\nYour Time is &quot;</span> <span class="o">+</span> <span class="nx">timer</span><span class="p">);</span>
-                <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">reload</span><span class="p">();</span>
+                <span class="nx">b</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                <span class="nx">score</span><span class="o">+=</span><span class="mi">3</span><span class="o">-</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">r</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
+                <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundBrick&quot;</span><span class="p">);</span>
+                <span class="c1">// 全てのブロックを崩した場合</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">score</span> <span class="o">==</span> <span class="nx">maxscore</span><span class="p">)</span> <span class="p">{</span>
+                  <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;YOU WIN\nYour Time is &quot;</span> <span class="o">+</span> <span class="nx">timer</span><span class="p">);</span>
+                  <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">reload</span><span class="p">();</span>
+                <span class="p">}</span>
               <span class="p">}</span>
             <span class="p">}</span>
           <span class="p">}</span>
@@ -540,131 +544,130 @@
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
-<span class="p">}</span>
 <span class="kd">function</span> <span class="nx">drawBall</span><span class="p">()</span> <span class="p">{</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">arc</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">ballRadius</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">*</span><span class="mi">2</span><span class="p">);</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">;</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">fill</span><span class="p">();</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">closePath</span><span class="p">();</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">arc</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">ballRadius</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">*</span><span class="mi">2</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fill</span><span class="p">();</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">closePath</span><span class="p">();</span>
 <span class="p">}</span>
 <span class="kd">function</span> <span class="nx">drawPaddle</span><span class="p">()</span> <span class="p">{</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">rect</span><span class="p">(</span><span class="nx">paddleX</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="o">-</span><span class="nx">paddleHeight</span><span class="o">-</span><span class="nx">paddleOffsetBottom</span><span class="p">,</span> <span class="nx">paddleWidth</span><span class="p">,</span> <span class="nx">paddleHeight</span><span class="p">);</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">;</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">fill</span><span class="p">();</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">closePath</span><span class="p">();</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">rect</span><span class="p">(</span><span class="nx">paddleX</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="o">-</span><span class="nx">paddleHeight</span><span class="o">-</span><span class="nx">paddleOffsetBottom</span><span class="p">,</span> <span class="nx">paddleWidth</span><span class="p">,</span> <span class="nx">paddleHeight</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fill</span><span class="p">();</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">closePath</span><span class="p">();</span>
 <span class="p">}</span>
 <span class="c1">// ブロックを1つずつ描画する。</span>
 <span class="kd">function</span> <span class="nx">drawBricks</span><span class="p">()</span> <span class="p">{</span>
-<span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">r</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">r</span><span class="o">&lt;</span><span class="nx">brickRowCount</span><span class="p">;</span> <span class="nx">r</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">c</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">c</span><span class="o">&lt;</span><span class="nx">brickColumnCount</span><span class="p">;</span> <span class="nx">c</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">bricks</span><span class="p">[</span><span class="nx">r</span><span class="p">][</span><span class="nx">c</span><span class="p">].</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">brickX</span> <span class="o">=</span> <span class="p">(</span><span class="nx">c</span><span class="o">*</span><span class="p">(</span><span class="nx">brickWidth</span><span class="o">+</span><span class="nx">brickPadding</span><span class="p">))</span><span class="o">+</span><span class="nx">brickOffsetLeft</span><span class="p">;</span>
-      <span class="kd">var</span> <span class="nx">brickY</span> <span class="o">=</span> <span class="p">(</span><span class="nx">r</span><span class="o">*</span><span class="p">(</span><span class="nx">brickHeight</span><span class="o">+</span><span class="nx">brickPadding</span><span class="p">))</span><span class="o">+</span><span class="nx">brickOffsetTop</span><span class="p">;</span>
-      <span class="nx">bricks</span><span class="p">[</span><span class="nx">r</span><span class="p">][</span><span class="nx">c</span><span class="p">].</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">brickX</span><span class="p">;</span>
-      <span class="nx">bricks</span><span class="p">[</span><span class="nx">r</span><span class="p">][</span><span class="nx">c</span><span class="p">].</span><span class="nx">y</span> <span class="o">=</span> <span class="nx">brickY</span><span class="p">;</span>
-      <span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
-      <span class="nx">ctx</span><span class="p">.</span><span class="nx">rect</span><span class="p">(</span><span class="nx">brickX</span><span class="p">,</span> <span class="nx">brickY</span><span class="p">,</span> <span class="nx">brickWidth</span><span class="p">,</span> <span class="nx">brickHeight</span><span class="p">);</span>
-      <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="nx">brickColors</span><span class="p">[</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">r</span><span class="o">/</span><span class="mi">2</span><span class="p">)];</span>
-      <span class="nx">ctx</span><span class="p">.</span><span class="nx">fill</span><span class="p">();</span>
-      <span class="nx">ctx</span><span class="p">.</span><span class="nx">closePath</span><span class="p">();</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-<span class="p">}</span>
-<span class="kd">function</span> <span class="nx">drawScore</span><span class="p">()</span> <span class="p">{</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="s2">&quot;30px &#39;Comic Sans MS&#39;&quot;</span><span class="p">;</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">;</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span><span class="nx">score</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="kd">function</span> <span class="nx">drawTime</span><span class="p">()</span> <span class="p">{</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="s2">&quot;30px &#39;Comic Sans MS&#39;&quot;</span><span class="p">;</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">;</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span><span class="nx">timer</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="kd">function</span> <span class="nx">drawLives</span><span class="p">()</span> <span class="p">{</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="s2">&quot;30px &#39;Comic Sans MS&#39;&quot;</span><span class="p">;</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">;</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span><span class="nx">lives</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">-</span><span class="mi">65</span><span class="p">,</span> <span class="mi">40</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="kd">function</span> <span class="nx">draw</span><span class="p">()</span> <span class="p">{</span>
-<span class="nx">ctx</span><span class="p">.</span><span class="nx">clearRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span> <span class="c1">// 毎フレームごとに削除</span>
-<span class="nx">drawBricks</span><span class="p">();</span>
-<span class="nx">drawBall</span><span class="p">();</span>
-<span class="nx">drawPaddle</span><span class="p">();</span>
-<span class="nx">drawScore</span><span class="p">();</span>
-<span class="nx">drawTime</span><span class="p">();</span>
-<span class="nx">drawLives</span><span class="p">();</span>
-<span class="nx">collisionDetection</span><span class="p">();</span>
-<span class="c1">// 左端と右端で弾ませる(ボールの半径を考える)</span>
-<span class="k">if</span><span class="p">(</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">dx</span><span class="o">&gt;</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">-</span><span class="nx">ballRadius</span> <span class="o">||</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">dx</span><span class="o">&lt;</span><span class="nx">ballRadius</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundBar&quot;</span><span class="p">);</span>
-  <span class="nx">dx</span> <span class="o">=</span> <span class="o">-</span><span class="nx">dx</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="c1">// 上端で弾ませる(ボールの半径を考える)</span>
-<span class="k">if</span><span class="p">(</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">dy</span><span class="o">&lt;</span><span class="nx">ballRadius</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundBar&quot;</span><span class="p">);</span>
-  <span class="nx">dy</span> <span class="o">=</span> <span class="o">-</span><span class="nx">dy</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="c1">// ボールがパドルの位置に到達した時</span>
-<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">y</span><span class="o">+</span><span class="nx">dy</span><span class="o">&gt;</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="o">-</span><span class="nx">paddleOffsetBottom</span><span class="o">-</span><span class="nx">ballRadius</span><span class="p">){</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">y</span><span class="o">+</span><span class="nx">dy</span><span class="o">&lt;</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="o">-</span><span class="nx">paddleOffsetBottom</span><span class="o">-</span><span class="nx">ballRadius</span><span class="o">+</span><span class="nx">brickHeight</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// ボールのx座標がパドル上にあれば、跳ね返る</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">x</span><span class="o">&gt;</span><span class="nx">paddleX</span><span class="p">){</span>
-      <span class="k">if</span><span class="p">(</span><span class="nx">x</span><span class="o">&lt;</span><span class="nx">paddleX</span> <span class="o">+</span> <span class="nx">paddleWidth</span><span class="p">){</span>
-        <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundBar&quot;</span><span class="p">);</span>
-        <span class="nx">dy</span> <span class="o">=</span> <span class="o">-</span><span class="nx">dy</span><span class="p">;</span>
+  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">r</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">r</span><span class="o">&lt;</span><span class="nx">brickRowCount</span><span class="p">;</span> <span class="nx">r</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">c</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">c</span><span class="o">&lt;</span><span class="nx">brickColumnCount</span><span class="p">;</span> <span class="nx">c</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">bricks</span><span class="p">[</span><span class="nx">r</span><span class="p">][</span><span class="nx">c</span><span class="p">].</span><span class="nx">status</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">brickX</span> <span class="o">=</span> <span class="p">(</span><span class="nx">c</span><span class="o">*</span><span class="p">(</span><span class="nx">brickWidth</span><span class="o">+</span><span class="nx">brickPadding</span><span class="p">))</span><span class="o">+</span><span class="nx">brickOffsetLeft</span><span class="p">;</span>
+        <span class="kd">var</span> <span class="nx">brickY</span> <span class="o">=</span> <span class="p">(</span><span class="nx">r</span><span class="o">*</span><span class="p">(</span><span class="nx">brickHeight</span><span class="o">+</span><span class="nx">brickPadding</span><span class="p">))</span><span class="o">+</span><span class="nx">brickOffsetTop</span><span class="p">;</span>
+        <span class="nx">bricks</span><span class="p">[</span><span class="nx">r</span><span class="p">][</span><span class="nx">c</span><span class="p">].</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">brickX</span><span class="p">;</span>
+        <span class="nx">bricks</span><span class="p">[</span><span class="nx">r</span><span class="p">][</span><span class="nx">c</span><span class="p">].</span><span class="nx">y</span> <span class="o">=</span> <span class="nx">brickY</span><span class="p">;</span>
+        <span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
+        <span class="nx">ctx</span><span class="p">.</span><span class="nx">rect</span><span class="p">(</span><span class="nx">brickX</span><span class="p">,</span> <span class="nx">brickY</span><span class="p">,</span> <span class="nx">brickWidth</span><span class="p">,</span> <span class="nx">brickHeight</span><span class="p">);</span>
+        <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="nx">brickColors</span><span class="p">[</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">r</span><span class="o">/</span><span class="mi">2</span><span class="p">)];</span>
+        <span class="nx">ctx</span><span class="p">.</span><span class="nx">fill</span><span class="p">();</span>
+        <span class="nx">ctx</span><span class="p">.</span><span class="nx">closePath</span><span class="p">();</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
-  <span class="c1">// ボールが下端に到達した時</span>
-  <span class="k">if</span><span class="p">(</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">dy</span><span class="o">&gt;</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="o">-</span><span class="nx">ballRadius</span><span class="p">){</span>
-    <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundFail&quot;</span><span class="p">);</span>
-    <span class="nx">lives</span><span class="o">--</span><span class="p">;</span>
-    <span class="c1">// 残機がなくなれば失敗する。</span>
-    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">lives</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;YOU LOSE&quot;</span><span class="p">);</span>
-      <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">reload</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">drawScore</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="s2">&quot;30px &#39;Comic Sans MS&#39;&quot;</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span><span class="nx">score</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">drawTime</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="s2">&quot;30px &#39;Comic Sans MS&#39;&quot;</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span><span class="nx">timer</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">drawLives</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="s2">&quot;30px &#39;Comic Sans MS&#39;&quot;</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span><span class="nx">lives</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">-</span><span class="mi">65</span><span class="p">,</span> <span class="mi">40</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">draw</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">clearRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span> <span class="c1">// 毎フレームごとに削除</span>
+  <span class="nx">drawBricks</span><span class="p">();</span>
+  <span class="nx">drawBall</span><span class="p">();</span>
+  <span class="nx">drawPaddle</span><span class="p">();</span>
+  <span class="nx">drawScore</span><span class="p">();</span>
+  <span class="nx">drawTime</span><span class="p">();</span>
+  <span class="nx">drawLives</span><span class="p">();</span>
+    <span class="nx">collisionDetection</span><span class="p">();</span>
+  <span class="c1">// 左端と右端で弾ませる(ボールの半径を考える)</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">dx</span><span class="o">&gt;</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">-</span><span class="nx">ballRadius</span> <span class="o">||</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">dx</span><span class="o">&lt;</span><span class="nx">ballRadius</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundBar&quot;</span><span class="p">);</span>
+    <span class="nx">dx</span> <span class="o">=</span> <span class="o">-</span><span class="nx">dx</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="c1">// 上端で弾ませる(ボールの半径を考える)</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">dy</span><span class="o">&lt;</span><span class="nx">ballRadius</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundBar&quot;</span><span class="p">);</span>
+    <span class="nx">dy</span> <span class="o">=</span> <span class="o">-</span><span class="nx">dy</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="c1">// ボールがパドルの位置に到達した時</span>
+  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">y</span><span class="o">+</span><span class="nx">dy</span><span class="o">&gt;</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="o">-</span><span class="nx">paddleOffsetBottom</span><span class="o">-</span><span class="nx">ballRadius</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">y</span><span class="o">+</span><span class="nx">dy</span><span class="o">&lt;</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="o">-</span><span class="nx">paddleOffsetBottom</span><span class="o">-</span><span class="nx">ballRadius</span><span class="o">+</span><span class="nx">brickHeight</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// ボールのx座標がパドル上にあれば、跳ね返る</span>
+      <span class="k">if</span><span class="p">(</span><span class="nx">x</span><span class="o">&gt;</span><span class="nx">paddleX</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">x</span><span class="o">&lt;</span><span class="nx">paddleX</span> <span class="o">+</span> <span class="nx">paddleWidth</span><span class="p">){</span>
+          <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundBar&quot;</span><span class="p">);</span>
+          <span class="nx">dy</span> <span class="o">=</span> <span class="o">-</span><span class="nx">dy</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
     <span class="p">}</span>
-    <span class="k">else</span> <span class="p">{</span>
-      <span class="nx">x</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
-      <span class="nx">y</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="o">-</span><span class="nx">paddleOffsetBottom</span><span class="o">-</span><span class="nx">brickHeight</span><span class="p">;</span>
-      <span class="nx">dx</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-      <span class="nx">dy</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span><span class="p">;</span>
-      <span class="nx">paddleX</span> <span class="o">=</span> <span class="p">(</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">-</span><span class="nx">paddleWidth</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+    <span class="c1">// ボールが下端に到達した時</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">dy</span><span class="o">&gt;</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="o">-</span><span class="nx">ballRadius</span><span class="p">){</span>
+      <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundFail&quot;</span><span class="p">);</span>
+      <span class="nx">lives</span><span class="o">--</span><span class="p">;</span>
+      <span class="c1">// 残機がなくなれば失敗する。</span>
+      <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">lives</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;YOU LOSE&quot;</span><span class="p">);</span>
+        <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">reload</span><span class="p">();</span>
+      <span class="p">}</span>
+      <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">x</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+        <span class="nx">y</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="o">-</span><span class="nx">paddleOffsetBottom</span><span class="o">-</span><span class="nx">brickHeight</span><span class="p">;</span>
+        <span class="nx">dx</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+        <span class="nx">dy</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span><span class="p">;</span>
+        <span class="nx">paddleX</span> <span class="o">=</span> <span class="p">(</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">-</span><span class="nx">paddleWidth</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+      <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
-<span class="p">}</span>
-<span class="c1">// パドルの移動指定されたピクセルだけ動く</span>
-<span class="k">if</span><span class="p">(</span><span class="nx">rightPressed</span><span class="p">){</span>
-  <span class="k">if</span><span class="p">(</span><span class="nx">paddleX</span><span class="o">&lt;</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">-</span><span class="nx">paddleWidth</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">paddleX</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
+  <span class="c1">// パドルの移動指定されたピクセルだけ動く</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">rightPressed</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">paddleX</span><span class="o">&lt;</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">-</span><span class="nx">paddleWidth</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">paddleX</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>
+    <span class="p">}</span>
   <span class="p">}</span>
-<span class="p">}</span>
-<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">leftPressed</span><span class="p">){</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">paddleX</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">paddleX</span> <span class="o">-=</span> <span class="mi">5</span><span class="p">;</span>
+  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">leftPressed</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">paddleX</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">paddleX</span> <span class="o">-=</span> <span class="mi">5</span><span class="p">;</span>
+    <span class="p">}</span>
   <span class="p">}</span>
-<span class="p">}</span>
-<span class="nx">x</span> <span class="o">+=</span> <span class="nx">dx</span><span class="p">;</span>
-<span class="nx">y</span> <span class="o">+=</span> <span class="nx">dy</span><span class="p">;</span>
-<span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">draw</span><span class="p">);</span>
+  <span class="nx">x</span> <span class="o">+=</span> <span class="nx">dx</span><span class="p">;</span>
+  <span class="nx">y</span> <span class="o">+=</span> <span class="nx">dy</span><span class="p">;</span>
+  <span class="nx">requestAnimationFrame</span><span class="p">(</span><span class="nx">draw</span><span class="p">);</span>
 <span class="p">}</span>
 <span class="kd">function</span> <span class="nx">setCanvas</span><span class="p">()</span> <span class="p">{</span>
-<span class="nx">drawBricks</span><span class="p">();</span>
-<span class="nx">drawBall</span><span class="p">();</span>
-<span class="nx">drawPaddle</span><span class="p">();</span>
-<span class="nx">drawScore</span><span class="p">();</span>
-<span class="nx">drawTime</span><span class="p">();</span>
-<span class="nx">drawLives</span><span class="p">();</span>
+  <span class="nx">drawBricks</span><span class="p">();</span>
+  <span class="nx">drawBall</span><span class="p">();</span>
+  <span class="nx">drawPaddle</span><span class="p">();</span>
+  <span class="nx">drawScore</span><span class="p">();</span>
+  <span class="nx">drawTime</span><span class="p">();</span>
+  <span class="nx">drawLives</span><span class="p">();</span>
 <span class="p">}</span>
 <span class="c1">// 初期状態を描いて待機</span>
 <span class="nx">setCanvas</span><span class="p">();</span>
 <span class="kd">function</span> <span class="nx">gameButton</span><span class="p">()</span> <span class="p">{</span>
-<span class="nx">draw</span><span class="p">();</span>
-<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;SPEED UP&quot;</span><span class="p">;</span>
-<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">fontSize</span> <span class="o">=</span> <span class="s2">&quot;10px&quot;</span><span class="p">;</span>
+  <span class="nx">draw</span><span class="p">();</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;SPEED UP&quot;</span><span class="p">;</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">fontSize</span> <span class="o">=</span> <span class="s2">&quot;10px&quot;</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
 
