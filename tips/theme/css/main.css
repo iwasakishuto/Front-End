@@ -56,7 +56,17 @@ img:not(.__canvas) {
     height: auto;
 }
 
+/* ↓Add by Shuto Iwasaki. */
+img.social-img {
+	height: 1em;
+	width: auto;
+	border: 0;
+	padding: 0 5px 0 0;
+	vertical-align: middle;
+}
+
 code {
+	font-family: monaco;
   padding: 2px 4px;
   color: #d14;
   background-color: #f7f7f9;
