@@ -61,7 +61,15 @@ code {
   color: #d14;
   background-color: #f7f7f9;
   border: 1px solid #e1e1e8;
-  white-space: nowrap;
+	white-space: nowrap;
+}
+
+/* Added by Shuto Iwasaki */
+code.hljs {
+	white-space: pre;
+	border: 0;
+	background-color:#272822;
+	color: white;
 }
 
 h2 {
