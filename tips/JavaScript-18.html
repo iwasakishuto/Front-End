@@ -113,7 +113,6 @@
   var currentSize = document.getElementById('currentSize');
   var files;
   var file;
-
   sizeRange.addEventListener('change', function (e) {
     let size = sizeRange.value + "%";
     currentSize.innerHTML = size;
@@ -122,10 +121,8 @@
       target[i].style.width = size;
     }
   });
-
   DirInputTag.addEventListener('change', function(e){
     files = e.target.files;
-
     var img
     var div;
     for (var i=0; i<files.length; i++) {
