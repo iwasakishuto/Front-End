@@ -57,22 +57,32 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-20.html">JS.20 Formの登録内容を可視化する。</a></h1>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-21.html">JS.21 画像のラベル化を楽にする。</a></h1>
 <footer class="post-info">
         <span>2020-11-08(Sun)</span>
 <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info --><p><a href="JavaScript-19.html">JS.19</a>でフォトギャラリーを作成したので、これを用いてアノテーションを楽にするツールの作成を試みる。</p>
-<p>キーボードから楽にアノテーションができるようにするため、属性(<code>attribute</code>)に対して（複数の）ラベル(<code>label</code>)とそれに対応するキー(<code>key</code>)用意し、それぞれキーボードから指定可能にした。</p>
+</footer><!-- /.post-info --><ul>
+<ul style="list-style: disc; margin-left: 2em;">
+  <li><a href="JavaScript-19.html">JS.19</a>で作成したフォトギャラリー</li>
+  <li><a href="JavaScript-20.html">JS.20</a>で作成したアノテーションツール</li>
+</ul>
+<p>を合わせて、画像用のアノテーションツールを作成しました。使い方は以下の通り。</p>
+<p>なお、このページはGithub Pagesで作成されている静的サイトのため、アップロードされた画像がサーバー等に送信されることはなく、安心してご利用できます。</p>
 <ol style="list-style: decimal; margin-left: 2em;">
   <li><a href="#registration-attrs-form">Registration</a> で属性(<code>attribute</code>)に対する（複数の）ラベル(<code>label</code>)とそれに対応するキー(<code>key</code>)を登録する。</li>
   <li>登録した内容は、<a href="#registered-attrs">Registered Attributes</a>に記載されています。</li>
-  <li>全ての属性の登録が済んだら、画像をクリックしてフォーカス状態にする。</li>
-  <li>その状態で先ほど登録したキーを入力すれば、対応するラベルが対応する属性に付加される。</li>
-  <li>download ボタンを押せば、json形式でダウンロード可能。</li>
+  <li>全ての属性の登録が済んだら、画像をクリックしてフォトギャラリー状態にする。</li>
+  <li>その状態で先ほど登録したキーを入力すれば、対応するラベルが対応する属性に付加される。
+    <ul>
+      <li>ESC: フォトギャラリーを終了</li>
+      <li>→: 次の画像に進む</li>
+      <li>←: 前の画像に戻る</li>
+    </ul>
+  </li>
+  <li>download ボタン（画面下部のものと、フォトギャラリー状態で出てくるものは同じです。）を押せば、json形式でラベル化データをダウンロードすることができます。</li>
 </ol>
-
 <div class="annotation-attrs">
-  <div class="registration-col" style="margin-left: 10px; float: left;">
+  <div class="registration-col" style="margin-left: 8%; float: left;">
     <h2>Registration</h2>
     <form id="registration-attrs-form" action="#" onsubmit="return false;">
       <table>
@@ -87,7 +97,7 @@
         </thead>
         <tbody id="registration-attrs-tbody">
           <tr>
-            <td><input type="text" class="command-key" maxlength="1" size="1"></td>
+            <td><input type="text" class="command-key" style="text-align: center;" maxlength="1" size="1"></td>
             <td><input type="text" class="label-name"  placeholder="label name"></td>
             <td><input type="button" value="＋" class="add" tabindex="-1"></td>
             <td><input type="button" value="－" class="del" tabindex="-1"></td>
@@ -96,13 +106,13 @@
         <tbody id="registration-attrs-ttail">
           <tr><td colspan="4">
             <input id="form-reset" type="reset" name="reset" value="Clear"/>
-            <input type="submit" value="Register" onclick="return register_attrs();">
+            <input id="form-submit" type="submit" value="Register" onclick="return register_attrs();">
           </td></tr>
         </tbody>
       </table>
     </form>
   </div>
-  <div class="registration-col" style="margin-right: 10px; float: right;">
+  <div class="registration-col" style="margin-right: 8%; float: right;">
     <h2>Registered Attributes</h2>
     <table id="registered-attrs">
       <thead id="registered-attrs-thead">
@@ -117,51 +127,384 @@
     </table>
   </div>
 </div>
-
-<div class="sample-box" style="text-align: center; width: 50%; margin: 0 auto;">
-  <a href="#" id="img-wrapper">
-    <img id="sample-img" src="https://iwasakishuto.github.io/images/profile/twitter.png">
-  </a>
-  <table id="annotation-label">
-    <thead id="annotation-label-thead">
-      <tr>
-        <th>attribute</th>
-        <th>current label</th>
-      </tr>
-    </thead>
-    <tbody id="annotation-label-tbody">
-    </tbody>
-  </table>
-  <button onclick="download_json();">download</button>
+<div style='text-align: center; margin-top: 5%;'>
+  <label id="InputFilesLabel" for='InputFiles'>
+    ディレクトリを選択してください。
+    <input id="InputFiles" type="file" webkitdirectory style='display:none;'>
+  </label>
 </div>
-
-<style>
-  a#img-wrapper:focus img{
-    border: 3px solid #008db8;
-  }
-  .annotation-attrs {
-    width:100%;
-    height:auto;
-  }
-  .annotation-attrs:after {
-    display: block;
-    clear: both;
-    content: "";
-  }
-  .registration-col th, .registration-col td {
-    text-align: center;
-    vertical-align: middle;
-  } 
-  form#registration-attrs-form table input {
-    padding: 8px;
-    border-radius: 6px;
-    margin: 2px;
-  }
-</style>
-
+<div style="padding: 10px; text-align: center;">
+  画像サイズ（現在<span id="currentSize">12%</span>）：5% <input id="sizeRange" type="range" min="5" max="100" step="1" value="12" />100%
+</div>
+<ul id="gallery" class="galleryCover"></ul>
+<div class="download_wrapper">
+  <button class="download_btn" onclick="download_json();">Download JSON</button>
+</div>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.7.1/css/lightbox.css" rel="stylesheet" />
 <script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
-
-<script type="text/javascript">
+<script>
+  /*!
+  * Lightbox v2.11.2
+  * by Lokesh Dhakar
+  *
+  * More info:
+  * http://lokeshdhakar.com/projects/lightbox2/
+  *
+  * Copyright Lokesh Dhakar
+  * Released under the MIT license
+  * https://github.com/lokesh/lightbox2/blob/master/LICENSE
+  *
+  * @preserve
+  */
+  /*!
+  * Modified by iwasakishuto (2020/11/08)
+  * Github : https://github.com/iwasakishuto
+  * Twitter: https://twitter.com/cabernet_rock
+  */
+  var currentImageIndex = -1;
+  (function() {
+    var a = jQuery,
+        b = function() {
+          function a() {
+            this.fadeDuration = 1, 
+            this.fitImagesInViewport = !0, 
+            this.resizeDuration = 0, 
+            this.positionFromTop = 50, 
+            this.showImageNumberLabel = ! 0, 
+            this.alwaysShowNavOnTouchDevices = ! 1, 
+            this.wrapAround = !1
+          }
+          return a.prototype.albumLabel = function(a, b) {
+            currentImageIndex = a;
+            generate_annotation_table()
+            return "Image " + a + " of " + b
+          }, a
+        }(),
+        c = function() {
+          function b(a) {
+            this.options = a, 
+            this.album = [], 
+            this.currentImageIndex = void 0, 
+            this.init()
+          }
+          return b.prototype.init = function() {
+            this.enable(), 
+            this.build()
+          }, b.prototype.enable = function() {
+            var b = this;
+            a("body").on("click",
+              "a[rel^=lightbox], area[rel^=lightbox], a[data-lightbox], area[data-lightbox]",
+              function(c) {
+                return b.start(a(c.currentTarget)), !1
+              })
+          }, b.prototype.build = function() {
+            var b = this;
+            a(`
+              <div id='lightboxOverlay' class='lightboxOverlay'></div>
+              <div id='lightbox' class='lightbox'>
+                <div class='lb-outerContainer'>
+                  <div class='lb-container'>
+                    <img class='lb-image' src='' />
+                    <div class='lb-nav'>
+                      <a class='lb-prev' href='' ></a>
+                      <a class='lb-next' href='' ></a>
+                    </div>
+                    <div class='lb-loader'>
+                      <a class='lb-cancel'></a>
+                    </div>
+                  </div>
+                </div>
+                <div class='lb-dataContainer'>
+                  <div class='lb-data'>
+                    <div class='lb-details'>
+                      <span class='lb-caption'></span>
+                      <span class='lb-number'></span>
+                    </div>
+                    <h4 style='color: white!important;'>Current Attributes</h4>
+                    <table id='annotation-label' style='color: white;'>
+                      <thead id='annotation-label-thead'>
+                        <tr>
+                          <th>attribute</th>
+                          <th>label</th>
+                        </tr>
+                      </thead>
+                      <tbody id='annotation-label-tbody'></tbody>
+                    </table>
+                    <h3 style='color: #ccc!important;'>Registered Attributes</h3>
+                    <table id='registered-attrs-overlay'>
+                      <thead id='registered-attrs-thead-overlay'>
+                        <tr>
+                          <th>attribute</th>
+                          <th>label</th>
+                          <th>command</th>
+                        </tr>
+                      </thead>
+                      <tbody id='registered-attrs-tbody-overlay'>
+                      </tbody>
+                    </table>
+                    <div class='download_wrapper'>
+                      <button class='download_btn' onclick='download_json();'>Download JSON</button>
+                    </div>
+                    <div class='lb-closeContainer'>
+                      <a class='lb-close'></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              `).appendTo(a("body")), 
+              this.$lightbox = a("#lightbox"), 
+              this.$overlay = a("#lightboxOverlay"), 
+              this.$outerContainer = this.$lightbox.find(".lb-outerContainer"), 
+              this.$container = this.$lightbox.find(".lb-container"), 
+              this.containerTopPadding = parseInt(this.$container.css("padding-top"), 10), 
+              this.containerRightPadding = parseInt(this.$container.css("padding-right"), 10), 
+              this.containerBottomPadding = parseInt(this.$container.css("padding-bottom"), 10),
+              this.containerLeftPadding = parseInt(this.$container.css("padding-left"), 10), 
+              this.$overlay.hide().on("click", function() { 
+                return b.end(), !1
+              }), 
+              this.$lightbox.hide().on("click", function(c) {
+                return "lightbox" === a(c.target).attr("id") && b.end(), !1
+              }), 
+              this.$outerContainer.on("click", function(c) {
+                return "lightbox" === a(c.target).attr("id") && b.end(), !1
+              }), 
+              this.$lightbox.find(".lb-prev").on("click", function() {
+                return b.changeImage(0 === b.currentImageIndex ? b.album.length - 1 : b.currentImageIndex - 1), !1
+              }), 
+              this.$lightbox.find(".lb-next").on("click", function() {
+                return b.changeImage(b.currentImageIndex === b.album.length - 1 ? 0 : b.currentImageIndex + 1), !1
+              }), 
+              this.$lightbox.find(".lb-loader, .lb-close").on("click", function() {
+                return b.end(), !1
+              })
+          }, b.prototype.start = function(b) {
+            function c(a) {
+              d.album.push({
+                link: a.attr("href"),
+                title: a.attr("data-title") || a.attr("title")
+              })
+            }
+            var d = this,
+                e = a(window);
+                e.on("resize", a.proxy(this.sizeOverlay, this)), 
+                a("select, object, embed").css({visibility: "hidden"}),
+                this.sizeOverlay(), 
+                this.album = [];
+            var f = 0, 
+                g = 0,
+                h = b.attr("data-lightbox");
+            if (h) {
+              f = a(b.prop("tagName") + '[data-lightbox="' + h + '"]');
+              for (var i = 0; i < f.length; i = ++i) c(a(f[i])), f[i] === b[0] && (g = i)
+            } else if ("lightbox" === b.attr("rel")) {
+              c(b);
+            } else {
+              f = a(b.prop("tagName") + '[rel="' + b.attr("rel") + '"]');
+              for (var j = 0; j < f.length; j = ++j) c(a(f[j])), f[j] === b[0] && (g = j)
+            }
+            var k = e.scrollTop() + this.options.positionFromTop,
+                l = e.scrollLeft();
+            this.$lightbox.css({
+              top: k + "px",
+              left: l + "px"
+            }).fadeIn(this.options.fadeDuration), 
+            this.changeImage(g)
+          }, b.prototype.changeImage = function(b) {
+            var c = this;
+            this.disableKeyboardNav();
+            var d = this.$lightbox.find(".lb-image");
+            this.$overlay.fadeIn(this.options.fadeDuration), 
+            a(".lb-loader").fadeIn("slow"), 
+            this.$lightbox.find(".lb-image, .lb-nav, .lb-prev, .lb-next, .lb-dataContainer, .lb-numbers, .lb-caption").hide(),
+            this.$outerContainer.addClass("animating");
+            var e = new Image;
+            e.onload = function() {
+              var f, g, h, i, j, k, l;
+              d.attr("src", c.album[b].link), 
+              f = a(e), 
+              d.width(e.width), 
+              d.height(e.height),
+              c.options.fitImagesInViewport && (
+                l = a(window).width(), 
+                k = a(window).height(),
+                j = l - c.containerLeftPadding - c.containerRightPadding - 20, 
+                i = k - c.containerTopPadding - c.containerBottomPadding - 120, 
+                (e.width > j || e.height > i) && 
+                (e.width / j > e.height / i ? (h = j, g = parseInt(e.height / (e.width / h), 10), d.width(h), d.height(g)) : (g = i, h = parseInt(e.width / (e.height / g), 10), d.width(h), d.height(g)))
+              ), 
+              c.sizeContainer(d.width(), d.height())
+            }, e.src = this.album[b].link, 
+              this.currentImageIndex = b
+          }, b.prototype.sizeOverlay = function() {
+            this.$overlay.width(a(window).width()).height(a(document).height())
+          }, b.prototype.sizeContainer = function(a, b) {
+            function c() {
+              d.$lightbox.find(".lb-dataContainer").width(g), 
+              d.$lightbox.find(".lb-prevLink").height(h),
+              d.$lightbox.find(".lb-nextLink").height(h),
+              d.showImage()
+            }
+            var d = this,
+                e = this.$outerContainer.outerWidth(),
+                f = this.$outerContainer.outerHeight(),
+                g = a + this.containerLeftPadding + this.containerRightPadding,
+                h = b + this.containerTopPadding + this.containerBottomPadding;
+            e !== g || f !== h ? this.$outerContainer.animate({
+              width: g,
+              height: h
+            }, this.options.resizeDuration, "swing", function() {
+              c()
+            }) : c()
+          }, b.prototype.showImage = function() {
+            this.$lightbox.find(".lb-loader").hide(), 
+            this.$lightbox.find(".lb-image").fadeIn("slow"), 
+            this.updateNav(), 
+            this.updateDetails(), 
+            this.preloadNeighboringImages(),
+            this.enableKeyboardNav()
+          }, b.prototype.updateNav = function() {
+            var a = !1;
+            try {
+              document.createEvent("TouchEvent"),
+              a = this.options.alwaysShowNavOnTouchDevices ? !0 : !1
+            } catch (b) {}
+            this.$lightbox.find(".lb-nav").show(), 
+            this.album.length > 1 && (this.options.wrapAround ? (
+                a && this.$lightbox.find(".lb-prev, .lb-next").css("opacity", "1"), 
+                this.$lightbox.find(".lb-prev, .lb-next").show()
+              ) : (
+                this.currentImageIndex > 0 && (this.$lightbox.find(".lb-prev").show(),
+                a && this.$lightbox.find(".lb-prev").css("opacity", "1")), 
+                this.currentImageIndex < this.album.length - 1 && (this.$lightbox.find(".lb-next").show(), 
+                a && this.$lightbox.find(".lb-next").css("opacity", "1"))
+              )
+            )
+          }, b.prototype.updateDetails = function() {
+            var b = this;
+            "undefined" != typeof this.album[this.currentImageIndex].title && "" !==
+              this.album[this.currentImageIndex].title && this.$lightbox.find(
+                ".lb-caption").html(this.album[this.currentImageIndex].title).fadeIn(
+                "fast").find("a").on("click", function() {
+                location.href = a(this).attr("href")
+              }), this.album.length > 1 && this.options.showImageNumberLabel ? this.$lightbox
+              .find(".lb-number").text(this.options.albumLabel(this.currentImageIndex +
+                1, this.album.length)).fadeIn("fast") : this.$lightbox.find(
+                ".lb-number").hide(), this.$outerContainer.removeClass("animating"),
+              this.$lightbox.find(".lb-dataContainer").fadeIn(this.options.resizeDuration,
+                function() {
+                  return b.sizeOverlay()
+                })
+          }, b.prototype.preloadNeighboringImages = function() {
+            if (this.album.length > this.currentImageIndex + 1) {
+              var a = new Image;
+              a.src = this.album[this.currentImageIndex + 1].link
+            }
+            if (this.currentImageIndex > 0) {
+              var b = new Image;
+              b.src = this.album[this.currentImageIndex - 1].link
+            }
+          }, b.prototype.enableKeyboardNav = function() {
+            a(document).on("keyup.keyboard", a.proxy(this.keyboardAction, this))
+          }, b.prototype.disableKeyboardNav = function() {
+            a(document).off(".keyboard")
+          }, b.prototype.keyboardAction = function(a) {
+            var b = 27, // <esc>
+              c = 37, // ←
+              d = 39, // →
+              e = a.keyCode;
+              // f = String.fromCharCode(e).toLowerCase();
+              assign_label(a.key);
+              e === b ?
+                this.end():
+                e === c ? // KeyCode == ←
+                  0 !==this.currentImageIndex ? 
+                    this.changeImage(this.currentImageIndex - 1) :
+                    this.options.wrapAround && this.album.length > 1 && this.changeImage(this.album.length - 1) : 
+                  e === d && (this.currentImageIndex !==this.album.length - 1 ? 
+                    this.changeImage(this.currentImageIndex + 1) :
+                  this.options.wrapAround && this.album.length > 1 && this.changeImage(0)
+              )
+          }, b.prototype.end = function() {
+            this.disableKeyboardNav(), a(window).off("resize", this.sizeOverlay),
+              this.$lightbox.fadeOut(this.options.fadeDuration), this.$overlay.fadeOut(
+                this.options.fadeDuration), a("select, object, embed").css({
+                visibility: "visible"
+              })
+          }, b
+        }();
+    a(function() {
+      {
+        var a = new b;
+        new c(a)
+      }
+    })
+  }).call(this);
+</script>
+<script>
+  // Folder Upload.
+  var gallery = document.getElementById('gallery');
+  var sizeRange = document.getElementById('sizeRange');
+  var currentSize = document.getElementById('currentSize');
+  var files, file;
+  var anno_dataset = {} // annotation dataset.
+  var command_keys = {} // command: [attribute_name, label]
+  var annotations = {}  // Filepath: {annotation}
+  var idx2filepath = {} // ImageIndex: ImageFilePath
+  // Change sizes of gallery images.
+  sizeRange.addEventListener("change", function(e){
+    let size = sizeRange.value + "%";
+    currentSize.innerHTML = size;
+    let target = document.getElementsByClassName("__canvas");
+    for (var i = 0; i < target.length; i++) {
+      target[i].style.width = size;
+    }
+  });
+  // Sort files in Uploaded directory, then create all img tags and annotations.
+  document.getElementById("InputFiles").addEventListener('change', function(e){
+    var img, div;
+    var files = [].slice.call(e.target.files)
+    // Sort files by file name.
+    files.sort(function(a,b){
+      if(a.name < b.name) return -1;
+      if(a.name > b.name) return 1;
+      return 0;
+    });
+    // Create <img> only for valid images.
+    const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+    let imgidx = 1;
+    for (var i=0; i<files.length; i++) {
+      if (validImageTypes.includes(files[i]['type'])){
+        let reader = new FileReader();
+        // Set file info to reader.
+        reader.fileName = files[i].name
+        reader.relativePath = files[i].webkitRelativePath
+        reader.onload = function(e) {
+          var filepath = e.target.relativePath
+          var filesrc  = e.target.result
+          idx2filepath[imgidx++] = filepath
+          // Initialize annotations.
+          annotations[filepath] = {}
+          //  <img src="e.target.result" class="__canvas">
+          img = document.createElement('img');
+          img.setAttribute('src', filesrc);
+          img.className = '__canvas';
+          // <a href="e.target.result" data-title="e.target.name" data-lightbox="photowall">
+          a = document.createElement('a');
+          a.setAttribute('href', filesrc);
+          a.setAttribute('data-title', filepath);
+          a.setAttribute('data-lightbox', "photowall")
+          a.appendChild(img);
+          // <li>
+          li = document.createElement('li');
+          li.appendChild(a);
+          li.className = 'galleryElements';
+          gallery.appendChild(li)
+        }
+        reader.readAsDataURL(files[i]);
+      }
+    }
+  });
   // Add and Delete input tags.
   $(document).on("click", ".add", function() {
     var target = $(this).parent().parent()
@@ -173,19 +516,14 @@
       target.remove();
     }
   });
-  var sample_img_annotation = {}
-  $("#img-wrapper").keydown(function(event) {
-    const key = event.key;
+  // Assign label using KeyboardEvent.
+  function assign_label(key){
     if (command_keys.hasOwnProperty(key)){
       attr_label = command_keys[key]
-      sample_img_annotation[attr_label[0]] = attr_label[1]
+      annotations[idx2filepath[currentImageIndex]][attr_label[0]] = attr_label[1]
     }
     generate_annotation_table()
-  });
-  // Cancel Default event.
-  document.getElementById("img-wrapper").addEventListener("click", function(e){
-    e.preventDefault();
-  }, false);
+  }
   // Change background-color when input is focused.
   $(function() {
     $('input[type="text"]')
@@ -197,8 +535,6 @@
       });
   });
   // Register Annotation labels.
-  var anno_dataset = {}
-  var command_keys = {}
   function register_attrs(){
     var attr_name = $("#attr-name")[0].value;
     var msg = "";
@@ -230,7 +566,7 @@
     alert(msg);
     reset_registration_table();
     generate_registered_table();
-    generate_annotation_table();
+    // generate_annotation_table();
     return false;
   }
   // Reset Registration Form table.
@@ -239,13 +575,14 @@
     del_btns = $("input[class='del']");
     for (let i=0; i<del_btns.length; i++){
       del_btns[i].click();
-      console.log(del_btns[i])
     }
   }
   // Generate Registered Attributes table.
   function generate_registered_table(){
     var registered_tbody = $("#registered-attrs-tbody");
+    var registered_tbody_overlay = $("#registered-attrs-tbody-overlay");
     registered_tbody.empty();
+    registered_tbody_overlay.empty()
     for (let attr_name in anno_dataset){
       let attrs = anno_dataset[attr_name];
       let num_labels = Object.keys(attrs).length;
@@ -262,6 +599,7 @@
         row += "</td>"      
       }
       registered_tbody.append(row);
+      registered_tbody_overlay.append(row);
     }
   }
   // Generate annotation table.
@@ -270,14 +608,15 @@
     annotation_tbody.empty();
     var row = ""
     for (let attr_name in anno_dataset){
-      var label = sample_img_annotation[attr_name];
+      var label = annotations[idx2filepath[currentImageIndex]][attr_name];
       var label = typeof(label) == "undefined" ? "" : label    
       row += "".concat("<tr>", "<td>", attr_name, "</td>", "<td>", label, "</td>");   
     }
     annotation_tbody.append(row);
   }
+  // Download all annotation data as json.
   function download_json(){
-    var jsonString = JSON.stringify(sample_img_annotation, null, '\t');
+    var jsonString = JSON.stringify(annotations, null, '\t');
     var blob = new Blob([jsonString], {type: 'application/json' });
     let link = document.createElement('a');
     link.href = window.URL.createObjectURL(blob);
@@ -285,203 +624,181 @@
     link.click();
   }
 </script>
-
-<h2>コード</h2>
-<h3><code>html</code></h3>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;annotation-attrs&quot;</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;registration-col&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;margin-left: 10px; float: left;&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Registration<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registration-attrs-form&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;#&quot;</span> <span class="na">onsubmit</span><span class="o">=</span><span class="s">&quot;return false;&quot;</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">table</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">thead</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registration-attrs-thead&quot;</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;&lt;</span><span class="nt">th</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;4&quot;</span><span class="p">&gt;</span>Attributes: <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;attr-name&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;form-control&quot;</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;attribute&quot;</span> <span class="na">required</span><span class="p">&gt;&lt;/</span><span class="nt">th</span><span class="p">&gt;&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Key<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Label<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Copy<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Delete<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">thead</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">tbody</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registration-attrs-tbody&quot;</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;command-key&quot;</span> <span class="na">maxlength</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">size</span><span class="o">=</span><span class="s">&quot;1&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;label-name&quot;</span>  <span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;label name&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;button&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;＋&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;add&quot;</span> <span class="na">tabindex</span><span class="o">=</span><span class="s">&quot;-1&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;button&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;－&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;del&quot;</span> <span class="na">tabindex</span><span class="o">=</span><span class="s">&quot;-1&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">tbody</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registration-attrs-ttail&quot;</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;4&quot;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;form-reset&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;reset&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;reset&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;Clear&quot;</span><span class="p">/&gt;</span>
-            <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;Register&quot;</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;return register_attrs();&quot;</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
-      <span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;registration-col&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;margin-right: 10px; float: right;&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Registered Attributes<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">table</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registered-attrs&quot;</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">thead</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registered-attrs-thead&quot;</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>attribute<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>label<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>command<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;/</span><span class="nt">thead</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">tbody</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registered-attrs-tbody&quot;</span><span class="p">&gt;</span>
-      <span class="p">&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;sample-box&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;text-align: center; width: 50%; margin: 0 auto;&quot;</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;img-wrapper&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">img</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;sample-img&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://iwasakishuto.github.io/images/profile/twitter.png&quot;</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">table</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;annotation-label&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">thead</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;annotation-label-thead&quot;</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>attribute<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>current label<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-      <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">thead</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tbody</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;annotation-label-tbody&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;download_json();&quot;</span><span class="p">&gt;</span>download<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</code></pre></div>
-
-
-<h3><code>js</code></h3>
-<p>※ <a href="https://jquery.com/">jquery</a>を使用した。</p>
-<div class="highlight"><pre><span></span><code><span class="c1">// Add and Delete input tags.</span>
-<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="s2">&quot;.add&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">parent</span><span class="p">()</span>
-  <span class="nx">target</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span><span class="nx">insertAfter</span><span class="p">(</span><span class="nx">target</span><span class="p">);</span>
-<span class="p">});</span>
-<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="s2">&quot;.del&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">parent</span><span class="p">();</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">parent</span><span class="p">().</span><span class="nx">children</span><span class="p">().</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">target</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
-  <span class="p">}</span>
-<span class="p">});</span>
-<span class="kd">var</span> <span class="nx">sample_img_annotation</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#img-wrapper&quot;</span><span class="p">).</span><span class="nx">keydown</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kr">const</span> <span class="nx">key</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">key</span><span class="p">;</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">command_keys</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">)){</span>
-    <span class="nx">attr_label</span> <span class="o">=</span> <span class="nx">command_keys</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
-    <span class="nx">sample_img_annotation</span><span class="p">[</span><span class="nx">attr_label</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">attr_label</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-  <span class="p">}</span>
-  <span class="nx">generate_annotation_table</span><span class="p">()</span>
-<span class="p">});</span>
-<span class="c1">// Cancel Default event.</span>
-<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;img-wrapper&quot;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
-  <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
-<span class="p">},</span> <span class="kc">false</span><span class="p">);</span>
-<span class="c1">// Change background-color when input is focused.</span>
-<span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;input[type=&quot;text&quot;]&#39;</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">focusin</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;background-color&#39;</span><span class="p">,</span> <span class="s1">&#39;#ffc&#39;</span><span class="p">);</span>
-    <span class="p">})</span>
-    <span class="p">.</span><span class="nx">focusout</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;background-color&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
-    <span class="p">});</span>
-<span class="p">});</span>
-<span class="c1">// Register Annotation labels.</span>
-<span class="kd">var</span> <span class="nx">anno_dataset</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="kd">var</span> <span class="nx">command_keys</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="kd">function</span> <span class="nx">register_attrs</span><span class="p">(){</span>
-  <span class="kd">var</span> <span class="nx">attr_name</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#attr-name&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">attr_name</span><span class="o">!=</span><span class="s2">&quot;&quot;</span><span class="p">){</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">attr_name</span> <span class="k">in</span> <span class="nx">anno_dataset</span><span class="p">){</span>
-      <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;[×] &quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">&quot;Attribute &quot;</span><span class="p">,</span> <span class="nx">attr_name</span><span class="p">,</span> <span class="s2">&quot; is already registered.&quot;</span><span class="p">,</span> <span class="s2">&quot;\n&quot;</span><span class="p">);</span>
-    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">attrs</span> <span class="o">=</span> <span class="p">{}</span>
-      <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;[○] &quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">&quot;Attribute &quot;</span><span class="p">,</span> <span class="nx">attr_name</span><span class="p">,</span> <span class="s2">&quot; is registered.&quot;</span><span class="p">,</span> <span class="s2">&quot;\n&quot;</span><span class="p">);</span>
-      <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#registration-attrs-tbody&quot;</span><span class="p">).</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;tr&quot;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">let</span> <span class="nx">inputs</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">);</span>
-        <span class="kd">let</span> <span class="nx">key</span>    <span class="o">=</span> <span class="nx">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span><span class="p">;</span>
-        <span class="kd">let</span> <span class="nx">label</span>  <span class="o">=</span> <span class="nx">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">value</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">key</span><span class="o">!=</span><span class="s2">&quot;&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">label</span><span class="o">!=</span><span class="s2">&quot;&quot;</span><span class="p">){</span>
-          <span class="k">if</span> <span class="p">(</span><span class="nx">command_keys</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">)){</span>
-            <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\t[×] &quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="s2">&quot; is already used.&quot;</span><span class="p">,</span> <span class="s2">&quot;\n&quot;</span><span class="p">);</span>
-          <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-            <span class="nx">command_keys</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">attr_name</span><span class="p">,</span> <span class="nx">label</span><span class="p">];</span>
-            <span class="nx">attrs</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">label</span><span class="p">;</span>
-            <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\t[○] &quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="s2">&quot; is registered to mean label: &quot;</span><span class="p">,</span> <span class="nx">label</span><span class="p">,</span> <span class="s2">&quot;\n&quot;</span><span class="p">);</span>
-          <span class="p">}</span>
-        <span class="p">}</span>
-      <span class="p">});</span>
-      <span class="nx">anno_dataset</span><span class="p">[</span><span class="nx">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">attrs</span><span class="p">;</span>      
-    <span class="p">}</span>
-  <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-    <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;[×] Please enter &#39;Attribute name&#39;.\n&quot;</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="nx">alert</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
-  <span class="nx">reset_registration_table</span><span class="p">();</span>
-  <span class="nx">generate_registered_table</span><span class="p">();</span>
-  <span class="nx">generate_annotation_table</span><span class="p">();</span>
-  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="c1">// Reset Registration Form table.</span>
-<span class="kd">function</span> <span class="nx">reset_registration_table</span><span class="p">(){</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#form-reset&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">();</span>
-  <span class="nx">del_btns</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;input[class=&#39;del&#39;]&quot;</span><span class="p">);</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">del_btns</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-    <span class="nx">del_btns</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">click</span><span class="p">();</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">del_btns</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-<span class="c1">// Generate Registered Attributes table.</span>
-<span class="kd">function</span> <span class="nx">generate_registered_table</span><span class="p">(){</span>
-  <span class="kd">var</span> <span class="nx">registered_tbody</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#registered-attrs-tbody&quot;</span><span class="p">);</span>
-  <span class="nx">registered_tbody</span><span class="p">.</span><span class="nx">empty</span><span class="p">();</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">attr_name</span> <span class="k">in</span> <span class="nx">anno_dataset</span><span class="p">){</span>
-    <span class="kd">let</span> <span class="nx">attrs</span> <span class="o">=</span> <span class="nx">anno_dataset</span><span class="p">[</span><span class="nx">attr_name</span><span class="p">];</span>
-    <span class="kd">let</span> <span class="nx">num_labels</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">attrs</span><span class="p">).</span><span class="nx">length</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">row</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">is_attr_added</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">attrs</span><span class="p">){</span>
-      <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&lt;tr&gt;&quot;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">is_attr_added</span><span class="p">){</span>
-        <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&lt;td rowspan=&#39;&quot;</span> <span class="o">+</span> <span class="nx">num_labels</span> <span class="o">+</span>  <span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="nx">attr_name</span> <span class="o">+</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">;</span>
-        <span class="nx">is_attr_added</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">&quot;&lt;td&gt;&quot;</span><span class="p">,</span> <span class="nx">attrs</span><span class="p">[</span><span class="nx">key</span><span class="p">],</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">);</span>
-      <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">&quot;&lt;td&gt;&quot;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">);</span>
-      <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span>      
-    <span class="p">}</span>
-    <span class="nx">registered_tbody</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-<span class="c1">// Generate annotation table.</span>
-<span class="kd">function</span> <span class="nx">generate_annotation_table</span><span class="p">(){</span>
-  <span class="kd">var</span> <span class="nx">annotation_tbody</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#annotation-label-tbody&quot;</span><span class="p">);</span>
-  <span class="nx">annotation_tbody</span><span class="p">.</span><span class="nx">empty</span><span class="p">();</span>
-  <span class="kd">var</span> <span class="nx">row</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">attr_name</span> <span class="k">in</span> <span class="nx">anno_dataset</span><span class="p">){</span>
-    <span class="kd">var</span> <span class="nx">label</span> <span class="o">=</span> <span class="nx">sample_img_annotation</span><span class="p">[</span><span class="nx">attr_name</span><span class="p">];</span>
-    <span class="kd">var</span> <span class="nx">label</span> <span class="o">=</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">label</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">?</span> <span class="s2">&quot;&quot;</span> <span class="o">:</span> <span class="nx">label</span>    
-    <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">&quot;&lt;tr&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;td&gt;&quot;</span><span class="p">,</span> <span class="nx">attr_name</span><span class="p">,</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;td&gt;&quot;</span><span class="p">,</span> <span class="nx">label</span><span class="p">,</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">);</span>   
-  <span class="p">}</span>
-  <span class="nx">annotation_tbody</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="kd">function</span> <span class="nx">download_json</span><span class="p">(){</span>
-  <span class="kd">var</span> <span class="nx">jsonString</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">sample_img_annotation</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="s1">&#39;\t&#39;</span><span class="p">);</span>
-  <span class="kd">var</span> <span class="nx">blob</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blob</span><span class="p">([</span><span class="nx">jsonString</span><span class="p">],</span> <span class="p">{</span><span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;application/json&#39;</span> <span class="p">});</span>
-  <span class="kd">let</span> <span class="nx">link</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">);</span>
-  <span class="nx">link</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nx">createObjectURL</span><span class="p">(</span><span class="nx">blob</span><span class="p">);</span>
-  <span class="nx">link</span><span class="p">.</span><span class="nx">download</span> <span class="o">=</span> <span class="s1">&#39;annotations.json&#39;</span><span class="p">;</span>
-  <span class="nx">link</span><span class="p">.</span><span class="nx">click</span><span class="p">();</span>
-<span class="p">}</span>
-</code></pre></div>                </article>
+<style>
+  .annotation-attrs {
+    width:100%;
+    height:auto;
+  }
+  .annotation-attrs:after {
+    display: block;
+    clear: both;
+    content: "";
+  }
+  .lb-data h4:before, .lb-data h4:after {
+    border-color: #c9e2ff;
+  }
+  .lb-data table#annotation-label {
+    border-color: white;
+  }
+  .lb-data table#annotation-label th, .lb-data table#annotation-label td{
+    border-color: white;
+  }
+  .lb-data table{
+    width: 100%;
+    border: 2px #ccc solid;
+    border-collapse: collapse;
+    table-layout: auto;
+  }
+  .lb-data th, .lb-data td {
+    text-align: center;
+    vertical-align: middle;
+    vertical-align: top;
+    border: 1px #ccc solid;
+    padding: .8em .5em;
+  }
+  .registration-col th, .registration-col td {
+    text-align: center;
+    vertical-align: middle;
+  } 
+  form#registration-attrs-form table input {
+    padding: 8px;
+    border-radius: 6px;
+    margin: 2px;
+  }
+  input.add, input#form-submit {
+    color: white;
+    font-weight: bold;
+    background-color: #ffabab;
+    border-color: #ffabab;
+  }
+  input.del, input#form-reset {
+    color: white;
+    font-weight: bold;
+    background-color: #b4b4ff;
+    border-color: #b4b4ff;
+  }
+  tbody#registration-attrs-ttail input {
+    width: 40%;
+  }
+  label#InputFilesLabel {
+    font-size: 1.3em;
+    color: white;
+    background-color:#008db8;
+    padding: 6px;
+    border-radius: 15px;
+  }
+  div.download_wrapper{
+    text-align: center;
+    margin-top: 5%;
+  }
+  button.download_btn {
+    background-color: #38da38;
+    border-color: #38da38;
+    color: white;
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 6px;
+    margin: 2px;
+    width: 60%;
+  }
+  .galleryCover .galleryElements {
+    text-align: center;
+    display: inline;
+  }
+  .galleryCover {
+    text-align: left;
+  }
+  img.__canvas {
+    width: 12%;
+    height: auto;
+    margin: 3px;
+    border: 5;
+  }
+  img.__canvas:hover{
+    background-color: #eee;
+  }
+  .lb-outerContainer {
+    min-width: 400px!important;
+    min-height: auto!important;
+  }
+  .lightbox .lb-image {
+    min-width: 400px!important;
+    min-height: auto!important;
+  }
+  .lb-container img {
+    min-width: 400px!important;
+    min-height: auto!important;
+    height: auto!important;
+  }
+  .lb-outerContainer{
+    height: auto!important;
+  }
+</style>
+<p id="pageTop"><a href="#"><i class="fa fa-chevron-up"></i></a></p>
+<script>
+  $(function(){
+    var topBtn=$('#pageTop');
+    topBtn.hide();
+    $(window).scroll(function(){
+      if($(this).scrollTop()>80){
+        topBtn.fadeIn();
+      }else{
+        topBtn.fadeOut();
+      }
+    });
+    topBtn.click(function(){
+      $('body,html').animate({
+      scrollTop: 0},500);
+      return false;
+    });
+  });
+</script>
+<style>
+  #pageTop {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+  }
+  #pageTop i {
+    padding-top: 6px
+  }
+  #pageTop a {
+    display: block;
+    z-index: 999;
+    padding: 8px 0 0 0;
+    border-radius: 30px;
+    width: 35px;
+    height: 35px;
+    background-color: #008db8;
+    color: #fff;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: center;
+  }
+  #pageTop a:hover {
+    text-decoration: none;
+    opacity: 0.7;
+  }
+</style>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
                     <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-20.html" rel="bookmark"
+                           title="Permalink to JS.20 Formの登録内容を可視化する。">JS.20 Formの登録内容を可視化する。</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <span>2020-11-08(Sun)</span>
+<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+</footer><!-- /.post-info -->                <p>Formの登録内容を可視化する。</p>
+                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-20.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -602,26 +919,11 @@
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-12.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-11.html" rel="bookmark"
-                           title="Permalink to JS.11 TensorFlow.jsでMNIST">JS.11 TensorFlow.jsでMNIST</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-06-14(Fri)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>TensorFlow.jsでMNIST</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-11.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
             </ol><!-- /#posts-list -->
 <p class="paginator">
-    Page 1 / 2
+    Page 1 / 3
         <a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript2.html">&raquo;</a>
-        <a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript2.html">&#8649;</a>
+        <a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript3.html">&#8649;</a>
 </p>
             </section><!-- /#content -->
         <section id="extras" class="body">
