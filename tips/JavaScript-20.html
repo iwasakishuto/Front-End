@@ -3,7 +3,7 @@
 <head>
         <meta charset="utf-8" />
         <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
-        <title>Shuto's Front-End - JavaScript</title>
+        <title>JS.20 Formの登録内容を可視化する。</title>
         <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
 
         <!-- Added by Shuto Iwasaki. -->
@@ -47,21 +47,26 @@
                 <nav><ul>
                     <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html">CSS</a></li>
                     <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html">HTML</a></li>
-                    <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
+                    <li class="active"><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
                 </ul>
 <form id="search" action"#" onsubmit="javascript:window.open('https://duckduckgo.com/?q='+document.getElementById('keywords').value+'+site:https://iwasakishuto.github.io/Front-End/tips');">
                         <input id="keywords" type="text" />
                     </form>
                 </nav>
         </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-20.html" rel="bookmark"
+           title="Permalink to JS.20 Formの登録内容を可視化する。">JS.20 Formの登録内容を可視化する。</a></h1>
+    </header>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-20.html">JS.20 Formの登録内容を可視化する。</a></h1>
+    <div class="entry-content">
 <footer class="post-info">
         <span>2020-11-08(Sun)</span>
 <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info --><p><a href="JavaScript-19.html">JS.19</a>でフォトギャラリーを作成したので、これを用いてアノテーションを楽にするツールの作成を試みる。</p>
+</footer><!-- /.post-info -->      <p><a href="JavaScript-19.html">JS.19</a>でフォトギャラリーを作成したので、これを用いてアノテーションを楽にするツールの作成を試みる。</p>
 <p>キーボードから楽にアノテーションができるようにするため、属性(<code>attribute</code>)に対して（複数の）ラベル(<code>label</code>)とそれに対応するキー(<code>key</code>)用意し、それぞれキーボードから指定可能にした。</p>
 <ol style="list-style: decimal; margin-left: 2em;">
   <li><a href="#registration-attrs-form">Registration</a> で属性(<code>attribute</code>)に対する（複数の）ラベル(<code>label</code>)とそれに対応するキー(<code>key</code>)を登録する。</li>
@@ -477,153 +482,11 @@
   <span class="nx">link</span><span class="p">.</span><span class="nx">download</span> <span class="o">=</span> <span class="s1">&#39;annotations.json&#39;</span><span class="p">;</span>
   <span class="nx">link</span><span class="p">.</span><span class="nx">click</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre></div>                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <ol id="posts-list" class="hfeed">
+</code></pre></div>
+    </div><!-- /.entry-content -->
 
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-19.html" rel="bookmark"
-                           title="Permalink to JS.19 ディレクトリ内の画像をフォトギャラリーで表示する。">JS.19 ディレクトリ内の画像をフォトギャラリーで表示する。</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2020-11-07(Sat)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>ディレクトリ内の画像をフォトギャラリーで表示する。</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-19.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-18.html" rel="bookmark"
-                           title="Permalink to JS.18 ディレクトリ内の画像を全て表示する。">JS.18 ディレクトリ内の画像を全て表示する。</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-09-07(Sat)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>ディレクトリ内の画像を全て表示する。</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-18.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-17.html" rel="bookmark"
-                           title="Permalink to JS.17 アノテーションデータ（バウンディングボックス）作成ツールのコード">JS.17 アノテーションデータ（バウンディングボックス）作成ツールのコード</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-09-04(Wed)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>アノテーションデータ（バウンディングボックス）作成ツールのコード</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-17.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-16.html" rel="bookmark"
-                           title="Permalink to JS.16 アノテーションデータ（バウンディングボックス）作成ツール">JS.16 アノテーションデータ（バウンディングボックス）作成ツール</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-09-04(Wed)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>アノテーションデータ（バウンディングボックス）作成ツール</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-16.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-15.html" rel="bookmark"
-                           title="Permalink to JS.15 ポケモン自己分析を分析してみる">JS.15 ポケモン自己分析を分析してみる</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-07-30(Tue)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>ポケモン自己分析を分析してみた。</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-15.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-14.html" rel="bookmark"
-                           title="Permalink to JS.14 Slack用の文字スタンプを作る">JS.14 Slack用の文字スタンプを作る</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-07-22(Mon)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>Slack用の文字スタンプを作る</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-14.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-13.html" rel="bookmark"
-                           title="Permalink to JS.13 GASでslackにメッセージを送る">JS.13 GASでslackにメッセージを送る</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-06-18(Tue)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>GASでslackにメッセージを送る。</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-13.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-12.html" rel="bookmark"
-                           title="Permalink to JS.12 Node.jsでコマンドメモアプリケーション">JS.12 Node.jsでコマンドメモアプリケーション</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-06-17(Mon)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a><a href="https://iwasakishuto.github.io/Front-End/tips/tag/udemy.html">Udemy</a></span>
-</footer><!-- /.post-info -->                <p>Node.jsでコマンドメモアプリケーション</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-12.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-11.html" rel="bookmark"
-                           title="Permalink to JS.11 TensorFlow.jsでMNIST">JS.11 TensorFlow.jsでMNIST</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-06-14(Fri)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>TensorFlow.jsでMNIST</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-11.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-            </ol><!-- /#posts-list -->
-<p class="paginator">
-    Page 1 / 2
-        <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript2.html">&raquo;</a>
-        <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript2.html">&#8649;</a>
-</p>
-            </section><!-- /#content -->
+  </article>
+</section>
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h5>other contents</h5>
