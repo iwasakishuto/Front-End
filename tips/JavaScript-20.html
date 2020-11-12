@@ -1,533 +1,530 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="author" content="Shuto" />
-        <meta name="twitter:creator" content="@cabernet_rock">
-        <meta name="twitter:site" content="@cabernet_rock">
-        <meta property="og:type" content="article" />
-        <meta name="twitter:card" content="summary">
-
-<meta name="keywords" content="JavaScript, JavaScript, " />
-<meta property="og:image" content="https://iwasakishuto.github.io/images/FacebookImage/Front-End.png"/>
-<meta property="og:title" content="JS.20 Formの登録内容を可視化する。 "/>
-<meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-20.html" />
-<meta property="og:description" content="Formの登録内容を可視化する。" />
-<meta property="og:site_name" content="Shuto&#39;s Front-End" />
-<meta property="og:article:author" content="Shuto" />
-<meta property="og:article:published_time" content="2020-11-08T11:00:00+09:00" />
-<meta property="og:article:modified_time" content="2020-11-08T11:00:00+09:00" />
-<meta name="twitter:title" content="JS.20 Formの登録内容を可視化する。 ">
-<meta name="twitter:description" content="Formの登録内容を可視化する。">
-
-        <title>JS.20 Formの登録内容を可視化する。</title>
-        <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
-
-        <!-- Added by Shuto Iwasaki. -->
-        <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
-        <script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"></script>
-        <script type="text/x-mathjax-config">
-        	MathJax.Hub.Config({
-        		tex2jax: {
-        			inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-        			displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-        		}
-        	});
-        </script>
-        <!-- Mermaid -->
-        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
-        <script>
-          mermaid.initialize({
-            startOnLoad:true
-          });
-        </script>
-
-        <!--[if IE]>
-            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-</head>
-
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="https://iwasakishuto.github.io/Front-End/tips/">Shuto's Front-End </a></h1>
-                <nav><ul>
-                    <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html">CSS</a></li>
-                    <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html">HTML</a></li>
-                    <li class="active"><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
-                </ul>
-<form id="search" action"#" onsubmit="javascript:window.open('https://duckduckgo.com/?q='+document.getElementById('keywords').value+'+site:https://iwasakishuto.github.io/Front-End/tips');">
-                        <input id="keywords" type="text" />
-                    </form>
-                </nav>
-        </header><!-- /#banner -->
-<section id="content" class="body">
-  <article>
-    <header>
-      <h1 class="entry-title">
-        <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-20.html" rel="bookmark"
-           title="Permalink to JS.20 Formの登録内容を可視化する。">JS.20 Formの登録内容を可視化する。</a></h1>
-<a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a><script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
-    </header>
-
-    <div class="entry-content">
-<footer class="post-info">
-        <span>2020-11-08(Sun)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->      <p><a href="JavaScript-19.html">JS.19</a>でフォトギャラリーを作成したので、これを用いてアノテーションを楽にするツールの作成を試みる。</p>
-<p>キーボードから楽にアノテーションができるようにするため、属性(<code>attribute</code>)に対して（複数の）ラベル(<code>label</code>)とそれに対応するキー(<code>key</code>)用意し、それぞれキーボードから指定可能にした。</p>
-<ol style="list-style: decimal; margin-left: 2em;">
-  <li><a href="#registration-attrs-form">Registration</a> で属性(<code>attribute</code>)に対する（複数の）ラベル(<code>label</code>)とそれに対応するキー(<code>key</code>)を登録する。</li>
-  <li>登録した内容は、<a href="#registered-attrs">Registered Attributes</a>に記載されています。</li>
-  <li>全ての属性の登録が済んだら、画像をクリックしてフォーカス状態にする。</li>
-  <li>その状態で先ほど登録したキーを入力すれば、対応するラベルが対応する属性に付加される。</li>
-  <li>download ボタンを押せば、json形式でダウンロード可能。</li>
-</ol>
-
-<div class="annotation-attrs">
-  <div class="registration-col" style="margin-left: 10px; float: left;">
-    <h2>Registration</h2>
-    <form id="registration-attrs-form" action="#" onsubmit="return false;">
-      <table>
-        <thead id="registration-attrs-thead">
-          <tr><th colspan="4">Attributes: <input id="attr-name" type="text" class="form-control" placeholder="attribute" required></th></tr>
-          <tr>
-            <th>Key</th>
-            <th>Label</th>
-            <th>Copy</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody id="registration-attrs-tbody">
-          <tr>
-            <td><input type="text" class="command-key" maxlength="1" size="1"></td>
-            <td><input type="text" class="label-name"  placeholder="label name"></td>
-            <td><input type="button" value="＋" class="add" tabindex="-1"></td>
-            <td><input type="button" value="－" class="del" tabindex="-1"></td>
-          </tr>
-        </tbody>
-        <tbody id="registration-attrs-ttail">
-          <tr><td colspan="4">
-            <input id="form-reset" type="reset" name="reset" value="Clear"/>
-            <input type="submit" value="Register" onclick="return register_attrs();">
-          </td></tr>
-        </tbody>
-      </table>
-    </form>
-  </div>
-  <div class="registration-col" style="margin-right: 10px; float: right;">
-    <h2>Registered Attributes</h2>
-    <table id="registered-attrs">
-      <thead id="registered-attrs-thead">
-        <tr>
-          <th>attribute</th>
-          <th>label</th>
-          <th>command</th>
-        </tr>
-      </thead>
-      <tbody id="registered-attrs-tbody">
-      </tbody>
-    </table>
-  </div>
-</div>
-
-<div class="sample-box" style="text-align: center; width: 50%; margin: 0 auto;">
-  <a href="#" id="img-wrapper">
-    <img id="sample-img" src="https://iwasakishuto.github.io/images/profile/twitter.png">
-  </a>
-  <table id="annotation-label">
-    <thead id="annotation-label-thead">
-      <tr>
-        <th>attribute</th>
-        <th>current label</th>
-      </tr>
-    </thead>
-    <tbody id="annotation-label-tbody">
-    </tbody>
-  </table>
-  <button onclick="download_json();">download</button>
-</div>
-
-<style>
-  a#img-wrapper:focus img{
-    border: 3px solid #008db8;
-  }
-  .annotation-attrs {
-    width:100%;
-    height:auto;
-  }
-  .annotation-attrs:after {
-    display: block;
-    clear: both;
-    content: "";
-  }
-  .registration-col th, .registration-col td {
-    text-align: center;
-    vertical-align: middle;
-  } 
-  form#registration-attrs-form table input {
-    padding: 8px;
-    border-radius: 6px;
-    margin: 2px;
-  }
-</style>
-
-<script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-  // Add and Delete input tags.
-  $(document).on("click", ".add", function() {
-    var target = $(this).parent().parent()
-    target.clone(true).insertAfter(target);
-  });
-  $(document).on("click", ".del", function() {
-    var target = $(this).parent().parent();
-    if (target.parent().children().length > 1) {
-      target.remove();
-    }
-  });
-  var sample_img_annotation = {}
-  $("#img-wrapper").keydown(function(event) {
-    const key = event.key;
-    if (command_keys.hasOwnProperty(key)){
-      attr_label = command_keys[key]
-      sample_img_annotation[attr_label[0]] = attr_label[1]
-    }
-    generate_annotation_table()
-  });
-  // Cancel Default event.
-  document.getElementById("img-wrapper").addEventListener("click", function(e){
-    e.preventDefault();
-  }, false);
-  // Change background-color when input is focused.
-  $(function() {
-    $('input[type="text"]')
-      .focusin(function(e) {
-        $(this).css('background-color', '#ffc');
-      })
-      .focusout(function(e) {
-        $(this).css('background-color', '');
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Shuto" />
+    <meta name="twitter:creator" content="@cabernet_rock">
+    <meta name="twitter:site" content="@cabernet_rock">
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary">
+    <meta name="keywords" content="JavaScript, JavaScript, " />
+    <meta property="og:image" content="https://iwasakishuto.github.io/images/FacebookImage/Front-End.png"/>
+    <meta property="og:title" content="JS.20 Formの登録内容を可視化する。 "/>
+    <meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-20.html" />
+    <meta property="og:description" content="Formの登録内容を可視化する。" />
+    <meta property="og:site_name" content="Shuto&#39;s Front-End" />
+    <meta property="og:article:author" content="Shuto" />
+    <meta property="og:article:published_time" content="2020-11-08T11:00:00+09:00" />
+    <meta property="og:article:modified_time" content="2020-11-08T11:00:00+09:00" />
+    <meta name="twitter:title" content="JS.20 Formの登録内容を可視化する。 ">
+    <meta name="twitter:description" content="Formの登録内容を可視化する。">
+    <title>JS.20 Formの登録内容を可視化する。</title>
+    <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
+    <!-- Added by Shuto Iwasaki. -->
+    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"></script>
+    <script type="text/x-mathjax-config">
+    	MathJax.Hub.Config({
+    		tex2jax: {
+    			inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    			displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    		}
+    	});
+    </script>
+    <!-- Mermaid -->
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
+    <script>
+      mermaid.initialize({
+        startOnLoad:true
       });
-  });
-  // Register Annotation labels.
-  var anno_dataset = {}
-  var command_keys = {}
-  function register_attrs(){
-    var attr_name = $("#attr-name")[0].value;
-    var msg = "";
-    if (attr_name!=""){
-      if (attr_name in anno_dataset){
-        msg += "[×] ".concat("Attribute ", attr_name, " is already registered.", "\n");
-      }else{
-        var attrs = {}
-        msg += "[○] ".concat("Attribute ", attr_name, " is registered.", "\n");
-        $("#registration-attrs-tbody").children("tr").each(function(i, e) {
-          let inputs = e.getElementsByTagName("input");
-          let key    = inputs[0].value;
-          let label  = inputs[1].value;
-          if (key!="" && label!=""){
-            if (command_keys.hasOwnProperty(key)){
-              msg += "\t[×] ".concat(key, " is already used.", "\n");
-            }else{
-              command_keys[key] = [attr_name, label];
-              attrs[key] = label;
-              msg += "\t[○] ".concat(key, " is registered to mean label: ", label, "\n");
+    </script>
+    <!--[if IE]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body id="index" class="home">
+    <header id="banner" class="body">
+      <h1><a href="https://iwasakishuto.github.io/Front-End/tips/">Shuto's Front-End </a></h1>
+      <nav>
+        <ul>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html">CSS</a></li>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html">HTML</a></li>
+          <li class="active"><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
+        </ul>
+        <form id="search" action"#" onsubmit="javascript:window.open('https://duckduckgo.com/?q='+document.getElementById('keywords').value+'+site:https://iwasakishuto.github.io/Front-End/tips');">
+          <input id="keywords" type="text" />
+        </form>
+      </nav>
+    </header><!-- /#banner -->
+    <section id="content" class="body">
+      <article>
+        <header>
+          <h1 class="entry-title">
+            <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-20.html" rel="bookmark" title="Permalink to JS.20 Formの登録内容を可視化する。">JS.20 Formの登録内容を可視化する。</a>
+          </h1>
+          <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
+          <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
+        </header>
+    
+        <div class="entry-content">
+          <footer class="post-info">
+            <span>2020-11-08(Sun)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+          </footer><!-- /.post-info -->
+          <p><a href="JavaScript-19.html">JS.19</a>でフォトギャラリーを作成したので、これを用いてアノテーションを楽にするツールの作成を試みる。</p>
+          <p>キーボードから楽にアノテーションができるようにするため、属性(<code>attribute</code>)に対して（複数の）ラベル(<code>label</code>)とそれに対応するキー(<code>key</code>)用意し、それぞれキーボードから指定可能にした。</p>
+          <ol style="list-style: decimal; margin-left: 2em;">
+            <li><a href="#registration-attrs-form">Registration</a> で属性(<code>attribute</code>)に対する（複数の）ラベル(<code>label</code>)とそれに対応するキー(<code>key</code>)を登録する。</li>
+            <li>登録した内容は、<a href="#registered-attrs">Registered Attributes</a>に記載されています。</li>
+            <li>全ての属性の登録が済んだら、画像をクリックしてフォーカス状態にする。</li>
+            <li>その状態で先ほど登録したキーを入力すれば、対応するラベルが対応する属性に付加される。</li>
+            <li>download ボタンを押せば、json形式でダウンロード可能。</li>
+          </ol>
+
+          <div class="annotation-attrs">
+            <div class="registration-col" style="margin-left: 10px; float: left;">
+              <h2>Registration</h2>
+              <form id="registration-attrs-form" action="#" onsubmit="return false;">
+                <table>
+                  <thead id="registration-attrs-thead">
+                    <tr><th colspan="4">Attributes: <input id="attr-name" type="text" class="form-control" placeholder="attribute" required></th></tr>
+                    <tr>
+                      <th>Key</th>
+                      <th>Label</th>
+                      <th>Copy</th>
+                      <th>Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody id="registration-attrs-tbody">
+                    <tr>
+                      <td><input type="text" class="command-key" maxlength="1" size="1"></td>
+                      <td><input type="text" class="label-name"  placeholder="label name"></td>
+                      <td><input type="button" value="＋" class="add" tabindex="-1"></td>
+                      <td><input type="button" value="－" class="del" tabindex="-1"></td>
+                    </tr>
+                  </tbody>
+                  <tbody id="registration-attrs-ttail">
+                    <tr><td colspan="4">
+                      <input id="form-reset" type="reset" name="reset" value="Clear"/>
+                      <input type="submit" value="Register" onclick="return register_attrs();">
+                    </td></tr>
+                  </tbody>
+                </table>
+              </form>
+            </div>
+            <div class="registration-col" style="margin-right: 10px; float: right;">
+              <h2>Registered Attributes</h2>
+              <table id="registered-attrs">
+                <thead id="registered-attrs-thead">
+                  <tr>
+                    <th>attribute</th>
+                    <th>label</th>
+                    <th>command</th>
+                  </tr>
+                </thead>
+                <tbody id="registered-attrs-tbody">
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="sample-box" style="text-align: center; width: 50%; margin: 0 auto;">
+            <a href="#" id="img-wrapper">
+              <img id="sample-img" src="https://iwasakishuto.github.io/images/profile/twitter.png">
+            </a>
+            <table id="annotation-label">
+              <thead id="annotation-label-thead">
+                <tr>
+                  <th>attribute</th>
+                  <th>current label</th>
+                </tr>
+              </thead>
+              <tbody id="annotation-label-tbody">
+              </tbody>
+            </table>
+            <button onclick="download_json();">download</button>
+          </div>
+
+          <style>
+            a#img-wrapper:focus img{
+              border: 3px solid #008db8;
             }
-          }
-        });
-        anno_dataset[attr_name] = attrs;      
-      }
-    }else{
-      msg += "[×] Please enter 'Attribute name'.\n";
-    }
-    alert(msg);
-    reset_registration_table();
-    generate_registered_table();
-    generate_annotation_table();
-    return false;
-  }
-  // Reset Registration Form table.
-  function reset_registration_table(){
-    $("#form-reset").click();
-    del_btns = $("input[class='del']");
-    for (let i=0; i<del_btns.length; i++){
-      del_btns[i].click();
-      console.log(del_btns[i])
-    }
-  }
-  // Generate Registered Attributes table.
-  function generate_registered_table(){
-    var registered_tbody = $("#registered-attrs-tbody");
-    registered_tbody.empty();
-    for (let attr_name in anno_dataset){
-      let attrs = anno_dataset[attr_name];
-      let num_labels = Object.keys(attrs).length;
-      var row = "";
-      var is_attr_added = false;
-      for (let key in attrs){
-        row += "<tr>"
-        if (!is_attr_added){
-          row += "<td rowspan='" + num_labels +  "'>" + attr_name + "</td>";
-          is_attr_added = true;
-        }
-        row += "".concat("<td>", attrs[key], "</td>");
-        row += "".concat("<td>", key, "</td>");
-        row += "</td>"      
-      }
-      registered_tbody.append(row);
-    }
-  }
-  // Generate annotation table.
-  function generate_annotation_table(){
-    var annotation_tbody = $("#annotation-label-tbody");
-    annotation_tbody.empty();
-    var row = ""
-    for (let attr_name in anno_dataset){
-      var label = sample_img_annotation[attr_name];
-      var label = typeof(label) == "undefined" ? "" : label    
-      row += "".concat("<tr>", "<td>", attr_name, "</td>", "<td>", label, "</td>");   
-    }
-    annotation_tbody.append(row);
-  }
-  function download_json(){
-    var jsonString = JSON.stringify(sample_img_annotation, null, '\t');
-    var blob = new Blob([jsonString], {type: 'application/json' });
-    let link = document.createElement('a');
-    link.href = window.URL.createObjectURL(blob);
-    link.download = 'annotations.json';
-    link.click();
-  }
-</script>
+            .annotation-attrs {
+              width:100%;
+              height:auto;
+            }
+            .annotation-attrs:after {
+              display: block;
+              clear: both;
+              content: "";
+            }
+            .registration-col th, .registration-col td {
+              text-align: center;
+              vertical-align: middle;
+            } 
+            form#registration-attrs-form table input {
+              padding: 8px;
+              border-radius: 6px;
+              margin: 2px;
+            }
+          </style>
 
-<h2>コード</h2>
-<h3><code>html</code></h3>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;annotation-attrs&quot;</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;registration-col&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;margin-left: 10px; float: left;&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Registration<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">form</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registration-attrs-form&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;#&quot;</span> <span class="na">onsubmit</span><span class="o">=</span><span class="s">&quot;return false;&quot;</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">table</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">thead</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registration-attrs-thead&quot;</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;&lt;</span><span class="nt">th</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;4&quot;</span><span class="p">&gt;</span>Attributes: <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;attr-name&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;form-control&quot;</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;attribute&quot;</span> <span class="na">required</span><span class="p">&gt;&lt;/</span><span class="nt">th</span><span class="p">&gt;&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Key<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Label<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Copy<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Delete<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">thead</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">tbody</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registration-attrs-tbody&quot;</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;command-key&quot;</span> <span class="na">maxlength</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">size</span><span class="o">=</span><span class="s">&quot;1&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;label-name&quot;</span>  <span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;label name&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;button&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;＋&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;add&quot;</span> <span class="na">tabindex</span><span class="o">=</span><span class="s">&quot;-1&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;button&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;－&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;del&quot;</span> <span class="na">tabindex</span><span class="o">=</span><span class="s">&quot;-1&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">tbody</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registration-attrs-ttail&quot;</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;4&quot;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;form-reset&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;reset&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;reset&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;Clear&quot;</span><span class="p">/&gt;</span>
-            <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;Register&quot;</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;return register_attrs();&quot;</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
-      <span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;registration-col&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;margin-right: 10px; float: right;&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Registered Attributes<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">table</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registered-attrs&quot;</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">thead</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registered-attrs-thead&quot;</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>attribute<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>label<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>command<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-        <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-      <span class="p">&lt;/</span><span class="nt">thead</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">tbody</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registered-attrs-tbody&quot;</span><span class="p">&gt;</span>
-      <span class="p">&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;sample-box&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;text-align: center; width: 50%; margin: 0 auto;&quot;</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;img-wrapper&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">img</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;sample-img&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://iwasakishuto.github.io/images/profile/twitter.png&quot;</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">table</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;annotation-label&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">thead</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;annotation-label-thead&quot;</span><span class="p">&gt;</span>
-      <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>attribute<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>current label<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
-      <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">thead</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">tbody</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;annotation-label-tbody&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;download_json();&quot;</span><span class="p">&gt;</span>download<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</code></pre></div>
+          <script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
+
+          <script type="text/javascript">
+            // Add and Delete input tags.
+            $(document).on("click", ".add", function() {
+              var target = $(this).parent().parent()
+              target.clone(true).insertAfter(target);
+            });
+            $(document).on("click", ".del", function() {
+              var target = $(this).parent().parent();
+              if (target.parent().children().length > 1) {
+                target.remove();
+              }
+            });
+            var sample_img_annotation = {}
+            $("#img-wrapper").keydown(function(event) {
+              const key = event.key;
+              if (command_keys.hasOwnProperty(key)){
+                attr_label = command_keys[key]
+                sample_img_annotation[attr_label[0]] = attr_label[1]
+              }
+              generate_annotation_table()
+            });
+            // Cancel Default event.
+            document.getElementById("img-wrapper").addEventListener("click", function(e){
+              e.preventDefault();
+            }, false);
+            // Change background-color when input is focused.
+            $(function() {
+              $('input[type="text"]')
+                .focusin(function(e) {
+                  $(this).css('background-color', '#ffc');
+                })
+                .focusout(function(e) {
+                  $(this).css('background-color', '');
+                });
+            });
+            // Register Annotation labels.
+            var anno_dataset = {}
+            var command_keys = {}
+            function register_attrs(){
+              var attr_name = $("#attr-name")[0].value;
+              var msg = "";
+              if (attr_name!=""){
+                if (attr_name in anno_dataset){
+                  msg += "[×] ".concat("Attribute ", attr_name, " is already registered.", "\n");
+                }else{
+                  var attrs = {}
+                  msg += "[○] ".concat("Attribute ", attr_name, " is registered.", "\n");
+                  $("#registration-attrs-tbody").children("tr").each(function(i, e) {
+                    let inputs = e.getElementsByTagName("input");
+                    let key    = inputs[0].value;
+                    let label  = inputs[1].value;
+                    if (key!="" && label!=""){
+                      if (command_keys.hasOwnProperty(key)){
+                        msg += "\t[×] ".concat(key, " is already used.", "\n");
+                      }else{
+                        command_keys[key] = [attr_name, label];
+                        attrs[key] = label;
+                        msg += "\t[○] ".concat(key, " is registered to mean label: ", label, "\n");
+                      }
+                    }
+                  });
+                  anno_dataset[attr_name] = attrs;      
+                }
+              }else{
+                msg += "[×] Please enter 'Attribute name'.\n";
+              }
+              alert(msg);
+              reset_registration_table();
+              generate_registered_table();
+              generate_annotation_table();
+              return false;
+            }
+            // Reset Registration Form table.
+            function reset_registration_table(){
+              $("#form-reset").click();
+              del_btns = $("input[class='del']");
+              for (let i=0; i<del_btns.length; i++){
+                del_btns[i].click();
+                console.log(del_btns[i])
+              }
+            }
+            // Generate Registered Attributes table.
+            function generate_registered_table(){
+              var registered_tbody = $("#registered-attrs-tbody");
+              registered_tbody.empty();
+              for (let attr_name in anno_dataset){
+                let attrs = anno_dataset[attr_name];
+                let num_labels = Object.keys(attrs).length;
+                var row = "";
+                var is_attr_added = false;
+                for (let key in attrs){
+                  row += "<tr>"
+                  if (!is_attr_added){
+                    row += "<td rowspan='" + num_labels +  "'>" + attr_name + "</td>";
+                    is_attr_added = true;
+                  }
+                  row += "".concat("<td>", attrs[key], "</td>");
+                  row += "".concat("<td>", key, "</td>");
+                  row += "</td>"      
+                }
+                registered_tbody.append(row);
+              }
+            }
+            // Generate annotation table.
+            function generate_annotation_table(){
+              var annotation_tbody = $("#annotation-label-tbody");
+              annotation_tbody.empty();
+              var row = ""
+              for (let attr_name in anno_dataset){
+                var label = sample_img_annotation[attr_name];
+                var label = typeof(label) == "undefined" ? "" : label    
+                row += "".concat("<tr>", "<td>", attr_name, "</td>", "<td>", label, "</td>");   
+              }
+              annotation_tbody.append(row);
+            }
+            function download_json(){
+              var jsonString = JSON.stringify(sample_img_annotation, null, '\t');
+              var blob = new Blob([jsonString], {type: 'application/json' });
+              let link = document.createElement('a');
+              link.href = window.URL.createObjectURL(blob);
+              link.download = 'annotations.json';
+              link.click();
+            }
+          </script>
+
+          <h2>コード</h2>
+          <h3><code>html</code></h3>
+          <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;annotation-attrs&quot;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;registration-col&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;margin-left: 10px; float: left;&quot;</span><span class="p">&gt;</span>
+              <span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Registration<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+              <span class="p">&lt;</span><span class="nt">form</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registration-attrs-form&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;#&quot;</span> <span class="na">onsubmit</span><span class="o">=</span><span class="s">&quot;return false;&quot;</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="nt">table</span><span class="p">&gt;</span>
+                  <span class="p">&lt;</span><span class="nt">thead</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registration-attrs-thead&quot;</span><span class="p">&gt;</span>
+                    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;&lt;</span><span class="nt">th</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;4&quot;</span><span class="p">&gt;</span>Attributes: <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;attr-name&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;form-control&quot;</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;attribute&quot;</span> <span class="na">required</span><span class="p">&gt;&lt;/</span><span class="nt">th</span><span class="p">&gt;&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+                    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+                      <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Key<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+                      <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Label<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+                      <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Copy<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+                      <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Delete<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+                    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+                  <span class="p">&lt;/</span><span class="nt">thead</span><span class="p">&gt;</span>
+                  <span class="p">&lt;</span><span class="nt">tbody</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registration-attrs-tbody&quot;</span><span class="p">&gt;</span>
+                    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+                      <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;command-key&quot;</span> <span class="na">maxlength</span><span class="o">=</span><span class="s">&quot;1&quot;</span> <span class="na">size</span><span class="o">=</span><span class="s">&quot;1&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+                      <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;label-name&quot;</span>  <span class="na">placeholder</span><span class="o">=</span><span class="s">&quot;label name&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+                      <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;button&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;＋&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;add&quot;</span> <span class="na">tabindex</span><span class="o">=</span><span class="s">&quot;-1&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+                      <span class="p">&lt;</span><span class="nt">td</span><span class="p">&gt;&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;button&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;－&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;del&quot;</span> <span class="na">tabindex</span><span class="o">=</span><span class="s">&quot;-1&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+                    <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+                  <span class="p">&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
+                  <span class="p">&lt;</span><span class="nt">tbody</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registration-attrs-ttail&quot;</span><span class="p">&gt;</span>
+                    <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;&lt;</span><span class="nt">td</span> <span class="na">colspan</span><span class="o">=</span><span class="s">&quot;4&quot;</span><span class="p">&gt;</span>
+                      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;form-reset&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;reset&quot;</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;reset&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;Clear&quot;</span><span class="p">/&gt;</span>
+                      <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;submit&quot;</span> <span class="na">value</span><span class="o">=</span><span class="s">&quot;Register&quot;</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;return register_attrs();&quot;</span><span class="p">&gt;</span>
+                    <span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+                  <span class="p">&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
+                <span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
+              <span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;registration-col&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;margin-right: 10px; float: right;&quot;</span><span class="p">&gt;</span>
+              <span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Registered Attributes<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+              <span class="p">&lt;</span><span class="nt">table</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registered-attrs&quot;</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="nt">thead</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registered-attrs-thead&quot;</span><span class="p">&gt;</span>
+                  <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+                    <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>attribute<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+                    <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>label<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+                    <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>command<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+                  <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+                <span class="p">&lt;/</span><span class="nt">thead</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="nt">tbody</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;registered-attrs-tbody&quot;</span><span class="p">&gt;</span>
+                <span class="p">&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
+              <span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+          <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;sample-box&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;text-align: center; width: 50%; margin: 0 auto;&quot;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;img-wrapper&quot;</span><span class="p">&gt;</span>
+              <span class="p">&lt;</span><span class="nt">img</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;sample-img&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://iwasakishuto.github.io/images/profile/twitter.png&quot;</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">table</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;annotation-label&quot;</span><span class="p">&gt;</span>
+              <span class="p">&lt;</span><span class="nt">thead</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;annotation-label-thead&quot;</span><span class="p">&gt;</span>
+                <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+                  <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>attribute<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+                  <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>current label<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+                <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+              <span class="p">&lt;/</span><span class="nt">thead</span><span class="p">&gt;</span>
+              <span class="p">&lt;</span><span class="nt">tbody</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;annotation-label-tbody&quot;</span><span class="p">&gt;</span>
+              <span class="p">&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
+            <span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;download_json();&quot;</span><span class="p">&gt;</span>download<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+          <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+          </code></pre></div>
 
 
-<h3><code>js</code></h3>
-<p>※ <a href="https://jquery.com/">jquery</a>を使用した。</p>
-<div class="highlight"><pre><span></span><code><span class="c1">// Add and Delete input tags.</span>
-<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="s2">&quot;.add&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">parent</span><span class="p">()</span>
-  <span class="nx">target</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span><span class="nx">insertAfter</span><span class="p">(</span><span class="nx">target</span><span class="p">);</span>
-<span class="p">});</span>
-<span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="s2">&quot;.del&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">parent</span><span class="p">();</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">parent</span><span class="p">().</span><span class="nx">children</span><span class="p">().</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">target</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
-  <span class="p">}</span>
-<span class="p">});</span>
-<span class="kd">var</span> <span class="nx">sample_img_annotation</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#img-wrapper&quot;</span><span class="p">).</span><span class="nx">keydown</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kr">const</span> <span class="nx">key</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">key</span><span class="p">;</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">command_keys</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">)){</span>
-    <span class="nx">attr_label</span> <span class="o">=</span> <span class="nx">command_keys</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
-    <span class="nx">sample_img_annotation</span><span class="p">[</span><span class="nx">attr_label</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">attr_label</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-  <span class="p">}</span>
-  <span class="nx">generate_annotation_table</span><span class="p">()</span>
-<span class="p">});</span>
-<span class="c1">// Cancel Default event.</span>
-<span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;img-wrapper&quot;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
-  <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
-<span class="p">},</span> <span class="kc">false</span><span class="p">);</span>
-<span class="c1">// Change background-color when input is focused.</span>
-<span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;input[type=&quot;text&quot;]&#39;</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">focusin</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;background-color&#39;</span><span class="p">,</span> <span class="s1">&#39;#ffc&#39;</span><span class="p">);</span>
-    <span class="p">})</span>
-    <span class="p">.</span><span class="nx">focusout</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;background-color&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
-    <span class="p">});</span>
-<span class="p">});</span>
-<span class="c1">// Register Annotation labels.</span>
-<span class="kd">var</span> <span class="nx">anno_dataset</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="kd">var</span> <span class="nx">command_keys</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="kd">function</span> <span class="nx">register_attrs</span><span class="p">(){</span>
-  <span class="kd">var</span> <span class="nx">attr_name</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#attr-name&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">attr_name</span><span class="o">!=</span><span class="s2">&quot;&quot;</span><span class="p">){</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">attr_name</span> <span class="k">in</span> <span class="nx">anno_dataset</span><span class="p">){</span>
-      <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;[×] &quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">&quot;Attribute &quot;</span><span class="p">,</span> <span class="nx">attr_name</span><span class="p">,</span> <span class="s2">&quot; is already registered.&quot;</span><span class="p">,</span> <span class="s2">&quot;\n&quot;</span><span class="p">);</span>
-    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">attrs</span> <span class="o">=</span> <span class="p">{}</span>
-      <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;[○] &quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">&quot;Attribute &quot;</span><span class="p">,</span> <span class="nx">attr_name</span><span class="p">,</span> <span class="s2">&quot; is registered.&quot;</span><span class="p">,</span> <span class="s2">&quot;\n&quot;</span><span class="p">);</span>
-      <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#registration-attrs-tbody&quot;</span><span class="p">).</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;tr&quot;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kd">let</span> <span class="nx">inputs</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">);</span>
-        <span class="kd">let</span> <span class="nx">key</span>    <span class="o">=</span> <span class="nx">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span><span class="p">;</span>
-        <span class="kd">let</span> <span class="nx">label</span>  <span class="o">=</span> <span class="nx">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">value</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">key</span><span class="o">!=</span><span class="s2">&quot;&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">label</span><span class="o">!=</span><span class="s2">&quot;&quot;</span><span class="p">){</span>
-          <span class="k">if</span> <span class="p">(</span><span class="nx">command_keys</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">)){</span>
-            <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\t[×] &quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="s2">&quot; is already used.&quot;</span><span class="p">,</span> <span class="s2">&quot;\n&quot;</span><span class="p">);</span>
-          <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-            <span class="nx">command_keys</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">attr_name</span><span class="p">,</span> <span class="nx">label</span><span class="p">];</span>
-            <span class="nx">attrs</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">label</span><span class="p">;</span>
-            <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\t[○] &quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="s2">&quot; is registered to mean label: &quot;</span><span class="p">,</span> <span class="nx">label</span><span class="p">,</span> <span class="s2">&quot;\n&quot;</span><span class="p">);</span>
+          <h3><code>js</code></h3>
+          <p>※ <a href="https://jquery.com/">jquery</a>を使用した。</p>
+          <div class="highlight"><pre><span></span><code><span class="c1">// Add and Delete input tags.</span>
+          <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="s2">&quot;.add&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">parent</span><span class="p">()</span>
+            <span class="nx">target</span><span class="p">.</span><span class="nx">clone</span><span class="p">(</span><span class="kc">true</span><span class="p">).</span><span class="nx">insertAfter</span><span class="p">(</span><span class="nx">target</span><span class="p">);</span>
+          <span class="p">});</span>
+          <span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="s2">&quot;.del&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">parent</span><span class="p">().</span><span class="nx">parent</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">parent</span><span class="p">().</span><span class="nx">children</span><span class="p">().</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+              <span class="nx">target</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+            <span class="p">}</span>
+          <span class="p">});</span>
+          <span class="kd">var</span> <span class="nx">sample_img_annotation</span> <span class="o">=</span> <span class="p">{}</span>
+          <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#img-wrapper&quot;</span><span class="p">).</span><span class="nx">keydown</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kr">const</span> <span class="nx">key</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">key</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">command_keys</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">)){</span>
+              <span class="nx">attr_label</span> <span class="o">=</span> <span class="nx">command_keys</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span>
+              <span class="nx">sample_img_annotation</span><span class="p">[</span><span class="nx">attr_label</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">attr_label</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">}</span>
+            <span class="nx">generate_annotation_table</span><span class="p">()</span>
+          <span class="p">});</span>
+          <span class="c1">// Cancel Default event.</span>
+          <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;img-wrapper&quot;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+            <span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
+          <span class="p">},</span> <span class="kc">false</span><span class="p">);</span>
+          <span class="c1">// Change background-color when input is focused.</span>
+          <span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;input[type=&quot;text&quot;]&#39;</span><span class="p">)</span>
+              <span class="p">.</span><span class="nx">focusin</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;background-color&#39;</span><span class="p">,</span> <span class="s1">&#39;#ffc&#39;</span><span class="p">);</span>
+              <span class="p">})</span>
+              <span class="p">.</span><span class="nx">focusout</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">&#39;background-color&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
+              <span class="p">});</span>
+          <span class="p">});</span>
+          <span class="c1">// Register Annotation labels.</span>
+          <span class="kd">var</span> <span class="nx">anno_dataset</span> <span class="o">=</span> <span class="p">{}</span>
+          <span class="kd">var</span> <span class="nx">command_keys</span> <span class="o">=</span> <span class="p">{}</span>
+          <span class="kd">function</span> <span class="nx">register_attrs</span><span class="p">(){</span>
+            <span class="kd">var</span> <span class="nx">attr_name</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#attr-name&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">attr_name</span><span class="o">!=</span><span class="s2">&quot;&quot;</span><span class="p">){</span>
+              <span class="k">if</span> <span class="p">(</span><span class="nx">attr_name</span> <span class="k">in</span> <span class="nx">anno_dataset</span><span class="p">){</span>
+                <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;[×] &quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">&quot;Attribute &quot;</span><span class="p">,</span> <span class="nx">attr_name</span><span class="p">,</span> <span class="s2">&quot; is already registered.&quot;</span><span class="p">,</span> <span class="s2">&quot;\n&quot;</span><span class="p">);</span>
+              <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                <span class="kd">var</span> <span class="nx">attrs</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;[○] &quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">&quot;Attribute &quot;</span><span class="p">,</span> <span class="nx">attr_name</span><span class="p">,</span> <span class="s2">&quot; is registered.&quot;</span><span class="p">,</span> <span class="s2">&quot;\n&quot;</span><span class="p">);</span>
+                <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#registration-attrs-tbody&quot;</span><span class="p">).</span><span class="nx">children</span><span class="p">(</span><span class="s2">&quot;tr&quot;</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+                  <span class="kd">let</span> <span class="nx">inputs</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">);</span>
+                  <span class="kd">let</span> <span class="nx">key</span>    <span class="o">=</span> <span class="nx">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span><span class="p">;</span>
+                  <span class="kd">let</span> <span class="nx">label</span>  <span class="o">=</span> <span class="nx">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">value</span><span class="p">;</span>
+                  <span class="k">if</span> <span class="p">(</span><span class="nx">key</span><span class="o">!=</span><span class="s2">&quot;&quot;</span> <span class="o">&amp;&amp;</span> <span class="nx">label</span><span class="o">!=</span><span class="s2">&quot;&quot;</span><span class="p">){</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">command_keys</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">)){</span>
+                      <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\t[×] &quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="s2">&quot; is already used.&quot;</span><span class="p">,</span> <span class="s2">&quot;\n&quot;</span><span class="p">);</span>
+                    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+                      <span class="nx">command_keys</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">attr_name</span><span class="p">,</span> <span class="nx">label</span><span class="p">];</span>
+                      <span class="nx">attrs</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">label</span><span class="p">;</span>
+                      <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;\t[○] &quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="s2">&quot; is registered to mean label: &quot;</span><span class="p">,</span> <span class="nx">label</span><span class="p">,</span> <span class="s2">&quot;\n&quot;</span><span class="p">);</span>
+                    <span class="p">}</span>
+                  <span class="p">}</span>
+                <span class="p">});</span>
+                <span class="nx">anno_dataset</span><span class="p">[</span><span class="nx">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">attrs</span><span class="p">;</span>      
+              <span class="p">}</span>
+            <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+              <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;[×] Please enter &#39;Attribute name&#39;.\n&quot;</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="nx">alert</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
+            <span class="nx">reset_registration_table</span><span class="p">();</span>
+            <span class="nx">generate_registered_table</span><span class="p">();</span>
+            <span class="nx">generate_annotation_table</span><span class="p">();</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
           <span class="p">}</span>
-        <span class="p">}</span>
-      <span class="p">});</span>
-      <span class="nx">anno_dataset</span><span class="p">[</span><span class="nx">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">attrs</span><span class="p">;</span>      
-    <span class="p">}</span>
-  <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-    <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">&quot;[×] Please enter &#39;Attribute name&#39;.\n&quot;</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="nx">alert</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
-  <span class="nx">reset_registration_table</span><span class="p">();</span>
-  <span class="nx">generate_registered_table</span><span class="p">();</span>
-  <span class="nx">generate_annotation_table</span><span class="p">();</span>
-  <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="c1">// Reset Registration Form table.</span>
-<span class="kd">function</span> <span class="nx">reset_registration_table</span><span class="p">(){</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#form-reset&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">();</span>
-  <span class="nx">del_btns</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;input[class=&#39;del&#39;]&quot;</span><span class="p">);</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">del_btns</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-    <span class="nx">del_btns</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">click</span><span class="p">();</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">del_btns</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-<span class="c1">// Generate Registered Attributes table.</span>
-<span class="kd">function</span> <span class="nx">generate_registered_table</span><span class="p">(){</span>
-  <span class="kd">var</span> <span class="nx">registered_tbody</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#registered-attrs-tbody&quot;</span><span class="p">);</span>
-  <span class="nx">registered_tbody</span><span class="p">.</span><span class="nx">empty</span><span class="p">();</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">attr_name</span> <span class="k">in</span> <span class="nx">anno_dataset</span><span class="p">){</span>
-    <span class="kd">let</span> <span class="nx">attrs</span> <span class="o">=</span> <span class="nx">anno_dataset</span><span class="p">[</span><span class="nx">attr_name</span><span class="p">];</span>
-    <span class="kd">let</span> <span class="nx">num_labels</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">attrs</span><span class="p">).</span><span class="nx">length</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">row</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">is_attr_added</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">attrs</span><span class="p">){</span>
-      <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&lt;tr&gt;&quot;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">is_attr_added</span><span class="p">){</span>
-        <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&lt;td rowspan=&#39;&quot;</span> <span class="o">+</span> <span class="nx">num_labels</span> <span class="o">+</span>  <span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="nx">attr_name</span> <span class="o">+</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">;</span>
-        <span class="nx">is_attr_added</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">&quot;&lt;td&gt;&quot;</span><span class="p">,</span> <span class="nx">attrs</span><span class="p">[</span><span class="nx">key</span><span class="p">],</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">);</span>
-      <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">&quot;&lt;td&gt;&quot;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">);</span>
-      <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span>      
-    <span class="p">}</span>
-    <span class="nx">registered_tbody</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-<span class="c1">// Generate annotation table.</span>
-<span class="kd">function</span> <span class="nx">generate_annotation_table</span><span class="p">(){</span>
-  <span class="kd">var</span> <span class="nx">annotation_tbody</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#annotation-label-tbody&quot;</span><span class="p">);</span>
-  <span class="nx">annotation_tbody</span><span class="p">.</span><span class="nx">empty</span><span class="p">();</span>
-  <span class="kd">var</span> <span class="nx">row</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">attr_name</span> <span class="k">in</span> <span class="nx">anno_dataset</span><span class="p">){</span>
-    <span class="kd">var</span> <span class="nx">label</span> <span class="o">=</span> <span class="nx">sample_img_annotation</span><span class="p">[</span><span class="nx">attr_name</span><span class="p">];</span>
-    <span class="kd">var</span> <span class="nx">label</span> <span class="o">=</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">label</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">?</span> <span class="s2">&quot;&quot;</span> <span class="o">:</span> <span class="nx">label</span>    
-    <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">&quot;&lt;tr&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;td&gt;&quot;</span><span class="p">,</span> <span class="nx">attr_name</span><span class="p">,</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;td&gt;&quot;</span><span class="p">,</span> <span class="nx">label</span><span class="p">,</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">);</span>   
-  <span class="p">}</span>
-  <span class="nx">annotation_tbody</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="kd">function</span> <span class="nx">download_json</span><span class="p">(){</span>
-  <span class="kd">var</span> <span class="nx">jsonString</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">sample_img_annotation</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="s1">&#39;\t&#39;</span><span class="p">);</span>
-  <span class="kd">var</span> <span class="nx">blob</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blob</span><span class="p">([</span><span class="nx">jsonString</span><span class="p">],</span> <span class="p">{</span><span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;application/json&#39;</span> <span class="p">});</span>
-  <span class="kd">let</span> <span class="nx">link</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">);</span>
-  <span class="nx">link</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nx">createObjectURL</span><span class="p">(</span><span class="nx">blob</span><span class="p">);</span>
-  <span class="nx">link</span><span class="p">.</span><span class="nx">download</span> <span class="o">=</span> <span class="s1">&#39;annotations.json&#39;</span><span class="p">;</span>
-  <span class="nx">link</span><span class="p">.</span><span class="nx">click</span><span class="p">();</span>
-<span class="p">}</span>
-</code></pre></div>
-    </div><!-- /.entry-content -->
+          <span class="c1">// Reset Registration Form table.</span>
+          <span class="kd">function</span> <span class="nx">reset_registration_table</span><span class="p">(){</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#form-reset&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">();</span>
+            <span class="nx">del_btns</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;input[class=&#39;del&#39;]&quot;</span><span class="p">);</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">del_btns</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+              <span class="nx">del_btns</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">click</span><span class="p">();</span>
+              <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">del_btns</span><span class="p">[</span><span class="nx">i</span><span class="p">])</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+          <span class="c1">// Generate Registered Attributes table.</span>
+          <span class="kd">function</span> <span class="nx">generate_registered_table</span><span class="p">(){</span>
+            <span class="kd">var</span> <span class="nx">registered_tbody</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#registered-attrs-tbody&quot;</span><span class="p">);</span>
+            <span class="nx">registered_tbody</span><span class="p">.</span><span class="nx">empty</span><span class="p">();</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">attr_name</span> <span class="k">in</span> <span class="nx">anno_dataset</span><span class="p">){</span>
+              <span class="kd">let</span> <span class="nx">attrs</span> <span class="o">=</span> <span class="nx">anno_dataset</span><span class="p">[</span><span class="nx">attr_name</span><span class="p">];</span>
+              <span class="kd">let</span> <span class="nx">num_labels</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">attrs</span><span class="p">).</span><span class="nx">length</span><span class="p">;</span>
+              <span class="kd">var</span> <span class="nx">row</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+              <span class="kd">var</span> <span class="nx">is_attr_added</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+              <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">attrs</span><span class="p">){</span>
+                <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&lt;tr&gt;&quot;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">is_attr_added</span><span class="p">){</span>
+                  <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&lt;td rowspan=&#39;&quot;</span> <span class="o">+</span> <span class="nx">num_labels</span> <span class="o">+</span>  <span class="s2">&quot;&#39;&gt;&quot;</span> <span class="o">+</span> <span class="nx">attr_name</span> <span class="o">+</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">;</span>
+                  <span class="nx">is_attr_added</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">&quot;&lt;td&gt;&quot;</span><span class="p">,</span> <span class="nx">attrs</span><span class="p">[</span><span class="nx">key</span><span class="p">],</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">);</span>
+                <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">&quot;&lt;td&gt;&quot;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">);</span>
+                <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span>      
+              <span class="p">}</span>
+              <span class="nx">registered_tbody</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+          <span class="c1">// Generate annotation table.</span>
+          <span class="kd">function</span> <span class="nx">generate_annotation_table</span><span class="p">(){</span>
+            <span class="kd">var</span> <span class="nx">annotation_tbody</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#annotation-label-tbody&quot;</span><span class="p">);</span>
+            <span class="nx">annotation_tbody</span><span class="p">.</span><span class="nx">empty</span><span class="p">();</span>
+            <span class="kd">var</span> <span class="nx">row</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">attr_name</span> <span class="k">in</span> <span class="nx">anno_dataset</span><span class="p">){</span>
+              <span class="kd">var</span> <span class="nx">label</span> <span class="o">=</span> <span class="nx">sample_img_annotation</span><span class="p">[</span><span class="nx">attr_name</span><span class="p">];</span>
+              <span class="kd">var</span> <span class="nx">label</span> <span class="o">=</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">label</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">?</span> <span class="s2">&quot;&quot;</span> <span class="o">:</span> <span class="nx">label</span>    
+              <span class="nx">row</span> <span class="o">+=</span> <span class="s2">&quot;&quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">&quot;&lt;tr&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;td&gt;&quot;</span><span class="p">,</span> <span class="nx">attr_name</span><span class="p">,</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;td&gt;&quot;</span><span class="p">,</span> <span class="nx">label</span><span class="p">,</span> <span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">);</span>   
+            <span class="p">}</span>
+            <span class="nx">annotation_tbody</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
+          <span class="p">}</span>
+          <span class="kd">function</span> <span class="nx">download_json</span><span class="p">(){</span>
+            <span class="kd">var</span> <span class="nx">jsonString</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">sample_img_annotation</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="s1">&#39;\t&#39;</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">blob</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Blob</span><span class="p">([</span><span class="nx">jsonString</span><span class="p">],</span> <span class="p">{</span><span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;application/json&#39;</span> <span class="p">});</span>
+            <span class="kd">let</span> <span class="nx">link</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">);</span>
+            <span class="nx">link</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">URL</span><span class="p">.</span><span class="nx">createObjectURL</span><span class="p">(</span><span class="nx">blob</span><span class="p">);</span>
+            <span class="nx">link</span><span class="p">.</span><span class="nx">download</span> <span class="o">=</span> <span class="s1">&#39;annotations.json&#39;</span><span class="p">;</span>
+            <span class="nx">link</span><span class="p">.</span><span class="nx">click</span><span class="p">();</span>
+          <span class="p">}</span>
+          </code></pre></div>
+        
+        </div><!-- /.entry-content -->
+    
+      </article>
+    </section>
+    <section id="extras" class="body">
+      <div class="blogroll">
+        <h5>other contents</h5>
+        <ul>
+          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Home.png">Home</a></li>
+          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">Blog</a></li>
+          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">University</a></li>
+          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">Kerasy</a></li>
+          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">Python-Charmers</a></li>
+          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">Translation-Gummy</a></li>
+        </ul>
+      </div><!-- /.blogroll -->
+      <div class="social">
+        <h5>social</h5>
+        <ul>
+          <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
+          <li><a href="https://github.com/iwasakishuto">github</a></li>
+        </ul>
+      </div><!-- /.social -->
+    </section><!-- /#extras -->
 
-  </article>
-</section>
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h5>other contents</h5>
-                        <ul>
-                            <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Home.png">Home</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">Blog</a></li>
-                            <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">University</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">Kerasy</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">Python-Charmers</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">Translation-Gummy</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h5>social</h5>
-                        <ul>
-
-                            <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
-                            <li><a href="https://github.com/iwasakishuto">github</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
-
-        <footer id="contentinfo" class="body">
-                <p>Powered by <a href="https://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
-        </footer><!-- /#contentinfo -->
-
+    <footer id="contentinfo" class="body">
+      <p>Powered by <a href="https://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
+    </footer><!-- /#contentinfo -->
     <script type="text/javascript">
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-164333757-3']);
@@ -538,5 +535,5 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
     </script>
-</body>
+  </body>
 </html>

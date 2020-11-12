@@ -1,254 +1,251 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="author" content="Shuto" />
-        <meta name="twitter:creator" content="@cabernet_rock">
-        <meta name="twitter:site" content="@cabernet_rock">
-        <meta property="og:type" content="article" />
-        <meta name="twitter:card" content="summary">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Shuto" />
+    <meta name="twitter:creator" content="@cabernet_rock">
+    <meta name="twitter:site" content="@cabernet_rock">
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary">
+    <meta name="keywords" content="JavaScript, JavaScript, " />
+    <meta property="og:image" content="https://www.w3schools.com/whatis/img_js.png"/>
+    <meta property="og:title" content="JS.8 Webカメラの映像で遊んでみる-2 "/>
+    <meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-8.html" />
+    <meta property="og:description" content="Webカメラの映像で遊んでみる-2" />
+    <meta property="og:site_name" content="Shuto&#39;s Front-End" />
+    <meta property="og:article:author" content="Shuto" />
+    <meta property="og:article:published_time" content="2019-06-09T05:00:00+09:00" />
+    <meta property="og:article:modified_time" content="2019-06-09T05:00:00+09:00" />
+    <meta name="twitter:title" content="JS.8 Webカメラの映像で遊んでみる-2 ">
+    <meta name="twitter:description" content="Webカメラの映像で遊んでみる-2">
+    <title>JS.8 Webカメラの映像で遊んでみる-2</title>
+    <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
+    <!-- Added by Shuto Iwasaki. -->
+    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"></script>
+    <script type="text/x-mathjax-config">
+    	MathJax.Hub.Config({
+    		tex2jax: {
+    			inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    			displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    		}
+    	});
+    </script>
+    <!-- Mermaid -->
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
+    <script>
+      mermaid.initialize({
+        startOnLoad:true
+      });
+    </script>
+    <!--[if IE]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body id="index" class="home">
+    <header id="banner" class="body">
+      <h1><a href="https://iwasakishuto.github.io/Front-End/tips/">Shuto's Front-End </a></h1>
+      <nav>
+        <ul>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html">CSS</a></li>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html">HTML</a></li>
+          <li class="active"><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
+        </ul>
+        <form id="search" action"#" onsubmit="javascript:window.open('https://duckduckgo.com/?q='+document.getElementById('keywords').value+'+site:https://iwasakishuto.github.io/Front-End/tips');">
+          <input id="keywords" type="text" />
+        </form>
+      </nav>
+    </header><!-- /#banner -->
+    <section id="content" class="body">
+      <article>
+        <header>
+          <h1 class="entry-title">
+            <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-8.html" rel="bookmark" title="Permalink to JS.8 Webカメラの映像で遊んでみる-2">JS.8 Webカメラの映像で遊んでみる-2</a>
+          </h1>
+          <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
+          <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
+        </header>
+    
+        <div class="entry-content">
+          <footer class="post-info">
+            <span>2019-06-09(Sun)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+          </footer><!-- /.post-info -->
+          <p>それでは、Webカメラの映像をモデルに通して遊んでみたいと思います。GitHub Pages は静的サイトなので、基本的には<code>Python</code>ファイルを動かすことができないのですが、<code>TensorFlow.js</code>というライブラリを使うことで静的サイトでも機械学習のモデルを使うことができます。</p>
+          <p>それはまたの機会にやってみるとして、ここではサーバーにWebカメラの映像を送る、といったことをしたいと思います。</p>
+          <p>この時、動画はフレームの重ね合わせなので、一定時間ごとのフレームを送る、という方法をとります。</p>
+          <p>まずは、<code>Canvas</code>タグに動画のフレームを描画することをやってみます。</p>
+          <h2>Webカメラの動画のフレームをCanvasに描画する</h2>
+          <div class="video-streaming">
+            <h3>Streaming</h3>
+            <video id="video" width="640" height="480" playsinline muted autoplay ></video><br>
+            <button id="start_stop" class="btn-red">STOP</button><br>
+            <h3>Canvas</h3>
+            <canvas id="canvas"></canvas><br>
+          </div>
 
-<meta name="keywords" content="JavaScript, JavaScript, " />
-<meta property="og:image" content="https://www.w3schools.com/whatis/img_js.png"/>
-<meta property="og:title" content="JS.8 Webカメラの映像で遊んでみる-2 "/>
-<meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-8.html" />
-<meta property="og:description" content="Webカメラの映像で遊んでみる-2" />
-<meta property="og:site_name" content="Shuto&#39;s Front-End" />
-<meta property="og:article:author" content="Shuto" />
-<meta property="og:article:published_time" content="2019-06-09T05:00:00+09:00" />
-<meta property="og:article:modified_time" content="2019-06-09T05:00:00+09:00" />
-<meta name="twitter:title" content="JS.8 Webカメラの映像で遊んでみる-2 ">
-<meta name="twitter:description" content="Webカメラの映像で遊んでみる-2">
+          <script>
+            var video = document.getElementById("video");
+            var media = navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "user" },
+            audio: false,
+            });
+            media.then((stream) => {
+            video.srcObject = stream;
+            setInterval(function() {
+              var canvas = document.getElementById('canvas');
+              var context = canvas.getContext('2d');
+              var w = video.offsetWidth;  canvas.setAttribute('width',  w.toString());
+              var h = video.offsetHeight; canvas.setAttribute('height', h.toString());
+              context.drawImage(video, 0, 0, w, h);
+            },1000);
+            });
+            document.getElementById('start_stop').addEventListener('click', function() {
+            var video = document.getElementById('video');
+            if (this.innerHTML === 'START'){
+              // ボタン操作
+              this.innerHTML = 'STOP';
+              this.classList.remove('btn-blue');
+              this.classList.add('btn-red');
+              // ビデオ操作
+              video.play()
+            } else {
+              this.innerHTML = "START";
+              this.classList.remove('btn-red');
+              this.classList.add('btn-blue');
+              video.pause()
+            }
+            });
+          </script>
 
-        <title>JS.8 Webカメラの映像で遊んでみる-2</title>
-        <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
+          <style>
+            .video-streaming {  
+              text-align: center;
+              margin: 30px auto;
+            }
+            #video {
+              border: 2px solid;
+              border-color: rgb(68, 122, 178);
+              width: 80%;
+              height: auto;
+            }
+            #canvas {
+              border: 2px solid;
+              border-color: rgb(252, 92, 84);
+              width: 80%;
+              height: auto;
+            }
+            .btn-blue {
+              background-color: rgb(68, 122, 178);
+              color: #fff;
+              padding: 10px;
+              border-radius: 3px;
+            }
+            .btn-red {
+              background-color: rgb(252, 92, 84);
+              color: #fff;
+              padding: 10px;
+              border-radius: 3px;
+            }
+          </style>
 
-        <!-- Added by Shuto Iwasaki. -->
-        <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
-        <script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"></script>
-        <script type="text/x-mathjax-config">
-        	MathJax.Hub.Config({
-        		tex2jax: {
-        			inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-        			displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-        		}
-        	});
-        </script>
-        <!-- Mermaid -->
-        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
-        <script>
-          mermaid.initialize({
-            startOnLoad:true
-          });
-        </script>
-
-        <!--[if IE]>
-            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-</head>
-
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="https://iwasakishuto.github.io/Front-End/tips/">Shuto's Front-End </a></h1>
-                <nav><ul>
-                    <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html">CSS</a></li>
-                    <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html">HTML</a></li>
-                    <li class="active"><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
-                </ul>
-<form id="search" action"#" onsubmit="javascript:window.open('https://duckduckgo.com/?q='+document.getElementById('keywords').value+'+site:https://iwasakishuto.github.io/Front-End/tips');">
-                        <input id="keywords" type="text" />
-                    </form>
-                </nav>
-        </header><!-- /#banner -->
-<section id="content" class="body">
-  <article>
-    <header>
-      <h1 class="entry-title">
-        <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-8.html" rel="bookmark"
-           title="Permalink to JS.8 Webカメラの映像で遊んでみる-2">JS.8 Webカメラの映像で遊んでみる-2</a></h1>
-<a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a><script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
-    </header>
-
-    <div class="entry-content">
-<footer class="post-info">
-        <span>2019-06-09(Sun)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->      <p>それでは、Webカメラの映像をモデルに通して遊んでみたいと思います。GitHub Pages は静的サイトなので、基本的には<code>Python</code>ファイルを動かすことができないのですが、<code>TensorFlow.js</code>というライブラリを使うことで静的サイトでも機械学習のモデルを使うことができます。</p>
-<p>それはまたの機会にやってみるとして、ここではサーバーにWebカメラの映像を送る、といったことをしたいと思います。</p>
-<p>この時、動画はフレームの重ね合わせなので、一定時間ごとのフレームを送る、という方法をとります。</p>
-<p>まずは、<code>Canvas</code>タグに動画のフレームを描画することをやってみます。</p>
-<h2>Webカメラの動画のフレームをCanvasに描画する</h2>
-<div class="video-streaming">
-  <h3>Streaming</h3>
-  <video id="video" width="640" height="480" playsinline muted autoplay ></video><br>
-  <button id="start_stop" class="btn-red">STOP</button><br>
-  <h3>Canvas</h3>
-  <canvas id="canvas"></canvas><br>
-</div>
-
-<script>
-  var video = document.getElementById("video");
-  var media = navigator.mediaDevices.getUserMedia({
-  video: { facingMode: "user" },
-  audio: false,
-  });
-  media.then((stream) => {
-  video.srcObject = stream;
-  setInterval(function() {
-    var canvas = document.getElementById('canvas');
-    var context = canvas.getContext('2d');
-    var w = video.offsetWidth;  canvas.setAttribute('width',  w.toString());
-    var h = video.offsetHeight; canvas.setAttribute('height', h.toString());
-    context.drawImage(video, 0, 0, w, h);
-  },1000);
-  });
-  document.getElementById('start_stop').addEventListener('click', function() {
-  var video = document.getElementById('video');
-  if (this.innerHTML === 'START'){
-    // ボタン操作
-    this.innerHTML = 'STOP';
-    this.classList.remove('btn-blue');
-    this.classList.add('btn-red');
-    // ビデオ操作
-    video.play()
-  } else {
-    this.innerHTML = "START";
-    this.classList.remove('btn-red');
-    this.classList.add('btn-blue');
-    video.pause()
-  }
-  });
-</script>
-
-<style>
-  .video-streaming {  
-    text-align: center;
-    margin: 30px auto;
-  }
-  #video {
-    border: 2px solid;
-    border-color: rgb(68, 122, 178);
-    width: 80%;
-    height: auto;
-  }
-  #canvas {
-    border: 2px solid;
-    border-color: rgb(252, 92, 84);
-    width: 80%;
-    height: auto;
-  }
-  .btn-blue {
-    background-color: rgb(68, 122, 178);
-    color: #fff;
-    padding: 10px;
-    border-radius: 3px;
-  }
-  .btn-red {
-    background-color: rgb(252, 92, 84);
-    color: #fff;
-    padding: 10px;
-    border-radius: 3px;
-  }
-</style>
-
-<h2>コード</h2>
-<h3><code>html</code></h3>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;video-streaming&quot;</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>Streaming<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">video</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;video&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;640&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;480&quot;</span> <span class="na">playsinline</span> <span class="na">muted</span> <span class="na">autoplay</span> <span class="p">&gt;&lt;/</span><span class="nt">video</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>Canvas<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;canvas&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</code></pre></div>
+          <h2>コード</h2>
+          <h3><code>html</code></h3>
+          <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;video-streaming&quot;</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>Streaming<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">video</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;video&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;640&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;480&quot;</span> <span class="na">playsinline</span> <span class="na">muted</span> <span class="na">autoplay</span> <span class="p">&gt;&lt;/</span><span class="nt">video</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>Canvas<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
+            <span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;canvas&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
+          <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+          </code></pre></div>
 
 
-<h3><code>JavaScript</code></h3>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">video</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;video&quot;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">mediaDevices</span><span class="p">.</span><span class="nx">getUserMedia</span><span class="p">({</span>
-  <span class="nx">video</span><span class="o">:</span> <span class="p">{</span> <span class="nx">facingMode</span><span class="o">:</span> <span class="s2">&quot;user&quot;</span> <span class="p">},</span>
-  <span class="nx">audio</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
-<span class="p">});</span>
-<span class="nx">media</span><span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">stream</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
-  <span class="nx">video</span><span class="p">.</span><span class="nx">srcObject</span> <span class="o">=</span> <span class="nx">stream</span><span class="p">;</span>
-  <span class="nx">setInterval</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;canvas&#39;</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">&#39;2d&#39;</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="nx">video</span><span class="p">.</span><span class="nx">offsetWidth</span><span class="p">;</span>  <span class="nx">canvas</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">,</span>  <span class="nx">w</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
-    <span class="kd">var</span> <span class="nx">h</span> <span class="o">=</span> <span class="nx">video</span><span class="p">.</span><span class="nx">offsetHeight</span><span class="p">;</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
-    <span class="nx">context</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">video</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">);</span>
-  <span class="p">},</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">//1000ms(=1s)毎に描画しています。</span>
-<span class="p">});</span>
-</code></pre></div>
+          <h3><code>JavaScript</code></h3>
+          <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">video</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;video&quot;</span><span class="p">);</span>
+          <span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">mediaDevices</span><span class="p">.</span><span class="nx">getUserMedia</span><span class="p">({</span>
+            <span class="nx">video</span><span class="o">:</span> <span class="p">{</span> <span class="nx">facingMode</span><span class="o">:</span> <span class="s2">&quot;user&quot;</span> <span class="p">},</span>
+            <span class="nx">audio</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+          <span class="p">});</span>
+          <span class="nx">media</span><span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">stream</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+            <span class="nx">video</span><span class="p">.</span><span class="nx">srcObject</span> <span class="o">=</span> <span class="nx">stream</span><span class="p">;</span>
+            <span class="nx">setInterval</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+              <span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;canvas&#39;</span><span class="p">);</span>
+              <span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">&#39;2d&#39;</span><span class="p">);</span>
+              <span class="kd">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="nx">video</span><span class="p">.</span><span class="nx">offsetWidth</span><span class="p">;</span>  <span class="nx">canvas</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">,</span>  <span class="nx">w</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+              <span class="kd">var</span> <span class="nx">h</span> <span class="o">=</span> <span class="nx">video</span><span class="p">.</span><span class="nx">offsetHeight</span><span class="p">;</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+              <span class="nx">context</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">video</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">);</span>
+            <span class="p">},</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">//1000ms(=1s)毎に描画しています。</span>
+          <span class="p">});</span>
+          </code></pre></div>
 
 
-<h3><code>css</code></h3>
-<div class="highlight"><pre><span></span><code><span class="p">.</span><span class="nc">video-streaming</span> <span class="p">{</span>  
-  <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
-  <span class="k">margin</span><span class="p">:</span> <span class="mi">30</span><span class="kt">px</span> <span class="kc">auto</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="p">#</span><span class="nn">video</span> <span class="p">{</span>
-  <span class="k">border</span><span class="p">:</span> <span class="mi">2</span><span class="kt">px</span> <span class="kc">solid</span><span class="p">;</span>
-  <span class="k">border-color</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="mi">68</span><span class="p">,</span> <span class="mi">122</span><span class="p">,</span> <span class="mi">178</span><span class="p">);</span>
-  <span class="k">width</span><span class="p">:</span> <span class="mi">80</span><span class="kt">%</span><span class="p">;</span>
-  <span class="k">height</span><span class="p">:</span> <span class="kc">auto</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="p">#</span><span class="nn">canvas</span> <span class="p">{</span>
-  <span class="k">border</span><span class="p">:</span> <span class="mi">2</span><span class="kt">px</span> <span class="kc">solid</span><span class="p">;</span>
-  <span class="k">border-color</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="mi">252</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">84</span><span class="p">);</span>
-  <span class="k">width</span><span class="p">:</span> <span class="mi">80</span><span class="kt">%</span><span class="p">;</span>
-  <span class="k">height</span><span class="p">:</span> <span class="kc">auto</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="p">.</span><span class="nc">btn-blue</span> <span class="p">{</span>
-  <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="mi">68</span><span class="p">,</span> <span class="mi">122</span><span class="p">,</span> <span class="mi">178</span><span class="p">);</span>
-  <span class="k">color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
-  <span class="k">padding</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-  <span class="k">border-radius</span><span class="p">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="p">.</span><span class="nc">btn-red</span> <span class="p">{</span>
-  <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="mi">252</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">84</span><span class="p">);</span>
-  <span class="k">color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
-  <span class="k">padding</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-  <span class="k">border-radius</span><span class="p">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div>
-    </div><!-- /.entry-content -->
+          <h3><code>css</code></h3>
+          <div class="highlight"><pre><span></span><code><span class="p">.</span><span class="nc">video-streaming</span> <span class="p">{</span>  
+            <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+            <span class="k">margin</span><span class="p">:</span> <span class="mi">30</span><span class="kt">px</span> <span class="kc">auto</span><span class="p">;</span>
+          <span class="p">}</span>
+          <span class="p">#</span><span class="nn">video</span> <span class="p">{</span>
+            <span class="k">border</span><span class="p">:</span> <span class="mi">2</span><span class="kt">px</span> <span class="kc">solid</span><span class="p">;</span>
+            <span class="k">border-color</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="mi">68</span><span class="p">,</span> <span class="mi">122</span><span class="p">,</span> <span class="mi">178</span><span class="p">);</span>
+            <span class="k">width</span><span class="p">:</span> <span class="mi">80</span><span class="kt">%</span><span class="p">;</span>
+            <span class="k">height</span><span class="p">:</span> <span class="kc">auto</span><span class="p">;</span>
+          <span class="p">}</span>
+          <span class="p">#</span><span class="nn">canvas</span> <span class="p">{</span>
+            <span class="k">border</span><span class="p">:</span> <span class="mi">2</span><span class="kt">px</span> <span class="kc">solid</span><span class="p">;</span>
+            <span class="k">border-color</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="mi">252</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">84</span><span class="p">);</span>
+            <span class="k">width</span><span class="p">:</span> <span class="mi">80</span><span class="kt">%</span><span class="p">;</span>
+            <span class="k">height</span><span class="p">:</span> <span class="kc">auto</span><span class="p">;</span>
+          <span class="p">}</span>
+          <span class="p">.</span><span class="nc">btn-blue</span> <span class="p">{</span>
+            <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="mi">68</span><span class="p">,</span> <span class="mi">122</span><span class="p">,</span> <span class="mi">178</span><span class="p">);</span>
+            <span class="k">color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+            <span class="k">padding</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+            <span class="k">border-radius</span><span class="p">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
+          <span class="p">}</span>
+          <span class="p">.</span><span class="nc">btn-red</span> <span class="p">{</span>
+            <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="mi">252</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">84</span><span class="p">);</span>
+            <span class="k">color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+            <span class="k">padding</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+            <span class="k">border-radius</span><span class="p">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
+          <span class="p">}</span>
+          </code></pre></div>
+        
+        </div><!-- /.entry-content -->
+    
+      </article>
+    </section>
+    <section id="extras" class="body">
+      <div class="blogroll">
+        <h5>other contents</h5>
+        <ul>
+          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Home.png">Home</a></li>
+          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">Blog</a></li>
+          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">University</a></li>
+          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">Kerasy</a></li>
+          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">Python-Charmers</a></li>
+          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">Translation-Gummy</a></li>
+        </ul>
+      </div><!-- /.blogroll -->
+      <div class="social">
+        <h5>social</h5>
+        <ul>
+          <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
+          <li><a href="https://github.com/iwasakishuto">github</a></li>
+        </ul>
+      </div><!-- /.social -->
+    </section><!-- /#extras -->
 
-  </article>
-</section>
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h5>other contents</h5>
-                        <ul>
-                            <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Home.png">Home</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">Blog</a></li>
-                            <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">University</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">Kerasy</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">Python-Charmers</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">Translation-Gummy</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h5>social</h5>
-                        <ul>
-
-                            <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
-                            <li><a href="https://github.com/iwasakishuto">github</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
-
-        <footer id="contentinfo" class="body">
-                <p>Powered by <a href="https://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
-        </footer><!-- /#contentinfo -->
-
+    <footer id="contentinfo" class="body">
+      <p>Powered by <a href="https://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
+    </footer><!-- /#contentinfo -->
     <script type="text/javascript">
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-164333757-3']);
@@ -259,5 +256,5 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
     </script>
-</body>
+  </body>
 </html>

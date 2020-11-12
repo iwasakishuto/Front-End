@@ -1,123 +1,465 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="author" content="Shuto" />
-        <meta name="twitter:creator" content="@cabernet_rock">
-        <meta name="twitter:site" content="@cabernet_rock">
-        <meta property="og:type" content="article" />
-        <meta name="twitter:card" content="summary">
-        <title>Shuto's Front-End - JavaScript</title>
-        <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
-
-        <!-- Added by Shuto Iwasaki. -->
-        <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
-        <script>hljs.initHighlightingOnLoad();</script>
-        <script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"></script>
-        <script type="text/x-mathjax-config">
-        	MathJax.Hub.Config({
-        		tex2jax: {
-        			inlineMath: [ ['$','$'], ["\\(","\\)"] ],
-        			displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
-        		}
-        	});
-        </script>
-        <!-- Mermaid -->
-        <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
-        <script>
-          mermaid.initialize({
-            startOnLoad:true
-          });
-        </script>
-
-        <!--[if IE]>
-            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
-</head>
-
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="https://iwasakishuto.github.io/Front-End/tips/">Shuto's Front-End </a></h1>
-                <nav><ul>
-                    <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html">CSS</a></li>
-                    <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html">HTML</a></li>
-                    <li class="active"><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
-                </ul>
-<form id="search" action"#" onsubmit="javascript:window.open('https://duckduckgo.com/?q='+document.getElementById('keywords').value+'+site:https://iwasakishuto.github.io/Front-End/tips');">
-                        <input id="keywords" type="text" />
-                    </form>
-                </nav>
-        </header><!-- /#banner -->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Shuto" />
+    <meta name="twitter:creator" content="@cabernet_rock">
+    <meta name="twitter:site" content="@cabernet_rock">
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary">
+    <title>Shuto's Front-End - JavaScript</title>
+    <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
+    <!-- Added by Shuto Iwasaki. -->
+    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"></script>
+    <script type="text/x-mathjax-config">
+    	MathJax.Hub.Config({
+    		tex2jax: {
+    			inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    			displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    		}
+    	});
+    </script>
+    <!-- Mermaid -->
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
+    <script>
+      mermaid.initialize({
+        startOnLoad:true
+      });
+    </script>
+    <!--[if IE]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body id="index" class="home">
+    <header id="banner" class="body">
+      <h1><a href="https://iwasakishuto.github.io/Front-End/tips/">Shuto's Front-End </a></h1>
+      <nav>
+        <ul>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html">CSS</a></li>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html">HTML</a></li>
+          <li class="active"><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
+        </ul>
+        <form id="search" action"#" onsubmit="javascript:window.open('https://duckduckgo.com/?q='+document.getElementById('keywords').value+'+site:https://iwasakishuto.github.io/Front-End/tips');">
+          <input id="keywords" type="text" />
+        </form>
+      </nav>
+    </header><!-- /#banner -->
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-22.html">JS.22 ページを多言語に対応する。</a></h1>
-<footer class="post-info">
-        <span>2020-11-12(Thu)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info --><div class="frame" style="text-align: center">
-  <a href="#googtrans(ja|en)" class="lang-select" data-lang="en">🇺🇸</a> 
-  <a href="#googtrans(ja|zh-CN)" class="lang-select" data-lang="zh-CN">🇨🇳</a> 
-  <a href="#googtrans(ja|es)" class="lang-select" data-lang="es">🇲🇽</a>
-  <a href="#googtrans(ja|fr)" class="lang-select" data-lang="fr">🇫🇷</a>
-  <a href="#googtrans(ja|ja)" class="lang-select" data-lang="ja">🇯🇵</a>
-  <h1 style="text-decoration: underline solid red; font-size: 3em;">こんにちは</h1>
-</div>
-
-<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-<script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
-
-<script>
-  $('.lang-select').click(function() {
-    var lang = $(this).attr('data-lang');
-    window.location = $(this).attr('href');
-    location.reload();
-  });
-  function googleTranslateElementInit() {
-    new google.translate.TranslateElement({
-      pageLanguage: 'ja', 
-      layout: google.translate.TranslateElement.FloatPosition.TOP_LEFT
-    }, 'google_translate_element');
-  }
-</script>
-
-<h2>コード</h2>
-<h3><code>html</code></h3>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;frame&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;text-align: center&quot;</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#googtrans(ja|en)&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lang-select&quot;</span> <span class="na">data-lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>🇺🇸<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> 
-  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#googtrans(ja|zh-CN)&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lang-select&quot;</span> <span class="na">data-lang</span><span class="o">=</span><span class="s">&quot;zh-CN&quot;</span><span class="p">&gt;</span>🇨🇳<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> 
-  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#googtrans(ja|es)&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lang-select&quot;</span> <span class="na">data-lang</span><span class="o">=</span><span class="s">&quot;es&quot;</span><span class="p">&gt;</span>🇲🇽<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#googtrans(ja|fr)&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lang-select&quot;</span> <span class="na">data-lang</span><span class="o">=</span><span class="s">&quot;fr&quot;</span><span class="p">&gt;</span>🇫🇷<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#googtrans(ja|ja)&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lang-select&quot;</span> <span class="na">data-lang</span><span class="o">=</span><span class="s">&quot;ja&quot;</span><span class="p">&gt;</span>🇯🇵<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">h1</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;text-decoration: underline solid red; font-size: 3em;&quot;</span><span class="p">&gt;</span>こんにちは<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-23.html">JS.23 TensorFlow.jsをTwitterのタイムライン上で動かす</a></h1>
+          <footer class="post-info">
+            <span>2020-11-13(Fri)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+          </footer><!-- /.post-info --><p><a href="JavaScript-11.html">JS.11 TensorFlow.jsでMNIST</a>と同じ内容なのですが、これを</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;twitter:player&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;https://iwasakishuto.github.io/Front-End/tips/JavaScript-23.html&quot;</span><span class="p">&gt;</span>
 </code></pre></div>
 
 
-<h3><code>js</code></h3>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span> <span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://iwasakishuto.github.io/js/jquery.js&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.lang-select&#39;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">lang</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-lang&#39;</span><span class="p">);</span>
-    <span class="nb">window</span><span class="p">.</span><span class="nx">location</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">);</span>
-    <span class="nx">location</span><span class="p">.</span><span class="nx">reload</span><span class="p">();</span>
+<p>というタグを用いてTwitterのタイムライン上で動かします👍</p>
+<h2>作ったもの</h2>
+<p><meta name="twitter:player" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-23.html">
+<div class="mnist">
+  <div class="drawing">
+    <canvas id="drawing-pad" width="280" height="280" style="border: 2px solid;"></canvas>
+    <canvas id="hidden-pad" style="display: none;"></canvas><br/>
+    <button id="predict-button" class="predict" onclick="prediction()">
+      <i id="loading" class="fa fa-spinner fa-spin" style="disabled: false;"></i>
+    </button>
+    <button id="reset-button" class="reset" onclick="reset()">
+      reset
+    </button>
+  </div>
+  <div class="result">
+    <table>
+      <thead>
+        <tr>
+          <th>Number</th>
+          <th>Accuracy</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>0</th>
+          <td class="accuracy" data-row-index="0">-</td>
+        </tr>
+        <tr>
+          <th>1</th>
+          <td class="accuracy" data-row-index="1">-</td>
+        </tr>
+        <tr>
+          <th>2</th>
+          <td class="accuracy" data-row-index="2">-</td>
+        </tr>
+        <tr>
+          <th>3</th>
+          <td class="accuracy" data-row-index="3">-</td>
+        </tr>
+        <tr>
+          <th>4</th>
+          <td class="accuracy" data-row-index="4">-</td>
+        </tr>
+        <tr>
+          <th>5</th>
+          <td class="accuracy" data-row-index="5">-</td>
+        </tr>
+        <tr>
+          <th>6</th>
+          <td class="accuracy" data-row-index="6">-</td>
+        </tr>
+        <tr>
+          <th>7</th>
+          <td class="accuracy" data-row-index="7">-</td>
+        </tr>
+        <tr>
+          <th>8</th>
+          <td class="accuracy" data-row-index="8">-</td>
+        </tr>
+        <tr>
+          <th>9</th>
+          <td class="accuracy" data-row-index="9">-</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<style>
+  .mnist {
+    padding: 10px;
+    width: 100%;
+    overflow: hidden;
+  }
+  .drawing {
+    float: left;
+    width: 50%;
+    text-align: center;
+  }
+  .result {
+    float: right;
+    width: 50%;
+  }
+  .predict{
+    padding: 10px;
+    background-color: #80160e;
+  }
+  .reset {
+    padding: 10px;
+    background-color: #c8c8a0;
+  }
+  .is-selected {
+    background-color: #80160e;
+    color: white;
+  }
+  @media only screen and (max-width: 1200px) {
+    .drawing {
+      width: 100%;
+      text-align: center;
+    }
+    .result {
+      width: 100%;
+    }
+  }
+  @media only screen and (max-width: 760px) {
+    .drawing {
+      float: left;
+      width: 50%;
+      text-align: center;
+    }
+    .result {
+      float: right;
+      width: 50%;
+    }
+  }
+  @media only screen and (max-width: 640px) {
+    .drawing {
+      width: 100%;
+      text-align: center;
+    }
+    .result {
+      width: 100%;
+    }
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.8.0"></script>
+<script src="https://docs.opencv.org/3.4/opencv.js" type="text/javascript"></script>
+<script>
+  // init SignaturePad
+  const drawElement = document.getElementById('drawing-pad');
+  const signaturePad = new SignaturePad(drawElement, {
+    minWidth: 6,
+    maxWidth: 6,
+    penColor: 'white',
+    backgroundColor: 'black',
+  });
+  // load pre-trained model
+  let model;
+  const model_path = '../../js/TensorFlowJs/MNIST/tf-model/model.json'
+  tf.loadModel(model_path)
+    .then(function(pretrainedModel){
+      model = pretrainedModel;
+      document.getElementById('predict-button').innerHTML = "predict";
+      document.getElementById('loading').style.disabled="true";
+    });
+  function getImageData() {
+    // grayscale
+    const src = cv.imread(drawElement);
+    let dst_gray = new cv.Mat();
+    cv.cvtColor(src, dst_gray, cv.COLOR_RGBA2GRAY, 0);
+    // resize
+    let dst_resized = new cv.Mat();
+    let dsize = new cv.Size(28, 28);
+    cv.resize(dst_gray, dst_resized, dsize, 0, 0, cv.INTER_AREA);
+    cv.imshow('hidden-pad', dst_resized);
+    const imageData = document.getElementById('hidden-pad').getContext('2d').getImageData(0, 0, 28, 28);
+    src.delete();
+    dst_gray.delete();
+    dst_resized.delete();
+    return imageData;
+  }
+  function getAccuracyScores(imageData) {
+    // メモリリークの心配がなくなる。自動的にメモリを解放。
+    const score = tf.tidy(function () {
+      const channels = 1;
+      let input = tf.fromPixels(imageData, channels);
+      input = tf.cast(input, 'float32').div(tf.scalar(255));
+      input = input.expandDims();
+      return model.predict(input).dataSync();
+    });
+    return score;
+  }
+  function prediction() {
+    const imageData = getImageData();
+    const accuracyScores = getAccuracyScores(imageData);
+    const maxAccuracy = accuracyScores.indexOf(Math.max.apply(null, accuracyScores));
+    const elements = document.querySelectorAll(".accuracy");
+    elements.forEach(function (el){
+      el.parentNode.classList.remove('is-selected');
+      const rowIndex = Number(el.dataset.rowIndex);
+      if (maxAccuracy === rowIndex) {
+        el.parentNode.classList.add('is-selected');
+      }
+      el.innerText = accuracyScores[rowIndex];
+    })
+  }
+  function reset() {
+    signaturePad.clear();
+    let elements = document.querySelectorAll(".accuracy");
+    elements.forEach(function (el){
+      el.parentNode.classList.remove('is-selected');
+      el.innerText = '-';
+    })
+  }
+</script></p>
+<h2>モデルの学習</h2>
+<p>なお、訓練は<a href="https://keras.io/examples/mnist_cnn/">Mnist cnn - Keras Documentation</a>に従って行なっていますが、一応モデルの重みを<code>TensorFlow.js</code>の形式に変換するところまでを含めて<a href="https://github.com/iwasakishuto/iwasakishuto.github.io/blob/master/js/TensorFlowJs/MNIST/Training.ipynb">notebook</a>にまとめてあります。</p>
+<p>また、<code>TensorFlow.js</code>に関しては、<a href="https://github.com/iwasakishuto/iwasakishuto.github.io/tree/master/js/TensorFlowJs">README.md</a>に簡単にまとめてあります。</p>
+<h2>コード</h2>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;mnist&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;drawing&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;drawing-pad&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;280&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;280&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;border: 2px solid;&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;hidden-pad&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;display: none;&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;predict-button&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;predict&quot;</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;prediction()&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">i</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;loading&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;fa fa-spinner fa-spin&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;disabled: false;&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">i</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;reset-button&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;reset&quot;</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;reset()&quot;</span><span class="p">&gt;</span>
+      reset
+    <span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;result&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">table</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">thead</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Number<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>Accuracy<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">thead</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">tbody</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>0<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">td</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;accuracy&quot;</span> <span class="na">data-row-index</span><span class="o">=</span><span class="s">&quot;0&quot;</span><span class="p">&gt;</span>-<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>1<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">td</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;accuracy&quot;</span> <span class="na">data-row-index</span><span class="o">=</span><span class="s">&quot;1&quot;</span><span class="p">&gt;</span>-<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>2<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">td</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;accuracy&quot;</span> <span class="na">data-row-index</span><span class="o">=</span><span class="s">&quot;2&quot;</span><span class="p">&gt;</span>-<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>3<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">td</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;accuracy&quot;</span> <span class="na">data-row-index</span><span class="o">=</span><span class="s">&quot;3&quot;</span><span class="p">&gt;</span>-<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>4<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">td</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;accuracy&quot;</span> <span class="na">data-row-index</span><span class="o">=</span><span class="s">&quot;4&quot;</span><span class="p">&gt;</span>-<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>5<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">td</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;accuracy&quot;</span> <span class="na">data-row-index</span><span class="o">=</span><span class="s">&quot;5&quot;</span><span class="p">&gt;</span>-<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>6<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">td</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;accuracy&quot;</span> <span class="na">data-row-index</span><span class="o">=</span><span class="s">&quot;6&quot;</span><span class="p">&gt;</span>-<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>7<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">td</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;accuracy&quot;</span> <span class="na">data-row-index</span><span class="o">=</span><span class="s">&quot;7&quot;</span><span class="p">&gt;</span>-<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>8<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">td</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;accuracy&quot;</span> <span class="na">data-row-index</span><span class="o">=</span><span class="s">&quot;8&quot;</span><span class="p">&gt;</span>-<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">tr</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">th</span><span class="p">&gt;</span>9<span class="p">&lt;/</span><span class="nt">th</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">td</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;accuracy&quot;</span> <span class="na">data-row-index</span><span class="o">=</span><span class="s">&quot;9&quot;</span><span class="p">&gt;</span>-<span class="p">&lt;/</span><span class="nt">td</span><span class="p">&gt;</span>
+        <span class="p">&lt;/</span><span class="nt">tr</span><span class="p">&gt;</span>
+      <span class="p">&lt;/</span><span class="nt">tbody</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">table</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.8.0&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://docs.opencv.org/3.4/opencv.js&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
+
+
+<h3><code>JavaScript</code></h3>
+<div class="highlight"><pre><span></span><code><span class="c1">// init SignaturePad</span>
+<span class="kr">const</span> <span class="nx">drawElement</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;drawing-pad&#39;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">signaturePad</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SignaturePad</span><span class="p">(</span><span class="nx">drawElement</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">minWidth</span><span class="o">:</span> <span class="mi">6</span><span class="p">,</span>
+  <span class="nx">maxWidth</span><span class="o">:</span> <span class="mi">6</span><span class="p">,</span>
+  <span class="nx">penColor</span><span class="o">:</span> <span class="s1">&#39;white&#39;</span><span class="p">,</span>
+  <span class="nx">backgroundColor</span><span class="o">:</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span>
+<span class="p">});</span>
+<span class="c1">// load pre-trained model</span>
+<span class="kd">let</span> <span class="nx">model</span><span class="p">;</span>
+<span class="kr">const</span> <span class="nx">model_path</span> <span class="o">=</span> <span class="s1">&#39;../../js/TensorFlowJs/MNIST/tf-model/model.json&#39;</span>
+<span class="nx">tf</span><span class="p">.</span><span class="nx">loadModel</span><span class="p">(</span><span class="nx">model_path</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">pretrainedModel</span><span class="p">){</span>
+    <span class="nx">model</span> <span class="o">=</span> <span class="nx">pretrainedModel</span><span class="p">;</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;predict-button&#39;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;predict&quot;</span><span class="p">;</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;loading&#39;</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">disabled</span><span class="o">=</span><span class="s2">&quot;true&quot;</span><span class="p">;</span>
   <span class="p">});</span>
-  <span class="kd">function</span> <span class="nx">googleTranslateElementInit</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">new</span> <span class="nx">google</span><span class="p">.</span><span class="nx">translate</span><span class="p">.</span><span class="nx">TranslateElement</span><span class="p">({</span>
-      <span class="nx">pageLanguage</span><span class="o">:</span> <span class="s1">&#39;ja&#39;</span><span class="p">,</span> 
-      <span class="nx">layout</span><span class="o">:</span> <span class="nx">google</span><span class="p">.</span><span class="nx">translate</span><span class="p">.</span><span class="nx">TranslateElement</span><span class="p">.</span><span class="nx">FloatPosition</span><span class="p">.</span><span class="nx">TOP_LEFT</span>
-    <span class="p">},</span> <span class="s1">&#39;google_translate_element&#39;</span><span class="p">);</span>
+<span class="kd">function</span> <span class="nx">getImageData</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// grayscale</span>
+  <span class="kr">const</span> <span class="nx">src</span> <span class="o">=</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">imread</span><span class="p">(</span><span class="nx">drawElement</span><span class="p">);</span>
+  <span class="kd">let</span> <span class="nx">dst_gray</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">Mat</span><span class="p">();</span>
+  <span class="nx">cv</span><span class="p">.</span><span class="nx">cvtColor</span><span class="p">(</span><span class="nx">src</span><span class="p">,</span> <span class="nx">dst_gray</span><span class="p">,</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">COLOR_RGBA2GRAY</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+  <span class="c1">// resize</span>
+  <span class="kd">let</span> <span class="nx">dst_resized</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">Mat</span><span class="p">();</span>
+  <span class="kd">let</span> <span class="nx">dsize</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">Size</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">);</span>
+  <span class="nx">cv</span><span class="p">.</span><span class="nx">resize</span><span class="p">(</span><span class="nx">dst_gray</span><span class="p">,</span> <span class="nx">dst_resized</span><span class="p">,</span> <span class="nx">dsize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">cv</span><span class="p">.</span><span class="nx">INTER_AREA</span><span class="p">);</span>
+  <span class="nx">cv</span><span class="p">.</span><span class="nx">imshow</span><span class="p">(</span><span class="s1">&#39;hidden-pad&#39;</span><span class="p">,</span> <span class="nx">dst_resized</span><span class="p">);</span>
+  <span class="kr">const</span> <span class="nx">imageData</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;hidden-pad&#39;</span><span class="p">).</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">&#39;2d&#39;</span><span class="p">).</span><span class="nx">getImageData</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">);</span>
+  <span class="nx">src</span><span class="p">.</span><span class="k">delete</span><span class="p">();</span>
+  <span class="nx">dst_gray</span><span class="p">.</span><span class="k">delete</span><span class="p">();</span>
+  <span class="nx">dst_resized</span><span class="p">.</span><span class="k">delete</span><span class="p">();</span>
+  <span class="k">return</span> <span class="nx">imageData</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">getAccuracyScores</span><span class="p">(</span><span class="nx">imageData</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// メモリリークの心配がなくなる。自動的にメモリを解放。</span>
+  <span class="kr">const</span> <span class="nx">score</span> <span class="o">=</span> <span class="nx">tf</span><span class="p">.</span><span class="nx">tidy</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">channels</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">input</span> <span class="o">=</span> <span class="nx">tf</span><span class="p">.</span><span class="nx">fromPixels</span><span class="p">(</span><span class="nx">imageData</span><span class="p">,</span> <span class="nx">channels</span><span class="p">);</span>
+    <span class="nx">input</span> <span class="o">=</span> <span class="nx">tf</span><span class="p">.</span><span class="nx">cast</span><span class="p">(</span><span class="nx">input</span><span class="p">,</span> <span class="s1">&#39;float32&#39;</span><span class="p">).</span><span class="nx">div</span><span class="p">(</span><span class="nx">tf</span><span class="p">.</span><span class="nx">scalar</span><span class="p">(</span><span class="mi">255</span><span class="p">));</span>
+    <span class="nx">input</span> <span class="o">=</span> <span class="nx">input</span><span class="p">.</span><span class="nx">expandDims</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">model</span><span class="p">.</span><span class="nx">predict</span><span class="p">(</span><span class="nx">input</span><span class="p">).</span><span class="nx">dataSync</span><span class="p">();</span>
+  <span class="p">});</span>
+  <span class="k">return</span> <span class="nx">score</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">prediction</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">imageData</span> <span class="o">=</span> <span class="nx">getImageData</span><span class="p">();</span>
+  <span class="kr">const</span> <span class="nx">accuracyScores</span> <span class="o">=</span> <span class="nx">getAccuracyScores</span><span class="p">(</span><span class="nx">imageData</span><span class="p">);</span>
+  <span class="kr">const</span> <span class="nx">maxAccuracy</span> <span class="o">=</span> <span class="nx">accuracyScores</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">accuracyScores</span><span class="p">));</span>
+  <span class="kr">const</span> <span class="nx">elements</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s2">&quot;.accuracy&quot;</span><span class="p">);</span>
+  <span class="nx">elements</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">){</span>
+    <span class="nx">el</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="s1">&#39;is-selected&#39;</span><span class="p">);</span>
+    <span class="kr">const</span> <span class="nx">rowIndex</span> <span class="o">=</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">rowIndex</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">maxAccuracy</span> <span class="o">===</span> <span class="nx">rowIndex</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">el</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">&#39;is-selected&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">el</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="nx">accuracyScores</span><span class="p">[</span><span class="nx">rowIndex</span><span class="p">];</span>
+  <span class="p">})</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">reset</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">signaturePad</span><span class="p">.</span><span class="nx">clear</span><span class="p">();</span>
+  <span class="kd">let</span> <span class="nx">elements</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s2">&quot;.accuracy&quot;</span><span class="p">);</span>
+  <span class="nx">elements</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">){</span>
+    <span class="nx">el</span><span class="p">.</span><span class="nx">parentNode</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="s1">&#39;is-selected&#39;</span><span class="p">);</span>
+    <span class="nx">el</span><span class="p">.</span><span class="nx">innerText</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="p">;</span>
+  <span class="p">})</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<h3><code>css</code></h3>
+<div class="highlight"><pre><span></span><code><span class="p">.</span><span class="nc">mnist</span> <span class="p">{</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">overflow</span><span class="p">:</span> <span class="kc">hidden</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">drawing</span> <span class="p">{</span>
+  <span class="k">float</span><span class="p">:</span> <span class="kc">left</span><span class="p">;</span>
+  <span class="k">width</span><span class="p">:</span> <span class="mi">50</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">result</span> <span class="p">{</span>
+  <span class="k">float</span><span class="p">:</span> <span class="kc">right</span><span class="p">;</span>
+  <span class="k">width</span><span class="p">:</span> <span class="mi">50</span><span class="kt">%</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">predict</span><span class="p">{</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">background-color</span><span class="p">:</span> <span class="mh">#80160e</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">reset</span> <span class="p">{</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">background-color</span><span class="p">:</span> <span class="mh">#c8c8a0</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">is-selected</span> <span class="p">{</span>
+  <span class="k">background-color</span><span class="p">:</span> <span class="mh">#80160e</span><span class="p">;</span>
+  <span class="k">color</span><span class="p">:</span> <span class="kc">white</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">@</span><span class="k">media</span> <span class="nt">only</span> <span class="nt">screen</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">max-width</span><span class="o">:</span> <span class="nt">1200px</span><span class="o">)</span> <span class="p">{</span>
+  <span class="p">.</span><span class="nc">drawing</span> <span class="p">{</span>
+    <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+    <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
   <span class="p">}</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="p">.</span><span class="nc">result</span> <span class="p">{</span>
+    <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="p">@</span><span class="k">media</span> <span class="nt">only</span> <span class="nt">screen</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">max-width</span><span class="o">:</span> <span class="nt">760px</span><span class="o">)</span> <span class="p">{</span>
+  <span class="p">.</span><span class="nc">drawing</span> <span class="p">{</span>
+    <span class="k">float</span><span class="p">:</span> <span class="kc">left</span><span class="p">;</span>
+    <span class="k">width</span><span class="p">:</span> <span class="mi">50</span><span class="kt">%</span><span class="p">;</span>
+    <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="p">.</span><span class="nc">result</span> <span class="p">{</span>
+    <span class="k">float</span><span class="p">:</span> <span class="kc">right</span><span class="p">;</span>
+    <span class="k">width</span><span class="p">:</span> <span class="mi">50</span><span class="kt">%</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="p">@</span><span class="k">media</span> <span class="nt">only</span> <span class="nt">screen</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">max-width</span><span class="o">:</span> <span class="nt">640px</span><span class="o">)</span> <span class="p">{</span>
+  <span class="p">.</span><span class="nc">drawing</span> <span class="p">{</span>
+    <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+    <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="p">.</span><span class="nc">result</span> <span class="p">{</span>
+    <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
@@ -126,15 +468,30 @@
 
             <li><article class="hentry">
                 <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-22.html" rel="bookmark"
+                           title="Permalink to JS.22 ページを多言語に対応する。">JS.22 ページを多言語に対応する。</a></h1>
+                </header>
+
+                <div class="entry-content">
+          <footer class="post-info">
+            <span>2020-11-12(Thu)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+          </footer><!-- /.post-info -->                <p>Googole翻訳を用いて、ページを多言語に対応する。</p>
+                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-22.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
                     <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-21.html" rel="bookmark"
                            title="Permalink to JS.21 画像認識用アノテーションツール。">JS.21 画像認識用アノテーションツール。</a></h1>
                 </header>
 
                 <div class="entry-content">
-<footer class="post-info">
-        <span>2020-11-08(Sun)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>キー入力に対応するラベルを付けることができ、アノテーション作業の効率を高める。ラベルデータはjson形式でダウンロード可能。</p>
+          <footer class="post-info">
+            <span>2020-11-08(Sun)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+          </footer><!-- /.post-info -->                <p>キー入力に対応するラベルを付けることができ、アノテーション作業の効率を高める。ラベルデータはjson形式でダウンロード可能。</p>
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-21.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
@@ -146,10 +503,10 @@
                 </header>
 
                 <div class="entry-content">
-<footer class="post-info">
-        <span>2020-11-08(Sun)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>Formの登録内容を可視化する。</p>
+          <footer class="post-info">
+            <span>2020-11-08(Sun)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+          </footer><!-- /.post-info -->                <p>Formの登録内容を可視化する。</p>
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-20.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
@@ -161,10 +518,10 @@
                 </header>
 
                 <div class="entry-content">
-<footer class="post-info">
-        <span>2020-11-07(Sat)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>ディレクトリ内の画像をフォトギャラリーで表示する。</p>
+          <footer class="post-info">
+            <span>2020-11-07(Sat)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+          </footer><!-- /.post-info -->                <p>ディレクトリ内の画像をフォトギャラリーで表示する。</p>
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-19.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
@@ -176,10 +533,10 @@
                 </header>
 
                 <div class="entry-content">
-<footer class="post-info">
-        <span>2019-09-07(Sat)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>ディレクトリ内の画像を全て表示する。</p>
+          <footer class="post-info">
+            <span>2019-09-07(Sat)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+          </footer><!-- /.post-info -->                <p>ディレクトリ内の画像を全て表示する。</p>
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-18.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
@@ -191,10 +548,10 @@
                 </header>
 
                 <div class="entry-content">
-<footer class="post-info">
-        <span>2019-09-04(Wed)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>アノテーションデータ（バウンディングボックス）作成ツールのコード</p>
+          <footer class="post-info">
+            <span>2019-09-04(Wed)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+          </footer><!-- /.post-info -->                <p>アノテーションデータ（バウンディングボックス）作成ツールのコード</p>
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-17.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
@@ -206,10 +563,10 @@
                 </header>
 
                 <div class="entry-content">
-<footer class="post-info">
-        <span>2019-09-04(Wed)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>アノテーションデータ（バウンディングボックス）作成ツール</p>
+          <footer class="post-info">
+            <span>2019-09-04(Wed)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+          </footer><!-- /.post-info -->                <p>アノテーションデータ（バウンディングボックス）作成ツール</p>
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-16.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
@@ -221,10 +578,10 @@
                 </header>
 
                 <div class="entry-content">
-<footer class="post-info">
-        <span>2019-07-30(Tue)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>ポケモン自己分析を分析してみた。</p>
+          <footer class="post-info">
+            <span>2019-07-30(Tue)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+          </footer><!-- /.post-info -->                <p>ポケモン自己分析を分析してみた。</p>
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-15.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
@@ -236,26 +593,11 @@
                 </header>
 
                 <div class="entry-content">
-<footer class="post-info">
-        <span>2019-07-22(Mon)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>Slack用の文字スタンプを作る</p>
+          <footer class="post-info">
+            <span>2019-07-22(Mon)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+          </footer><!-- /.post-info -->                <p>Slack用の文字スタンプを作る</p>
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-14.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-13.html" rel="bookmark"
-                           title="Permalink to JS.13 GASでslackにメッセージを送る">JS.13 GASでslackにメッセージを送る</a></h1>
-                </header>
-
-                <div class="entry-content">
-<footer class="post-info">
-        <span>2019-06-18(Tue)</span>
-<span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-</footer><!-- /.post-info -->                <p>GASでslackにメッセージを送る。</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-13.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
             </ol><!-- /#posts-list -->
@@ -265,32 +607,30 @@
         <a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript3.html">&#8649;</a>
 </p>
             </section><!-- /#content -->
-        <section id="extras" class="body">
-                <div class="blogroll">
-                        <h5>other contents</h5>
-                        <ul>
-                            <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Home.png">Home</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">Blog</a></li>
-                            <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">University</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">Kerasy</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">Python-Charmers</a></li>
-                            <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">Translation-Gummy</a></li>
-                        </ul>
-                </div><!-- /.blogroll -->
-                <div class="social">
-                        <h5>social</h5>
-                        <ul>
+    <section id="extras" class="body">
+      <div class="blogroll">
+        <h5>other contents</h5>
+        <ul>
+          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Home.png">Home</a></li>
+          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">Blog</a></li>
+          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">University</a></li>
+          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">Kerasy</a></li>
+          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">Python-Charmers</a></li>
+          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">Translation-Gummy</a></li>
+        </ul>
+      </div><!-- /.blogroll -->
+      <div class="social">
+        <h5>social</h5>
+        <ul>
+          <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
+          <li><a href="https://github.com/iwasakishuto">github</a></li>
+        </ul>
+      </div><!-- /.social -->
+    </section><!-- /#extras -->
 
-                            <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
-                            <li><a href="https://github.com/iwasakishuto">github</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
-
-        <footer id="contentinfo" class="body">
-                <p>Powered by <a href="https://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
-        </footer><!-- /#contentinfo -->
-
+    <footer id="contentinfo" class="body">
+      <p>Powered by <a href="https://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
+    </footer><!-- /#contentinfo -->
     <script type="text/javascript">
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-164333757-3']);
@@ -301,5 +641,5 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
     </script>
-</body>
+  </body>
 </html>
