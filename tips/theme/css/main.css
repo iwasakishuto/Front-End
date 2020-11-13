@@ -63,6 +63,18 @@ img.social-img {
 	padding: 0 5px 0 0!important;
 	vertical-align: middle!important;
 }
+div#loading{
+	width: 50%;
+  margin: 0 auto;
+}
+div#loading img.loading_img {
+	border: 0!important;
+}
+div#loading p.loading_info {
+	text-align: center;
+	font-size: 4em;
+	color: #008db8;
+}
 
 code {
 	font-family: monaco;
