@@ -91,11 +91,11 @@
 
           <div class="nunkiru">
             <h1>ヌンキル (눈길)</h1>
-            <p>Tensorflow.js を用いて、<a href="https://www.netflix.com/title/81290293">Start-Up(Netflix)</a>に出てくる<b>ヌンキル (눈길)</b>のようなものを作成しました。</p>
+            <p>Tensorflow.js を用いて、<a href="https://www.netflix.com/title/81290293">Start-Up(Netflix)</a>に出てくる<b>ヌンキル (눈길)</b>のようなものを作成しました。<b>※音声が出ます</b></p>
             <button id="switchCamera" onclick="switchFrontBackCamera()">switch Camera</button>
             <div id="video-canvas-wrapper" class="video-and-canvas" style="height:480px; background-color:black;">
-              <video id="video" style="z-index: 30;" width="640" height="480" playsinline muted autoplay ></video>
-              <canvas id="canvas" style="z-index: 20;" width="640" height="480"></canvas>
+              <video id="video" style="z-index: 30;"  playsinline muted autoplay ></video>
+              <canvas id="canvas" style="z-index: 20;" ></canvas>
             </div>
             <button id="predict-button" class="predict" style="margin-top:10px;" onclick="detection()">
               Loading Model <i id="loading" class="fa fa-spinner fa-spin" style="visibility: none;"></i>
