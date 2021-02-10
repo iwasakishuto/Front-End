@@ -56,196 +56,180 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-23.html">JS.23 Twitterのタイムライン上でMNIST</a></h1>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-24.html">JS.24 ヌンキル (눈길)を作る</a></h1>
           <footer class="post-info">
-            <span>2020-11-13(Fri)</span>
+            <span>2021-02-10(Wed)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-          </footer><!-- /.post-info --><p><a href="JavaScript-11.html">JS.11 TensorFlow.jsでMNIST</a>と同じ内容なのですが、これを</p>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;twitter:card&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;player&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;twitter:player&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;https://iwasakishuto.github.io/Front-End/tips/JavaScript-23.html&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;twitter:player:width&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;960&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;twitter:player:height&quot;</span> <span class="na">content</span><span class="o">=</span><span class="s">&quot;540&quot;</span><span class="p">&gt;</span>
+          </footer><!-- /.post-info --><script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"> </script>
+
+<div class="nunkiru">
+  <h1>ヌンキル (눈길)</h1>
+  <p>Tensorflow.js を用いて、<a href="https://www.netflix.com/title/81290293">Start-Up(Netflix)</a>に出てくる<b>ヌンキル (눈길)</b>のようなものを作成しました。</p>
+  <div class="video-and-canvas">
+    <video id="video" style="z-index: 30;" width="640" height="480" playsinline muted autoplay ></video>
+    <canvas id="canvas" style="z-index: 20;" width="640" height="480"></canvas>
+  </div>
+  <button id="predict-button" class="predict" style="margin-top:500px;" onclick="detection()">
+    <i id="loading" class="fa fa-spinner fa-spin" style="visibility: none;"></i>
+  </button>
+</div>
+
+<p>喋る部分は、以下のようなコードで実装しています。</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SpeechSynthesisUtterance</span><span class="p">();</span>
+<span class="nx">u</span><span class="p">.</span><span class="nx">lang</span> <span class="o">=</span> <span class="s1">&#39;en-US&#39;</span><span class="p">;</span>
+<span class="nx">u</span><span class="p">.</span><span class="nx">rate</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+<span class="nx">u</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;Hello World!&quot;</span><span class="p">;</span>
+<span class="nx">speechSynthesis</span><span class="p">.</span><span class="nx">speak</span><span class="p">(</span><span class="nx">u</span><span class="p">);</span>
 </code></pre></div>
 
 
-<p>というタグを用いてTwitterのタイムライン上で動かします👍</p>
-<h2>作ったもの</h2>
-<p><meta name="twitter:card" content="player">
-<meta name="twitter:player" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-23_iframe.html"></p>
-<p><meta name="twitter:player:width" content="960">
-<meta name="twitter:player:height" content="960"></p>
-<div class="mnist">
-  <div class="drawing">
-    <canvas id="drawing-pad" width="280" height="280" style="border: 2px solid;"></canvas>
-    <canvas id="hidden-pad" style="display: none;"></canvas><br/>
-    <button id="predict-button" class="predict" onclick="prediction()">
-      <i id="loading" class="fa fa-spinner fa-spin" style="disabled: false;"></i>
-    </button>
-    <button id="reset-button" class="reset" onclick="reset()">
-      reset
-    </button>
-  </div>
-  <div class="result">
-    <table>
-      <thead>
-        <tr><th>Number</th><th>Accuracy</th></tr>
-      </thead>
-      <tbody>
-        <tr><th>0</th><td class="accuracy" data-row-index="0">-</td></tr>
-        <tr><th>1</th><td class="accuracy" data-row-index="1">-</td></tr>
-        <tr><th>2</th><td class="accuracy" data-row-index="2">-</td></tr>
-        <tr><th>3</th><td class="accuracy" data-row-index="3">-</td></tr>
-        <tr><th>4</th><td class="accuracy" data-row-index="4">-</td></tr>
-        <tr><th>5</th><td class="accuracy" data-row-index="5">-</td></tr>
-        <tr><th>6</th><td class="accuracy" data-row-index="6">-</td></tr>
-        <tr><th>7</th><td class="accuracy" data-row-index="7">-</td></tr>
-        <tr><th>8</th><td class="accuracy" data-row-index="8">-</td></tr>
-        <tr><th>9</th><td class="accuracy" data-row-index="9">-</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+<p>また、モデルは<a href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd">Object Detection (coco-ssd)</a>を利用しています。</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/@tensorflow/tfjs&quot;</span><span class="p">&gt;</span> <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd&quot;</span><span class="p">&gt;</span> <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+// Load COCO SSD model.
+cocoSsd.load().then(function(pretrainedModel){
+  model = pretrainedModel;
+  predictition_button.innerHTML = &quot;ヌンキル（눈길）&quot;;  
+});
+</code></pre></div>
 
-<style>
-  .mnist {
-    padding: 10px;
-    width: 100%;
-    overflow: hidden;
-  }
-  .drawing {
-    float: left;
-    width: 50%;
-    text-align: center;
-  }
-  .result {
-    float: right;
-    width: 50%;
-  }
-  .predict{
-    padding: 10px;
-    background-color: #80160e;
-  }
-  .reset {
-    padding: 10px;
-    background-color: #c8c8a0;
-  }
-  .is-selected {
-    background-color: #80160e;
-    color: white;
-  }
-  @media only screen and (max-width: 1200px) {
-    .drawing {
-      width: 100%;
-      text-align: center;
-    }
-    .result {
-      width: 100%;
-    }
-  }
-  @media only screen and (max-width: 760px) {
-    .drawing {
-      float: left;
-      width: 50%;
-      text-align: center;
-    }
-    .result {
-      float: right;
-      width: 50%;
-    }
-  }
-  @media only screen and (max-width: 640px) {
-    .drawing {
-      width: 100%;
-      text-align: center;
-    }
-    .result {
-      width: 100%;
-    }
-  }
-</style>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.8.0"></script>
-
-<script src="https://docs.opencv.org/3.4/opencv.js" type="text/javascript"></script>
 
 <script>
-  // init SignaturePad
-  document.getElementById('loading').style.display = "block";
-  document.getElementById('content').style.display = "none";
-  const drawElement = document.getElementById('drawing-pad');
-  const signaturePad = new SignaturePad(drawElement, {
-    minWidth: 6,
-    maxWidth: 6,
-    penColor: 'white',
-    backgroundColor: 'black',
+  // Define global variables.
+  var predictition_button = document.getElementById('predict-button');
+  var video = document.getElementById("video");
+  var is_detecting = false;
+  var last_img = video;
+  var result;
+  var num_detection = 0
+  // Start Video Streaming.
+  var media = navigator.mediaDevices.getUserMedia({
+    video: { facingMode: "user" },
+    audio: false,
   });
-  // load pre-trained model
-  let model;
-  const model_path = '../../js/TensorFlowJs/MNIST/tf-model/model.json'
-  tf.loadModel(model_path)
-    .then(function(pretrainedModel){
-      model = pretrainedModel;
-      document.getElementById('predict-button').innerHTML = "predict";
-      document.getElementById('loading').style.disabled="true";
-      document.getElementById('loading').style.display = "none";
-      document.getElementById('content').style.display = "block";
-    });
-  function getImageData() {
-    // grayscale
-    const src = cv.imread(drawElement);
-    let dst_gray = new cv.Mat();
-    cv.cvtColor(src, dst_gray, cv.COLOR_RGBA2GRAY, 0);
-    // resize
-    let dst_resized = new cv.Mat();
-    let dsize = new cv.Size(28, 28);
-    cv.resize(dst_gray, dst_resized, dsize, 0, 0, cv.INTER_AREA);
-    cv.imshow('hidden-pad', dst_resized);
-    const imageData = document.getElementById('hidden-pad').getContext('2d').getImageData(0, 0, 28, 28);
-    src.delete();
-    dst_gray.delete();
-    dst_resized.delete();
-    return imageData;
-  }
-  function getAccuracyScores(imageData) {
-    // メモリリークの心配がなくなる。自動的にメモリを解放。
-    const score = tf.tidy(function () {
-      const channels = 1;
-      let input = tf.fromPixels(imageData, channels);
-      input = tf.cast(input, 'float32').div(tf.scalar(255));
-      input = input.expandDims();
-      return model.predict(input).dataSync();
-    });
-    return score;
-  }
-  function prediction() {
-    const imageData = getImageData();
-    const accuracyScores = getAccuracyScores(imageData);
-    const maxAccuracy = accuracyScores.indexOf(Math.max.apply(null, accuracyScores));
-    const elements = document.querySelectorAll(".accuracy");
-    elements.forEach(function (el){
-      el.parentNode.classList.remove('is-selected');
-      const rowIndex = Number(el.dataset.rowIndex);
-      if (maxAccuracy === rowIndex) {
-        el.parentNode.classList.add('is-selected');
+  media.then((stream) => {
+    video.srcObject = stream;
+    setInterval(function() {
+      var canvas = document.getElementById('canvas');
+      var context = canvas.getContext('2d');
+      var w = video.offsetWidth;  canvas.setAttribute('width',  w.toString()); predictition_button.style.marginTop=(h+20)+"px"
+      var h = video.offsetHeight; canvas.setAttribute('height', h.toString());
+      context.drawImage(video, 0, 0, w, h);
+      if (is_detecting){
+        context.font = '10px Arial';
+        console.log('number of detections: ', result.length);
+        for (let i = 0; i < result.length; i++) {
+          context.beginPath();
+          context.rect(...result[i].bbox);
+          context.lineWidth = 1;
+          context.strokeStyle = 'green';
+          context.fillStyle = 'green';
+          context.stroke();
+          context.fillText(
+            result[i].score.toFixed(3) + ' ' + result[i].class, result[i].bbox[0],
+            result[i].bbox[1] > 10 ? result[i].bbox[1] - 5 : 10
+          );
+        }
       }
-      el.innerText = accuracyScores[rowIndex];
-    })
+    },100);
+  });
+  // Load COCO SSD model.
+  cocoSsd.load().then(function(pretrainedModel){
+    model = pretrainedModel;
+    predictition_button.innerHTML = "Detection";
+  });
+  // Detection function
+  async function detection(){
+    is_detecting = !is_detecting;
+    if (is_detecting){
+      video.pause();
+      predictition_button.innerHTML = "Again";
+      video.style.zIndex = 10;
+      result = await model.detect(video);
+      num_detection = result.length
+      var text = ""
+      if (num_detection==1){
+        text += "There is 1 object. " + result[0].class;
+      }else{
+        text += "There are " + num_detection + " objects. ";
+        for (let i = 0; i < num_detection; i++) {
+          if (i-1!=num_detection){
+            text += result[i].class + ", "
+          }else{
+            text += "and " + result[i].class;
+          }
+        }
+      }
+      var u = new SpeechSynthesisUtterance();
+      u.lang = 'en-US';
+      u.rate = 1.0;
+      u.text = text;
+      speechSynthesis.speak(u);
+    }else{
+      video.play();
+      predictition_button.innerHTML = "Detection";
+      video.style.zIndex = 30;
+    }
+  }  
+</script>
+
+<style>
+  body {
+    background-image: url("https://upload.wikimedia.org/wikipedia/en/1/12/Start-Up_2020.jpg");
   }
-  function reset() {
-    signaturePad.clear();
-    let elements = document.querySelectorAll(".accuracy");
-    elements.forEach(function (el){
-      el.parentNode.classList.remove('is-selected');
-      el.innerText = '-';
-    })
+  .nunkiru{
+    text-align: center;
   }
-</script>                </article>
+  .video-and-canvas {
+    position: relative;
+  }
+  #video, #canvas {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+  }
+  #predict-button {
+    display: inline-block;
+    text-decoration: none;
+    color: #e50914;
+    width: 120px;
+    height: 120px;
+    line-height: 120px;
+    border-radius: 50%;
+    border: solid 2px #e50914;
+    text-align: center;
+    vertical-align: middle;
+    overflow: hidden;
+    font-weight: bold;
+    transition: .4s;
+    background-color: #f5f5f1!important;
+  }
+  #predict-button:hover {
+      background: #b81d24;
+  }
+</style>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
                     <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-23.html" rel="bookmark"
+                           title="Permalink to JS.23 Twitterのタイムライン上でMNIST">JS.23 Twitterのタイムライン上でMNIST</a></h1>
+                </header>
+
+                <div class="entry-content">
+          <footer class="post-info">
+            <span>2020-11-13(Fri)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+          </footer><!-- /.post-info -->                <p>▷を押す。黒いキャンバスに数字を描く。"predict"を押す。の3ステップでMNIST:)</p>
+                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-23.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -364,21 +348,6 @@
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/css.html">css</a></span>
           </footer><!-- /.post-info -->                <p>::befere &amp; ::after</p>
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/css-2.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/html-1.html" rel="bookmark"
-                           title="Permalink to html.1 テーブルについて理解する。">html.1 テーブルについて理解する。</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2019-09-02(Mon)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/html.html">html</a></span>
-          </footer><!-- /.post-info -->                <p>テーブルについて理解する。</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/html-1.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
             </ol><!-- /#posts-list -->

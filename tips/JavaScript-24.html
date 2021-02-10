@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Shuto" />
+    <meta name="twitter:creator" content="@cabernet_rock">
+    <meta name="twitter:site" content="@cabernet_rock">
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary">
+    <meta name="keywords" content="JavaScript, JavaScript, " />
+    <meta property="og:image" content="https://iwasakishuto.github.io/Front-End/tips/images/atamanowaruihito.jpg"/>
+    <meta property="og:title" content="JS.24 ヌンキル (눈길)を作る "/>
+    <meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-24.html" />
+    <meta property="og:description" content="ヌンキル (눈길)を作る" />
+    <meta property="og:site_name" content="Shuto&#39;s Front-End" />
+    <meta property="og:article:author" content="Shuto" />
+    <meta property="og:article:published_time" content="2021-02-10T00:00:00+09:00" />
+    <meta property="og:article:modified_time" content="2020-02-10T00:00:00+09:00" />
+    <meta name="twitter:title" content="JS.24 ヌンキル (눈길)を作る ">
+    <meta name="twitter:description" content="ヌンキル (눈길)を作る">
+    <title>JS.24 ヌンキル (눈길)を作る</title>
+    <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
+    <!-- Added by Shuto Iwasaki. -->
+    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"></script>
+    <script type="text/x-mathjax-config">
+    	MathJax.Hub.Config({
+    		tex2jax: {
+    			inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    			displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    		}
+    	});
+    </script>
+    <!-- Mermaid -->
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
+    <script>
+      mermaid.initialize({
+        startOnLoad:true
+      });
+    </script>
+    <!--[if IE]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body id="index" class="home">
+    <header id="banner" class="body">
+      <h1><a href="https://iwasakishuto.github.io/Front-End/tips/">Shuto's Front-End </a></h1>
+      <nav>
+        <ul>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html">CSS</a></li>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html">HTML</a></li>
+          <li class="active"><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
+        </ul>
+        <form id="search" action"#" onsubmit="javascript:window.open('https://duckduckgo.com/?q='+document.getElementById('keywords').value+'+site:https://iwasakishuto.github.io/Front-End/tips');">
+          <input id="keywords" type="text" />
+        </form>
+      </nav>
+    </header><!-- /#banner -->
+    <div id="loading" style="display: none;">
+      <div class="loading_wrapper">
+        <img class="loading_img" src="https://iwasakishuto.github.io/Front-End/tips/images/Bean Eater-1s-400px.gif">
+        <p class="loading_info">Loading...</p>
+      </div>
+    </div>
+    <section id="content" class="body" style="display: block;">
+      <article>
+        <header>
+          <h1 class="entry-title">
+            <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-24.html" rel="bookmark" title="Permalink to JS.24 ヌンキル (눈길)を作る">JS.24 ヌンキル (눈길)を作る</a>
+          </h1>
+          <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
+          <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
+        </header>
+    
+        <div class="entry-content">
+          <footer class="post-info">
+            <span>2021-02-10(Wed)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+          </footer><!-- /.post-info -->
+          <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
+
+          <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"> </script>
+
+          <div class="nunkiru">
+            <h1>ヌンキル (눈길)</h1>
+            <p>Tensorflow.js を用いて、<a href="https://www.netflix.com/title/81290293">Start-Up(Netflix)</a>に出てくる<b>ヌンキル (눈길)</b>のようなものを作成しました。</p>
+            <div class="video-and-canvas">
+              <video id="video" style="z-index: 30;" width="640" height="480" playsinline muted autoplay ></video>
+              <canvas id="canvas" style="z-index: 20;" width="640" height="480"></canvas>
+            </div>
+            <button id="predict-button" class="predict" style="margin-top:500px;" onclick="detection()">
+              <i id="loading" class="fa fa-spinner fa-spin" style="visibility: none;"></i>
+            </button>
+          </div>
+
+          <p>喋る部分は、以下のようなコードで実装しています。</p>
+          <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SpeechSynthesisUtterance</span><span class="p">();</span>
+          <span class="nx">u</span><span class="p">.</span><span class="nx">lang</span> <span class="o">=</span> <span class="s1">&#39;en-US&#39;</span><span class="p">;</span>
+          <span class="nx">u</span><span class="p">.</span><span class="nx">rate</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+          <span class="nx">u</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;Hello World!&quot;</span><span class="p">;</span>
+          <span class="nx">speechSynthesis</span><span class="p">.</span><span class="nx">speak</span><span class="p">(</span><span class="nx">u</span><span class="p">);</span>
+          </code></pre></div>
+
+
+          <p>また、モデルは<a href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd">Object Detection (coco-ssd)</a>を利用しています。</p>
+          <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/@tensorflow/tfjs&quot;</span><span class="p">&gt;</span> <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+          <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd&quot;</span><span class="p">&gt;</span> <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+          // Load COCO SSD model.
+          cocoSsd.load().then(function(pretrainedModel){
+            model = pretrainedModel;
+            predictition_button.innerHTML = &quot;ヌンキル（눈길）&quot;;  
+          });
+          </code></pre></div>
+
+
+          <script>
+            // Define global variables.
+            var predictition_button = document.getElementById('predict-button');
+            var video = document.getElementById("video");
+            var is_detecting = false;
+            var last_img = video;
+            var result;
+            var num_detection = 0
+            // Start Video Streaming.
+            var media = navigator.mediaDevices.getUserMedia({
+              video: { facingMode: "user" },
+              audio: false,
+            });
+            media.then((stream) => {
+              video.srcObject = stream;
+              setInterval(function() {
+                var canvas = document.getElementById('canvas');
+                var context = canvas.getContext('2d');
+                var w = video.offsetWidth;  canvas.setAttribute('width',  w.toString()); predictition_button.style.marginTop=(h+20)+"px"
+                var h = video.offsetHeight; canvas.setAttribute('height', h.toString());
+                context.drawImage(video, 0, 0, w, h);
+                if (is_detecting){
+                  context.font = '10px Arial';
+                  console.log('number of detections: ', result.length);
+                  for (let i = 0; i < result.length; i++) {
+                    context.beginPath();
+                    context.rect(...result[i].bbox);
+                    context.lineWidth = 1;
+                    context.strokeStyle = 'green';
+                    context.fillStyle = 'green';
+                    context.stroke();
+                    context.fillText(
+                      result[i].score.toFixed(3) + ' ' + result[i].class, result[i].bbox[0],
+                      result[i].bbox[1] > 10 ? result[i].bbox[1] - 5 : 10
+                    );
+                  }
+                }
+              },100);
+            });
+            // Load COCO SSD model.
+            cocoSsd.load().then(function(pretrainedModel){
+              model = pretrainedModel;
+              predictition_button.innerHTML = "Detection";
+            });
+            // Detection function
+            async function detection(){
+              is_detecting = !is_detecting;
+              if (is_detecting){
+                video.pause();
+                predictition_button.innerHTML = "Again";
+                video.style.zIndex = 10;
+                result = await model.detect(video);
+                num_detection = result.length
+                var text = ""
+                if (num_detection==1){
+                  text += "There is 1 object. " + result[0].class;
+                }else{
+                  text += "There are " + num_detection + " objects. ";
+                  for (let i = 0; i < num_detection; i++) {
+                    if (i-1!=num_detection){
+                      text += result[i].class + ", "
+                    }else{
+                      text += "and " + result[i].class;
+                    }
+                  }
+                }
+                var u = new SpeechSynthesisUtterance();
+                u.lang = 'en-US';
+                u.rate = 1.0;
+                u.text = text;
+                speechSynthesis.speak(u);
+              }else{
+                video.play();
+                predictition_button.innerHTML = "Detection";
+                video.style.zIndex = 30;
+              }
+            }  
+          </script>
+
+          <style>
+            body {
+              background-image: url("https://upload.wikimedia.org/wikipedia/en/1/12/Start-Up_2020.jpg");
+            }
+            .nunkiru{
+              text-align: center;
+            }
+            .video-and-canvas {
+              position: relative;
+            }
+            #video, #canvas {
+              position: absolute;
+              left: 0;
+              right: 0;
+              margin: 0 auto;
+            }
+            #predict-button {
+              display: inline-block;
+              text-decoration: none;
+              color: #e50914;
+              width: 120px;
+              height: 120px;
+              line-height: 120px;
+              border-radius: 50%;
+              border: solid 2px #e50914;
+              text-align: center;
+              vertical-align: middle;
+              overflow: hidden;
+              font-weight: bold;
+              transition: .4s;
+              background-color: #f5f5f1!important;
+            }
+            #predict-button:hover {
+                background: #b81d24;
+            }
+          </style>
+        
+        </div><!-- /.entry-content -->
+    
+      </article>
+    </section>
+    <section id="extras" class="body">
+      <div class="blogroll">
+        <h5>other contents</h5>
+        <ul>
+          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Home.png">Home</a></li>
+          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">Blog</a></li>
+          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">University</a></li>
+          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">Kerasy</a></li>
+          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">Python-Charmers</a></li>
+          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">Translation-Gummy</a></li>
+        </ul>
+      </div><!-- /.blogroll -->
+      <div class="social">
+        <h5>social</h5>
+        <ul>
+          <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
+          <li><a href="https://github.com/iwasakishuto">github</a></li>
+        </ul>
+      </div><!-- /.social -->
+    </section><!-- /#extras -->
+
+    <footer id="contentinfo" class="body">
+      <p>Powered by <a href="https://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
+    </footer><!-- /#contentinfo -->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-164333757-3']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+  </body>
+</html>
