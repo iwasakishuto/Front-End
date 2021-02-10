@@ -68,12 +68,12 @@
   <h1>ヌンキル (눈길)</h1>
   <p>Tensorflow.js を用いて、<a href="https://www.netflix.com/title/81290293">Start-Up(Netflix)</a>に出てくる<b>ヌンキル (눈길)</b>のようなものを作成しました。<b>※音声が出ます</b></p>
   <button id="switchCamera" onclick="switchFrontBackCamera()">switch Camera</button>
-  <div id="video-canvas-wrapper" class="video-and-canvas" style="height:480px; background-color:black;">
-    <video id="video" style="z-index: 30;"  playsinline muted autoplay ></video>
-    <canvas id="canvas" style="z-index: 20;" ></canvas>
+  <div id="video-canvas-wrapper" class="video-and-canvas" style="background-color:black;">
+    <video id="video" style="z-index: 30;" playsinline muted autoplay ></video>
+    <canvas id="canvas" style="z-index: 20;"></canvas>
   </div>
   <button id="predict-button" class="predict" style="margin-top:10px;" onclick="detection()">
-    Loading Model <i id="loading" class="fa fa-spinner fa-spin" style="visibility: none;"></i>
+    Loading Model <br><i id="loading" class="fa fa-spinner fa-spin" style="visibility: none;"></i>
   </button>
 </div>
 
@@ -121,12 +121,12 @@ cocoSsd.load().then(function(pretrainedModel){
       video.srcObject = stream;
       setInterval(function() {
         var context = canvas.getContext('2d');
-        var w = video.offsetWidth;  canvas.setAttribute('width',  w.toString()); video_canvas_wrapper.style.height=h+"px";
-        var h = video.offsetHeight; canvas.setAttribute('height', h.toString());
+        var w = video.offsetWidth; canvas.setAttribute('width',  w.toString());
+        var h = video.offsetHeight; canvas.setAttribute('height', h.toString()); video_canvas_wrapper.style.height=h.toString()+"px";
         context.drawImage(video, 0, 0, w, h);
+        console.log("hog")
         if (is_detecting){
           context.font = '10px Arial';
-          console.log('number of detections: ', result.length);
           for (let i = 0; i < result.length; i++) {
             context.beginPath();
             context.rect(...result[i].bbox);
