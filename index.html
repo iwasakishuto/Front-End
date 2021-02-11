@@ -43,8 +43,8 @@
   <body id="index" class="home">
     <section id="content" class="body">
       <h1 style="background-color: black; color: white; padding: 0.2em 0.2em 0.2em 0.8em;">Front-End Portfolio</h1>
-      <table>
-        <thead>
+      <table style="table-layout:fixed;">
+        <thead style="word-break: break-all;">
           <tr>
             <th align="center">HTML</th>
             <th align="center">CSS</th>
@@ -64,8 +64,13 @@
     .img-block {
       overflow: hidden;
     }
+    .img-block a {
+      padding: 0!important;
+    }
     .img-block img {
       transition: 0.5s;
+      padding: 0!important;
+      border: 0!important;
     }
     .img-block img:hover {
       -moz-transform: scale(1.1,1.1);
