@@ -56,262 +56,212 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-24.html">JS.24 ヌンキル (눈길)を作る</a></h1>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-26.html">JS.26 モーダル（ポップアップ）の作成</a></h1>
           <footer class="post-info">
-            <span>2021-02-10(Wed)</span>
+            <span>2021-02-16(Tue)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-          </footer><!-- /.post-info --><script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
-
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"> </script>
-
-<div class="nunkiru">
-  <h1>ヌンキル (눈길)</h1>
-  <p>Tensorflow.js を用いて、<a href="https://www.netflix.com/title/81290293">Start-Up(Netflix)</a>に出てくる<b>ヌンキル (눈길)</b>のようなものを作成しました。<b>※音声が出ます</b></p>
-  <button id="switchCamera" onclick="switchFrontBackCamera()">switch Camera</button>
-  <div id="video-canvas-wrapper" class="video-and-canvas" style="background-color:black;">
-    <video id="video" style="z-index: 30;" playsinline muted autoplay ></video>
-    <canvas id="canvas" style="z-index: 20;"></canvas>
-  </div>
-  <button id="predict-button" class="predict" style="margin-top:10px;" onclick="detection()">
-    Loading Model <br><i id="loading" class="fa fa-spinner fa-spin" style="visibility: none;"></i>
-  </button>
+          </footer><!-- /.post-info --><p>画像や広告などが表示され、クリックや閉じるなどの操作をしないとページが閲覧できないような表現を<b>モーダル</b>と呼ぶ。今回は、これをライブラリを使わない素のJavascriptによるDOM操作で作った。</p>
+<h2>作ったもの</h2>
+<div class="popup" id="js-popup">
+  <table style="table-layout:fixed;">
+    <thead style="word-break: break-all;">
+      <tr>
+        <th align="center">HTML</th>
+        <th align="center">CSS</th>
+        <th align="center">JavaScript</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="img-block" align="center"><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/language/html.png"></a></td>
+        <td class="img-block" align="center"><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/language/css.png"></a></td>
+        <td class="img-block" align="center"><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/language/js.png"></a></td>
+      </tr>
+    </tbody>
+  </table>
+  <style>
+  .img-block {
+    overflow: hidden;
+  }
+  .img-block a {
+    padding: 0!important;
+  }
+  .img-block img {
+    transition: 0.5s;
+    padding: 0!important;
+    border: 0!important;
+  }
+  .img-block img:hover {
+    -moz-transform: scale(1.1,1.1);
+    -webkit-transform: scale(1.1,1.1);
+    -o-transform: scale(1.1,1.1);
+    -ms-transform: scale(1.1,1.1);
+  }
+  </style>
 </div>
 
-<p>喋る部分は、以下のようなコードで実装しています。</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SpeechSynthesisUtterance</span><span class="p">();</span>
-<span class="nx">u</span><span class="p">.</span><span class="nx">lang</span> <span class="o">=</span> <span class="s1">&#39;en-US&#39;</span><span class="p">;</span>
-<span class="nx">u</span><span class="p">.</span><span class="nx">rate</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
-<span class="nx">u</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;Hello World!&quot;</span><span class="p">;</span>
-<span class="nx">speechSynthesis</span><span class="p">.</span><span class="nx">speak</span><span class="p">(</span><span class="nx">u</span><span class="p">);</span>
+<p><button id="js-popup-show">Show Popup</button></p>
+<p>以下のように、id=<code>ID</code> の <code>div</code> タグの中にポップアップ時に表示されるコンテンツを入れ、id=<code>ID</code>+<code>"-show"</code>の要素をクリックすることでこれを表示できるようにした。</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;popup&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;js-popup&quot;</span><span class="p">&gt;</span>
+  Any thing You Want !!
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;js-popup-show&quot;</span><span class="p">&gt;</span>Show Popup<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
 </code></pre></div>
 
 
-<p>また、モデルは<a href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd">Object Detection (coco-ssd)</a>を利用しています。判断できるクラスは80種（<a href="#class-list">以下</a>に記載。）</p>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/@tensorflow/tfjs&quot;</span><span class="p">&gt;</span> <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd&quot;</span><span class="p">&gt;</span> <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-// Load COCO SSD model.
-cocoSsd.load().then(function(pretrainedModel){
-  model = pretrainedModel;
-  predictition_button.innerHTML = &quot;ヌンキル（눈길）&quot;;  
-});
+<h2>コード</h2>
+<h3><code>js</code></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">window</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">popuplists</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByClassName</span><span class="p">(</span><span class="s2">&quot;popup&quot;</span><span class="p">);</span>
+  <span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">popuplists</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="kd">let</span> <span class="nx">e</span> <span class="o">=</span> <span class="nx">popuplists</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+    <span class="kd">let</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">id</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">e_s</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot;-show&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">e_s</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">){</span>
+      <span class="nx">e</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="sb">`&lt;div class=&quot;popup-inner&quot;&gt;&lt;div class=&quot;close-btn&quot;&gt;&lt;i class=&quot;fas fa-times&quot;&gt;&lt;/i&gt;&lt;/div&gt;`</span> <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">+</span> <span class="sb">`&lt;/div&gt;&lt;div class=&quot;black-background&quot;&gt;&lt;/div&gt;`</span>
+      <span class="nx">addPopupEvent</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>
+      <span class="c1">// ページ読み込み時に表示させるかどうか。</span>
+      <span class="c1">// document.getElementById(id + &quot;-show&quot;)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">addPopupEvent</span><span class="p">(</span><span class="nx">id</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">id</span><span class="p">);</span>      
+    <span class="kd">function</span> <span class="nx">togglePopUp</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+        <span class="nx">e</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+          <span class="nx">t</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">toggle</span><span class="p">(</span><span class="s1">&#39;is-show&#39;</span><span class="p">);</span>
+        <span class="p">});</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">togglePopUp</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">&quot;.black-background&quot;</span><span class="p">));</span>
+    <span class="nx">togglePopUp</span><span class="p">(</span><span class="nx">t</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">&quot;.close-btn&quot;</span><span class="p">));</span>
+    <span class="nx">togglePopUp</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot;-show&quot;</span><span class="p">));</span>
+  <span class="p">}</span>
+<span class="p">};</span>
 </code></pre></div>
 
 
-<h3 id="class-list">Class List</h3>
-
-<p>※ 詳しくは<a href="https://github.com/tensorflow/tfjs-models/blob/master/coco-ssd/src/classes.ts"><code>classes.ts</code></a>を見てください。</p>
-<div class="highlight"><pre><span></span><code><span class="n">classes</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="s1">&#39;person&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;bicycle&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;car&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;motorcycle&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;airplane&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;bus&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;train&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;truck&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;boat&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;traffic light&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;fire hydrant&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;stop sign&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;parking meter&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;bench&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;bird&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;cat&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;dog&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;horse&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;sheep&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;cow&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;elephant&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;bear&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;zebra&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;giraffe&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;backpack&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;umbrella&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;handbag&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;tie&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;suitcase&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;frisbee&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;skis&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;snowboard&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;sports ball&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;kite&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;baseball bat&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;baseball glove&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;skateboard&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;surfboard&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;tennis racket&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;bottle&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;wine glass&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;cup&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;fork&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;knife&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;spoon&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;bowl&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;banana&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;apple&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;sandwich&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;orange&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;broccoli&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;carrot&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;hot dog&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;pizza&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;donut&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;cake&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;chair&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;couch&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;potted plant&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;bed&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;dining table&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;toilet&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;tv&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;laptop&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;mouse&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;remote&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;keyboard&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;cell phone&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;microwave&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;oven&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;toaster&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;sink&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;refrigerator&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;book&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;clock&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;vase&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;scissors&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;teddy bear&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;hair drier&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;toothbrush&#39;</span>
-<span class="p">]</span>
+<h3><code>css</code></h3>
+<div class="highlight"><pre><span></span><code><span class="p">.</span><span class="nc">popup</span> <span class="p">{</span>
+  <span class="k">position</span><span class="p">:</span> <span class="kc">fixed</span><span class="p">;</span>
+  <span class="k">left</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">top</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">z-index</span><span class="p">:</span> <span class="mi">9999</span><span class="p">;</span>
+  <span class="k">opacity</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">visibility</span><span class="p">:</span> <span class="kc">hidden</span><span class="p">;</span>
+  <span class="k">transition</span><span class="p">:</span> <span class="mf">.6</span><span class="kt">s</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">popup</span><span class="p">.</span><span class="nc">is-show</span> <span class="p">{</span>
+  <span class="k">opacity</span><span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="k">visibility</span><span class="p">:</span> <span class="kc">visible</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">popup-inner</span> <span class="p">{</span>
+  <span class="k">position</span><span class="p">:</span> <span class="kc">absolute</span><span class="p">;</span>
+  <span class="k">left</span><span class="p">:</span> <span class="mi">50</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">top</span><span class="p">:</span> <span class="mi">50</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">transform</span><span class="p">:</span> <span class="nb">translate</span><span class="p">(</span><span class="mi">-50</span><span class="kt">%</span><span class="p">,</span><span class="mi">-50</span><span class="kt">%</span><span class="p">);</span>
+  <span class="k">max-width</span><span class="p">:</span> <span class="mi">80</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">max-height</span><span class="p">:</span> <span class="mi">80</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">overflow</span><span class="p">:</span> <span class="kc">auto</span><span class="p">;</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mi">50</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">background-color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+  <span class="k">z-index</span><span class="p">:</span> <span class="mi">2</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">popup-inner</span> <span class="nt">img</span> <span class="p">{</span>
+  <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">close-btn</span> <span class="p">{</span>
+  <span class="k">position</span><span class="p">:</span> <span class="kc">absolute</span><span class="p">;</span>
+  <span class="k">right</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">top</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">width</span><span class="p">:</span> <span class="mi">50</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">height</span><span class="p">:</span> <span class="mi">50</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">line-height</span><span class="p">:</span> <span class="mi">50</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+  <span class="k">cursor</span><span class="p">:</span> <span class="kc">pointer</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">close-btn</span> <span class="nt">i</span> <span class="p">{</span>
+  <span class="k">font-size</span><span class="p">:</span> <span class="mi">40</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">color</span><span class="p">:</span> <span class="mh">#333</span><span class="p">;</span>
+  <span class="k">border</span><span class="p">:</span> <span class="mi">3</span><span class="kt">px</span> <span class="kc">solid</span><span class="p">;</span>
+  <span class="k">border-radius</span><span class="p">:</span> <span class="mi">50</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">width</span><span class="p">:</span> <span class="mi">40</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">black-background</span> <span class="p">{</span>
+  <span class="k">position</span><span class="p">:</span> <span class="kc">absolute</span><span class="p">;</span>
+  <span class="k">left</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">top</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">height</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+  <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">.8</span><span class="p">);</span>
+  <span class="k">z-index</span><span class="p">:</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="k">cursor</span><span class="p">:</span> <span class="kc">pointer</span><span class="p">;</span>
+<span class="p">}</span>
 </code></pre></div>
 
-
-<script>
-  // Define global variables.
-  var predictition_button = document.getElementById('predict-button');
-  var video = document.getElementById("video");
-  var canvas = document.getElementById('canvas');
-  var video_canvas_wrapper = document.getElementById('video-canvas-wrapper');
-  var is_detecting = false;
-  var is_Facing = true;  
-  var result;
-  var num_detection = 0
-  // Start Video Streaming.
-  function switchFrontBackCamera(){
-    is_Facing = !is_Facing;
-    mode = is_Facing ? "environment" : "user";
-    // is_Facing ? video.classList.remove("active")  : video.classList.add("active");
-    // is_Facing ? canvas.classList.remove("active") : canvas.classList.add("active");
-    media = navigator.mediaDevices.getUserMedia({
-       video: { facingMode: mode },
-       audio: false,
-    })
-    media.then((stream) => {
-      video.srcObject = stream;
-      setInterval(function() {
-        var context = canvas.getContext('2d');
-        var w = video.offsetWidth; canvas.setAttribute('width',  w.toString());
-        var h = video.offsetHeight; canvas.setAttribute('height', h.toString()); video_canvas_wrapper.style.height=h.toString()+"px";
-        context.drawImage(video, 0, 0, w, h);
-        console.log("hog")
-        if (is_detecting){
-          context.font = '10px Arial';
-          for (let i = 0; i < result.length; i++) {
-            context.beginPath();
-            context.rect(...result[i].bbox);
-            context.lineWidth = 1;
-            context.strokeStyle = 'green';
-            context.fillStyle = 'green';
-            context.stroke();
-            context.fillText(
-              result[i].score.toFixed(3) + ' ' + result[i].class, result[i].bbox[0],
-              result[i].bbox[1] > 10 ? result[i].bbox[1] - 5 : 10
-            );
-          }
-        }
-      },100);
-    });
-  }
-  // Load COCO SSD model.
-  cocoSsd.load().then(function(pretrainedModel){
-    model = pretrainedModel;
-    predictition_button.innerHTML = "Detection";
-    switchFrontBackCamera();
-  });
-  // Detection function
-  async function detection(){
-    is_detecting = !is_detecting;
-    if (is_detecting){
-      video.pause();
-      predictition_button.innerHTML = "Again";
-      video.style.zIndex = 10;
-      result = await model.detect(video);
-      num_detection = result.length
-      var text = ""
-      if (num_detection==1){
-        text += "There is 1 object. " + result[0].class;
-      }else{
-        text += "There are " + num_detection + " objects. ";
-        for (let i = 0; i < num_detection; i++) {
-          if (i-1!=num_detection){
-            text += result[i].class + ", "
-          }else{
-            text += "and " + result[i].class;
-          }
-        }
-      }
-      var u = new SpeechSynthesisUtterance();
-      u.lang = 'en-US';
-      u.rate = 1.0;
-      u.text = text;
-      speechSynthesis.speak(u);
-    }else{
-      video.play();
-      predictition_button.innerHTML = "Detection";
-      video.style.zIndex = 30;
-    }
-  }  
-</script>
 
 <style>
-  body {
-    background-image: url("https://upload.wikimedia.org/wikipedia/en/1/12/Start-Up_2020.jpg");
-    background-size: 33.33% auto;
+  .popup {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: .6s;
   }
-  .nunkiru{
+  .popup.is-show {
+    opacity: 1;
+    visibility: visible;
+  }
+  .popup-inner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    max-width: 80%;
+    max-height: 80%;
+    overflow: auto;
+    padding: 50px;
+    background-color: #fff;
+    z-index: 2;
+  }
+  .popup-inner img {
+    width: 100%;
+  }
+  .close-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
     text-align: center;
+    cursor: pointer;
   }
-  .video-and-canvas {
-    position: relative;
+  .close-btn i {
+    font-size: 40px;
+    color: #333;
+    border: 3px solid;
+    border-radius: 50%;
+    width: 40px;
   }
-  /* video.active, canvas.active {
-    transform: rotateY(180deg);
-    -webkit-transform:rotateY(180deg);
-    -moz-transform:rotateY(180deg);
-  } */
-  #video, #canvas {
+  .black-background {
     position: absolute;
     left: 0;
-    right: 0;
-    margin: 0 auto;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.8);
+    z-index: 1;
+    cursor: pointer;
   }
-  #predict-button {
-    display: inline-block;
-    text-decoration: none;
-    color: #e50914;
-    width: 120px;
-    height: 120px;
-    font-family: inherit;
-    line-height: 120px;
-    border-radius: 50%;
-    border: solid 2px #e50914;
-    text-align: center;
-    vertical-align: middle;
-    overflow: hidden;
-    font-weight: bold;
-    transition: .4s;
-    background-color: #f5f5f1!important;
-  }
-  #switchCamera {
+  button#js-popup-show {
     width: 200px;
     margin: 10px auto;
     font-family: inherit;
@@ -321,14 +271,71 @@ cocoSsd.load().then(function(pretrainedModel){
     color: #fff;
     background-color: #008db8;
   }
-  #predict-button:hover {
-    background: #b81d24;
-  }
-</style>                </article>
+</style>
+
+<script>
+  window.onload = function(){
+    var popuplists = document.getElementsByClassName("popup");
+    for(let i=0; i<popuplists.length; i++){
+      let e = popuplists[i];
+      let id = e.id;
+      let e_s = document.getElementById(id + "-show")
+      if (e_s != null){
+        e.innerHTML = `<div class="popup-inner"><div class="close-btn"><i class="fas fa-times"></i></div>` + e.innerHTML + `</div><div class="black-background"></div>`
+        addPopupEvent(id);
+        document.getElementById(id + "-show").click()
+      }
+    }
+
+    function addPopupEvent(id){
+      var t = document.getElementById(id);      
+      function togglePopUp(e) {
+        if (e){
+          e.addEventListener('click', function() {
+            t.classList.toggle('is-show');
+          });
+        }
+      }
+      togglePopUp(t.querySelector(".black-background"));
+      togglePopUp(t.querySelector(".close-btn"));
+      togglePopUp(document.getElementById(id + "-show"));
+    }
+  };
+</script>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
                     <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-25.html" rel="bookmark"
+                           title="Permalink to JS.25 ポケモンエメラルドでとエンカウントする">JS.25 ポケモンエメラルドでとエンカウントする</a></h1>
+                </header>
+
+                <div class="entry-content">
+          <footer class="post-info">
+            <span>2021-02-15(Mon)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a><a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a></span>
+          </footer><!-- /.post-info -->                <p>汎用コードで任意ポケモンとエンカウントする</p>
+                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-25.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-24.html" rel="bookmark"
+                           title="Permalink to JS.24 ヌンキル (눈길)を作る">JS.24 ヌンキル (눈길)を作る</a></h1>
+                </header>
+
+                <div class="entry-content">
+          <footer class="post-info">
+            <span>2021-02-10(Wed)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+          </footer><!-- /.post-info -->                <p>ヌンキル (눈길)を作る</p>
+                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-24.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -432,36 +439,6 @@ cocoSsd.load().then(function(pretrainedModel){
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
           </footer><!-- /.post-info -->                <p>アノテーションデータ（バウンディングボックス）作成ツールのコード</p>
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-17.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-16.html" rel="bookmark"
-                           title="Permalink to JS.16 アノテーションデータ（バウンディングボックス）作成ツール">JS.16 アノテーションデータ（バウンディングボックス）作成ツール</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2019-09-04(Wed)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-          </footer><!-- /.post-info -->                <p>アノテーションデータ（バウンディングボックス）作成ツール</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-16.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/css-2.html" rel="bookmark"
-                           title="Permalink to css.2 ::befere & ::after">css.2 ::befere & ::after</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2019-09-03(Tue)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/css.html">css</a></span>
-          </footer><!-- /.post-info -->                <p>::befere &amp; ::after</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/css-2.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
             </ol><!-- /#posts-list -->
