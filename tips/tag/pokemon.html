@@ -271,6 +271,42 @@
   <iframe width="560" height="315" src="https://www.youtube.com/embed/TQN7mWXrOPs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
+<p>上記の他にも、以下のような実用的なコードが多数存在する。詳しくは<a href="http://detelony.blog.fc2.com/blog-entry-20.html">ブログ記事</a>を参照。</p>
+<form id="item_form" name="ITEM">
+  <table class="fixed" id="result_item">
+    <thead><thead><tr><th colspan="2" style="text-align: center">任意アイテム入手(主人公のボックスに追加)</th></tr></thead>
+    <tbody>
+      <tr style="padding:0;vertical-align:middle;">
+        <td style="text-align: center"><select id="item_name" name="item" style="border:0;width:100%;padding:.5em .4em;" id="item" name="item"><option value="0x0001">マスターボール</option><option value="0x0002">ハイパーボール</option><option value="0x0003">スーパーボール</option><option value="0x0004">モンスターボール</option><option value="0x0005">サファリボール</option><option value="0x0006">ネットボール</option><option value="0x0007">ダイブボール</option><option value="0x0008">ネストボール</option><option value="0x0009">リピートボール</option><option value="0x000A">タイマーボール</option><option value="0x000B">ゴージャスボール</option><option value="0x000C">プレミアボール</option><option value="0x000D">キズぐすり</option><option value="0x000E">どくけし</option><option value="0x000F">やけどなおし</option><option value="0x0010">こおりなおし</option><option value="0x0011">ねむけざまし</option><option value="0x0012">まひなおし</option><option value="0x0013">かいふくのくすり</option><option value="0x0014">まんたんのくすり</option><option value="0x0015">すごいキズぐすり</option><option value="0x0016">いいキズぐすり</option><option value="0x0017">なんでもなおし</option><option value="0x0018">げんきのかけら</option><option value="0x0019">げんきのかたまり</option><option value="0x001A">おいしいみず</option><option value="0x001B">サイコソーダ</option><option value="0x001C">ミックスオレ</option><option value="0x001D">モーモーミルク</option><option value="0x001E">ちからのこな</option><option value="0x001F">ちからのねっこ</option><option value="0x0020">ばんのうごな</option><option value="0x0021">ふっかつそう</option><option value="0x0022">ピーピーエイド</option><option value="0x0023">ピーピーリカバー</option><option value="0x0024">ピーピーエイダー</option><option value="0x0025">ピーピーマックス</option><option value="0x0026">フエンせんべい</option><option value="0x0027">あおいビードロ</option><option value="0x0028">きいろビードロ</option><option value="0x0029">あかいビードロ</option><option value="0x002A">くろいビードロ</option><option value="0x002B">しろいビードロ</option><option value="0x002C">きのみジュース</option><option value="0x002D">せいなるはい</option><option value="0x002E">あさせのしお</option><option value="0x002F">あさせのかいがら</option><option value="0x0030">あかいかけら</option><option value="0x0031">あおいかけら</option><option value="0x0032">きいろいかけら</option><option value="0x0033">みどりのかけら</option><option value="0x003F">マックスアップ</option><option value="0x0040">タウリン</option><option value="0x0041">ブロムヘキシン</option><option value="0x0042">インドメタシン</option><option value="0x0043">リゾチウム</option><option value="0x0044">ふしぎなアメ</option><option value="0x0045">ポイントアップ</option><option value="0x0046">キトサン</option><option value="0x0047">ポイントマックス</option><option value="0x0049">エフェクトガード</option><option value="0x004A">クリティカッター</option><option value="0x004B">プラスパワー</option><option value="0x004C">ディフェンダー</option><option value="0x004D">スピーダー</option><option value="0x004E">ヨクアタール</option><option value="0x004F">スペシャルアップ</option><option value="0x0050">ピッピにんぎょう</option><option value="0x0051">エネコのシッポ</option><option value="0x0053">シルバースプレー</option><option value="0x0054">ゴールドスプレー</option><option value="0x0055">あなぬけのヒモ</option><option value="0x0056">むしよけスプレー</option><option value="0x005D">たいようのいし</option><option value="0x005E">つきのいし</option><option value="0x005F">ほのおのいし</option><option value="0x0060">かみなりのいし</option><option value="0x0061">みずのいし</option><option value="0x0062">リーフのいし</option><option value="0x0067">ちいさなキノコ</option><option value="0x0068">おおきなキノコ</option><option value="0x006A">しんじゅ</option><option value="0x006B">おおきなしんじゅ</option><option value="0x006C">ほしのすな</option><option value="0x006D">ほしのかけら</option><option value="0x006E">きんのたま</option><option value="0x006F">ハートのウロコ</option><option value="0x0079">オレンジメール</option><option value="0x007A">ハーバーメール</option><option value="0x007B">キラキラメール</option><option value="0x007C">メカニカルメール</option><option value="0x007D">ウッディメール</option><option value="0x007E">クロスメール</option><option value="0x007F">トレジャーメール</option><option value="0x0080">シャドーメール</option><option value="0x0081">トロピカルメール</option><option value="0x0082">ドリームメール</option><option value="0x0083">ミラクルメール</option><option value="0x0084">レトロメール</option><option value="0x0085">クラボのみ</option><option value="0x0086">カゴのみ</option><option value="0x0087">モモンのみ</option><option value="0x0088">チーゴのみ</option><option value="0x0089">ナナシのみ</option><option value="0x008A">ヒメリのみ</option><option value="0x008B">オレンのみ</option><option value="0x008C">キーのみ</option><option value="0x008D">ラムのみ</option><option value="0x008E">オボンのみ</option><option value="0x008F">フィラのみ</option><option value="0x0090">ウイのみ</option><option value="0x0091">マゴのみ</option><option value="0x0092">バンジのみ</option><option value="0x0093">イアのみ</option><option value="0x0094">ズリのみ</option><option value="0x0095">ブリーのみ</option><option value="0x0096">ナナのみ</option><option value="0x0097">セシナのみ</option><option value="0x0098">パイルのみ</option><option value="0x0099">ザロクのみ</option><option value="0x009A">ネコブのみ</option><option value="0x009B">タポルのみ</option><option value="0x009C">ロメのみ</option><option value="0x009D">ウブのみ</option><option value="0x009E">マトマのみ</option><option value="0x009F">モコシのみ</option><option value="0x00A0">ゴスのみ</option><option value="0x00A1">ラブタのみ</option><option value="0x00A2">ノメルのみ</option><option value="0x00A3">ノワキのみ</option><option value="0x00A4">シーヤのみ</option><option value="0x00A5">カイスのみ</option><option value="0x00A6">ドリのみ</option><option value="0x00A7">ベリブのみ</option><option value="0x00A8">チイラのみ</option><option value="0x00A9">リュガのみ</option><option value="0x00AA">カムラのみ</option><option value="0x00AB">ヤタピのみ</option><option value="0x00AC">ズアのみ</option><option value="0x00AD">サンのみ</option><option value="0x00AE">スターのみ</option><option value="0x00AF">ナゾのみ</option><option value="0x00B3">ひかりのこな</option><option value="0x00B4">しろいハーブ</option><option value="0x00B5">きょうせいギプス</option><option value="0x00B6">がくしゅうそうち</option><option value="0x00B7">せんせいのツメ</option><option value="0x00B8">やすらぎのすず</option><option value="0x00B9">メンタルハーブ</option><option value="0x00BA">こだわりハチマキ</option><option value="0x00BB">おうじゃのしるし</option><option value="0x00BC">ぎんのこな</option><option value="0x00BD">おまもりこばん</option><option value="0x00BE">きよめのおふだ</option><option value="0x00BF">こころのしずく</option><option value="0x00C0">しんかいのキバ</option><option value="0x00C1">しんかいのウロコ</option><option value="0x00C2">けむりだま</option><option value="0x00C3">かわらずのいし</option><option value="0x00C4">きあいのハチマキ</option><option value="0x00C5">しあわせタマゴ</option><option value="0x00C6">ピントレンズ</option><option value="0x00C7">メタルコート</option><option value="0x00C8">たべのこし</option><option value="0x00C9">りゅうのウロコ</option><option value="0x00CA">でんきだま</option><option value="0x00CB">やわらかいすな</option><option value="0x00CC">かたいいし</option><option value="0x00CD">きせきのタネ</option><option value="0x00CE">くろいメガネ</option><option value="0x00CF">くろおび</option><option value="0x00D0">じしゃく</option><option value="0x00D1">しんぴのしずく</option><option value="0x00D2">するどいくちばし</option><option value="0x00D3">どくバリ</option><option value="0x00D4">とけないこおり</option><option value="0x00D5">のろいのおふだ</option><option value="0x00D6">まがったスプーン</option><option value="0x00D7">もくたん</option><option value="0x00D8">りゅうのキバ</option><option value="0x00D9">シルクのスカーフ</option><option value="0x00DA">アップグレード</option><option value="0x00DB">かいがらのすず</option><option value="0x00DC">うしおのおこう</option><option value="0x00DD">のんきのおこう</option><option value="0x00DE">ラッキーパンチ</option><option value="0x00DF">メタルパウダー</option><option value="0x00E0">ふといホネ</option><option value="0x00E1">ながねぎ</option><option value="0x00FE">あかいバンダナ</option><option value="0x00FF">あおいバンダナ</option><option value="0x0100">ピンクのバンダナ</option><option value="0x0101">みどりのバンダナ</option><option value="0x0102">きいろのバンダナ</option><option value="0x0103">マッハじてんしゃ</option><option value="0x0104">コインケース</option><option value="0x0105">ダウジングマシン</option><option value="0x0106">ボロのつりざお</option><option value="0x0107">いいつりざお</option><option value="0x0108">すごいつりざお</option><option value="0x0109">ふねのチケット</option><option value="0x010A">コンテストパス</option><option value="0x010C">ホエルコじょうろ</option><option value="0x010D">デボンのにもつ</option><option value="0x010E">はいぶくろ</option><option value="0x010F">ちかのカギ</option><option value="0x0110">ダートじてんしゃ</option><option value="0x0111">ポロックケース</option><option value="0x0112">ダイゴへのてがみ</option><option value="0x0113">むげんのチケット</option><option value="0x0114">べにいろのたま</option><option value="0x0115">あいいろのたま</option><option value="0x0116">たんちき</option><option value="0x0117">ゴーゴーゴーグル</option><option value="0x0118">いんせき</option><option value="0x0119">１ごうしつのカギ</option><option value="0x011A">２ごうしつのカギ</option><option value="0x011B">４ごうしつのカギ</option><option value="0x011C">６ごうしつのカギ</option><option value="0x011D">そうこのカギ</option><option value="0x011E">ねっこのカセキ</option><option value="0x011F">ツメのカセキ</option><option value="0x0120">デボンスコープ</option><option value="0x0121">わざマシン０１　きあいパンチ</option><option value="0x0122">わざマシン０２　ドラゴンクロー</option><option value="0x0123">わざマシン０３　みずのはどう</option><option value="0x0124">わざマシン０４　めいそう</option><option value="0x0125">わざマシン０５　ほえる</option><option value="0x0126">わざマシン０６　どくどく</option><option value="0x0127">わざマシン０７　あられ</option><option value="0x0128">わざマシン０８　ビルドアップ</option><option value="0x0129">わざマシン０９　タネマシンガン</option><option value="0x012A">わざマシン１０　めざめるパワー</option><option value="0x012B">わざマシン１１　にほんばれ</option><option value="0x012C">わざマシン１２　ちょうはつ</option><option value="0x012D">わざマシン１３　れいとうビーム</option><option value="0x012E">わざマシン１４　ふぶき</option><option value="0x012F">わざマシン１５　はかいこうせん</option><option value="0x0130">わざマシン１６　ひかりのかべ</option><option value="0x0131">わざマシン１７　まもる</option><option value="0x0132">わざマシン１８　あまごい</option><option value="0x0133">わざマシン１９　ギガドレイン</option><option value="0x0134">わざマシン２０　しんぴのまもり</option><option value="0x0135">わざマシン２１　やつあたり</option><option value="0x0136">わざマシン２２　ソーラービーム</option><option value="0x0137">わざマシン２３　アイアンテール</option><option value="0x0138">わざマシン２４　１０まんボルト</option><option value="0x0139">わざマシン２５　かみなり</option><option value="0x013A">わざマシン２６　じしん</option><option value="0x013B">わざマシン２７　おんがえし</option><option value="0x013C">わざマシン２８　あなをほる</option><option value="0x013D">わざマシン２９　サイコキネシス</option><option value="0x013E">わざマシン３０　シャドーボール</option><option value="0x013F">わざマシン３１　かわらわり</option><option value="0x0140">わざマシン３２　かげぶんしん</option><option value="0x0141">わざマシン３３　リフレクター</option><option value="0x0142">わざマシン３４　でんげきは</option><option value="0x0143">わざマシン３５　かえんほうしゃ</option><option value="0x0144">わざマシン３６　ヘドロばくだん</option><option value="0x0145">わざマシン３７　すなあらし</option><option value="0x0146">わざマシン３８　だいもんじ</option><option value="0x0147">わざマシン３９　がんせきふうじ</option><option value="0x0148">わざマシン４０　つばめがえし</option><option value="0x0149">わざマシン４１　いちゃもん</option><option value="0x014A">わざマシン４２　からげんき</option><option value="0x014B">わざマシン４３　ひみつのちから</option><option value="0x014C">わざマシン４４　ねむる</option><option value="0x014D">わざマシン４５　メロメロ</option><option value="0x014E">わざマシン４６　どろぼう</option><option value="0x014F">わざマシン４７　はがねのつばさ</option><option value="0x0150">わざマシン４８　スキルスワップ</option><option value="0x0151">わざマシン４９　よこどり</option><option value="0x0152">わざマシン５０　オーバーヒート</option><option value="0x0153">ひでんマシン０１　いあいぎり</option><option value="0x0154">ひでんマシン０２　そらをとぶ</option><option value="0x0155">ひでんマシン０３　なみのり</option><option value="0x0156">ひでんマシン０４　かいりき</option><option value="0x0157">ひでんマシン０５　フラッシュ</option><option value="0x0158">ひでんマシン０６　いわくだき</option><option value="0x0159">ひでんマシン０７　たきのぼり</option><option value="0x015A">ひでんマシン０８　ダイビング</option><option value="0x015D">おとどけもの</option><option value="0x015E">ポケモンのふえ</option><option value="0x015F">ひみつのカギ</option><option value="0x0160">ひきかえけん</option><option value="0x0161">きんのいれば</option><option value="0x0162">ひみつのコハク</option><option value="0x0163">カードキー</option><option value="0x0164">エレベータのカギ</option><option value="0x0165">かいのカセキ</option><option value="0x0166">こうらのカセキ</option><option value="0x0167">シルフスコープ</option><option value="0x0168">じてんしゃ</option><option value="0x0169">タウンマップ</option><option value="0x016A">バトルサーチャー</option><option value="0x016B">ボイスチェッカー</option><option value="0x016C">わざマシンケース</option><option value="0x016D">きのみぶくろ</option><option value="0x016E">おしえテレビ</option><option value="0x016F">トライパス</option><option value="0x0170">レインボーパス</option><option value="0x0171">おちゃ</option><option value="0x0172">しんぴのチケット</option><option value="0x0173">オーロラチケット</option><option value="0x0174">こないれ</option><option value="0x0175">ルビー</option><option value="0x0176">サファイア</option><option value="0x0177">マグマのしるし</option><option value="0x0178">ふるびたかいず</option></select></td>
+        <td style="text-align: left">個数： <input id="num_item" name="num" type="number" min="1" max="999" value="99" size="3"></td>
+      </tr>
+      <tr>
+        <td style="text-align: center">ボックス名1</td>
+        <td id="box1_item" style="text-align: left">[]</td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+
+<form id="property_form" name="PROPERTY">
+  <table class="fixed" id="result_property">
+    <thead><thead><tr><th colspan="2" style="text-align: center">所持金加算： <input onchange="money_calculate(document.PROPERTY)" name="money" type="number" min="1" max="999999" value="999999" size="6"> 円</th></tr></thead>
+    <tbody>
+      <tr>
+        <td style="text-align: center">ボックス名1</td>
+        <td id="box1_money" style="text-align: left">[]</td>
+      </tr>
+    </tbody>
+    <thead><thead><tr><th colspan="2" style="text-align: center">所持BP加算： <input onchange="BP_calculate(document.PROPERTY)" name="BP" type="number" min="1" max="9999" value="9999" size="4"> BP</th></tr></thead>
+    <tbody>
+      <tr>
+        <td style="text-align: center">ボックス名1</td>
+        <td id="box1_BP" style="text-align: left">[]</td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+
 <script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
 
 <script>
@@ -588,6 +624,49 @@
     return a-b;
   }
 
+  // Assign Auxiliary data when seed length is 4.
+  function useAuxiliary_4(query, max_iter=30){
+    if (typeof(query) != "number"){
+      query = query.toString();
+      if (query.length==4){
+        query = "0x" + query;
+      }
+    }
+    main_decimal = Number(query);
+    aux_decimal = Number("0x0000");
+    for (var i=0; i<max_iter; i++){
+      main_hex = decimal2hex(main_decimal).slice(-4);
+      main_hex_pre  = main_hex.slice(-4, -2);
+      main_hex_post = main_hex.slice(-2);
+      aux_hex = decimal2hex(aux_decimal).slice(-4);
+      aux_hex_pre  = aux_hex.slice(-4, -2);
+      aux_hex_post = aux_hex.slice(-2);
+      if (!(main_hex_pre in HEX2POKESTRINGS && aux_hex_pre in HEX2POKESTRINGS)){
+        aux_decimal  += Number("0x0100");
+        main_decimal -= Number("0x0100");
+      }else if (!(main_hex_post in HEX2POKESTRINGS && aux_hex_post in HEX2POKESTRINGS)){
+        aux_decimal  += Number("0x0001");
+        main_decimal -= Number("0x0001");
+      }else{
+        break
+      }
+    }
+    if (i==max_iter){
+      alert("Couldn't split 0x" + decimal2hex(aux_decimal+main_decimal).slice(-4))
+    }
+    return ["0x"+main_hex, "0x"+aux_hex];
+  }
+
+  function assignPokestring(hex){
+    hexes = hex.toString().split("x").slice(-1)[0].match(/.{2}/g);
+
+    var results = [];
+    for (var i=0; i<hexes.length; i++) {
+      results.unshift(HEX2POKESTRINGS[hexes[i].toLowerCase()])
+    }
+    return results.join("");
+  }
+
   function set_pokemon_options(POKE){
     var ability_options = "<option>----</option>";
     var sex_options = "<option>----</option>";
@@ -655,7 +734,7 @@
     }
   }
 
-  function calculate(POKE){
+  function poke_calculate(POKE){
     var R;
     var R4;
     var ih = parseInt(POKE.iH.value, 10);
@@ -778,48 +857,15 @@
     meza_power.innerHTML = 30 + Math.floor(40*mp/63);
   }
 
-
-  // Assign Auxiliary data when seed length is 4.
-  function useAuxiliary_4(query, max_iter=30){
-    if (typeof(query) != "number"){
-      query = query.toString();
-      if (query.length==4){
-        query = "0x" + query;
-      }
-    }
-    main_decimal = Number(query);
-    aux_decimal = Number("0x0000");
-    for (var i=0; i<max_iter; i++){
-      main_hex = decimal2hex(main_decimal).slice(-4);
-      main_hex_pre  = main_hex.slice(-4, -2);
-      main_hex_post = main_hex.slice(-2);
-      aux_hex = decimal2hex(aux_decimal).slice(-4);
-      aux_hex_pre  = aux_hex.slice(-4, -2);
-      aux_hex_post = aux_hex.slice(-2);
-      if (!(main_hex_pre in HEX2POKESTRINGS && aux_hex_pre in HEX2POKESTRINGS)){
-        aux_decimal  += Number("0x0100");
-        main_decimal -= Number("0x0100");
-      }else if (!(main_hex_post in HEX2POKESTRINGS && aux_hex_post in HEX2POKESTRINGS)){
-        aux_decimal  += Number("0x0001");
-        main_decimal -= Number("0x0001");
-      }else{
-        break
-      }
-    }
-    if (i==max_iter){
-      alert("Couldn't split 0x" + decimal2hex(aux_decimal+main_decimal).slice(-4))
-    }
-    return ["0x"+main_hex, "0x"+aux_hex];
+  function item_calculate(ITEM){
+    document.getElementById("box1_item").innerHTML = "[べ" + assignPokestring(ITEM.item.value) + assignPokestring(decimal2hex(ITEM.num.value).slice(-4)) + "]";
   }
 
-  function assignPokestring(hex){
-    hexes = hex.toString().split("x").slice(-1)[0].match(/.{2}/g);
-
-    var results = [];
-    for (var i=0; i<hexes.length; i++) {
-      results.unshift(HEX2POKESTRINGS[hexes[i].toLowerCase()])
-    }
-    return results.join("");
+  function money_calculate(PROPERTY){
+    document.getElementById("box1_money").innerHTML = "[ゾ" + assignPokestring(decimal2hex(PROPERTY.money.value)) + "]";
+  }
+  function BP_calculate(PROPERTY){
+    document.getElementById("box1_BP").innerHTML = "[にえィ" + assignPokestring(decimal2hex(PROPERTY.BP.value).slice(-4)) + "ゆＭあ]";
   }
 </script>
 
@@ -934,9 +980,10 @@
       togglePopUp(document.getElementById(id + "-show"));
     }
 
-    var formObjects = document.getElementById("poke_form");
-    for(let i = 0; i < formObjects.length; i++){
-      let e = formObjects.elements[i];
+    // Pokemon Forms
+    var poke_form = document.getElementById("poke_form");
+    for(let i = 0; i < poke_form.length; i++){
+      let e = poke_form.elements[i];
       if (e.id == "poke_name"){
         e.onchange = function(){
           set_pokemon_options(document.POKE);
@@ -947,15 +994,28 @@
         };
       }else{
         e.onkeyup = function(){
-          calculate(document.POKE);
+          poke_calculate(document.POKE);
         };
         e.onchange = function(){
-          calculate(document.POKE);
+          poke_calculate(document.POKE);
         };
       }
     }
     set_pokemon_options(document.POKE);
-    calculate(document.POKE);
+    poke_calculate(document.POKE);
+
+    // Item Forms
+    var item_form = document.getElementById("item_form");
+    for(let i = 0; i < item_form.length; i++){
+      item_form.elements[i].onchange = function(){
+        item_calculate(document.ITEM);
+      };
+    }
+    item_calculate(document.ITEM);
+
+    // PROPERTY
+    money_calculate(document.PROPERTY);
+    BP_calculate(document.PROPERTY);
   };
 </script>                </article>
             </aside><!-- /#featured -->
