@@ -220,8 +220,12 @@
             <thead><thead><tr><th colspan="2" style="text-align: center">任意乱数値指定系</th></tr></thead>
               <tbody>
                   <tr class="g1">
+                  <td style="text-align: center">性格値</td>
+                <td id="target_PID" style="text-align: left"></td>
+              </tr>
+                  <tr class="g1">
                   <td style="text-align: center">目標乱数値(<code>seed[n]</code>)</td>
-                <td name="ddtarget" id="target_seed" style="text-align: left"></td>
+                <td id="target_seed" style="text-align: left"></td>
               </tr>
               <tr class="g1">
                 <td style="text-align: center">指定乱数値(<code>seed[n-2]</code>)</td>
@@ -287,6 +291,7 @@
           </table>
 
           <ul>
+            <li style="color:red;">上記の色違いを入手したい場合は、<a href="#id_form">以下</a>でIDを変更すると楽かと思います。</li>
             <li>ポケモンのコードは<a href="https://m.bulbapedia.bulbagarden.net/wiki/List_of_locations_by_index_number_(Generation_III)">https://m.bulbapedia.bulbagarden.net/wiki/List_of_locations_by_index_number_(Generation_III)</a>を参照した。</li>
             <li>文字コードは<a href="https://wikiwiki.jp/pokemonhack/文字コード">https://wikiwiki.jp/pokemonhack/文字コード</a>を参照した</li>
           </ul>
@@ -308,7 +313,7 @@
               <tbody>
                 <tr style="padding:0;vertical-align:middle;">
                   <td style="text-align: center"><select id="item_name" name="item" style="border:0;width:100%;padding:.5em .4em;" id="item" name="item"><option value="0x0001">マスターボール</option><option value="0x0002">ハイパーボール</option><option value="0x0003">スーパーボール</option><option value="0x0004">モンスターボール</option><option value="0x0005">サファリボール</option><option value="0x0006">ネットボール</option><option value="0x0007">ダイブボール</option><option value="0x0008">ネストボール</option><option value="0x0009">リピートボール</option><option value="0x000A">タイマーボール</option><option value="0x000B">ゴージャスボール</option><option value="0x000C">プレミアボール</option><option value="0x000D">キズぐすり</option><option value="0x000E">どくけし</option><option value="0x000F">やけどなおし</option><option value="0x0010">こおりなおし</option><option value="0x0011">ねむけざまし</option><option value="0x0012">まひなおし</option><option value="0x0013">かいふくのくすり</option><option value="0x0014">まんたんのくすり</option><option value="0x0015">すごいキズぐすり</option><option value="0x0016">いいキズぐすり</option><option value="0x0017">なんでもなおし</option><option value="0x0018">げんきのかけら</option><option value="0x0019">げんきのかたまり</option><option value="0x001A">おいしいみず</option><option value="0x001B">サイコソーダ</option><option value="0x001C">ミックスオレ</option><option value="0x001D">モーモーミルク</option><option value="0x001E">ちからのこな</option><option value="0x001F">ちからのねっこ</option><option value="0x0020">ばんのうごな</option><option value="0x0021">ふっかつそう</option><option value="0x0022">ピーピーエイド</option><option value="0x0023">ピーピーリカバー</option><option value="0x0024">ピーピーエイダー</option><option value="0x0025">ピーピーマックス</option><option value="0x0026">フエンせんべい</option><option value="0x0027">あおいビードロ</option><option value="0x0028">きいろビードロ</option><option value="0x0029">あかいビードロ</option><option value="0x002A">くろいビードロ</option><option value="0x002B">しろいビードロ</option><option value="0x002C">きのみジュース</option><option value="0x002D">せいなるはい</option><option value="0x002E">あさせのしお</option><option value="0x002F">あさせのかいがら</option><option value="0x0030">あかいかけら</option><option value="0x0031">あおいかけら</option><option value="0x0032">きいろいかけら</option><option value="0x0033">みどりのかけら</option><option value="0x003F">マックスアップ</option><option value="0x0040">タウリン</option><option value="0x0041">ブロムヘキシン</option><option value="0x0042">インドメタシン</option><option value="0x0043">リゾチウム</option><option value="0x0044">ふしぎなアメ</option><option value="0x0045">ポイントアップ</option><option value="0x0046">キトサン</option><option value="0x0047">ポイントマックス</option><option value="0x0049">エフェクトガード</option><option value="0x004A">クリティカッター</option><option value="0x004B">プラスパワー</option><option value="0x004C">ディフェンダー</option><option value="0x004D">スピーダー</option><option value="0x004E">ヨクアタール</option><option value="0x004F">スペシャルアップ</option><option value="0x0050">ピッピにんぎょう</option><option value="0x0051">エネコのシッポ</option><option value="0x0053">シルバースプレー</option><option value="0x0054">ゴールドスプレー</option><option value="0x0055">あなぬけのヒモ</option><option value="0x0056">むしよけスプレー</option><option value="0x005D">たいようのいし</option><option value="0x005E">つきのいし</option><option value="0x005F">ほのおのいし</option><option value="0x0060">かみなりのいし</option><option value="0x0061">みずのいし</option><option value="0x0062">リーフのいし</option><option value="0x0067">ちいさなキノコ</option><option value="0x0068">おおきなキノコ</option><option value="0x006A">しんじゅ</option><option value="0x006B">おおきなしんじゅ</option><option value="0x006C">ほしのすな</option><option value="0x006D">ほしのかけら</option><option value="0x006E">きんのたま</option><option value="0x006F">ハートのウロコ</option><option value="0x0079">オレンジメール</option><option value="0x007A">ハーバーメール</option><option value="0x007B">キラキラメール</option><option value="0x007C">メカニカルメール</option><option value="0x007D">ウッディメール</option><option value="0x007E">クロスメール</option><option value="0x007F">トレジャーメール</option><option value="0x0080">シャドーメール</option><option value="0x0081">トロピカルメール</option><option value="0x0082">ドリームメール</option><option value="0x0083">ミラクルメール</option><option value="0x0084">レトロメール</option><option value="0x0085">クラボのみ</option><option value="0x0086">カゴのみ</option><option value="0x0087">モモンのみ</option><option value="0x0088">チーゴのみ</option><option value="0x0089">ナナシのみ</option><option value="0x008A">ヒメリのみ</option><option value="0x008B">オレンのみ</option><option value="0x008C">キーのみ</option><option value="0x008D">ラムのみ</option><option value="0x008E">オボンのみ</option><option value="0x008F">フィラのみ</option><option value="0x0090">ウイのみ</option><option value="0x0091">マゴのみ</option><option value="0x0092">バンジのみ</option><option value="0x0093">イアのみ</option><option value="0x0094">ズリのみ</option><option value="0x0095">ブリーのみ</option><option value="0x0096">ナナのみ</option><option value="0x0097">セシナのみ</option><option value="0x0098">パイルのみ</option><option value="0x0099">ザロクのみ</option><option value="0x009A">ネコブのみ</option><option value="0x009B">タポルのみ</option><option value="0x009C">ロメのみ</option><option value="0x009D">ウブのみ</option><option value="0x009E">マトマのみ</option><option value="0x009F">モコシのみ</option><option value="0x00A0">ゴスのみ</option><option value="0x00A1">ラブタのみ</option><option value="0x00A2">ノメルのみ</option><option value="0x00A3">ノワキのみ</option><option value="0x00A4">シーヤのみ</option><option value="0x00A5">カイスのみ</option><option value="0x00A6">ドリのみ</option><option value="0x00A7">ベリブのみ</option><option value="0x00A8">チイラのみ</option><option value="0x00A9">リュガのみ</option><option value="0x00AA">カムラのみ</option><option value="0x00AB">ヤタピのみ</option><option value="0x00AC">ズアのみ</option><option value="0x00AD">サンのみ</option><option value="0x00AE">スターのみ</option><option value="0x00AF">ナゾのみ</option><option value="0x00B3">ひかりのこな</option><option value="0x00B4">しろいハーブ</option><option value="0x00B5">きょうせいギプス</option><option value="0x00B6">がくしゅうそうち</option><option value="0x00B7">せんせいのツメ</option><option value="0x00B8">やすらぎのすず</option><option value="0x00B9">メンタルハーブ</option><option value="0x00BA">こだわりハチマキ</option><option value="0x00BB">おうじゃのしるし</option><option value="0x00BC">ぎんのこな</option><option value="0x00BD">おまもりこばん</option><option value="0x00BE">きよめのおふだ</option><option value="0x00BF">こころのしずく</option><option value="0x00C0">しんかいのキバ</option><option value="0x00C1">しんかいのウロコ</option><option value="0x00C2">けむりだま</option><option value="0x00C3">かわらずのいし</option><option value="0x00C4">きあいのハチマキ</option><option value="0x00C5">しあわせタマゴ</option><option value="0x00C6">ピントレンズ</option><option value="0x00C7">メタルコート</option><option value="0x00C8">たべのこし</option><option value="0x00C9">りゅうのウロコ</option><option value="0x00CA">でんきだま</option><option value="0x00CB">やわらかいすな</option><option value="0x00CC">かたいいし</option><option value="0x00CD">きせきのタネ</option><option value="0x00CE">くろいメガネ</option><option value="0x00CF">くろおび</option><option value="0x00D0">じしゃく</option><option value="0x00D1">しんぴのしずく</option><option value="0x00D2">するどいくちばし</option><option value="0x00D3">どくバリ</option><option value="0x00D4">とけないこおり</option><option value="0x00D5">のろいのおふだ</option><option value="0x00D6">まがったスプーン</option><option value="0x00D7">もくたん</option><option value="0x00D8">りゅうのキバ</option><option value="0x00D9">シルクのスカーフ</option><option value="0x00DA">アップグレード</option><option value="0x00DB">かいがらのすず</option><option value="0x00DC">うしおのおこう</option><option value="0x00DD">のんきのおこう</option><option value="0x00DE">ラッキーパンチ</option><option value="0x00DF">メタルパウダー</option><option value="0x00E0">ふといホネ</option><option value="0x00E1">ながねぎ</option><option value="0x00FE">あかいバンダナ</option><option value="0x00FF">あおいバンダナ</option><option value="0x0100">ピンクのバンダナ</option><option value="0x0101">みどりのバンダナ</option><option value="0x0102">きいろのバンダナ</option><option value="0x0103">マッハじてんしゃ</option><option value="0x0104">コインケース</option><option value="0x0105">ダウジングマシン</option><option value="0x0106">ボロのつりざお</option><option value="0x0107">いいつりざお</option><option value="0x0108">すごいつりざお</option><option value="0x0109">ふねのチケット</option><option value="0x010A">コンテストパス</option><option value="0x010C">ホエルコじょうろ</option><option value="0x010D">デボンのにもつ</option><option value="0x010E">はいぶくろ</option><option value="0x010F">ちかのカギ</option><option value="0x0110">ダートじてんしゃ</option><option value="0x0111">ポロックケース</option><option value="0x0112">ダイゴへのてがみ</option><option value="0x0113">むげんのチケット</option><option value="0x0114">べにいろのたま</option><option value="0x0115">あいいろのたま</option><option value="0x0116">たんちき</option><option value="0x0117">ゴーゴーゴーグル</option><option value="0x0118">いんせき</option><option value="0x0119">１ごうしつのカギ</option><option value="0x011A">２ごうしつのカギ</option><option value="0x011B">４ごうしつのカギ</option><option value="0x011C">６ごうしつのカギ</option><option value="0x011D">そうこのカギ</option><option value="0x011E">ねっこのカセキ</option><option value="0x011F">ツメのカセキ</option><option value="0x0120">デボンスコープ</option><option value="0x0121">わざマシン０１　きあいパンチ</option><option value="0x0122">わざマシン０２　ドラゴンクロー</option><option value="0x0123">わざマシン０３　みずのはどう</option><option value="0x0124">わざマシン０４　めいそう</option><option value="0x0125">わざマシン０５　ほえる</option><option value="0x0126">わざマシン０６　どくどく</option><option value="0x0127">わざマシン０７　あられ</option><option value="0x0128">わざマシン０８　ビルドアップ</option><option value="0x0129">わざマシン０９　タネマシンガン</option><option value="0x012A">わざマシン１０　めざめるパワー</option><option value="0x012B">わざマシン１１　にほんばれ</option><option value="0x012C">わざマシン１２　ちょうはつ</option><option value="0x012D">わざマシン１３　れいとうビーム</option><option value="0x012E">わざマシン１４　ふぶき</option><option value="0x012F">わざマシン１５　はかいこうせん</option><option value="0x0130">わざマシン１６　ひかりのかべ</option><option value="0x0131">わざマシン１７　まもる</option><option value="0x0132">わざマシン１８　あまごい</option><option value="0x0133">わざマシン１９　ギガドレイン</option><option value="0x0134">わざマシン２０　しんぴのまもり</option><option value="0x0135">わざマシン２１　やつあたり</option><option value="0x0136">わざマシン２２　ソーラービーム</option><option value="0x0137">わざマシン２３　アイアンテール</option><option value="0x0138">わざマシン２４　１０まんボルト</option><option value="0x0139">わざマシン２５　かみなり</option><option value="0x013A">わざマシン２６　じしん</option><option value="0x013B">わざマシン２７　おんがえし</option><option value="0x013C">わざマシン２８　あなをほる</option><option value="0x013D">わざマシン２９　サイコキネシス</option><option value="0x013E">わざマシン３０　シャドーボール</option><option value="0x013F">わざマシン３１　かわらわり</option><option value="0x0140">わざマシン３２　かげぶんしん</option><option value="0x0141">わざマシン３３　リフレクター</option><option value="0x0142">わざマシン３４　でんげきは</option><option value="0x0143">わざマシン３５　かえんほうしゃ</option><option value="0x0144">わざマシン３６　ヘドロばくだん</option><option value="0x0145">わざマシン３７　すなあらし</option><option value="0x0146">わざマシン３８　だいもんじ</option><option value="0x0147">わざマシン３９　がんせきふうじ</option><option value="0x0148">わざマシン４０　つばめがえし</option><option value="0x0149">わざマシン４１　いちゃもん</option><option value="0x014A">わざマシン４２　からげんき</option><option value="0x014B">わざマシン４３　ひみつのちから</option><option value="0x014C">わざマシン４４　ねむる</option><option value="0x014D">わざマシン４５　メロメロ</option><option value="0x014E">わざマシン４６　どろぼう</option><option value="0x014F">わざマシン４７　はがねのつばさ</option><option value="0x0150">わざマシン４８　スキルスワップ</option><option value="0x0151">わざマシン４９　よこどり</option><option value="0x0152">わざマシン５０　オーバーヒート</option><option value="0x0153">ひでんマシン０１　いあいぎり</option><option value="0x0154">ひでんマシン０２　そらをとぶ</option><option value="0x0155">ひでんマシン０３　なみのり</option><option value="0x0156">ひでんマシン０４　かいりき</option><option value="0x0157">ひでんマシン０５　フラッシュ</option><option value="0x0158">ひでんマシン０６　いわくだき</option><option value="0x0159">ひでんマシン０７　たきのぼり</option><option value="0x015A">ひでんマシン０８　ダイビング</option><option value="0x015D">おとどけもの</option><option value="0x015E">ポケモンのふえ</option><option value="0x015F">ひみつのカギ</option><option value="0x0160">ひきかえけん</option><option value="0x0161">きんのいれば</option><option value="0x0162">ひみつのコハク</option><option value="0x0163">カードキー</option><option value="0x0164">エレベータのカギ</option><option value="0x0165">かいのカセキ</option><option value="0x0166">こうらのカセキ</option><option value="0x0167">シルフスコープ</option><option value="0x0168">じてんしゃ</option><option value="0x0169">タウンマップ</option><option value="0x016A">バトルサーチャー</option><option value="0x016B">ボイスチェッカー</option><option value="0x016C">わざマシンケース</option><option value="0x016D">きのみぶくろ</option><option value="0x016E">おしえテレビ</option><option value="0x016F">トライパス</option><option value="0x0170">レインボーパス</option><option value="0x0171">おちゃ</option><option value="0x0172">しんぴのチケット</option><option value="0x0173">オーロラチケット</option><option value="0x0174">こないれ</option><option value="0x0175">ルビー</option><option value="0x0176">サファイア</option><option value="0x0177">マグマのしるし</option><option value="0x0178">ふるびたかいず</option></select></td>
-                  <td style="text-align: left">個数： <input id="num_item" name="num" type="number" min="1" max="999" value="99" size="3"></td>
+                  <td style="text-align: left">個数： <input id="num_item" name="num" type="number" min="1" max="999" value="99" size="3"><input type="text" name="dummy" style="display:none;"></td>
                 </tr>
                 <tr class="g4">
                   <td style="text-align: center">ボックス名1</td>
@@ -316,9 +321,8 @@
                 </tr>
               </tbody>
             </table>
+            <p>※ アイテムコードは<a href="https://wikiwiki.jp/pokemonhack/アイテムコード">https://wikiwiki.jp/pokemonhack/アイテムコード</a>を参照した。</p>
           </form>
-
-          <p>※ アイテムコードは<a href="https://wikiwiki.jp/pokemonhack/アイテムコード">https://wikiwiki.jp/pokemonhack/アイテムコード</a>を参照した。</p>
 
           <form id="property_form" name="PROPERTY">
             <table class="fixed" id="result_property">
@@ -363,15 +367,47 @@
                   <td style="text-align: center">ボックス名4</td>
                   <td id="box4_move" style="text-align: left">[]</td>
                 </tr>
-                <tr class="g4">
+                <tr>
                   <td style="text-align: center">ボックス名5</td>
                   <td id="box5_move" style="text-align: left">[]</td>
                 </tr>
               </tbody>
             </table>
+            <p>※ 技コードは<a href="https://wikiwiki.jp/pokemonhack/技コード">https://wikiwiki.jp/pokemonhack/技コード</a>を参照した。</p>
           </form>
 
-          <p>※ 技コードは<a href="https://wikiwiki.jp/pokemonhack/技コード">https://wikiwiki.jp/pokemonhack/技コード</a>を参照した。</p>
+          <form id="id_form" name="ID">
+            <table class="fixed" id="result_property">
+              <thead><thead><tr><th colspan="2" style="text-align: center">ID変更（表ID:<input id="TID" onchange="ID_calculate(document.ID)" name="TID" type="number" min="0" max="65535" value="0" size="4">, 裏ID: <input id="SID" onchange="ID_calculate(document.ID)" name="SID" type="number" min="0" max="65535" value="0" size="4">）</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td style="text-align: center">ボックス名1</td>
+                  <td style="text-align: left">[もけぬうい]</td>
+                </tr>
+                <tr>
+                  <td style="text-align: center">ボックス名5</td>
+                  <td style="text-align: left">[かッンＮテぞけノ]</td>
+                </tr>
+                <tr>
+                  <td style="text-align: center">ボックス名6</td>
+                  <td style="text-align: left">[アぱゥひし　ｌ]</td>
+                </tr>
+                <tr>
+                  <td style="text-align: center">ボックス名7</td>
+                  <td style="text-align: left">[ゴゥぃＢＦＣ]</td>
+                </tr>
+                <tr>
+                  <td style="text-align: center">ボックス名8</td>
+                  <td style="text-align: left">[アｌコ　う]</td>
+                </tr>
+                <tr class="g4">
+                  <td style="text-align: center">ボックス名9</td>
+                  <td id="box9_id" style="text-align: left">[]</td>
+                </tr>
+              </tbody>
+            </table>
+            <p id="id_info"></p>
+          </form>
 
           <script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
 
@@ -816,7 +852,6 @@
               var ec = parseInt(POKE.eC.value, 10);
               var ed = parseInt(POKE.eD.value, 10);
               var es = parseInt(POKE.eS.value, 10);
-              var ary1, ary2;
               var ability, seikaku, poke_name, poke_data, sex_desc, sex;
 
               ability   = (POKE.ability.length > 2 ? POKE.ability.selectedIndex - 1 : -1);
@@ -827,68 +862,60 @@
               sex       = ((POKE.sex.length < 2 && sex_desc != "ふめい") ? -4 : (sex_desc == "ふめい" ? -3 : (sex_desc == "♂のみ" || sex_desc == "♀のみ" ? -2 : POKE.sex.selectedIndex - 1)))
               sexBorder = ((sex_desc == "♂のみ") ? -1 : (sex_desc == "1:7" ? 30 : (sex_desc == "1:3" ? 63 : (sex_desc == "1:1" ? 126 : (sex_desc == "3:1" ? 190 : 255)))));
 
-              //Method 1
-              R = new Array(), ary1=new Array(), ary2=new Array(), ary3=new Array();  
+              // [Method 1]
+              R = new Array();
               R3 = (((ib << 5) | ia) << 5) | ih;
               R4 = (((id << 5) | ic) << 5) | is;
+              console.log(R3, R4)
               for (let i = 0; i < 2; i++) {
                 tmp = R3 | (i << 15);
                 for (j = 0; j < 0x00010000; j++) {
                   tmp2 = (tmp << 16) | j;
                   if ((((makeR(tmp2) >>> 16) & 0x00007fff) ^ R4) == 0) R.push(tmp2);
-                  if ((((makeR(makeR(tmp2)) >>> 16) & 0x00007fff) ^ R4) == 0) ary3.push(tmp2);
                 }
               }
 
               for(let i=0,len=R.length;i<len;i++){
                 R[i] = invR(R[i]);
-                ary2.push(R[i]);
               }
-              if(seikaku < 0 && ability < 0 && sex < 0){
-                for(let i=0, len=R.length;i<len;i++){
-                  R[i] = invR(R[i]);
-                  if(R[i] < 0) R[i] = R[i] + 0xffffffff + 0x00000001;
-                  ary1.push(R[i]);
-                }
-              }
-              else{
-                for(let i = 0, len = R.length; i < len; i++) {
-                  R2 = R[i];
-                  R1 = invR(R2);
-                  if (R1 < 0) R1 = R1 + 0xffffffff + 0x00000001;
-                  ary1.push(R1);
-                  PID = ((R2 & 0xffff0000) | (R1 >>> 16));
-                  if (PID < 0) PID = PID + 0xffffffff + 0x00000001;
-                  if ((seikaku >= 0) && (PID % 25 != seikaku) || (ability >= 0) && (PID % 2 != ability) || (sex > 0) && (PID % 256 > sexBorder) || (sex == 0) && (PID % 256 <= sexBorder)) {
-                    R.splice(i, 1);
-                    len--;
-                    i--;
-                  } else R[i] = R1;
+              var tseed = undefined;
+              for(let i = 0, len = R.length; i < len; i++) {
+                R2 = R[i];
+                R1 = invR(R2);
+                if (R1 < 0) R1 = R1 + 0xffffffff + 0x00000001;
+                PID = ((R2 & 0xffff0000) | (R1 >>> 16));
+                if (PID < 0) PID = PID + 0xffffffff + 0x00000001;
+                if ((seikaku >= 0) && (PID % 25 != seikaku) || (ability >= 0) && (PID % 2 != ability) || (sex > 0) && (PID % 256 > sexBorder) || (sex == 0) && (PID % 256 <= sexBorder)) {
+                  R.splice(i, 1);
+                  len--;
+                  i--;
+                } else {
+                  // Extract only smallest one to make it easier to program.
+                  tseed = R1;
+                  suggest_ids(PID);
+                  break
                 }
               }
 
               // Results
+              var target_PID = document.getElementById("target_PID");
               var target_seed = document.getElementById("target_seed");
               var set_seed = document.getElementById("set_seed");
               var box9_name = document.getElementById("box9_random_number");
-              var meza_type = document.getElementById("meza_type");
-              var meza_power = document.getElementById("meza_power");
+              var random_number_results = [target_PID, target_seed, set_seed, box9_name];
 
-              if (R.length < 1){
+              if (tseed == undefined){
+                target_PID.innerHTML = "";
                 target_seed.innerHTML = "解なし";
-                target_seed.classList.add("g3");
                 set_seed.innerHTML = "";
-                set_seed.classList.add("g3");
                 box9_name.innerHTML = "[]";
-                box9_name.classList.add("g3");
+                random_number_results.forEach(function(e){e.classList.add("g3")});
               }else{
-                var tseed = R.sort(sort_smaller)[0]; // Extract only smallest one to make it easier to program.
-                target_seed.innerHTML = tseed;
-                target_seed.classList.remove("g3");
+                target_PID.innerHTML = decimal2hex(PID);
+                target_seed.innerHTML = decimal2hex(tseed);
                 // Target Seed → Set Seed (n → n-2)
-                var sseed = decimal2hex(invR(invR(Number(tseed))));
+                var sseed = decimal2hex(invR(invR(tseed)));
                 set_seed.innerHTML = sseed;
-                set_seed.classList.remove("g3");
                 // Calculate Box9 string name.
                 var box9 = ""
                 pre_sseeds  = useAuxiliary_4(sseed.slice(-8,-4));
@@ -896,8 +923,8 @@
                 [post_sseeds[0], pre_sseeds[0], post_sseeds[1], pre_sseeds[1]].forEach(function(e,i){
                   box9 += assignPokestring(e);
                 })
-                box9_name.innerHTML = "[" + box9 + "]"
-                box9_name.classList.remove("g3");
+                box9_name.innerHTML = "[" + box9 + "]";
+                random_number_results.forEach(function(e){e.classList.remove("g3")});
               }
 
               // Calculate Real States
@@ -913,8 +940,11 @@
                 }
                 real_states[i+1].innerHTML = val;
               }
-              // Calc Hidden Power
+
+              // Calculate Hidden Power
               var mt=0, mp=0;
+              var meza_type = document.getElementById("meza_type");
+              var meza_power = document.getElementById("meza_power");
               [ih, ia, ib, is, ic, id].forEach(function(e,i){
                 if (e%2 === 1) mt += Math.pow(2, i);
                 if (e%4 === 2 || e%4 === 3) mp += Math.pow(2, i);
@@ -952,13 +982,42 @@
                 box3_move.innerHTML = "[にいィ" + assignPokestring(tmp[0]) + "　　ビ]";
                 box4_move.innerHTML = "[ぬいィ" + assignPokestring(tmp[1]) + "にうィ]";
                 box5_move.innerHTML = "[アおリメうい]";
+                // Adjust the appearance.
+                box1_move.parentElement.classList.remove("g4");
+                [box2_move, box3_move, box4_move, box5_move].forEach(function(e){
+                  e.parentElement.style.display = "table-row";
+                })
               } else {
                 box1_move.innerHTML = "[ロ" +  party_no_string + move_no_string + assignPokestring(move_hex) + "]";
-                box2_move.innerHTML = "任意";
-                box3_move.innerHTML = "任意";
-                box4_move.innerHTML = "任意";
-                box5_move.innerHTML = "任意";
+                [box2_move, box3_move, box4_move, box5_move].forEach(function(e){
+                  e.parentElement.style.display = "none";
+                })
+                box1_move.parentElement.classList.add("g4");
               }
+            }
+            // ID
+            function suggest_ids(PID){
+              var a,b,c,d;
+              PID_hex = decimal2hex(PID);
+              a = Number("0x" + PID_hex.slice(-4));
+              b = Number("0x" + PID_hex.slice(-8, -4));
+              c = Math.floor(Math.random() * (0xFFFF + 1));
+              for(d=0; d<=0xFFFF; d++){
+                if ((((c ^ d) ^ a) ^ b) <= 7) break
+              }
+              document.getElementById("TID").value = c;
+              document.getElementById("SID").value = d;
+              ID_calculate(document.ID)
+              document.getElementById("id_info").innerHTML = "※ 性格値:" + decimal2hex(PID) + " の個体を色違いにするID例（表ID: " + c + ", 裏ID: " + d + "）";
+            }
+            function ID_calculate(ID){
+              var s = ""
+              var tids = useAuxiliary_4(decimal2hex(ID.TID.value));
+              var sids = useAuxiliary_4(decimal2hex(ID.SID.value));
+              [tids[0], sids[0], tids[1], sids[1]].forEach(function(e,i){
+                s += assignPokestring(e);
+              })
+              document.getElementById("box9_id").innerHTML = "[" + s + "]";
             }
           </script>
 
@@ -985,7 +1044,7 @@
               background-color: lightcoral;
             }
             .g4 {
-              background-color: lightgreen;
+              background-color: palegreen;
             }
           </style>
 
@@ -1083,6 +1142,7 @@
                 if (e.id == "poke_name"){
                   e.onchange = function(){
                     set_pokemon_options(document.POKE);
+                    poke_calculate(document.POKE);
                   };
                 }else if (e.id == "lv"){
                   e.onchange = function(){
@@ -1113,6 +1173,7 @@
               money_calculate(document.PROPERTY);
               BP_calculate(document.PROPERTY);
 
+              // MOVE form.
               var move_form = document.getElementById("move_form");
               for(let i = 0; i < move_form.length; i++){
                 let e = move_form.elements[i];
@@ -1124,6 +1185,9 @@
                 };
               }
               move_calculate(document.MOVE);
+
+              // ID
+              ID_calculate(document.ID);
             };
           </script>
         
