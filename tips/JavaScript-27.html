@@ -117,6 +117,73 @@
             <p>上記の表を見ながら<a href="https://iwasakishuto.github.io/Front-End/JavaScript-25.html">ツール</a>を用いると、効率的な努力値配分がわかると思います。（ex.ラティオスを最速にすると実数値178となるが、上記の表より172~180間の素早さをとるポケモンがいないため、173とすれば十分である。）</p>
           </form>
 
+          <form id="damage_form" name="DAMAGE">
+            <h3>ダメージ計算ツール</h3>
+            <p>上記の表から相手の、以下の表から自分のポケモンをそれぞれ選んでください。（※色のついている部分が選択されていれば大丈夫です。）</p>
+          </form>
+
+          <form id="mypoke_form" name="MYPOKE">
+            <h3>自分のポケモン</h3>
+            <table class="fixed" id="my-pokemon">
+              <thead><tr><th colspan="7" style="text-align: center">自分のポケモン</th></tr></thead>
+              <tbody>
+                <tr class="g1">
+                  <td colspan="3" style="text-align: center">ポケモン</td>
+                  <td colspan="4" style="text-align: center"><select id="poke_name" name="poke"></select></td>
+                </tr>
+                <tr class="g1">
+                  <td colspan="3">とくせい</td>
+                  <td colspan="4"><select id="ability" name="ability"><option>----</option></select></td>
+                </tr>
+                <tr>
+                  <td colspan="3">性別</td>
+                  <td colspan="4"><select id="sex" name="sex"><option>--</option></select></td>
+                </tr>
+                <tr>
+                  <td colspan="3">性格</td>
+                  <td colspan="4"><select id="seikaku" name="seikaku"><option value="1">さみしがり (A↑ B↓)</option><option value="3">いじっぱり (A↑ C↓)</option><option value="4">やんちゃ　 (A↑ D↓)</option><option value="2">ゆうかん　 (A↑ S↓)</option><option value="5">ずぶとい　 (B↑ A↓)</option><option value="8">わんぱく　 (B↑ C↓)</option><option value="9">のうてんき (B↑ D↓)</option><option value="7">のんき　　 (B↑ S↓)</option><option value="15" selected>ひかえめ　 (C↑ A↓)</option><option value="16">おっとり　 (C↑ B↓)</option><option value="19">うっかりや (C↑ D↓)</option><option value="17">れいせい　 (C↑ S↓)</option><option value="20">おだやか　 (D↑ A↓)</option><option value="21">おとなしい (D↑ B↓)</option><option value="23">しんちょう (D↑ C↓)</option><option value="22">なまいき　 (D↑ S↓)</option><option value="10">おくびょう (S↑ A↓)</option><option value="11">せっかち　 (S↑ B↓)</option><option value="13">ようき　　 (S↑ C↓)</option><option value="14">むじゃき　 (S↑ D↓)</option><option value="18">てれや　　 </option><option value="0">がんばりや </option><option value="6">すなお　　 </option><option value="24">きまぐれ　 </option><option value="12">まじめ　　 </option></select></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr>
+                  <th><img style="border:0;margin:0;padding:0;width:5em;"></th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="only-text">
+                  <td>種族値</td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr>
+                  <td>個体値</td>
+                  <td><input type="number" min="0" max="31"  value="31" size="3" name="iH"></td>
+                  <td><input type="number" min="0" max="31"  value="31" size="3" name="iA"></td>
+                  <td><input type="number" min="0" max="31"  value="31" size="3" name="iB"></td>
+                  <td><input type="number" min="0" max="31"  value="31" size="3" name="iC"></td>
+                  <td><input type="number" min="0" max="31"  value="31" size="3" name="iD"></td>
+                  <td><input type="number" min="0" max="31"  value="31" size="3" name="iS"></td>
+                </tr>
+                <tr>
+                  <td>努力値</td>
+                  <td><input type="number" min="0" max="255" value="0" size="3" name="eH"></td>
+                  <td><input type="number" min="0" max="255" value="0" size="3" name="eA"></td>
+                  <td><input type="number" min="0" max="255" value="0" size="3" name="eB"></td>
+                  <td><input type="number" min="0" max="255" value="0" size="3" name="eC"></td>
+                  <td><input type="number" min="0" max="255" value="0" size="3" name="eD"></td>
+                  <td><input type="number" min="0" max="255" value="0" size="3" name="eS"></td>
+                </tr>
+                <tr class="g1 only-text">
+                  <td>実数値</td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="H"></td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="A"></td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="B"></td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="C"></td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="D"></td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="S"></td>
+                </tr>
+              </tbody>
+            </table>  
+          </form>
+
           <!-- Load Scripts. -->
 
           <script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
@@ -188,10 +255,10 @@
               }
             })
             // Calculate statistics based on the 
-            function recalculate_statistics(){
+            function calculate_BF_statistics(BFT){
               var tds, name, seikaku;
-              var lv = parseInt(document.getElementById("lv").value);
-              var iv = parseInt(document.getElementById("iv").value);
+              var lv = parseInt(BFT.LV.value);
+              var iv = parseInt(BFT.IV.value);
               var bf_trows = BFtable.querySelectorAll("tr");
               var evals = [0,0,0,0,0,0];
               var ivals = [iv,iv,iv,iv,iv,iv];
@@ -208,17 +275,102 @@
             }
           </script>
 
+          <script>
+            const MPtable = document.getElementById("my-pokemon");
+            const MPT_base_statsIdx = 6;
+            const MPT_ivIdx = 7;
+            const MPT_evIdx = 8;
+            const MPT_statsIdx = 9;
+            // Set pokemon seletions.
+            var select = document.getElementById("poke_name")
+            for (let name in POKENAME2DATA) {
+              let e = document.createElement("option");
+              e.innerText = name
+              select.appendChild(e)
+            }
+            function set_pokemon_options(MYPOKE){
+              var poke_name = MYPOKE.poke.value;
+              var data = POKENAME2DATA[MYPOKE.poke.value];
+              // If pokemon has multiple abilities, show all.
+              var ability_options = "";
+              ability_options += "<option>" + data[Pdata_abilityIdx] + "</option>";
+              if(data[Pdata_abilityIdx+1] != "") ability_options += '<option>' + data[Pdata_abilityIdx+1] + '</option>';
+              MYPOKE.ability.innerHTML = ability_options;
+              // Add sex option from sex description.
+              var sex_options = "";
+              var sex_desc = data[Pdata_sexIdx];
+              if (["ふめい", "-"].indexOf(sex_desc) == -1){
+                if (sex_desc != "♀のみ") sex_options += '<option>♂</option>';
+                if (sex_desc != "♂のみ") sex_options += '<option>♀</option>';
+              }
+              MYPOKE.sex.innerHTML = sex_options;
+              // Set Base States & Image.
+              var base_states = MPtable.getElementsByTagName("tr")[MPT_base_statsIdx].querySelectorAll("td");
+              for (let i=1; i<7; i++){
+                base_states[i].innerHTML = data[Pdata_statusIdx+i-1];
+              }
+              MPtable.querySelector("img").setAttribute("src", data[Pdata_imgIdx]);
+              calculate_mypoke_statistics(MYPOKE)
+            }
+            function calculate_mypoke_statistics(MYPOKE){
+              var poke_name = MYPOKE.poke.value;
+              var lv = parseInt(document.getElementById("lv").value);
+              var seikaku = parseInt(MYPOKE.seikaku.value);
+              var ivals = [];
+              var evals = [];
+              var MPtrs = MPtable.getElementsByTagName("tr");
+              // Get Individual values & Effort Values.
+              var iv_inputs = MPtrs[MPT_ivIdx].querySelectorAll("input");
+              var ev_inputs = MPtrs[MPT_evIdx].querySelectorAll("input");
+              for (let i=0; i<6; i++){ivals.push(parseInt(iv_inputs[i].value))};
+              for (let i=0; i<6; i++){evals.push(parseInt(ev_inputs[i].value))};
+              // Calculate Statistics.
+              var stats_tds = MPtrs[MPT_statsIdx].querySelectorAll("td");
+              var stats = calculate_statistics(name=poke_name, ivals=ivals, evals=evals, seikaku=seikaku, lv=lv);
+              for (let i=0; i<6; i++){
+                stats_tds[i+1].innerHTML = stats[i];
+              }
+            }
+          </script>
+
           <!-- On load -->
 
           <script>
             window.onload = function(){
+              // Battle Frontier Forms.
               var bf_table_form = document.getElementById("bf_table_form");
               for(let i=0; i<bf_table_form.length; i++){
-                bf_table_form.elements[i].onchange = function(){
-                  recalculate_statistics();
-                };
+                let e = bf_table_form.elements[i];
+                if (e.id=="lv"){
+                  e.onchange = function(){
+                    calculate_BF_statistics(document.BFT);
+                    calculate_mypoke_statistics(document.MYPOKE);
+                  };
+                }else{
+                  e.onchange = function(){
+                    calculate_BF_statistics(document.BFT);
+                  };
+                }
               }
-              recalculate_statistics();
+              calculate_BF_statistics(document.BFT);
+              // My Pokemon Forms.
+              var mypoke_form = document.getElementById("mypoke_form");
+              for(let i=0; i<mypoke_form.length; i++){
+                let e = mypoke_form.elements[i];
+                if (e.id == "poke_name"){
+                  e.onchange = function(){
+                    set_pokemon_options(document.MYPOKE);
+                  };
+                }else{
+                  e.onkeyup = function(){
+                    calculate_mypoke_statistics(document.MYPOKE);
+                  };
+                  e.onchange = function(){
+                    calculate_mypoke_statistics(document.MYPOKE);
+                  };
+                }
+              }
+              set_pokemon_options(document.MYPOKE);
             }
           </script>
 
@@ -231,6 +383,23 @@
               left: 0;
               color: #fff;
               background: #333;
+            }
+            table#my-pokemon * {
+              vertical-align: middle;
+              text-align: center;
+            }
+            table#my-pokemon select, table#my-pokemon input {
+              border: 0;
+              width: 100%;
+              padding: .5em 0;
+              background-color: transparent;
+              font-family: Monaco, monospace, sans-serif;
+            }
+            table#my-pokemon tr:not(.only-text) td {
+              padding: 0;
+            }
+            .g1 {
+              background-color: lightgoldenrodyellow;
             }
           </style>
         
