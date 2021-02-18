@@ -47,15 +47,15 @@ h3, h4, h5, h6 { margin-top: .8em; }
 
 hr { border: 2px solid #EEEEEE; }
 
-/* ↓Add by Shuto Iwasaki. */
-img:not(.__canvas):not(.lb-image) {
+/* ↓Add by iwasakishuto<https://github.com/iwasakishuto> */
+img:not(.__canvas .sort-arrow):not(.lb-image) {
     border: 2px solid #EEE;
     padding: 5px;
     text-align: center;
     width: 100%;
     height: auto;
 }
-/* ↓Add by Shuto Iwasaki. */
+/* ↓Add by iwasakishuto<https://github.com/iwasakishuto> */
 img.social-img {
 	height: 1em!important;
 	width: auto!important;
