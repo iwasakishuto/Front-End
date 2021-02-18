@@ -10,17 +10,17 @@
     <meta property="og:type" content="article" />
     <meta name="twitter:card" content="summary">
     <meta name="keywords" content="JavaScript, pokemon, JavaScript, " />
-    <meta property="og:image" content="https://images-na.ssl-images-amazon.com/images/I/51J7YFH1NHL._AC_.jpg"/>
-    <meta property="og:title" content="JS.25 ポケモンエメラルドでフロンティア マスターを目指す "/>
+    <meta property="og:image" content="https://www.pokemon.co.jp/img/game/emerald/pho_main.jpg"/>
+    <meta property="og:title" content="JS.25 ポケモンエメラルドでフロンティア マスターを目指す（その１） "/>
     <meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-25.html" />
-    <meta property="og:description" content="ポケモンエメラルドでフロンティア マスターを目指す" />
+    <meta property="og:description" content="ポケモンエメラルドでフロンティア マスターを目指す（その１）" />
     <meta property="og:site_name" content="Shuto&#39;s Front-End" />
     <meta property="og:article:author" content="Shuto" />
     <meta property="og:article:published_time" content="2021-02-15T00:00:00+09:00" />
     <meta property="og:article:modified_time" content="2020-02-15T00:00:00+09:00" />
-    <meta name="twitter:title" content="JS.25 ポケモンエメラルドでフロンティア マスターを目指す ">
-    <meta name="twitter:description" content="ポケモンエメラルドでフロンティア マスターを目指す">
-    <title>JS.25 ポケモンエメラルドでフロンティア マスターを目指す</title>
+    <meta name="twitter:title" content="JS.25 ポケモンエメラルドでフロンティア マスターを目指す（その１） ">
+    <meta name="twitter:description" content="ポケモンエメラルドでフロンティア マスターを目指す（その１）">
+    <title>JS.25 ポケモンエメラルドでフロンティア マスターを目指す（その１）</title>
     <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
     <!-- Added by Shuto Iwasaki. -->
     <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
@@ -74,7 +74,7 @@
       <article>
         <header>
           <h1 class="entry-title">
-            <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-25.html" rel="bookmark" title="Permalink to JS.25 ポケモンエメラルドでフロンティア マスターを目指す">JS.25 ポケモンエメラルドでフロンティア マスターを目指す</a>
+            <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-25.html" rel="bookmark" title="Permalink to JS.25 ポケモンエメラルドでフロンティア マスターを目指す（その１）">JS.25 ポケモンエメラルドでフロンティア マスターを目指す（その１）</a>
           </h1>
           <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
           <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
@@ -85,7 +85,7 @@
             <span>2021-02-15(Mon)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a></span>
           </footer><!-- /.post-info -->
-          <h2>フロンティア マスターへの道</h2>
+          <h2>フロンティア マスターへの道 〜厳選効率化〜</h2>
 
           <p>個人的にポケモンが非常に好きなのですが、実際のゲームはルビー・エメラルドしか持っておらず、そのためか定期的に<b>"ポケモンエメラルドでバトルフロンティア完全制覇"</b>をしたくなります。</p>
 
@@ -172,38 +172,39 @@
             </td></tr></table>    
           </div>
 
-          <table id="confirmation">
+          <table class="fixed" id="confirmation">
               <thead>
               <tr>
-              <th style="text-align: center"></th>
-              <th style="text-align: center">H</th>
-              <th style="text-align: center">A</th>
-              <th style="text-align: center">B</th>
-              <th style="text-align: center">C</th>
-              <th style="text-align: center">D</th>
-              <th style="text-align: center">S</th>
-              <th style="text-align: center">Total</th>
+                <th style="text-align: center"></th>
+                <th style="text-align: center">H</th>
+                <th style="text-align: center">A</th>
+                <th style="text-align: center">B</th>
+                <th style="text-align: center">C</th>
+                <th style="text-align: center">D</th>
+                <th style="text-align: center">S</th>
+                <th style="text-align: center">Total</th>
               </tr>
               </thead>
-              <tbody><tr id="base_states">
-              <td style="text-align: center">種族値</td>
-              <td style="text-align: center"></td>
-              <td style="text-align: center"></td>
-              <td style="text-align: center"></td>
-              <td style="text-align: center"></td>
-              <td style="text-align: center"></td>
-              <td style="text-align: center"></td>
-              <td style="text-align: center"></td>
+              <tbody>
+              <tr id="base_states">
+                <td style="text-align: center">種族値</td>
+                <td style="text-align: center"></td>
+                <td style="text-align: center"></td>
+                <td style="text-align: center"></td>
+                <td style="text-align: center"></td>
+                <td style="text-align: center"></td>
+                <td style="text-align: center"></td>
+                <td style="text-align: center"></td>
               </tr>
-              <tr id="real_states">
-              <td style="text-align: center">実数値</td>
-              <td style="text-align: center"></td>
-              <td style="text-align: center"></td>
-              <td style="text-align: center"></td>
-              <td style="text-align: center"></td>
-              <td style="text-align: center"></td>
-              <td style="text-align: center"></td>
-              <td style="text-align: center"><img style="border:0;margin:0;padding:0;width:5em;"></td>
+              <tr id="statistics">
+                <td style="text-align: center">実数値</td>
+                <td style="text-align: center"></td>
+                <td style="text-align: center"></td>
+                <td style="text-align: center"></td>
+                <td style="text-align: center"></td>
+                <td style="text-align: center"></td>
+                <td style="text-align: center"></td>
+                <td style="text-align: center"><img style="border:0;margin:0;padding:0;width:5em;"></td>
               </tr>
               </tbody>
           </table>
@@ -410,6 +411,8 @@
           </form>
 
           <script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
+
+          <script src="theme/js/pokeutils.js" type="text/javascript"></script>
 
           <script>
             // Data 
@@ -662,51 +665,19 @@
               // 'f5': 'ö',
               // 'f6': 'ü'
             }
-
-            // pokemon name → data (status[h,a,b,c,d,s],sex,ability1,ability2,imgsrc)
-            const POKENAME2DATA = {'フシギダネ': [45, 49, 49, 65, 65, 45, '1:7', 'しんりょく', '', 'https://cdn.bulbagarden.net/upload/2/21/001MS8.png'], 'フシギソウ': [60, 62, 63, 80, 80, 60, '1:7', 'しんりょく', '', 'https://cdn.bulbagarden.net/upload/3/38/002MS8.png'], 'フシギバナ': [80, 82, 83, 100, 100, 80, '1:7', 'しんりょく', '', 'https://cdn.bulbagarden.net/upload/b/ba/003MS8.png'], 'ヒトカゲ': [39, 52, 43, 60, 50, 65, '1:7', 'もうか', '', 'https://cdn.bulbagarden.net/upload/d/dc/004MS8.png'], 'リザード': [58, 64, 58, 80, 65, 80, '1:7', 'もうか', '', 'https://cdn.bulbagarden.net/upload/b/b8/005MS8.png'], 'リザードン': [78, 84, 78, 109, 85, 100, '1:7', 'もうか', '', 'https://cdn.bulbagarden.net/upload/a/a4/006MS8.png'], 'ゼニガメ': [44, 48, 65, 50, 64, 43, '1:7', 'げきりゅう', '', 'https://cdn.bulbagarden.net/upload/d/dc/007MS8.png'], 'カメール': [59, 63, 80, 65, 80, 58, '1:7', 'げきりゅう', '', 'https://cdn.bulbagarden.net/upload/a/af/008MS8.png'], 'カメックス': [79, 83, 100, 85, 105, 78, '1:7', 'げきりゅう', '', 'https://cdn.bulbagarden.net/upload/f/f0/009MS8.png'], 'キャタピー': [45, 30, 35, 20, 20, 45, '1:1', 'りんぷん', '', 'https://cdn.bulbagarden.net/upload/6/61/010MS8.png'], 'トランセル': [50, 20, 55, 25, 25, 30, '1:1', 'だっぴ', '', 'https://cdn.bulbagarden.net/upload/f/f9/011MS8.png'], 'バタフリー': [60, 45, 50, 80, 80, 70, '1:1', 'ふくがん', '', 'https://cdn.bulbagarden.net/upload/f/fe/012MS8.png'], 'ビードル': [40, 35, 30, 20, 20, 50, '1:1', 'りんぷん', '', 'https://cdn.bulbagarden.net/upload/b/bc/013MSPE.png'], 'コクーン': [45, 25, 50, 25, 25, 35, '1:1', 'だっぴ', '', 'https://cdn.bulbagarden.net/upload/7/70/014MSPE.png'], 'スピアー': [65, 80, 40, 45, 80, 75, '1:1', 'むしのしらせ', '', 'https://cdn.bulbagarden.net/upload/a/a2/015MSPE.png'], 'ポッポ': [40, 45, 40, 35, 35, 56, '1:1', 'するどいめ', 'ちどりあし', 'https://cdn.bulbagarden.net/upload/5/56/016MSPE.png'], 'ピジョン': [63, 60, 55, 50, 50, 71, '1:1', 'するどいめ', 'ちどりあし', 'https://cdn.bulbagarden.net/upload/c/cc/017MSPE.png'], 'ピジョット': [83, 80, 75, 70, 70, 91, '1:1', 'するどいめ', 'ちどりあし', 'https://cdn.bulbagarden.net/upload/9/93/018MSPE.png'], 'コラッタ': [30, 56, 35, 25, 35, 72, '1:1', 'にげあし', 'こんじょう', 'https://cdn.bulbagarden.net/upload/7/7a/019MSPE.png'], 'ラッタ': [55, 81, 60, 50, 70, 97, '1:1', 'にげあし', 'こんじょう', 'https://cdn.bulbagarden.net/upload/7/77/020MSPE.png'], 'オニスズメ': [40, 60, 30, 31, 31, 70, '1:1', 'するどいめ', '', 'https://cdn.bulbagarden.net/upload/a/af/021MSPE.png'], 'オニドリル': [65, 90, 65, 61, 61, 100, '1:1', 'するどいめ', '', 'https://cdn.bulbagarden.net/upload/7/76/022MSPE.png'], 'アーボ': [35, 60, 44, 40, 54, 55, '1:1', 'いかく', 'だっぴ', 'https://cdn.bulbagarden.net/upload/a/a7/023MSPE.png'], 'アーボック': [60, 85, 69, 65, 79, 80, '1:1', 'いかく', 'だっぴ', 'https://cdn.bulbagarden.net/upload/2/2c/024MSPE.png'], 'ピカチュウ': [35, 55, 30, 50, 40, 90, '1:1', 'せいでんき', '', 'https://cdn.bulbagarden.net/upload/6/66/025MS8.png'], 'ライチュウ': [60, 90, 55, 90, 80, 100, '1:1', 'せいでんき', '', 'https://cdn.bulbagarden.net/upload/b/b5/026MS8.png'], 'サンド': [50, 75, 85, 20, 30, 40, '1:1', 'すながくれ', '', 'https://cdn.bulbagarden.net/upload/a/ac/027MS8.png'], 'サンドパン': [75, 100, 110, 45, 55, 65, '1:1', 'すながくれ', '', 'https://cdn.bulbagarden.net/upload/b/b6/028MS8.png'], 'ニドラン♀': [55, 47, 52, 40, 40, 41, '♀のみ', 'どくのトゲ', 'とうそうしん', 'https://cdn.bulbagarden.net/upload/8/89/029MS8.png'], 'ニドリーナ': [70, 62, 67, 55, 55, 56, '♀のみ', 'どくのトゲ', 'とうそうしん', 'https://cdn.bulbagarden.net/upload/9/9e/030MS8.png'], 'ニドクイン': [90, 82, 87, 75, 85, 76, '♀のみ', 'どくのトゲ', 'とうそうしん', 'https://cdn.bulbagarden.net/upload/8/8d/031MS8.png'], 'ニドラン♂': [46, 57, 40, 40, 40, 50, '♂のみ', 'どくのトゲ', 'とうそうしん', 'https://cdn.bulbagarden.net/upload/4/4a/032MS8.png'], 'ニドリーノ': [61, 72, 57, 55, 55, 65, '♂のみ', 'どくのトゲ', 'とうそうしん', 'https://cdn.bulbagarden.net/upload/7/75/033MS8.png'], 'ニドキング': [81, 92, 77, 85, 75, 85, '♂のみ', 'どくのトゲ', 'とうそうしん', 'https://cdn.bulbagarden.net/upload/8/8a/034MS8.png'], 'ピッピ': [70, 45, 48, 60, 65, 35, '3:1', 'メロメロボディ', 'マジックガード', 'https://cdn.bulbagarden.net/upload/c/cf/035MS8.png'], 'ピクシー': [95, 70, 73, 85, 90, 60, '3:1', 'メロメロボディ', 'マジックガード', 'https://cdn.bulbagarden.net/upload/9/97/036MS8.png'], 'ロコン': [38, 41, 40, 50, 65, 65, '3:1', 'もらいび', '', 'https://cdn.bulbagarden.net/upload/6/6d/037MS8.png'], 'キュウコン': [73, 76, 75, 81, 100, 100, '3:1', 'もらいび', '', 'https://cdn.bulbagarden.net/upload/6/61/038MS8.png'], 'プリン': [115, 45, 20, 45, 25, 20, '3:1', 'メロメロボディ', '', 'https://cdn.bulbagarden.net/upload/f/f3/039MS8.png'], 'プクリン': [140, 70, 45, 75, 50, 45, '3:1', 'メロメロボディ', '', 'https://cdn.bulbagarden.net/upload/c/c6/040MS8.png'], 'ズバット': [40, 45, 35, 30, 40, 55, '1:1', 'せいしんりょく', '', 'https://cdn.bulbagarden.net/upload/0/0c/041MS8.png'], 'ゴルバット': [75, 80, 70, 65, 75, 90, '1:1', 'せいしんりょく', '', 'https://cdn.bulbagarden.net/upload/c/ce/042MS8.png'], 'ナゾノクサ': [45, 50, 55, 75, 65, 30, '1:1', 'ようりょくそ', '', 'https://cdn.bulbagarden.net/upload/6/68/043MS8.png'], 'クサイハナ': [60, 65, 70, 85, 75, 40, '1:1', 'ようりょくそ', '', 'https://cdn.bulbagarden.net/upload/f/f5/044MS8.png'], 'ラフレシア': [75, 80, 85, 100, 90, 50, '1:1', 'ようりょくそ', '', 'https://cdn.bulbagarden.net/upload/a/a5/045MS8.png'], 'パラス': [35, 70, 55, 45, 55, 25, '1:1', 'ほうし', 'かんそうはだ', 'https://cdn.bulbagarden.net/upload/6/6a/046MSPE.png'], 'パラセクト': [60, 95, 80, 60, 80, 30, '1:1', 'ほうし', 'かんそうはだ', 'https://cdn.bulbagarden.net/upload/4/40/047MSPE.png'], 'コンパン': [60, 55, 50, 40, 55, 45, '1:1', 'ふくがん', 'いろめがね', 'https://cdn.bulbagarden.net/upload/3/30/048MSPE.png'], 'モルフォン': [70, 65, 60, 90, 75, 90, '1:1', 'りんぷん', 'いろめがね', 'https://cdn.bulbagarden.net/upload/a/a7/049MSPE.png'], 'ディグダ': [10, 55, 25, 35, 45, 95, '1:1', 'すながくれ', 'ありじごく', 'https://cdn.bulbagarden.net/upload/f/f1/050MS8.png'], 'ダグトリオ': [35, 80, 50, 50, 70, 120, '1:1', 'すながくれ', 'ありじごく', 'https://cdn.bulbagarden.net/upload/2/2a/051MS8.png'], 'ニャース': [40, 45, 35, 40, 40, 90, '1:1', 'ものひろい', 'テクニシャン', 'https://cdn.bulbagarden.net/upload/e/e4/052MS8.png'], 'ペルシアン': [65, 70, 60, 65, 65, 115, '1:1', 'じゅうなん', 'テクニシャン', 'https://cdn.bulbagarden.net/upload/f/f7/053MS8.png'], 'コダック': [50, 52, 48, 65, 50, 55, '1:1', 'しめりけ', 'ノーてんき', 'https://cdn.bulbagarden.net/upload/a/a0/054MS8.png'], 'ゴルダック': [80, 82, 78, 95, 80, 85, '1:1', 'しめりけ', 'ノーてんき', 'https://cdn.bulbagarden.net/upload/7/7f/055MS8.png'], 'マンキー': [40, 80, 35, 35, 45, 70, '1:1', 'やるき', 'いかりのつぼ', 'https://cdn.bulbagarden.net/upload/a/af/056MSPE.png'], 'オコリザル': [65, 105, 60, 60, 70, 95, '1:1', 'やるき', 'いかりのつぼ', 'https://cdn.bulbagarden.net/upload/a/aa/057MSPE.png'], 'ガーディ': [55, 70, 45, 70, 50, 60, '1:3', 'いかく', 'もらいび', 'https://cdn.bulbagarden.net/upload/4/45/058MS8.png'], 'ウインディ': [90, 110, 80, 100, 80, 95, '1:3', 'いかく', 'もらいび', 'https://cdn.bulbagarden.net/upload/c/cc/059MS8.png'], 'ニョロモ': [40, 50, 40, 40, 40, 90, '1:1', 'ちょすい', 'しめりけ', 'https://cdn.bulbagarden.net/upload/c/c7/060MS8.png'], 'ニョロゾ': [65, 65, 65, 50, 50, 90, '1:1', 'ちょすい', 'しめりけ', 'https://cdn.bulbagarden.net/upload/b/b1/061MS8.png'], 'ニョロボン': [90, 85, 95, 70, 90, 70, '1:1', 'ちょすい', 'しめりけ', 'https://cdn.bulbagarden.net/upload/e/e4/062MS8.png'], 'ケーシィ': [25, 20, 15, 105, 55, 90, '1:3', 'シンクロ', 'せいしんりょく', 'https://cdn.bulbagarden.net/upload/4/4e/063MS8.png'], 'ユンゲラー': [40, 35, 30, 120, 70, 105, '1:3', 'シンクロ', 'せいしんりょく', 'https://cdn.bulbagarden.net/upload/d/dc/064MS8.png'], 'フーディン': [55, 50, 45, 135, 85, 120, '1:3', 'シンクロ', 'せいしんりょく', 'https://cdn.bulbagarden.net/upload/4/41/065MS8.png'], 'ワンリキー': [70, 80, 50, 35, 35, 35, '1:3', 'こんじょう', 'ノーガード', 'https://cdn.bulbagarden.net/upload/4/4c/066MS8.png'], 'ゴーリキー': [80, 100, 70, 50, 60, 45, '1:3', 'こんじょう', 'ノーガード', 'https://cdn.bulbagarden.net/upload/1/13/067MS8.png'], 'カイリキー': [90, 130, 80, 65, 85, 55, '1:3', 'こんじょう', 'ノーガード', 'https://cdn.bulbagarden.net/upload/8/87/068MS8.png'], 'マダツボミ': [50, 75, 35, 70, 30, 40, '1:1', 'ようりょくそ', '', 'https://cdn.bulbagarden.net/upload/4/41/069MSPE.png'], 'ウツドン': [65, 90, 50, 85, 45, 55, '1:1', 'ようりょくそ', '', 'https://cdn.bulbagarden.net/upload/2/2e/070MSPE.png'], 'ウツボット': [80, 105, 65, 100, 60, 70, '1:1', 'ようりょくそ', '', 'https://cdn.bulbagarden.net/upload/4/4b/071MSPE.png'], 'メノクラゲ': [40, 40, 35, 50, 100, 70, '1:1', 'クリアボディ', 'ヘドロえき', 'https://cdn.bulbagarden.net/upload/6/6f/072MS8.png'], 'ドククラゲ': [80, 70, 65, 80, 120, 100, '1:1', 'クリアボディ', 'ヘドロえき', 'https://cdn.bulbagarden.net/upload/6/6c/073MS8.png'], 'イシツブテ': [40, 80, 100, 30, 30, 20, '1:1', 'いしあたま', 'がんじょう', 'https://cdn.bulbagarden.net/upload/0/04/074MSPE.png'], 'ゴローン': [55, 95, 115, 45, 45, 35, '1:1', 'いしあたま', 'がんじょう', 'https://cdn.bulbagarden.net/upload/0/00/075MSPE.png'], 'ゴローニャ': [80, 110, 130, 55, 65, 45, '1:1', 'いしあたま', 'がんじょう', 'https://cdn.bulbagarden.net/upload/a/a9/076MSPE.png'], 'ポニータ': [50, 85, 55, 65, 65, 90, '1:1', 'にげあし', 'もらいび', 'https://cdn.bulbagarden.net/upload/3/30/077MS8.png'], 'ギャロップ': [65, 100, 70, 80, 80, 105, '1:1', 'にげあし', 'もらいび', 'https://cdn.bulbagarden.net/upload/3/30/077MS8.png'], 'ヤドン': [90, 65, 65, 40, 40, 15, '1:1', 'どんかん', 'マイペース', 'https://cdn.bulbagarden.net/upload/3/31/079MS8.png'], 'ヤドラン': [95, 75, 110, 100, 80, 30, '1:1', 'どんかん', 'マイペース', 'https://cdn.bulbagarden.net/upload/c/cb/080MS8.png'], 'コイル': [25, 35, 70, 95, 55, 45, 'ふめい', 'じりょく', 'がんじょう', 'https://cdn.bulbagarden.net/upload/e/ea/081MS8.png'], 'レアコイル': [50, 60, 95, 120, 70, 70, 'ふめい', 'じりょく', 'がんじょう', 'https://cdn.bulbagarden.net/upload/d/da/082MS8.png'], 'カモネギ': [52, 65, 55, 58, 62, 60, '1:1', 'するどいめ', 'せいしんりょく', 'https://cdn.bulbagarden.net/upload/2/23/083MS8.png'], 'ドードー': [35, 85, 45, 35, 35, 75, '1:1', 'にげあし', 'はやおき', 'https://cdn.bulbagarden.net/upload/5/58/084MSPE.png'], 'ドードリオ': [60, 110, 70, 60, 60, 100, '1:1', 'にげあし', 'はやおき', 'https://cdn.bulbagarden.net/upload/3/3b/085MSPE.png'], 'パウワウ': [65, 45, 55, 45, 70, 45, '1:1', 'あついしぼう', 'うるおいボディ', 'https://cdn.bulbagarden.net/upload/3/37/086MSPE.png'], 'ジュゴン': [90, 70, 80, 70, 95, 70, '1:1', 'あついしぼう', 'うるおいボディ', 'https://cdn.bulbagarden.net/upload/a/a7/087MSPE.png'], 'ベトベター': [80, 80, 50, 40, 50, 25, '1:1', 'あくしゅう', 'ねんちゃく', 'https://cdn.bulbagarden.net/upload/6/63/088MSPE.png'], 'ベトベトン': [105, 105, 75, 65, 100, 50, '1:1', 'あくしゅう', 'ねんちゃく', 'https://cdn.bulbagarden.net/upload/d/d1/089MSPE.png'], 'シェルダー': [30, 65, 100, 45, 25, 40, '1:1', 'シェルアーマー', 'スキルリンク', 'https://cdn.bulbagarden.net/upload/8/8f/090MS8.png'], 'パルシェン': [50, 95, 180, 85, 45, 70, '1:1', 'シェルアーマー', 'スキルリンク', 'https://cdn.bulbagarden.net/upload/c/ce/091MS8.png'], 'ゴース': [30, 35, 30, 100, 35, 80, '1:1', 'ふゆう', '', 'https://cdn.bulbagarden.net/upload/8/8e/092MS8.png'], 'ゴースト': [45, 50, 45, 115, 55, 95, '1:1', 'ふゆう', '', 'https://cdn.bulbagarden.net/upload/e/e8/093MS8.png'], 'ゲンガー': [60, 65, 60, 130, 75, 110, '1:1', 'ふゆう', '', 'https://cdn.bulbagarden.net/upload/5/58/094MS8.png'], 'イワーク': [35, 45, 160, 30, 45, 70, '1:1', 'いしあたま', 'がんじょう', 'https://cdn.bulbagarden.net/upload/5/5e/095MS8.png'], 'スリープ': [60, 48, 45, 43, 90, 42, '1:1', 'ふみん', 'よちむ', 'https://cdn.bulbagarden.net/upload/1/12/096MSPE.png'], 'スリーパー': [85, 73, 70, 73, 115, 67, '1:1', 'ふみん', 'よちむ', 'https://cdn.bulbagarden.net/upload/6/64/097MSPE.png'], 'クラブ': [30, 105, 90, 25, 25, 50, '1:1', 'かいりきバサミ', 'シェルアーマー', 'https://cdn.bulbagarden.net/upload/b/be/098MS8.png'], 'キングラー': [55, 130, 115, 50, 50, 75, '1:1', 'かいりきバサミ', 'シェルアーマー', 'https://cdn.bulbagarden.net/upload/f/fd/099MS8.png'], 'ビリリダマ': [40, 30, 50, 55, 55, 100, 'ふめい', 'ぼうおん', 'せいでんき', 'https://cdn.bulbagarden.net/upload/3/31/100MSPE.png'], 'マルマイン': [60, 50, 70, 80, 80, 140, 'ふめい', 'ぼうおん', 'せいでんき', 'https://cdn.bulbagarden.net/upload/3/31/101MSPE.png'], 'タマタマ': [60, 40, 80, 60, 45, 40, '1:1', 'ようりょくそ', '', 'https://cdn.bulbagarden.net/upload/0/07/102MS8.png'], 'ナッシー': [95, 95, 85, 125, 65, 55, '1:1', 'ようりょくそ', '', 'https://cdn.bulbagarden.net/upload/f/fb/103MS8.png'], 'カラカラ': [50, 50, 95, 40, 50, 35, '1:1', 'いしあたま', 'ひらいしん', 'https://cdn.bulbagarden.net/upload/8/88/104MS8.png'], 'ガラガラ': [60, 80, 110, 50, 80, 45, '1:1', 'いしあたま', 'ひらいしん', 'https://cdn.bulbagarden.net/upload/7/72/105MS8.png'], 'サワムラー': [50, 120, 53, 35, 110, 87, '♂のみ', 'じゅうなん', 'すてみ', 'https://cdn.bulbagarden.net/upload/5/5d/106MS8.png'], 'エビワラー': [50, 105, 79, 35, 110, 76, '♂のみ', 'するどいめ', 'てつのこぶし', 'https://cdn.bulbagarden.net/upload/8/81/107MS8.png'], 'ベロリンガ': [90, 55, 75, 60, 75, 30, '1:1', 'マイペース', 'どんかん', 'https://cdn.bulbagarden.net/upload/3/32/108MS8.png'], 'ドガース': [40, 65, 95, 60, 45, 35, '1:1', 'ふゆう', '', 'https://cdn.bulbagarden.net/upload/c/c7/109MS8.png'], 'マタドガス': [65, 90, 120, 85, 70, 60, '1:1', 'ふゆう', '', 'https://cdn.bulbagarden.net/upload/5/58/110MS8.png'], 'サイホーン': [80, 85, 95, 30, 30, 25, '1:1', 'ひらいしん', 'いしあたま', 'https://cdn.bulbagarden.net/upload/e/e1/111MS8.png'], 'サイドン': [105, 130, 120, 45, 45, 40, '1:1', 'ひらいしん', 'いしあたま', 'https://cdn.bulbagarden.net/upload/0/04/112MS8.png'], 'ラッキー': [250, 5, 5, 35, 105, 50, '♀のみ', 'しぜんかいふく', 'てんのめぐみ', 'https://cdn.bulbagarden.net/upload/f/f1/113MS8.png'], 'モンジャラ': [65, 55, 115, 100, 40, 60, '1:1', 'ようりょくそ', 'リーフガード', 'https://cdn.bulbagarden.net/upload/b/b3/114MS8.png'], 'ガルーラ': [105, 95, 80, 40, 80, 90, '♀のみ', 'はやおき', 'きもったま', 'https://cdn.bulbagarden.net/upload/7/74/115MS8.png'], 'タッツー': [30, 40, 70, 70, 25, 60, '1:1', 'すいすい', 'スナイパー', 'https://cdn.bulbagarden.net/upload/6/65/116MS8.png'], 'シードラ': [55, 65, 95, 95, 45, 85, '1:1', 'どくのトゲ', 'スナイパー', 'https://cdn.bulbagarden.net/upload/a/ae/117MS8.png'], 'トサキント': [45, 67, 60, 35, 50, 63, '1:1', 'すいすい', 'みずのベール', 'https://cdn.bulbagarden.net/upload/7/71/118MS8.png'], 'アズマオウ': [80, 92, 65, 65, 80, 68, '1:1', 'すいすい', 'みずのベール', 'https://cdn.bulbagarden.net/upload/5/59/119MS8.png'], 'ヒトデマン': [30, 45, 55, 70, 55, 85, 'ふめい', 'はっこう', 'しぜんかいふく', 'https://cdn.bulbagarden.net/upload/0/04/120MS8.png'], 'スターミー': [60, 75, 85, 100, 85, 115, 'ふめい', 'はっこう', 'しぜんかいふく', 'https://cdn.bulbagarden.net/upload/2/2b/121MS8.png'], 'バリヤード': [40, 45, 65, 100, 120, 90, '1:1', 'ぼうおん', 'フィルター', 'https://cdn.bulbagarden.net/upload/e/e6/122MS8.png'], 'ストライク': [70, 110, 80, 55, 80, 105, '1:1', 'むしのしらせ', 'テクニシャン', 'https://cdn.bulbagarden.net/upload/e/e6/123MS8.png'], 'ルージュラ': [65, 50, 35, 115, 95, 95, '♀のみ', 'どんかん', 'よちむ', 'https://cdn.bulbagarden.net/upload/9/90/124MS8.png'], 'エレブー': [65, 83, 57, 95, 85, 105, '1:3', 'せいでんき', '', 'https://cdn.bulbagarden.net/upload/f/f0/125MS8.png'], 'ブーバー': [65, 95, 57, 100, 85, 93, '1:3', 'ほのおのからだ', '', 'https://cdn.bulbagarden.net/upload/3/3c/126MS8.png'], 'カイロス': [65, 125, 100, 55, 70, 85, '1:1', 'かいりきバサミ', 'かたやぶり', 'https://cdn.bulbagarden.net/upload/b/b8/127MS8.png'], 'ケンタロス': [75, 100, 95, 40, 70, 110, '♂のみ', 'いかく', 'いかりのつぼ', 'https://cdn.bulbagarden.net/upload/b/be/128MS8.png'], 'コイキング': [20, 10, 55, 15, 20, 80, '1:1', 'すいすい', '', 'https://cdn.bulbagarden.net/upload/d/d0/129MS8.png'], 'ギャラドス': [95, 125, 79, 60, 100, 81, '1:1', 'いかく', '', 'https://cdn.bulbagarden.net/upload/8/8e/130MS8.png'], 'ラプラス': [130, 85, 80, 85, 95, 60, '1:1', 'ちょすい', 'シェルアーマー', 'https://cdn.bulbagarden.net/upload/c/c3/131MS8.png'], 'メタモン': [48, 48, 48, 48, 48, 48, 'ふめい', 'じゅうなん', '', 'https://cdn.bulbagarden.net/upload/9/92/132MS8.png'], 'イーブイ': [55, 55, 50, 45, 65, 55, '1:7', 'にげあし', 'てきおうりょく', 'https://cdn.bulbagarden.net/upload/1/19/133MS8.png'], 'シャワーズ': [130, 65, 60, 110, 95, 65, '1:7', 'ちょすい', '', 'https://cdn.bulbagarden.net/upload/c/ca/134MS8.png'], 'サンダース': [65, 65, 60, 110, 95, 130, '1:7', 'ちくでん', '', 'https://cdn.bulbagarden.net/upload/8/8c/135MS8.png'], 'ブースター': [65, 130, 60, 95, 110, 65, '1:7', 'もらいび', '', 'https://cdn.bulbagarden.net/upload/e/e5/136MS8.png'], 'ポリゴン': [65, 60, 70, 85, 75, 40, 'ふめい', 'トレース', 'ダウンロード', 'https://cdn.bulbagarden.net/upload/b/bc/137MS8.png'], 'オムナイト': [35, 40, 100, 90, 55, 35, '1:7', 'すいすい', 'シェルアーマー', 'https://cdn.bulbagarden.net/upload/c/c2/138MS8.png'], 'オムスター': [70, 60, 125, 115, 70, 55, '1:7', 'すいすい', 'シェルアーマー', 'https://cdn.bulbagarden.net/upload/8/80/139MS8.png'], 'カブト': [30, 80, 90, 55, 45, 55, '1:7', 'すいすい', 'カブトアーマー', 'https://cdn.bulbagarden.net/upload/a/a8/140MS8.png'], 'カブトプス': [60, 115, 105, 65, 70, 80, '1:7', 'すいすい', 'カブトアーマー', 'https://cdn.bulbagarden.net/upload/4/4c/141MS8.png'], 'プテラ': [80, 105, 65, 60, 75, 130, '1:7', 'いしあたま', 'プレッシャー', 'https://cdn.bulbagarden.net/upload/9/90/142MS8.png'], 'カビゴン': [160, 110, 65, 65, 110, 30, '1:7', 'めんえき', 'あついしぼう', 'https://cdn.bulbagarden.net/upload/5/5a/143MS8.png'], 'フリーザー': [90, 85, 100, 95, 125, 85, 'ふめい', 'プレッシャー', '', 'https://cdn.bulbagarden.net/upload/a/a0/144MS8.png'], 'サンダー': [90, 90, 85, 125, 90, 100, 'ふめい', 'プレッシャー', '', 'https://cdn.bulbagarden.net/upload/4/4b/145MS8.png'], 'ファイヤー': [90, 100, 90, 125, 85, 90, 'ふめい', 'プレッシャー', '', 'https://cdn.bulbagarden.net/upload/f/f6/146MS8.png'], 'ミニリュウ': [41, 64, 45, 50, 50, 50, '1:1', 'だっぴ', '', 'https://cdn.bulbagarden.net/upload/9/9d/147MS8.png'], 'ハクリュー': [61, 84, 65, 70, 70, 70, '1:1', 'だっぴ', '', 'https://cdn.bulbagarden.net/upload/b/b7/148MS8.png'], 'カイリュー': [91, 134, 95, 100, 100, 80, '1:1', 'せいしんりょく', '', 'https://cdn.bulbagarden.net/upload/5/55/149MS8.png'], 'ミュウツー': [106, 110, 90, 154, 90, 130, 'ふめい', 'プレッシャー', '', 'https://cdn.bulbagarden.net/upload/3/3e/150MS8.png'], 'ミュウ': [100, 100, 100, 100, 100, 100, 'ふめい', 'シンクロ', '', 'https://cdn.bulbagarden.net/upload/b/b0/151MS8.png'], 'チコリータ': [45, 49, 65, 49, 65, 45, '1:7', 'しんりょく', '', 'https://cdn.bulbagarden.net/upload/4/41/152MS6.png'], 'ベイリーフ': [60, 62, 80, 63, 80, 60, '1:7', 'しんりょく', '', 'https://cdn.bulbagarden.net/upload/7/71/153MS6.png'], 'メガニウム': [80, 82, 100, 83, 100, 80, '1:7', 'しんりょく', '', 'https://cdn.bulbagarden.net/upload/2/23/154MS6.png'], 'ヒノアラシ': [39, 52, 43, 60, 50, 65, '1:7', 'もうか', '', 'https://cdn.bulbagarden.net/upload/9/96/155MS6.png'], 'マグマラシ': [58, 64, 58, 80, 65, 80, '1:7', 'もうか', '', 'https://cdn.bulbagarden.net/upload/d/df/156MS6.png'], 'バクフーン': [78, 84, 78, 109, 85, 100, '1:7', 'もうか', '', 'https://cdn.bulbagarden.net/upload/5/55/157MS6.png'], 'ワニノコ': [50, 65, 64, 44, 48, 43, '1:7', 'げきりゅう', '', 'https://cdn.bulbagarden.net/upload/3/39/158MS6.png'], 'アリゲイツ': [65, 80, 80, 59, 63, 58, '1:7', 'げきりゅう', '', 'https://cdn.bulbagarden.net/upload/b/b9/159MS6.png'], 'オーダイル': [85, 105, 100, 79, 83, 78, '1:7', 'げきりゅう', '', 'https://cdn.bulbagarden.net/upload/9/99/160MS6.png'], 'オタチ': [35, 46, 34, 35, 45, 20, '1:1', 'にげあし', 'するどいめ', 'https://cdn.bulbagarden.net/upload/6/69/161MS6.png'], 'オオタチ': [85, 76, 64, 45, 55, 90, '1:1', 'にげあし', 'するどいめ', 'https://cdn.bulbagarden.net/upload/4/47/162MS6.png'], 'ホーホー': [60, 30, 30, 36, 56, 50, '1:1', 'ふみん', 'するどいめ', 'https://cdn.bulbagarden.net/upload/a/ae/163MS8.png'], 'ヨルノズク': [100, 50, 50, 76, 96, 70, '1:1', 'ふみん', 'するどいめ', 'https://cdn.bulbagarden.net/upload/5/50/164MS8.png'], 'レディバ': [40, 20, 30, 40, 80, 55, '1:1', 'むしのしらせ', 'はやおき', 'https://cdn.bulbagarden.net/upload/f/fe/165MS6.png'], 'レディアン': [55, 35, 50, 55, 110, 85, '1:1', 'むしのしらせ', 'はやおき', 'https://cdn.bulbagarden.net/upload/1/10/166MS6.png'], 'イトマル': [40, 60, 40, 40, 40, 30, '1:1', 'むしのしらせ', 'ふみん', 'https://cdn.bulbagarden.net/upload/7/71/167MS6.png'], 'アリアドス': [70, 90, 70, 60, 60, 40, '1:1', 'むしのしらせ', 'ふみん', 'https://cdn.bulbagarden.net/upload/9/96/168MS6.png'], 'クロバット': [85, 90, 80, 70, 80, 130, '1:1', 'せいしんりょく', '', 'https://cdn.bulbagarden.net/upload/f/fa/169MS8.png'], 'チョンチー': [75, 38, 38, 56, 56, 67, '1:1', 'ちくでん', 'はっこう', 'https://cdn.bulbagarden.net/upload/a/ac/170MS8.png'], 'ランターン': [125, 58, 58, 76, 76, 67, '1:1', 'ちくでん', 'はっこう', 'https://cdn.bulbagarden.net/upload/d/d4/171MS8.png'], 'ピチュー': [20, 40, 15, 35, 35, 60, '1:1', 'せいでんき', '', 'https://cdn.bulbagarden.net/upload/b/be/172MS8.png'], 'ピィ': [50, 25, 28, 45, 55, 15, '3:1', 'メロメロボディ', 'マジックガード', 'https://cdn.bulbagarden.net/upload/e/e0/173MS8.png'], 'ププリン': [90, 30, 15, 40, 20, 15, '3:1', 'メロメロボディ', '', 'https://cdn.bulbagarden.net/upload/9/95/174MS8.png'], 'トゲピー': [35, 20, 65, 40, 65, 20, '1:7', 'はりきり', 'てんのめぐみ', 'https://cdn.bulbagarden.net/upload/4/4c/175MS8.png'], 'トゲチック': [55, 40, 85, 80, 105, 40, '1:7', 'はりきり', 'てんのめぐみ', 'https://cdn.bulbagarden.net/upload/b/bc/176MS8.png'], 'ネイティ': [40, 50, 45, 70, 45, 70, '1:1', 'シンクロ', 'はやおき', 'https://cdn.bulbagarden.net/upload/7/7a/177MS8.png'], 'ネイティオ': [65, 75, 70, 95, 70, 95, '1:1', 'シンクロ', 'はやおき', 'https://cdn.bulbagarden.net/upload/8/88/178MS8.png'], 'メリープ': [55, 40, 40, 65, 45, 35, '1:1', 'せいでんき', '', 'https://cdn.bulbagarden.net/upload/e/e8/179MS6.png'], 'モココ': [70, 55, 55, 80, 60, 45, '1:1', 'せいでんき', '', 'https://cdn.bulbagarden.net/upload/e/eb/180MS6.png'], 'デンリュウ': [90, 75, 75, 115, 90, 55, '1:1', 'せいでんき', '', 'https://cdn.bulbagarden.net/upload/8/89/181MS6.png'], 'キレイハナ': [75, 80, 85, 90, 100, 50, '1:1', 'ようりょくそ', '', 'https://cdn.bulbagarden.net/upload/c/c9/182MS8.png'], 'マリル': [70, 20, 50, 20, 50, 40, '1:1', 'あついしぼう', 'ちからもち', 'https://cdn.bulbagarden.net/upload/8/8f/183MS8.png'], 'マリルリ': [100, 50, 80, 50, 80, 50, '1:1', 'あついしぼう', 'ちからもち', 'https://cdn.bulbagarden.net/upload/c/cc/184MS8.png'], 'ウソッキー': [70, 100, 115, 30, 65, 30, '1:1', 'がんじょう', 'いしあたま', 'https://cdn.bulbagarden.net/upload/b/b3/185MS8.png'], 'ニョロトノ': [90, 75, 75, 90, 100, 70, '1:1', 'ちょすい', 'しめりけ', 'https://cdn.bulbagarden.net/upload/f/ff/186MS8.png'], 'ハネッコ': [35, 35, 40, 35, 55, 50, '1:1', 'ようりょくそ', 'リーフガード', 'https://cdn.bulbagarden.net/upload/b/b3/187MS6.png'], 'ポポッコ': [55, 45, 50, 45, 65, 80, '1:1', 'ようりょくそ', 'リーフガード', 'https://cdn.bulbagarden.net/upload/d/d4/188MS6.png'], 'ワタッコ': [75, 55, 70, 55, 85, 110, '1:1', 'ようりょくそ', 'リーフガード', 'https://cdn.bulbagarden.net/upload/5/5b/189MS6.png'], 'エイパム': [55, 70, 55, 40, 55, 85, '1:1', 'にげあし', 'ものひろい', 'https://cdn.bulbagarden.net/upload/9/92/190MS6.png'], 'ヒマナッツ': [30, 30, 30, 30, 30, 30, '1:1', 'ようりょくそ', 'サンパワー', 'https://cdn.bulbagarden.net/upload/b/b6/191MS6.png'], 'キマワリ': [75, 75, 55, 105, 85, 30, '1:1', 'ようりょくそ', 'サンパワー', 'https://cdn.bulbagarden.net/upload/8/89/192MS6.png'], 'ヤンヤンマ': [65, 65, 45, 75, 45, 95, '1:1', 'かそく', 'ふくがん', 'https://cdn.bulbagarden.net/upload/1/1c/193MS6.png'], 'ウパー': [55, 45, 45, 25, 25, 15, '1:1', 'しめりけ', 'ちょすい', 'https://cdn.bulbagarden.net/upload/c/cd/194MS8.png'], 'ヌオー': [95, 85, 85, 65, 65, 35, '1:1', 'しめりけ', 'ちょすい', 'https://cdn.bulbagarden.net/upload/1/15/195MS8.png'], 'エーフィ': [65, 65, 60, 130, 95, 110, '1:7', 'シンクロ', '', 'https://cdn.bulbagarden.net/upload/7/78/196MS8.png'], 'ブラッキー': [95, 65, 110, 60, 130, 65, '1:7', 'シンクロ', '', 'https://cdn.bulbagarden.net/upload/f/f4/197MS8.png'], 'ヤミカラス': [60, 85, 42, 85, 42, 91, '1:1', 'ふみん', 'きょううん', 'https://cdn.bulbagarden.net/upload/4/4f/198MS6.png'], 'ヤドキング': [95, 75, 80, 100, 110, 30, '1:1', 'どんかん', 'マイペース', 'https://cdn.bulbagarden.net/upload/f/f0/199MS8.png'], 'ムウマ': [60, 60, 60, 85, 85, 85, '1:1', 'ふゆう', '', 'https://cdn.bulbagarden.net/upload/e/e3/200MS6.png'], 'アンノーン': [48, 72, 48, 72, 48, 48, 'ふめい', 'ふゆう', '', 'https://cdn.bulbagarden.net/upload/b/b9/201QUMS6.png'], 'ソーナンス': [190, 33, 58, 33, 58, 33, '1:1', 'かげふみ', '', 'https://cdn.bulbagarden.net/upload/8/89/202MS8.png'], 'キリンリキ': [70, 80, 65, 90, 65, 85, '1:1', 'せいしんりょく', 'はやおき', 'https://cdn.bulbagarden.net/upload/b/bc/203MS6.png'], 'クヌギダマ': [50, 65, 90, 35, 35, 15, '1:1', 'がんじょう', '', 'https://cdn.bulbagarden.net/upload/d/db/204MS6.png'], 'フォレトス': [75, 90, 140, 60, 60, 40, '1:1', 'がんじょう', '', 'https://cdn.bulbagarden.net/upload/c/c4/205MS6.png'], 'ノコッチ': [100, 70, 70, 65, 65, 45, '1:1', 'てんのめぐみ', 'にげあし', 'https://cdn.bulbagarden.net/upload/1/19/206MS8.png'], 'グライガー': [65, 75, 105, 35, 65, 85, '1:1', 'かいりきバサミ', 'すながくれ', 'https://cdn.bulbagarden.net/upload/2/27/207MS6.png'], 'ハガネール': [75, 85, 200, 55, 65, 30, '1:1', 'いしあたま', 'がんじょう', 'https://cdn.bulbagarden.net/upload/e/ee/208MS8.png'], 'ブルー': [60, 80, 50, 40, 40, 30, '3:1', 'いかく', 'にげあし', 'https://cdn.bulbagarden.net/upload/d/d4/209MS6.png'], 'グランブル': [90, 120, 75, 60, 60, 45, '3:1', 'いかく', 'はやあし', 'https://cdn.bulbagarden.net/upload/8/8e/210MS6.png'], 'ハリーセン': [65, 95, 75, 55, 55, 85, '1:1', 'どくのトゲ', 'すいすい', 'https://cdn.bulbagarden.net/upload/a/a4/211MS8.png'], 'ハッサム': [70, 130, 100, 55, 80, 65, '1:1', 'むしのしらせ', 'テクニシャン', 'https://cdn.bulbagarden.net/upload/b/bb/212MS8.png'], 'ツボツボ': [20, 10, 230, 10, 230, 5, '1:1', 'がんじょう', 'くいしんぼう', 'https://cdn.bulbagarden.net/upload/0/00/213MS8.png'], 'ヘラクロス': [80, 125, 75, 40, 95, 85, '1:1', 'むしのしらせ', 'こんじょう', 'https://cdn.bulbagarden.net/upload/9/9d/214MS8.png'], 'ニューラ': [55, 95, 55, 35, 75, 115, '1:1', 'せいしんりょく', 'するどいめ', 'https://cdn.bulbagarden.net/upload/e/ea/215MS8.png'], 'ヒメグマ': [60, 80, 50, 50, 50, 40, '1:1', 'ものひろい', 'はやあし', 'https://cdn.bulbagarden.net/upload/9/90/216MS6.png'], 'リングマ': [90, 130, 75, 75, 75, 55, '1:1', 'こんじょう', 'はやあし', 'https://cdn.bulbagarden.net/upload/6/6d/217MS6.png'], 'マグマッグ': [40, 40, 40, 70, 40, 20, '1:1', 'マグマのよろい', 'ほのおのからだ', 'https://cdn.bulbagarden.net/upload/8/8e/218MS6.png'], 'マグカルゴ': [50, 50, 120, 80, 80, 30, '1:1', 'マグマのよろい', 'ほのおのからだ', 'https://cdn.bulbagarden.net/upload/e/e3/219MS6.png'], 'ウリムー': [50, 50, 40, 30, 30, 50, '1:1', 'どんかん', 'ゆきがくれ', 'https://cdn.bulbagarden.net/upload/2/26/220MS8.png'], 'イノムー': [100, 100, 80, 60, 60, 50, '1:1', 'どんかん', 'ゆきがくれ', 'https://cdn.bulbagarden.net/upload/0/01/221MS8.png'], 'サニーゴ': [55, 55, 85, 65, 85, 35, '3:1', 'はりきり', 'しぜんかいふく', 'https://cdn.bulbagarden.net/upload/5/52/222MS8.png'], 'テッポウオ': [35, 65, 35, 65, 35, 65, '1:1', 'はりきり', 'スナイパー', 'https://cdn.bulbagarden.net/upload/c/cb/223MS8.png'], 'オクタン': [75, 105, 75, 105, 75, 45, '1:1', 'きゅうばん', 'スナイパー', 'https://cdn.bulbagarden.net/upload/f/f6/224MS8.png'], 'デリバード': [45, 55, 45, 65, 45, 75, '1:1', 'やるき', 'はりきり', 'https://cdn.bulbagarden.net/upload/9/90/225MS8.png'], 'マンタイン': [65, 40, 70, 80, 140, 70, '1:1', 'すいすい', 'ちょすい', 'https://cdn.bulbagarden.net/upload/9/92/226MS8.png'], 'エアームド': [65, 80, 140, 40, 70, 70, '1:1', 'するどいめ', 'がんじょう', 'https://cdn.bulbagarden.net/upload/6/6b/227MS8.png'], 'デルビル': [45, 60, 30, 80, 50, 65, '1:1', 'はやおき', 'もらいび', 'https://cdn.bulbagarden.net/upload/b/bc/228MS6.png'], 'ヘルガー': [75, 90, 50, 110, 80, 95, '1:1', 'はやおき', 'もらいび', 'https://cdn.bulbagarden.net/upload/4/40/229MS6.png'], 'キングドラ': [75, 95, 95, 95, 95, 85, '1:1', 'すいすい', 'スナイパー', 'https://cdn.bulbagarden.net/upload/7/7f/230MS8.png'], 'ゴマゾウ': [90, 60, 60, 40, 40, 40, '1:1', 'ものひろい', '', 'https://cdn.bulbagarden.net/upload/6/6c/231MS6.png'], 'ドンファン': [90, 120, 120, 60, 60, 50, '1:1', 'がんじょう', '', 'https://cdn.bulbagarden.net/upload/8/85/232MS6.png'], 'ポリゴン2': [85, 80, 90, 105, 95, 60, 'ふめい', 'トレース', 'ダウンロード', 'https://cdn.bulbagarden.net/upload/a/a0/233MS8.png'], 'オドシシ': [73, 95, 62, 85, 65, 85, '1:1', 'いかく', 'おみとおし', 'https://cdn.bulbagarden.net/upload/1/19/234MS6.png'], 'ドーブル': [55, 20, 35, 20, 45, 75, '1:1', 'マイペース', 'テクニシャン', 'https://cdn.bulbagarden.net/upload/a/af/235MS6.png'], 'バルキー': [35, 35, 35, 35, 35, 35, '♂のみ', 'こんじょう', 'ふくつのこころ', 'https://cdn.bulbagarden.net/upload/d/dc/236MS8.png'], 'カポエラー': [50, 95, 95, 35, 110, 70, '♂のみ', 'いかく', 'テクニシャン', 'https://cdn.bulbagarden.net/upload/9/93/237MS8.png'], 'ムチュール': [45, 30, 15, 85, 65, 65, '♀のみ', 'どんかん', 'よちむ', 'https://cdn.bulbagarden.net/upload/0/0e/238MS8.png'], 'エレキッド': [45, 63, 37, 65, 55, 95, '1:3', 'せいでんき', '', 'https://cdn.bulbagarden.net/upload/3/33/239MS8.png'], 'ブビィ': [45, 75, 37, 70, 55, 83, '1:3', 'ほのおのからだ', '', 'https://cdn.bulbagarden.net/upload/0/06/240MS8.png'], 'ミルタンク': [95, 80, 105, 40, 70, 100, '♀のみ', 'あついしぼう', 'きもったま', 'https://cdn.bulbagarden.net/upload/7/73/241MS8.png'], 'ハピナス': [255, 10, 10, 75, 135, 55, '♀のみ', 'しぜんかいふく', 'てんのめぐみ', 'https://cdn.bulbagarden.net/upload/d/d6/242MS8.png'], 'ライコウ': [90, 85, 75, 115, 100, 115, 'ふめい', 'プレッシャー', '', 'https://cdn.bulbagarden.net/upload/2/27/243MS8.png'], 'エンテイ': [115, 115, 85, 90, 75, 100, 'ふめい', 'プレッシャー', '', 'https://cdn.bulbagarden.net/upload/8/81/244MS8.png'], 'スイクン': [100, 75, 115, 90, 115, 85, 'ふめい', 'プレッシャー', '', 'https://cdn.bulbagarden.net/upload/0/0b/245MS8.png'], 'ヨーギラス': [50, 64, 50, 45, 50, 41, '1:1', 'こんじょう', '', 'https://cdn.bulbagarden.net/upload/4/47/246MS8.png'], 'サナギラス': [70, 84, 70, 65, 70, 51, '1:1', 'だっぴ', '', 'https://cdn.bulbagarden.net/upload/2/23/247MS8.png'], 'バンギラス': [100, 134, 110, 95, 100, 61, '1:1', 'すなおこし', '', 'https://cdn.bulbagarden.net/upload/3/30/248MS8.png'], 'ルギア': [106, 90, 130, 90, 154, 110, 'ふめい', 'プレッシャー', '', 'https://cdn.bulbagarden.net/upload/1/1e/249MS8.png'], 'ホウオウ': [106, 130, 90, 110, 154, 90, 'ふめい', 'プレッシャー', '', 'https://cdn.bulbagarden.net/upload/c/c4/250MS8.png'], 'セレビィ': [100, 100, 100, 100, 100, 100, 'ふめい', 'しぜんかいふく', '', 'https://cdn.bulbagarden.net/upload/2/26/251MS8.png'], 'キモリ': [40, 45, 35, 65, 55, 70, '1:7', 'しんりょく', '', 'https://cdn.bulbagarden.net/upload/e/e0/252MS8.png'], 'ジュプトル': [50, 65, 45, 85, 65, 95, '1:7', 'しんりょく', '', 'https://cdn.bulbagarden.net/upload/4/43/253MS8.png'], 'ジュカイン': [70, 85, 65, 105, 85, 120, '1:7', 'しんりょく', '', 'https://cdn.bulbagarden.net/upload/6/67/254MS8.png'], 'アチャモ': [45, 60, 40, 70, 50, 45, '1:7', 'もうか', '', 'https://cdn.bulbagarden.net/upload/7/79/255MS8.png'], 'ワカシャモ': [60, 85, 60, 85, 60, 55, '1:7', 'もうか', '', 'https://cdn.bulbagarden.net/upload/c/cc/256MS8.png'], 'バシャーモ': [80, 120, 70, 110, 70, 80, '1:7', 'もうか', '', 'https://cdn.bulbagarden.net/upload/d/d5/257MS8.png'], 'ミズゴロウ': [50, 70, 50, 50, 50, 40, '1:7', 'げきりゅう', '', 'https://cdn.bulbagarden.net/upload/4/43/258MS8.png'], 'ヌマクロー': [70, 85, 70, 60, 70, 50, '1:7', 'げきりゅう', '', 'https://cdn.bulbagarden.net/upload/0/04/259MS8.png'], 'ラグラージ': [100, 110, 90, 85, 90, 60, '1:7', 'げきりゅう', '', 'https://cdn.bulbagarden.net/upload/2/2b/260MS8.png'], 'ポチエナ': [35, 55, 35, 30, 30, 35, '1:1', 'にげあし', 'はやあし', 'https://cdn.bulbagarden.net/upload/3/39/261MS6.png'], 'グラエナ': [70, 90, 70, 60, 60, 70, '1:1', 'いかく', 'はやあし', 'https://cdn.bulbagarden.net/upload/b/ba/262MS6.png'], 'ジグザグマ': [38, 30, 41, 30, 41, 60, '1:1', 'ものひろい', 'くいしんぼう', 'https://cdn.bulbagarden.net/upload/4/47/263MS8.png'], 'マッスグマ': [78, 70, 61, 50, 61, 100, '1:1', 'ものひろい', 'くいしんぼう', 'https://cdn.bulbagarden.net/upload/c/c1/264MS8.png'], 'ケムッソ': [45, 45, 35, 20, 30, 20, '1:1', 'りんぷん', '', 'https://cdn.bulbagarden.net/upload/f/f4/265MS6.png'], 'カラサリス': [50, 35, 55, 25, 25, 15, '1:1', 'だっぴ', '', 'https://cdn.bulbagarden.net/upload/7/76/266MS6.png'], 'アゲハント': [60, 70, 50, 90, 50, 65, '1:1', 'むしのしらせ', '', 'https://cdn.bulbagarden.net/upload/0/0e/267MS6.png'], 'マユルド': [50, 35, 55, 25, 25, 15, '1:1', 'だっぴ', '', 'https://cdn.bulbagarden.net/upload/7/70/268MS6.png'], 'ドクケイル': [60, 50, 70, 50, 90, 65, '1:1', 'りんぷん', '', 'https://cdn.bulbagarden.net/upload/a/ac/269MS6.png'], 'ハスボー': [40, 30, 30, 40, 50, 30, '1:1', 'すいすい', 'あめうけざら', 'https://cdn.bulbagarden.net/upload/1/19/270MS8.png'], 'ハスブレロ': [60, 50, 50, 60, 70, 50, '1:1', 'すいすい', 'あめうけざら', 'https://cdn.bulbagarden.net/upload/6/61/271MS8.png'], 'ルンパッパ': [80, 70, 70, 90, 100, 70, '1:1', 'すいすい', 'あめうけざら', 'https://cdn.bulbagarden.net/upload/e/e4/272MS8.png'], 'タネボー': [40, 40, 50, 30, 30, 30, '1:1', 'ようりょくそ', 'はやおき', 'https://cdn.bulbagarden.net/upload/d/da/273MS8.png'], 'コノハナ': [70, 70, 40, 60, 40, 60, '1:1', 'ようりょくそ', 'はやおき', 'https://cdn.bulbagarden.net/upload/8/8e/274MS8.png'], 'ダーテング': [90, 100, 60, 90, 60, 80, '1:1', 'ようりょくそ', 'はやおき', 'https://cdn.bulbagarden.net/upload/c/c7/275MS8.png'], 'スバメ': [40, 55, 30, 30, 30, 85, '1:1', 'こんじょう', '', 'https://cdn.bulbagarden.net/upload/2/2f/276MS6.png'], 'オオスバメ': [60, 85, 60, 50, 50, 125, '1:1', 'こんじょう', '', 'https://cdn.bulbagarden.net/upload/6/65/277MS6.png'], 'キャモメ': [40, 30, 30, 55, 30, 85, '1:1', 'するどいめ', '', 'https://cdn.bulbagarden.net/upload/2/20/278MS8.png'], 'ペリッパー': [60, 50, 100, 85, 70, 65, '1:1', 'するどいめ', '', 'https://cdn.bulbagarden.net/upload/3/33/279MS8.png'], 'ラルトス': [28, 25, 25, 45, 35, 40, '1:1', 'シンクロ', 'トレース', 'https://cdn.bulbagarden.net/upload/e/e8/280MS8.png'], 'キルリア': [38, 35, 35, 65, 55, 50, '1:1', 'シンクロ', 'トレース', 'https://cdn.bulbagarden.net/upload/5/51/281MS8.png'], 'サーナイト': [68, 65, 65, 125, 115, 80, '1:1', 'シンクロ', 'トレース', 'https://cdn.bulbagarden.net/upload/0/06/282MS8.png'], 'アメタマ': [40, 30, 32, 50, 52, 65, '1:1', 'すいすい', '', 'https://cdn.bulbagarden.net/upload/0/09/283MS6.png'], 'アメモース': [70, 60, 62, 80, 82, 60, '1:1', 'いかく', '', 'https://cdn.bulbagarden.net/upload/d/d5/284MS6.png'], 'キノココ': [60, 40, 60, 40, 60, 35, '1:1', 'ほうし', 'ポイズンヒール', 'https://cdn.bulbagarden.net/upload/7/70/285MS6.png'], 'キノガッサ': [60, 130, 80, 60, 60, 70, '1:1', 'ほうし', 'ポイズンヒール', 'https://cdn.bulbagarden.net/upload/8/8c/286MS6.png'], 'ナマケロ': [60, 60, 60, 35, 35, 30, '1:1', 'なまけ', '', 'https://cdn.bulbagarden.net/upload/a/af/287MS6.png'], 'ヤルキモノ': [80, 80, 80, 55, 55, 90, '1:1', 'やるき', '', 'https://cdn.bulbagarden.net/upload/e/e6/288MS6.png'], 'ケッキング': [150, 160, 100, 95, 65, 100, '1:1', 'なまけ', '', 'https://cdn.bulbagarden.net/upload/f/f3/289MS6.png'], 'ツチニン': [31, 45, 90, 30, 30, 40, '1:1', 'ふくがん', '', 'https://cdn.bulbagarden.net/upload/6/6e/290MS8.png'], 'テッカニン': [61, 90, 45, 50, 50, 160, '1:1', 'かそく', '', 'https://cdn.bulbagarden.net/upload/c/c8/291MS8.png'], 'ヌケニン': [1, 90, 45, 30, 30, 40, 'ふめい', 'ふしぎなまもり', '', 'https://cdn.bulbagarden.net/upload/7/79/292MS8.png'], 'ゴニョニョ': [64, 51, 23, 51, 23, 28, '1:1', 'ぼうおん', '', 'https://cdn.bulbagarden.net/upload/b/bb/293MS8.png'], 'ドゴーム': [84, 71, 43, 71, 43, 48, '1:1', 'ぼうおん', '', 'https://cdn.bulbagarden.net/upload/6/69/294MS8.png'], 'バクオング': [104, 91, 63, 91, 63, 68, '1:1', 'ぼうおん', '', 'https://cdn.bulbagarden.net/upload/2/26/295MS8.png'], 'マクノシタ': [72, 60, 30, 20, 30, 25, '1:3', 'あついしぼう', 'こんじょう', 'https://cdn.bulbagarden.net/upload/d/d9/296MS6.png'], 'ハリテヤマ': [144, 120, 60, 40, 60, 50, '1:3', 'あついしぼう', 'こんじょう', 'https://cdn.bulbagarden.net/upload/6/63/297MS6.png'], 'ルリリ': [50, 20, 40, 20, 40, 20, '3:1', 'あついしぼう', 'ちからもち', 'https://cdn.bulbagarden.net/upload/c/c7/298MS8.png'], 'ノズパス': [30, 45, 135, 45, 90, 30, '1:1', 'がんじょう', 'じりょく', 'https://cdn.bulbagarden.net/upload/6/65/299MS6.png'], 'エネコ': [50, 45, 45, 35, 35, 50, '3:1', 'メロメロボディ', 'ノーマルスキン', 'https://cdn.bulbagarden.net/upload/a/ad/300MS6.png'], 'エネコロロ': [70, 65, 65, 55, 55, 70, '3:1', 'メロメロボディ', 'ノーマルスキン', 'https://cdn.bulbagarden.net/upload/e/ea/301MS6.png'], 'ヤミラミ': [50, 75, 75, 65, 65, 50, '1:1', 'するどいめ', 'あとだし', 'https://cdn.bulbagarden.net/upload/0/0d/302MS8.png'], 'クチート': [50, 85, 85, 55, 55, 50, '1:1', 'かいりきバサミ', 'いかく', 'https://cdn.bulbagarden.net/upload/9/92/303MS8.png'], 'ココドラ': [50, 70, 100, 40, 40, 30, '1:1', 'がんじょう', 'いしあたま', 'https://cdn.bulbagarden.net/upload/b/b5/304MS8.png'], 'コドラ': [60, 90, 140, 50, 50, 40, '1:1', 'がんじょう', 'いしあたま', 'https://cdn.bulbagarden.net/upload/0/0d/305MS8.png'], 'ボスゴドラ': [70, 110, 180, 60, 60, 50, '1:1', 'がんじょう', 'いしあたま', 'https://cdn.bulbagarden.net/upload/6/68/306MS8.png'], 'アサナン': [30, 40, 55, 40, 55, 60, '1:1', 'ヨガパワー', '', 'https://cdn.bulbagarden.net/upload/1/1a/307MS6.png'], 'チャーレム': [60, 60, 75, 60, 75, 80, '1:1', 'ヨガパワー', '', 'https://cdn.bulbagarden.net/upload/c/cf/308MS6.png'], 'ラクライ': [40, 45, 40, 65, 40, 65, '1:1', 'せいでんき', 'ひらいしん', 'https://cdn.bulbagarden.net/upload/4/4f/309MS8.png'], 'ライボルト': [70, 75, 60, 105, 60, 105, '1:1', 'せいでんき', 'ひらいしん', 'https://cdn.bulbagarden.net/upload/4/47/310MS8.png'], 'プラスル': [60, 50, 40, 85, 75, 95, '1:1', 'プラス', '', 'https://cdn.bulbagarden.net/upload/f/f2/311MS6.png'], 'マイナン': [60, 40, 50, 75, 85, 95, '1:1', 'マイナス', '', 'https://cdn.bulbagarden.net/upload/3/35/312MS6.png'], 'バルビート': [65, 73, 55, 47, 75, 85, '♂のみ', 'はっこう', 'むしのしらせ', 'https://cdn.bulbagarden.net/upload/7/75/313MS6.png'], 'イルミーゼ': [65, 47, 55, 73, 75, 85, '♀のみ', 'どんかん', 'いろめがね', 'https://cdn.bulbagarden.net/upload/2/23/314MS6.png'], 'ロゼリア': [50, 60, 45, 100, 80, 65, '1:1', 'しぜんかいふく', 'どくのトゲ', 'https://cdn.bulbagarden.net/upload/f/f3/315MS8.png'], 'ゴクリン': [70, 43, 53, 43, 53, 40, '1:1', 'ヘドロえき', 'ねんちゃく', 'https://cdn.bulbagarden.net/upload/d/db/316MS6.png'], 'マルノーム': [100, 73, 83, 73, 83, 55, '1:1', 'ヘドロえき', 'ねんちゃく', 'https://cdn.bulbagarden.net/upload/e/ed/317MS6.png'], 'キバニア': [45, 90, 20, 65, 20, 65, '1:1', 'さめはだ', '', 'https://cdn.bulbagarden.net/upload/6/66/318MS8.png'], 'サメハダー': [70, 120, 40, 95, 40, 95, '1:1', 'さめはだ', '', 'https://cdn.bulbagarden.net/upload/c/cc/319MS8.png'], 'ホエルコ': [130, 70, 35, 70, 35, 60, '1:1', 'みずのベール', 'どんかん', 'https://cdn.bulbagarden.net/upload/2/2e/320MS8.png'], 'ホエルオー': [170, 90, 45, 90, 45, 60, '1:1', 'みずのベール', 'どんかん', 'https://cdn.bulbagarden.net/upload/7/70/321MS8.png'], 'ドンメル': [60, 60, 40, 65, 45, 35, '1:1', 'どんかん', 'たんじゅん', 'https://cdn.bulbagarden.net/upload/5/52/322MS6.png'], 'バクーダ': [70, 100, 70, 105, 75, 40, '1:1', 'マグマのよろい', 'ハードロック', 'https://cdn.bulbagarden.net/upload/8/8e/323MS6.png'], 'コータス': [70, 85, 140, 85, 70, 20, '1:1', 'しろいけむり', '', 'https://cdn.bulbagarden.net/upload/9/95/324MS8.png'], 'バネブー': [60, 25, 35, 70, 80, 60, '1:1', 'あついしぼう', 'マイペース', 'https://cdn.bulbagarden.net/upload/a/ab/325MS6.png'], 'ブーピッグ': [80, 45, 65, 90, 110, 80, '1:1', 'あついしぼう', 'マイペース', 'https://cdn.bulbagarden.net/upload/5/53/326MS6.png'], 'パッチール': [60, 60, 60, 60, 60, 60, '1:1', 'マイペース', 'ちどりあし', 'https://cdn.bulbagarden.net/upload/f/f9/327MS6.png'], 'ナックラー': [45, 100, 45, 45, 45, 10, '1:1', 'かいりきバサミ', 'ありじごく', 'https://cdn.bulbagarden.net/upload/1/12/328MS8.png'], 'ビブラーバ': [50, 70, 50, 50, 50, 70, '1:1', 'ふゆう', '', 'https://cdn.bulbagarden.net/upload/c/c2/329MS8.png'], 'フライゴン': [80, 100, 80, 80, 80, 100, '1:1', 'ふゆう', '', 'https://cdn.bulbagarden.net/upload/2/2d/330MS8.png'], 'サボネア': [50, 85, 40, 85, 40, 35, '1:1', 'すながくれ', '', 'https://cdn.bulbagarden.net/upload/7/70/331MS6.png'], 'ノクタス': [70, 115, 60, 115, 60, 55, '1:1', 'すながくれ', '', 'https://cdn.bulbagarden.net/upload/9/94/332MS6.png'], 'チルット': [45, 40, 60, 40, 75, 50, '1:1', 'しぜんかいふく', '', 'https://cdn.bulbagarden.net/upload/a/a7/333MS8.png'], 'チルタリス': [75, 70, 90, 70, 105, 80, '1:1', 'しぜんかいふく', '', 'https://cdn.bulbagarden.net/upload/2/2e/334MS8.png'], 'ザングース': [73, 115, 60, 60, 60, 90, '1:1', 'めんえき', '', 'https://cdn.bulbagarden.net/upload/c/c6/335MS6.png'], 'ハブネーク': [73, 100, 60, 100, 60, 65, '1:1', 'だっぴ', '', 'https://cdn.bulbagarden.net/upload/a/a5/336MS6.png'], 'ルナトーン': [70, 55, 65, 95, 85, 70, 'ふめい', 'ふゆう', '', 'https://cdn.bulbagarden.net/upload/4/45/337MS8.png'], 'ソルロック': [70, 95, 85, 55, 65, 70, 'ふめい', 'ふゆう', '', 'https://cdn.bulbagarden.net/upload/b/b2/338MS8.png'], 'ドジョッチ': [50, 48, 43, 46, 41, 60, '1:1', 'どんかん', 'きけんよち', 'https://cdn.bulbagarden.net/upload/e/ef/339MS8.png'], 'ナマズン': [110, 78, 73, 76, 71, 60, '1:1', 'どんかん', 'きけんよち', 'https://cdn.bulbagarden.net/upload/6/69/340MS8.png'], 'ヘイガニ': [43, 80, 65, 50, 35, 35, '1:1', 'かいりきバサミ', 'シェルアーマー', 'https://cdn.bulbagarden.net/upload/e/e2/341MS8.png'], 'シザリガー': [63, 120, 85, 90, 55, 55, '1:1', 'かいりきバサミ', 'シェルアーマー', 'https://cdn.bulbagarden.net/upload/3/3e/342MS8.png'], 'ヤジロン': [40, 40, 55, 40, 70, 55, 'ふめい', 'ふゆう', '', 'https://cdn.bulbagarden.net/upload/0/03/343MS8.png'], 'ネンドール': [60, 70, 105, 70, 120, 75, 'ふめい', 'ふゆう', '', 'https://cdn.bulbagarden.net/upload/2/2a/344MS8.png'], 'リリーラ': [66, 41, 77, 61, 87, 23, '1:7', 'きゅうばん', '', 'https://cdn.bulbagarden.net/upload/b/b8/345MS8.png'], 'ユレイドル': [86, 81, 97, 81, 107, 43, '1:7', 'きゅうばん', '', 'https://cdn.bulbagarden.net/upload/3/34/346MS8.png'], 'アノプス': [45, 95, 50, 40, 50, 75, '1:7', 'カブトアーマー', '', 'https://cdn.bulbagarden.net/upload/f/f4/347MS8.png'], 'アーマルド': [75, 125, 100, 70, 80, 45, '1:7', 'カブトアーマー', '', 'https://cdn.bulbagarden.net/upload/3/3b/348MS8.png'], 'ヒンバス': [20, 15, 20, 10, 55, 80, '1:1', 'すいすい', '', 'https://cdn.bulbagarden.net/upload/7/75/349MS8.png'], 'ミロカロス': [95, 60, 79, 100, 125, 81, '1:1', 'ふしぎなうろこ', '', 'https://cdn.bulbagarden.net/upload/d/d9/350MS8.png'], 'ポワルン': [70, 70, 70, 70, 70, 70, '1:1', 'てんきや', '', 'https://cdn.bulbagarden.net/upload/e/ef/351MS6.png'], 'カクレオン': [60, 90, 70, 60, 120, 40, '1:1', 'へんしょく', '', 'https://cdn.bulbagarden.net/upload/d/de/352MS6.png'], 'カゲボウズ': [44, 75, 35, 63, 33, 45, '1:1', 'ふみん', 'おみとおし', 'https://cdn.bulbagarden.net/upload/4/4a/353MS6.png'], 'ジュペッタ': [64, 115, 65, 83, 63, 65, '1:1', 'ふみん', 'おみとおし', 'https://cdn.bulbagarden.net/upload/7/79/354MS6.png'], 'ヨマワル': [20, 40, 90, 30, 90, 25, '1:1', 'ふゆう', '', 'https://cdn.bulbagarden.net/upload/3/33/355MS8.png'], 'サマヨール': [40, 70, 130, 60, 130, 25, '1:1', 'プレッシャー', '', 'https://cdn.bulbagarden.net/upload/0/0b/356MS8.png'], 'トロピウス': [99, 68, 83, 72, 87, 51, '1:1', 'ようりょくそ', 'サンパワー', 'https://cdn.bulbagarden.net/upload/7/77/357MS6.png'], 'チリーン': [65, 50, 70, 95, 80, 65, '1:1', 'ふゆう', '', 'https://cdn.bulbagarden.net/upload/1/1a/358MS6.png'], 'アブソル': [65, 130, 60, 75, 60, 75, '1:1', 'プレッシャー', 'きょううん', 'https://cdn.bulbagarden.net/upload/4/42/359MS8.png'], 'ソーナノ': [95, 23, 48, 23, 48, 23, '1:1', 'かげふみ', '', 'https://cdn.bulbagarden.net/upload/9/97/360MS8.png'], 'ユキワラシ': [50, 50, 50, 50, 50, 50, '1:1', 'せいしんりょく', 'アイスボディ', 'https://cdn.bulbagarden.net/upload/a/af/361MS8.png'], 'オニゴーリ': [80, 80, 80, 80, 80, 80, '1:1', 'せいしんりょく', 'アイスボディ', 'https://cdn.bulbagarden.net/upload/f/f3/362MS8.png'], 'タマザラシ': [70, 40, 50, 55, 50, 25, '1:1', 'あついしぼう', 'アイスボディ', 'https://cdn.bulbagarden.net/upload/c/cb/363MS8.png'], 'トドグラー': [90, 60, 70, 75, 70, 45, '1:1', 'あついしぼう', 'アイスボディ', 'https://cdn.bulbagarden.net/upload/8/89/364MS8.png'], 'トドゼルガ': [110, 80, 90, 95, 90, 65, '1:1', 'あついしぼう', 'アイスボディ', 'https://cdn.bulbagarden.net/upload/5/5b/365MS8.png'], 'パールル': [35, 64, 85, 74, 55, 32, '1:1', 'シェルアーマー', '', 'https://cdn.bulbagarden.net/upload/6/67/366MS6.png'], 'ハンテール': [55, 104, 105, 94, 75, 52, '1:1', 'すいすい', '', 'https://cdn.bulbagarden.net/upload/4/4d/367MS6.png'], 'サクラビス': [55, 84, 105, 114, 75, 52, '1:1', 'すいすい', '', 'https://cdn.bulbagarden.net/upload/1/11/368MS6.png'], 'ジーランス': [100, 90, 130, 45, 65, 55, '1:7', 'すいすい', 'いしあたま', 'https://cdn.bulbagarden.net/upload/4/4a/369MS8.png'], 'ラブカス': [43, 30, 55, 40, 65, 97, '3:1', 'すいすい', '', 'https://cdn.bulbagarden.net/upload/1/1b/370MS6.png'], 'タツベイ': [45, 75, 60, 40, 30, 50, '1:1', 'いしあたま', '', 'https://cdn.bulbagarden.net/upload/a/a5/371MS8.png'], 'コモルー': [65, 95, 100, 60, 50, 50, '1:1', 'いしあたま', '', 'https://cdn.bulbagarden.net/upload/3/3c/372MS8.png'], 'ボーマンダ': [95, 135, 80, 110, 80, 100, '1:1', 'いかく', '', 'https://cdn.bulbagarden.net/upload/3/30/373MS8.png'], 'ダンバル': [40, 55, 80, 35, 60, 30, 'ふめい', 'クリアボディ', '', 'https://cdn.bulbagarden.net/upload/6/6b/374MS8.png'], 'メタング': [60, 75, 100, 55, 80, 50, 'ふめい', 'クリアボディ', '', 'https://cdn.bulbagarden.net/upload/a/af/375MS8.png'], 'メタグロス': [80, 135, 130, 95, 90, 70, 'ふめい', 'クリアボディ', '', 'https://cdn.bulbagarden.net/upload/4/48/376MS8.png'], 'レジロック': [80, 100, 200, 50, 100, 50, 'ふめい', 'クリアボディ', '', 'https://cdn.bulbagarden.net/upload/8/86/377MS8.png'], 'レジアイス': [80, 50, 100, 100, 200, 50, 'ふめい', 'クリアボディ', '', 'https://cdn.bulbagarden.net/upload/e/ee/378MS8.png'], 'レジスチル': [80, 75, 150, 75, 150, 50, 'ふめい', 'クリアボディ', '', 'https://cdn.bulbagarden.net/upload/1/16/379MS8.png'], 'ラティアス': [80, 80, 90, 110, 130, 110, '♀のみ', 'ふゆう', '', 'https://cdn.bulbagarden.net/upload/b/ba/380MS8.png'], 'ラティオス': [80, 90, 80, 130, 110, 110, '♂のみ', 'ふゆう', '', 'https://cdn.bulbagarden.net/upload/4/4c/381MS8.png'], 'カイオーガ': [100, 100, 90, 150, 140, 90, 'ふめい', 'あめふらし', '', 'https://cdn.bulbagarden.net/upload/a/a9/382MS8.png'], 'グラードン': [100, 150, 140, 100, 90, 90, 'ふめい', 'ひでり', '', 'https://cdn.bulbagarden.net/upload/c/cc/383MS8.png'], 'レックウザ': [105, 150, 90, 150, 90, 95, 'ふめい', 'エアロック', '', 'https://cdn.bulbagarden.net/upload/a/a4/384MS8.png'], 'ジラーチ': [100, 100, 100, 100, 100, 100, 'ふめい', 'てんのめぐみ', '', 'https://cdn.bulbagarden.net/upload/4/41/385MS8.png'], 'デオキシス': [50, 95, 90, 95, 90, 180, 'ふめい', 'プレッシャー', '', 'https://cdn.bulbagarden.net/upload/6/6a/386MS6.png']}
-            const Pdata_status_idx = 0;
-            const Pdata_sex_idx = 6;
-            const Pdata_ability_idx = 7;
-            const Pdata_img_idx = 9;
-
-            const seikaku2status = {
-              1 : [1.1, 0.9, 1.0, 1.0, 1.0],
-              3 : [1.1, 1.0, 0.9, 1.0, 1.0],
-              4 : [1.1, 1.0, 1.0, 0.9, 1.0],
-              2 : [1.1, 1.0, 1.0, 1.0, 0.9],
-              5 : [0.9, 1.1, 1.0, 1.0, 1.0],
-              8 : [1.0, 1.1, 0.9, 1.0, 1.0],
-              9 : [1.0, 1.1, 1.0, 0.9, 1.0],
-              7 : [1.0, 1.1, 1.0, 1.0, 0.9],
-             15 : [0.9, 1.0, 1.1, 1.0, 1.0],
-             16 : [1.0, 0.9, 1.1, 1.0, 1.0],
-             19 : [1.0, 1.0, 1.1, 0.9, 1.0],
-             17 : [1.0, 1.0, 1.1, 1.0, 0.9],
-             20 : [0.9, 1.0, 1.0, 1.1, 1.0],
-             21 : [1.0, 0.9, 1.0, 1.1, 1.0],
-             23 : [1.0, 1.0, 0.9, 1.1, 1.0],
-             22 : [1.0, 1.0, 1.0, 1.1, 0.9],
-             10 : [0.9, 1.0, 1.0, 1.0, 1.1],
-             11 : [1.0, 0.9, 1.0, 1.0, 1.1],
-             13 : [1.0, 1.0, 0.9, 1.0, 1.1],
-             14 : [1.0, 1.0, 1.0, 0.9, 1.1],
-             18 : [1.0, 1.0, 1.0, 1.0, 1.0],
-              0 : [1.0, 1.0, 1.0, 1.0, 1.0],
-              6 : [1.0, 1.0, 1.0, 1.0, 1.0],
-             24 : [1.0, 1.0, 1.0, 1.0, 1.0],
-             12 : [1.0, 1.0, 1.0, 1.0, 1.0],
-            }
           </script>
 
           <script>
             var s1 = 0x41C64E6D, s2 = 0x6073;
 
-            function multi64(a, b){
-              a = (((a & 0x0000ffff) * (b & 0x0000ffff)) & 0x0000ffff) | (((((((a & 0x0000ffff) * (b & 0x0000ffff)) & 0xffff0000) >>> 16) + ((((a & 0xffff0000) >>> 16) * (b & 0x0000ffff)) & 0x0000ffff) + (((a & 0x0000ffff) * ((b & 0xffff0000) >>> 16)) & 0x0000ffff)) & 0x0000ffff) << 16);
-              return (a < 0 ? (a + 0xffffffff) + 0x00000001 : a);
+            function clip_hex(e, digit=8){
+              return e < 0 ? (e + 16**digit) : e;
             }
 
+            function multi64(a, b){
+              a = (((a & 0x0000ffff) * (b & 0x0000ffff)) & 0x0000ffff) | (((((((a & 0x0000ffff) * (b & 0x0000ffff)) & 0xffff0000) >>> 16) + ((((a & 0xffff0000) >>> 16) * (b & 0x0000ffff)) & 0x0000ffff) + (((a & 0x0000ffff) * ((b & 0xffff0000) >>> 16)) & 0x0000ffff)) & 0x0000ffff) << 16);
+              return clip_hex(a, digit=8);
+            }
 
             function makeR(seed){
               return ((((seed & 0x0000ffff) * (s1 & 0x0000ffff)) & 0x0000ffff) | (((((((seed & 0x0000ffff) * (s1 & 0x0000ffff)) & 0xffff0000) >>> 16) + ((((seed & 0xffff0000) >>> 16) * (s1 & 0x0000ffff)) & 0x0000ffff) + (((seed & 0x0000ffff) * ((s1 & 0xffff0000) >>> 16)) & 0x0000ffff)) & 0x0000ffff) << 16)) + s2;
@@ -720,10 +691,6 @@
 
             function decimal2hex(decimal){
               return "0x" + ("0000000" + Number(decimal).toString(16)).slice(-8);
-            }
-
-            function sort_smaller(a, b){
-              return a-b;
             }
 
             // Assign Auxiliary data when seed length is 4.
@@ -759,7 +726,7 @@
               return ["0x"+main_hex, "0x"+aux_hex];
             }
 
-            function assignPokestring(hex){
+            function decode2Pokestring(hex){
               hexes = hex.toString().split("x").slice(-1)[0].match(/.{2}/g);
 
               var results = [];
@@ -770,18 +737,18 @@
             }
 
             function set_pokemon_options(POKE){
-              var ability_options = "<option>----</option>";
-              var sex_options = "<option>----</option>";
+              var ability_options = "";
+              var sex_options = "";
 
               var poke_name = POKE.poke.options[POKE.poke.selectedIndex].text.split(".")[1];
               var data = POKENAME2DATA[poke_name];
 
               if (data != undefined){
                 // If pokemon has multiple abilities, show all.
-                ability_options += "<option>" + data[Pdata_ability_idx] + "</option>";
-                if(data[Pdata_ability_idx+1] != "") ability_options += '<option>' + data[Pdata_ability_idx+1] + '</option>';
+                ability_options += "<option>" + data[Pdata_abilityIdx] + "</option>";
+                if(data[Pdata_abilityIdx+1] != "") ability_options += '<option>' + data[Pdata_abilityIdx+1] + '</option>';
                 // Add sex option from sex description.
-                var sex_desc = data[Pdata_sex_idx];
+                var sex_desc = data[Pdata_sexIdx];
                 if (["ふめい", "-"].indexOf(sex_desc) == -1){
                   if (sex_desc != "♀のみ") sex_options += '<option>♂</option>';
                   if (sex_desc != "♂のみ") sex_options += '<option>♀</option>';
@@ -790,11 +757,11 @@
                 // Set Base States
                 var confirmation_tabel = document.getElementById("confirmation");
                 confirmation_tabel.querySelector("th").innerText = poke_name;
-                confirmation_tabel.querySelector("img").setAttribute("src", data[Pdata_img_idx])
+                confirmation_tabel.querySelector("img").setAttribute("src", data[Pdata_imgIdx])
                 var base_states = document.getElementById("base_states").querySelectorAll("td");
                 var tot = 0;
                 for (var i=1; i<7; i++){
-                  let base_status = data[Pdata_status_idx+i-1];
+                  let base_status = data[Pdata_statusIdx+i-1];
                   base_states[i].innerHTML = base_status
                   tot += base_status;
                 }
@@ -807,7 +774,7 @@
 
             function set_pokemon_program(POKE){
               var poke_hex  = POKE.poke.value;
-              var lv_string = assignPokestring(decimal2hex(parseInt(POKE.L.value, 10)).slice(-2));
+              var lv_string = decode2Pokestring(decimal2hex(parseInt(POKE.L.value, 10)).slice(-2));
 
               // Pokemon encount program
               var box2_encount = document.getElementById("box2_pokemon_encount");
@@ -816,23 +783,27 @@
               var box2_event = document.getElementById("box2_pokemon_event");
               var box3_event = document.getElementById("box3_pokemon_event");
 
-              if (assignPokestring(poke_hex).length < 2){
+              if (decode2Pokestring(poke_hex).length < 2){
                 // Pokemon encount program
                 box2_encount.innerHTML = "[]";
                 box2_encount.classList.add("g3");
                 // Pokemon event program
                 var tmp = useAuxiliary_4(poke_hex);
-                box1_event.innerHTML = "[に　ぞ" + assignPokestring(tmp[0]) + "　　ビ]";
-                box2_event.innerHTML = "[ぬ　ぞ" + assignPokestring(tmp[1]) + "もけぬ]";
+                box1_event.innerHTML = "[に　ぞ" + decode2Pokestring(tmp[0]) + "　　ビ]";
+                box1_event.parentElement.classList.add("g2") 
+                box2_event.innerHTML = "[ぬ　ぞ" + decode2Pokestring(tmp[1]) + "もけぬ]";
                 box3_event.innerHTML = "[い　ル　ぞ" + lv_string + "　　]";
+                box3_event.parentElement.style.display = "table-row";
               } else {
                 // Pokemon encount program
-                box2_encount.innerHTML = "[い♀" + assignPokestring(poke_hex) + lv_string + "　　ビ]";
+                box2_encount.innerHTML = "[い♀" + decode2Pokestring(poke_hex) + lv_string + "　　ビ]";
                 box2_encount.classList.remove("g3");
                 // Pokemon event program
                 box1_event.innerHTML = "[あああああもけぬ]";
-                box2_event.innerHTML = "[い　ル" + assignPokestring(poke_hex) + lv_string + "　　]";
+                box1_event.parentElement.classList.remove("g2")      
+                box2_event.innerHTML = "[い　ル" + decode2Pokestring(poke_hex) + lv_string + "　　]";
                 box3_event.innerHTML = "任意"
+                box3_event.parentElement.style.display = "none";
               }
             }
 
@@ -852,25 +823,25 @@
               var ec = parseInt(POKE.eC.value, 10);
               var ed = parseInt(POKE.eD.value, 10);
               var es = parseInt(POKE.eS.value, 10);
-              var ability, seikaku, poke_name, poke_data, sex_desc, sex;
+              var ability, seikaku, poke_name, sex_desc, sex;
 
-              ability   = (POKE.ability.length > 2 ? POKE.ability.selectedIndex - 1 : -1);
-              seikaku   = parseInt(POKE.seikaku.value, 10);
-              poke_name = POKE.poke.options[POKE.poke.selectedIndex].text.split(".")[1];
-              poke_data = POKENAME2DATA[poke_name];
-              sex_desc  = poke_data[Pdata_sex_idx];
-              sex       = ((POKE.sex.length < 2 && sex_desc != "ふめい") ? -4 : (sex_desc == "ふめい" ? -3 : (sex_desc == "♂のみ" || sex_desc == "♀のみ" ? -2 : POKE.sex.selectedIndex - 1)))
-              sexBorder = ((sex_desc == "♂のみ") ? -1 : (sex_desc == "1:7" ? 30 : (sex_desc == "1:3" ? 63 : (sex_desc == "1:1" ? 126 : (sex_desc == "3:1" ? 190 : 255)))));
+              ability     = POKE.ability.length == 2 ? POKE.ability.selectedIndex : -1;
+              seikaku     = parseInt(POKE.seikaku.value, 10);
+              poke_name   = POKE.poke.options[POKE.poke.selectedIndex].text.split(".")[1];
+              sex_desc    = POKENAME2DATA[poke_name][Pdata_sexIdx];
+              sex         = ((POKE.sex.length == 0 && sex_desc != "ふめい") ? -4 : (sex_desc == "ふめい" ? -3 : (sex_desc == "♂のみ" || sex_desc == "♀のみ" ? -2 : POKE.sex.selectedIndex)))
+              // Female Probability is `female_rate` / (0xFF+1)
+              female_rate = ((sex_desc == "♂のみ") ? -1 : (sex_desc == "1:7" ? 30 : (sex_desc == "1:3" ? 63 : (sex_desc == "1:1" ? 126 : (sex_desc == "3:1" ? 190 : 255)))));
 
               // [Method 1]
               R = new Array();
               R3 = (((ib << 5) | ia) << 5) | ih;
               R4 = (((id << 5) | ic) << 5) | is;
-              console.log(R3, R4)
               for (let i = 0; i < 2; i++) {
-                tmp = R3 | (i << 15);
+                tmp = R3 | (i << 15); // 0, 0x00008000
                 for (j = 0; j < 0x00010000; j++) {
                   tmp2 = (tmp << 16) | j;
+                  // ((makeR(tmp2) >>> 16) & 0x00007fff) == R4
                   if ((((makeR(tmp2) >>> 16) & 0x00007fff) ^ R4) == 0) R.push(tmp2);
                 }
               }
@@ -881,11 +852,9 @@
               var tseed = undefined;
               for(let i = 0, len = R.length; i < len; i++) {
                 R2 = R[i];
-                R1 = invR(R2);
-                if (R1 < 0) R1 = R1 + 0xffffffff + 0x00000001;
-                PID = ((R2 & 0xffff0000) | (R1 >>> 16));
-                if (PID < 0) PID = PID + 0xffffffff + 0x00000001;
-                if ((seikaku >= 0) && (PID % 25 != seikaku) || (ability >= 0) && (PID % 2 != ability) || (sex > 0) && (PID % 256 > sexBorder) || (sex == 0) && (PID % 256 <= sexBorder)) {
+                R1 = clip_hex(invR(R2), digit=8);
+                PID = clip_hex(((R2 & 0xffff0000) | (R1 >>> 16)), digit=8);
+                if ((PID%25 != seikaku) || (ability>=0) && (PID%2 != ability) || (sex==1) && (PID%256 > female_rate) || (sex==0) && (PID%256 <= female_rate)) {
                   R.splice(i, 1);
                   len--;
                   i--;
@@ -921,53 +890,40 @@
                 pre_sseeds  = useAuxiliary_4(sseed.slice(-8,-4));
                 post_sseeds = useAuxiliary_4(sseed.slice(-4));
                 [post_sseeds[0], pre_sseeds[0], post_sseeds[1], pre_sseeds[1]].forEach(function(e,i){
-                  box9 += assignPokestring(e);
+                  box9 += decode2Pokestring(e);
                 })
                 box9_name.innerHTML = "[" + box9 + "]";
                 random_number_results.forEach(function(e){e.classList.remove("g3")});
               }
 
-              // Calculate Real States
-              var real_states = document.getElementById("real_states").querySelectorAll("td");
-              var rates = seikaku2status[seikaku];
-              var evals = [eh, ea, eb, ec, ed, es];
-              var ivals = [ih, ia, ib, ic, id, is];
+              // Calculate (Real) Statistics
+              var statistics = document.getElementById("statistics").querySelectorAll("td");
+              var stats = calculate_statistics(name=poke_name, ivals=[ih, ia, ib, ic, id, is], evals=[eh, ea, eb, ec, ed, es], seikaku=seikaku, lv=lv);
               for (let i=0; i<6; i++){
-                if (i==0){
-                  val = Math.floor((poke_data[Pdata_status_idx+i]*2+ivals[i]+Math.floor(evals[i]/4))*lv/100)+10+lv
-                }else{
-                  val = Math.floor((Math.floor((poke_data[Pdata_status_idx+i]*2+ivals[i]+Math.floor(evals[i]/4))*lv/100)+5)*rates[i-1])
-                }
-                real_states[i+1].innerHTML = val;
+                statistics[i+1].innerHTML = stats[i];
               }
 
-              // Calculate Hidden Power
-              var mt=0, mp=0;
-              var meza_type = document.getElementById("meza_type");
-              var meza_power = document.getElementById("meza_power");
-              [ih, ia, ib, is, ic, id].forEach(function(e,i){
-                if (e%2 === 1) mt += Math.pow(2, i);
-                if (e%4 === 2 || e%4 === 3) mp += Math.pow(2, i);
-              })
-              meza_type.innerHTML = ["格","飛","毒","地","岩","虫","霊","鋼","炎","水","草","電","超","氷","竜","悪"][Math.floor(15*mt/63)];
-              meza_power.innerHTML = 30 + Math.floor(40*mp/63);
+              // alculate the type & power of "hidden power"
+              hidden_power = calculate_hidden_power([ih, ia, ib, is, ic, id])
+              document.getElementById("meza_type").innerHTML = hidden_power[0];
+              document.getElementById("meza_power").innerHTML = hidden_power[1];
             }
             // ITEM 
             function item_calculate(ITEM){
-              document.getElementById("box1_item").innerHTML = "[べ" + assignPokestring(ITEM.item.value) + assignPokestring(decimal2hex(ITEM.num.value).slice(-4)) + "]";
+              document.getElementById("box1_item").innerHTML = "[べ" + decode2Pokestring(ITEM.item.value) + decode2Pokestring(decimal2hex(ITEM.num.value).slice(-4)) + "]";
             }
             // PROPERTY
             function money_calculate(PROPERTY){
-              document.getElementById("box1_money").innerHTML = "[ゾ" + assignPokestring(decimal2hex(PROPERTY.money.value)) + "]";
+              document.getElementById("box1_money").innerHTML = "[ゾ" + decode2Pokestring(decimal2hex(PROPERTY.money.value)) + "]";
             }
             function BP_calculate(PROPERTY){
-              document.getElementById("box1_BP").innerHTML = "[にえィ" + assignPokestring(decimal2hex(PROPERTY.BP.value).slice(-4)) + "ゆＭあ]";
+              document.getElementById("box1_BP").innerHTML = "[にえィ" + decode2Pokestring(decimal2hex(PROPERTY.BP.value).slice(-4)) + "ゆＭあ]";
             }
             // MOVE
             function move_calculate(MOVE){
               var move_hex = MOVE.move.value;
-              var party_no_string = assignPokestring(decimal2hex(parseInt(MOVE.party_no.value, 10)-1).slice(-2));
-              var move_no_string = assignPokestring(decimal2hex(parseInt(MOVE.move_no.value, 10)-1).slice(-2));
+              var party_no_string = decode2Pokestring(decimal2hex(parseInt(MOVE.party_no.value, 10)-1).slice(-2));
+              var move_no_string = decode2Pokestring(decimal2hex(parseInt(MOVE.move_no.value, 10)-1).slice(-2));
 
               var box1_move = document.getElementById("box1_move");
               var box2_move = document.getElementById("box2_move");
@@ -975,12 +931,12 @@
               var box4_move = document.getElementById("box4_move");
               var box5_move = document.getElementById("box5_move");
 
-              if (assignPokestring(move_hex).length < 2){
+              if (decode2Pokestring(move_hex).length < 2){
                 var tmp = useAuxiliary_4(move_hex);
                 box1_move.innerHTML = "[に　ィ　ロ　　ビ]";
                 box2_move.innerHTML = "[にあィ" + party_no_string + move_no_string + "　　ビ]";
-                box3_move.innerHTML = "[にいィ" + assignPokestring(tmp[0]) + "　　ビ]";
-                box4_move.innerHTML = "[ぬいィ" + assignPokestring(tmp[1]) + "にうィ]";
+                box3_move.innerHTML = "[にいィ" + decode2Pokestring(tmp[0]) + "　　ビ]";
+                box4_move.innerHTML = "[ぬいィ" + decode2Pokestring(tmp[1]) + "にうィ]";
                 box5_move.innerHTML = "[アおリメうい]";
                 // Adjust the appearance.
                 box1_move.parentElement.classList.remove("g4");
@@ -988,7 +944,7 @@
                   e.parentElement.style.display = "table-row";
                 })
               } else {
-                box1_move.innerHTML = "[ロ" +  party_no_string + move_no_string + assignPokestring(move_hex) + "]";
+                box1_move.innerHTML = "[ロ" +  party_no_string + move_no_string + decode2Pokestring(move_hex) + "]";
                 [box2_move, box3_move, box4_move, box5_move].forEach(function(e){
                   e.parentElement.style.display = "none";
                 })
@@ -1015,7 +971,7 @@
               var tids = useAuxiliary_4(decimal2hex(ID.TID.value));
               var sids = useAuxiliary_4(decimal2hex(ID.SID.value));
               [tids[0], sids[0], tids[1], sids[1]].forEach(function(e,i){
-                s += assignPokestring(e);
+                s += decode2Pokestring(e);
               })
               document.getElementById("box9_id").innerHTML = "[" + s + "]";
             }
