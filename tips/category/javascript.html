@@ -441,7 +441,7 @@
       var tds = e.querySelectorAll("td");
       var op_item = tds[RT_oppokeitemIdx].value;
       var bf_tds = bf_trows[id2rowIndex[tds[RT_oppokeidIdx].textContent]].querySelectorAll("td");
-      for (let j=0; j<6; j++){op_stats[i]=parseInt(bf_tds[BFT_statusIdx+j].textContent)}
+      for (let j=0; j<6; j++){op_stats[j]=parseInt(bf_tds[BFT_statusIdx+j].textContent)}
       var op_poke_data = POKENAME2DATA[bf_tds[BFT_pokenameIdx].textContent];
       op_types = [op_poke_data[Pdata_typeIdx], op_poke_data[Pdata_typeIdx+1]];
       op_ability = tds[RT_oppokeabilityIdx].querySelector("select").value;

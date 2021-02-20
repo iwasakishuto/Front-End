@@ -142,7 +142,7 @@ function calculate_damage(name, lv=50,
     var attack_multiple = data[Mdata_rangeIdx] == "相手２匹";
     // Power correction
     var power = (helping_hand ? 1.5 : 1)
-              * data[Mdata_powerIdx]
+              * parseInt(data[Mdata_powerIdx])
               * (POKETYPE2ITEM[move_type].indexOf(Aitem)!=-1 ? 1.1 : 1)
               * ((is_mudsport_field && move_type=="でんき") ? 0.5 : 1)
               * ((is_watersport_field && move_type=="ほのお") ? 0.5 : 1)
@@ -155,11 +155,12 @@ function calculate_damage(name, lv=50,
     }else if (move_class=="特殊"){
       A=Astats[3]; D=Dstats[4]; Ar=Aranks[3]; Dr=Dranks[4]
     }else{
-      alert(move_class + " の技です。「攻撃」もしくは「特殊」の技でないと計算できません。")
+      console.log(move_class + " の技です。「攻撃」もしくは「特殊」の技でないと計算できません。")
+      A=0;D=100;Ar=0;Dr=0;
     }
     Ar=RANK2MAGNIFICATION[Ar]; Dr=RANK2MAGNIFICATION[Dr];
     if (hit_critical){
-      Ar=Math.max(0, Ar); Dr=Math.min(0, Dr)
+      Ar=Math.max(1, Ar); Dr=Math.min(1, Dr)
     }
     // Damage compensation
     Ma = (hit_critical ? 1 : has_shield ? attack_multiple ? 2/3 : 0.5 : 1)
