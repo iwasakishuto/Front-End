@@ -69,10 +69,15 @@ function calculate_statistics(name, ivals, evals, seikaku, lv=50){
 
     // Calculate Statistics.
     for (let i=0; i<6; i++){
+      var base_stats = poke_data[Pdata_statusIdx+i];
       if (i==0){
-        val = Math.floor((poke_data[Pdata_statusIdx+i]*2+ivals[i]+Math.floor(evals[i]/4))*lv/100)+10+lv
+        if (base_stats==1){
+          val = 1
+        }else{
+          val = Math.floor((base_stats*2+ivals[i]+Math.floor(evals[i]/4))*lv/100)+10+lv
+        }
       }else{
-        val = Math.floor((Math.floor((poke_data[Pdata_statusIdx+i]*2+ivals[i]+Math.floor(evals[i]/4))*lv/100)+5)*corr[i-1])
+        val = Math.floor((Math.floor((base_stats*2+ivals[i]+Math.floor(evals[i]/4))*lv/100)+5)*corr[i-1])
       }
       statistics[i] = val;
     }
@@ -141,8 +146,9 @@ function calculate_damage(name, lv=50,
     var move_class = data[Mdata_classIdx];
     var attack_multiple = data[Mdata_rangeIdx] == "相手２匹";
     // Power correction
+    var base_power = parseInt(data[Mdata_powerIdx]) || 0
     var power = (helping_hand ? 1.5 : 1)
-              * parseInt(data[Mdata_powerIdx])
+              * base_power || 0
               * (POKETYPE2ITEM[move_type].indexOf(Aitem)!=-1 ? 1.1 : 1)
               * ((is_mudsport_field && move_type=="でんき") ? 0.5 : 1)
               * ((is_watersport_field && move_type=="ほのお") ? 0.5 : 1)
@@ -155,8 +161,8 @@ function calculate_damage(name, lv=50,
     }else if (move_class=="特殊"){
       A=Astats[3]; D=Dstats[4]; Ar=Aranks[3]; Dr=Dranks[4]
     }else{
-      console.log(move_class + " の技です。「攻撃」もしくは「特殊」の技でないと計算できません。")
-      A=0;D=100;Ar=0;Dr=0;
+      console.log(name + "は「" + move_class + "」の技です。「攻撃」もしくは「特殊」の技でないと計算できません。")
+      A=0;D=100;Ar=1;Dr=1;
     }
     Ar=RANK2MAGNIFICATION[Ar]; Dr=RANK2MAGNIFICATION[Dr];
     if (hit_critical){
@@ -173,15 +179,27 @@ function calculate_damage(name, lv=50,
     Mb = (hit_critical ? 2 : 1)
        * (Atypes.indexOf(move_type)!=-1 ? Aability=="てきおうりょく" ? 2 : 1.5 : 1)
        * (type_compatibility(move_type, Dtypes[0]) * type_compatibility(move_type, Dtypes[1]));
-    var damage = Math.floor(Math.floor(Math.floor(lv*2/5+2)*power*A/D)/50*Ma+2);
-    var damage_lb = Math.floor(damage*Mb*0.85);
-    var damage_ub = Math.floor(damage*Mb*1);
+    var damage = Math.floor(Math.floor(Math.floor(Math.floor(lv*2/5+2)*power*A/D)/50*Ma+2)*Mb);
+    var damages = arrange_damage(damage, name, base_power);
     // Charge
     if (is_charged && move_type=="でんき"){
-      damage_lb*=2; damage_ub*=2;
+      damages[0]*=2; damages[1]*=2;
     }
-    return [damage_lb, damage_ub];
+    return damages;
   }else{
     alert("技 " + name + " は対応していません。（エメラルドまでです。）")
+  }
+  function arrange_damage(damage, name, base_power){
+    var damages;
+    if (name=="ソニックブーム") damages=[20,20];
+    else if (name=="りゅうのいかり") damages=[40,40];
+    else if (name=="ちきゅうなげ") damages=[lv,lv];
+    else if (name=="ナイトヘッド") damages=[lv,lv];
+    else if (name=="サイコウェーブ") damages=[Math.floor(lv*0.5),Math.floor(lv*1.5)];
+    else {
+      if (base_power==0) damage = 0
+      damages = [Math.floor(damage*0.85), damage];
+    }
+    return damages
   }
 }
