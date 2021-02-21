@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Shuto" />
+    <meta name="twitter:creator" content="@cabernet_rock">
+    <meta name="twitter:site" content="@cabernet_rock">
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary">
+    <meta name="keywords" content="JavaScript, pokemon, JavaScript, " />
+    <meta property="og:image" content="https://www.pokemon.co.jp/img/game/emerald/pho_main.jpg"/>
+    <meta property="og:title" content="JS.27 ポケモンエメラルドでフロンティア マスターを目指す（その３） "/>
+    <meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-28.html" />
+    <meta property="og:description" content="ポケモンエメラルドでフロンティア マスターを目指す（その３）" />
+    <meta property="og:site_name" content="Shuto&#39;s Front-End" />
+    <meta property="og:article:author" content="Shuto" />
+    <meta property="og:article:published_time" content="2021-02-21T00:00:00+09:00" />
+    <meta property="og:article:modified_time" content="2020-02-21T00:00:00+09:00" />
+    <meta name="twitter:title" content="JS.27 ポケモンエメラルドでフロンティア マスターを目指す（その３） ">
+    <meta name="twitter:description" content="ポケモンエメラルドでフロンティア マスターを目指す（その３）">
+    <title>JS.27 ポケモンエメラルドでフロンティア マスターを目指す（その３）</title>
+    <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
+    <!-- Added by Shuto Iwasaki. -->
+    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"></script>
+    <script type="text/x-mathjax-config">
+    	MathJax.Hub.Config({
+    		tex2jax: {
+    			inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    			displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    		}
+    	});
+    </script>
+    <!-- Mermaid -->
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
+    <script>
+      mermaid.initialize({
+        startOnLoad:true
+      });
+    </script>
+    <!--[if IE]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body id="index" class="home">
+    <header id="banner" class="body">
+      <h1><a href="https://iwasakishuto.github.io/Front-End/tips/">Shuto's Front-End </a></h1>
+      <nav>
+        <ul>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html">CSS</a></li>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html">HTML</a></li>
+          <li class="active"><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
+        </ul>
+        <form id="search" action"#" onsubmit="javascript:window.open('https://duckduckgo.com/?q='+document.getElementById('keywords').value+'+site:https://iwasakishuto.github.io/Front-End/tips');">
+          <input id="keywords" type="text" />
+        </form>
+      </nav>
+    </header><!-- /#banner -->
+    <div id="loading" style="display: none;">
+      <div class="loading_wrapper">
+        <img class="loading_img" src="https://iwasakishuto.github.io/Front-End/tips/images/Bean Eater-1s-400px.gif">
+        <p class="loading_info">Loading...</p>
+      </div>
+    </div>
+    <section id="content" class="body" style="display: block;">
+      <article>
+        <header>
+          <h1 class="entry-title">
+            <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-28.html" rel="bookmark" title="Permalink to JS.27 ポケモンエメラルドでフロンティア マスターを目指す（その３）">JS.27 ポケモンエメラルドでフロンティア マスターを目指す（その３）</a>
+          </h1>
+          <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
+          <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
+        </header>
+    
+        <div class="entry-content">
+          <footer class="post-info">
+            <span>2021-02-21(Sun)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a></span>
+          </footer><!-- /.post-info -->
+          <h2>フロンティア マスターへの道 〜施設を知る〜</h2>
+
+          <p>今回は、フロンティア内の7つの施設ごとのルールを確認しつつ、各施設を攻略する上で便利なツール群を作成します。</p>
+
+          <p>見たい施設のタイトルをクリックして、各ツールを利用してください！！</p>
+
+          <p style="color:red">※ 今回の記事も完全に自己満ツール群です🙇‍♂️多分これで終わりです。</p>
+
+          <form id="mypoke_form" name="MYPOKE">
+            <h2>自分のポケモン</h2>
+            <p>以下の表で自分のポケモンを設定してください。なお、レベルはバトルフロンティアのポケモンと共通しています。</p>
+            <table class="fixed" id="my-pokemon">
+              <thead><tr><th colspan="7"><label>自分のポケモン（Lv: <input id="lv" type="number" min="1" max="100" value="50" size="3" name="LV">）</label></th></tr></thead>
+              <tbody>
+                <tr class="g1">
+                  <td colspan="3">ポケモン</td>
+                  <td colspan="4"><select id="poke_name" name="poke"></select></td>
+                </tr>
+                <tr class="g1">
+                  <td colspan="3">とくせい</td>
+                  <td colspan="4"><select id="ability" name="ability"><option>----</option></select></td>
+                </tr>
+                <tr>
+                  <td colspan="3">性別</td>
+                  <td colspan="4"><select id="sex" name="sex"><option>--</option></select></td>
+                </tr>
+                <tr class="g2">
+                  <td colspan="3">性格</td>
+                  <td colspan="4"><select id="seikaku" name="seikaku"><option value="1">さみしがり (A↑ B↓)</option><option value="3">いじっぱり (A↑ C↓)</option><option value="4">やんちゃ　 (A↑ D↓)</option><option value="2">ゆうかん　 (A↑ S↓)</option><option value="5">ずぶとい　 (B↑ A↓)</option><option value="8">わんぱく　 (B↑ C↓)</option><option value="9">のうてんき (B↑ D↓)</option><option value="7">のんき　　 (B↑ S↓)</option><option value="15" selected>ひかえめ　 (C↑ A↓)</option><option value="16">おっとり　 (C↑ B↓)</option><option value="19">うっかりや (C↑ D↓)</option><option value="17">れいせい　 (C↑ S↓)</option><option value="20">おだやか　 (D↑ A↓)</option><option value="21">おとなしい (D↑ B↓)</option><option value="23">しんちょう (D↑ C↓)</option><option value="22">なまいき　 (D↑ S↓)</option><option value="10">おくびょう (S↑ A↓)</option><option value="11">せっかち　 (S↑ B↓)</option><option value="13">ようき　　 (S↑ C↓)</option><option value="14">むじゃき　 (S↑ D↓)</option><option value="18">てれや　　 </option><option value="0">がんばりや </option><option value="6">すなお　　 </option><option value="24">きまぐれ　 </option><option value="12">まじめ　　 </option></select></td>
+                </tr>
+              </tbody>
+              <thead>
+                <tr>
+                  <th><div class='overflow-ms'><img></div></th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="only-text">
+                  <td>種族値</td><td></td><td></td><td></td><td></td><td></td><td></td>
+                </tr>
+                <tr class="g2">
+                  <td>個体値</td>
+                  <td><input type="number" min="0" max="31"  value="31" size="3" name="iH"></td>
+                  <td><input type="number" min="0" max="31"  value="31" size="3" name="iA"></td>
+                  <td><input type="number" min="0" max="31"  value="31" size="3" name="iB"></td>
+                  <td><input type="number" min="0" max="31"  value="31" size="3" name="iC"></td>
+                  <td><input type="number" min="0" max="31"  value="31" size="3" name="iD"></td>
+                  <td><input type="number" min="0" max="31"  value="31" size="3" name="iS"></td>
+                </tr>
+                <tr class="g2">
+                  <td>努力値</td>
+                  <td><input type="number" min="0" max="255" value="0" size="3" name="eH"></td>
+                  <td><input type="number" min="0" max="255" value="0" size="3" name="eA"></td>
+                  <td><input type="number" min="0" max="255" value="0" size="3" name="eB"></td>
+                  <td><input type="number" min="0" max="255" value="0" size="3" name="eC"></td>
+                  <td><input type="number" min="0" max="255" value="0" size="3" name="eD"></td>
+                  <td><input type="number" min="0" max="255" value="0" size="3" name="eS"></td>
+                </tr>
+                <tr class="g1 only-text">
+                  <td>実数値</td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="H"></td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="A"></td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="B"></td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="C"></td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="D"></td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="S"></td>
+                </tr>
+              </tbody>
+            </table>  
+          </form>
+
+          <details>
+            <summary class="h2">バトルパレス</summary>
+            <form id="palace_form" name="PALACE">
+              <details>
+                <summary class="h3">技の区表</summary>
+                <table id="move_list">
+                  <thead><tr><th colspan="5">
+                    <label><input type="checkbox" name="palace_move_class" checked>攻撃技</label>
+                    <label><input type="checkbox" name="palace_move_class" checked>防御技</label>
+                    <label><input type="checkbox" name="palace_move_class" checked>補助技</label>
+                  </th></tr>
+                    <tr>
+                      <th></td>
+                      <th>技</td>
+                      <th>タイプ</td>
+                      <th>威力</td>
+                      <th>区分</td>
+                    </tr>
+                  </head>
+                  <tbody><tr>
+                  </tr></tbody>
+                </table> 
+              </details>
+              <details>
+                <summary class="h3">性格別の傾向</summary>
+                <table id="seikaku_trend">
+                  <thead><tr><th colspan="5">
+                    <label><input type="checkbox" name="palace_move_class" checked>攻撃技</label>
+                    <label><input type="checkbox" name="palace_move_class" checked>防御技</label>
+                    <label><input type="checkbox" name="palace_move_class" checked>補助技</label>
+                  </th></tr>
+                    <tr>
+                      <th></td>
+                      <th>技</td>
+                      <th>タイプ</td>
+                      <th>威力</td>
+                      <th>区分</td>
+                    </tr>
+                  </head>
+                  <tbody><tr>
+                  </tr></tbody>
+                </table>
+              </details>
+            </form>
+          </details>
+
+          <!-- Load Scripts. -->
+
+          <script type="text/javascript" src="https://iwasakishuto.github.io/js/jquery.js"></script>
+
+          <script type="text/javascript" src="theme/js/pokeutils.js"></script>
+
+          <script type="text/javascript" src="https://iwasakishuto.github.io/js/custom.js"></script>
+
+          <!-- My Pokemon Form -->
+
+          <script>
+            const MPtable = document.getElementById("my-pokemon");
+            const MPT_base_statsIdx = 6;
+            const MPT_ivIdx = 7;
+            const MPT_evIdx = 8;
+            const MPT_statsIdx = 9;
+            // Set pokemon seletions.
+            var select = document.getElementById("poke_name")
+            for (let name in POKENAME2DATA) {
+              let e = document.createElement("option");
+              e.innerText = name
+              select.appendChild(e)
+            }
+            function set_pokemon_options(MYPOKE){
+              var pokename = MYPOKE.poke.value
+              var data = POKENAME2DATA[pokename];
+              // If pokemon has multiple abilities, show all.
+              var ability_options = "";
+              ability_options += "<option>" + data[Pdata_abilityIdx] + "</option>";
+              if(data[Pdata_abilityIdx+1] != "") ability_options += '<option>' + data[Pdata_abilityIdx+1] + '</option>';
+              MYPOKE.ability.innerHTML = ability_options;
+              // Add sex option from sex description.
+              var sex_options = "";
+              var sex_desc = data[Pdata_sexIdx];
+              if (["ふめい", "-"].indexOf(sex_desc) == -1){
+                if (sex_desc != "♀のみ") sex_options += '<option>♂</option>';
+                if (sex_desc != "♂のみ") sex_options += '<option>♀</option>';
+              }
+              MYPOKE.sex.innerHTML = sex_options;
+              // Set Base States & Image.
+              var base_states = MPtable.getElementsByTagName("tr")[MPT_base_statsIdx].querySelectorAll("td");
+              for (let i=1; i<7; i++){
+                base_states[i].innerHTML = data[Pdata_statusIdx+i-1];
+              }
+              MPtable.querySelector("img").setAttribute("src", data[Pdata_imgIdx]);
+              calculate_mypoke_statistics(MYPOKE);
+              generate_move_table(MYPOKE, document.PALACE);
+            }
+            function calculate_mypoke_statistics(MYPOKE){
+              var poke_name = MYPOKE.poke.value;
+              var lv = parseInt(MYPOKE.LV.value);
+              var seikaku = parseInt(MYPOKE.seikaku.value);
+              var ivals = [];
+              var evals = [];
+              var MPtrs = MPtable.getElementsByTagName("tr");
+              // Get Individual values & Effort Values.
+              var iv_inputs = MPtrs[MPT_ivIdx].querySelectorAll("input");
+              var ev_inputs = MPtrs[MPT_evIdx].querySelectorAll("input");
+              for (let i=0; i<6; i++){ivals.push(parseInt(iv_inputs[i].value))};
+              for (let i=0; i<6; i++){evals.push(parseInt(ev_inputs[i].value))};
+              // Calculate Statistics.
+              var stats_tds = MPtrs[MPT_statsIdx].querySelectorAll("td");
+              var stats = calculate_statistics(name=poke_name, ivals=ivals, evals=evals, seikaku=seikaku, lv=lv);
+              for (let i=0; i<6; i++){
+                stats_tds[i+1].innerHTML = stats[i];
+              }
+            }
+          </script>
+
+          <!-- Move List -->
+
+          <script>
+            function generate_move_table(MYPOKE, PALACE){
+              var move_table = PALACE.querySelector("table#move_list");
+              var pokename = MYPOKE.poke.value;
+              var checkboxes = PALACE.palace_move_class;
+              var type2appear={}
+              PALACE.palace_move_class.forEach(function(e,i){type2appear[e.parentElement.textContent.slice(0,-1)] = e.checked})
+              var move_tbody = ""
+              var type2classname={"攻撃":"gp1","防御":"gp2","補助":"gp3",} 
+              POKENAME2MOVE[pokename].forEach(function(e,i){
+                let m = e.split(".")
+                let d = MOVENAME2DATA[m[1]]
+                let t = d[Mdata_palaceIdx]
+                if (type2appear[t]){
+                  move_tbody += "<tr class='" + type2classname[t] + "'><th>" + m[0] + "</td><th>" + m[1] + "</td><th>" + d[Mdata_typeIdx] + "</td><th>" + d[Mdata_powerIdx] + "</td><th>" + t + "</td></tr>"
+                }
+              })
+              move_table.querySelector("tbody").innerHTML = move_tbody
+            }
+          </script>
+
+          <!-- On load -->
+
+          <script>
+            window.onload = function(){
+              // My Pokemon Forms.
+              var mypoke_form = document.getElementById("mypoke_form");
+              for(let i=0; i<mypoke_form.length; i++){
+                let e = mypoke_form.elements[i];
+                if (e.id == "poke_name"){
+                  e.onchange = function(){
+                    set_pokemon_options(document.MYPOKE);
+                  };
+                }else{
+                  e.onkeyup = function(){
+                    calculate_mypoke_statistics(document.MYPOKE);
+                  };
+                  e.onchange = function(){
+                    calculate_mypoke_statistics(document.MYPOKE);
+                  };
+                }
+              }
+              set_pokemon_options(document.MYPOKE);
+              // Battle Palace.
+              var palace_form = document.getElementById("palace_form");
+              var palace_move_table = document.getElementById("move_list");
+              for(let i=0; i<palace_form.length; i++){
+                let e = palace_form.elements[i];
+                if (e.id == "show_palace_move_table"){
+                  e.addEventListener('change', function(evt){
+                    palace_move_table.style.display = e.checked ? "table" : "none";
+                  });
+                }else{
+                  e.addEventListener('change', function(){
+                    generate_move_table(document.MYPOKE, document.PALACE);
+                  });
+                }
+              }
+              generate_move_table(document.MYPOKE, document.PALACE);
+            }
+          </script>
+
+          <!-- Stylesheet -->
+
+          <style>
+            table#my-pokemon *{
+              vertical-align: middle;
+              text-align: center;
+            }
+            table#my-pokemon select, table#my-pokemon input{
+              border: 0;
+              padding: .5em .4em;
+              background-color: transparent;
+              font-family: Monaco, monospace, sans-serif;
+            }
+            table#my-pokemon select{
+              width: 100%;
+            }
+            table#my-pokemon tr:not(.only-text) td{
+              padding: 0;
+            }
+            .g1{
+              background-color: lightgoldenrodyellow;
+            }
+            .g2{
+              background-color: azure;
+            }
+            .gp1{
+              background-color: #ffcfdf;
+            }
+            .gp2{
+              background-color: #a5dee5;
+            }
+            .gp3{
+              background-color: #e0f9b5;
+            }
+            div.overflow-ms{
+              width: 32px;
+              height: 32px;
+              overflow: visible;
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              pointer-events: none;
+            }
+            div.overflow-ms img {
+              border: 0!important;
+              margin: 0!important;
+              padding: 0!important;
+              width: 200%!important;
+              vertical-align: middle;
+            }
+          </style>
+        
+        </div><!-- /.entry-content -->
+    
+      </article>
+    </section>
+    <section id="extras" class="body">
+      <div class="blogroll">
+        <h5>other contents</h5>
+        <ul>
+          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Home.png">Home</a></li>
+          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">Blog</a></li>
+          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">University</a></li>
+          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">Kerasy</a></li>
+          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">Python-Charmers</a></li>
+          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">Translation-Gummy</a></li>
+        </ul>
+      </div><!-- /.blogroll -->
+      <div class="social">
+        <h5>social</h5>
+        <ul>
+          <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
+          <li><a href="https://github.com/iwasakishuto">github</a></li>
+        </ul>
+      </div><!-- /.social -->
+    </section><!-- /#extras -->
+
+    <footer id="contentinfo" class="body">
+      <p>Powered by <a href="https://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
+    </footer><!-- /#contentinfo -->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-164333757-3']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+  </body>
+</html>
