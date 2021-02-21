@@ -9,7 +9,7 @@
     <meta name="twitter:site" content="@cabernet_rock">
     <meta property="og:type" content="article" />
     <meta name="twitter:card" content="summary">
-    <meta name="keywords" content="JavaScript, JavaScript, " />
+    <meta name="keywords" content="JavaScript, TensorFlow.js, JavaScript, " />
     <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/en/1/12/Start-Up_2020.jpg"/>
     <meta property="og:title" content="JS.24 ヌンキル (눈길)を作る "/>
     <meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-24.html" />
@@ -83,7 +83,7 @@
         <div class="entry-content">
           <footer class="post-info">
             <span>2021-02-10(Wed)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tensorflowjs.html">TensorFlow.js</a></span>
           </footer><!-- /.post-info -->
           <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
 
@@ -93,7 +93,7 @@
             <h1>ヌンキル (눈길)</h1>
             <p>Tensorflow.js を用いて、<a href="https://www.netflix.com/title/81290293">Start-Up(Netflix)</a>に出てくる<b>ヌンキル (눈길)</b>のようなものを作成しました。<b>※音声が出ます</b></p>
             <button id="switchCamera" onclick="switchFrontBackCamera()">switch Camera</button>
-            <div id="video-canvas-wrapper" class="video-and-canvas" style="background-color:black;">
+            <div id="video-canvas-wrapper" class="video-and-canvas">
               <video id="video" style="z-index: 30;" playsinline muted autoplay ></video>
               <canvas id="canvas" style="z-index: 20;"></canvas>
             </div>
@@ -237,7 +237,6 @@
                   var w = video.offsetWidth; canvas.setAttribute('width',  w.toString());
                   var h = video.offsetHeight; canvas.setAttribute('height', h.toString()); video_canvas_wrapper.style.height=h.toString()+"px";
                   context.drawImage(video, 0, 0, w, h);
-                  console.log("hog")
                   if (is_detecting){
                     context.font = '10px Arial';
                     for (let i = 0; i < result.length; i++) {
@@ -307,6 +306,8 @@
             }
             .video-and-canvas {
               position: relative;
+              margin: 0 auto;
+              /* width: 100% */
             }
             /* video.active, canvas.active {
               transform: rotateY(180deg);

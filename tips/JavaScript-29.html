@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Shuto" />
+    <meta name="twitter:creator" content="@cabernet_rock">
+    <meta name="twitter:site" content="@cabernet_rock">
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary">
+    <meta name="keywords" content="JavaScript, TensorFlow.js, JavaScript, " />
+    <meta property="og:image" content="https://github.com/tensorflow/tfjs-models/raw/master/posenet/demos/camera.gif"/>
+    <meta property="og:title" content="JS.29 TensorflowJS で Pose Detection "/>
+    <meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-29.html" />
+    <meta property="og:description" content="TensorflowJS で Pose Detectionを動かす。" />
+    <meta property="og:site_name" content="Shuto&#39;s Front-End" />
+    <meta property="og:article:author" content="Shuto" />
+    <meta property="og:article:published_time" content="2021-02-21T00:00:00+09:00" />
+    <meta property="og:article:modified_time" content="2020-02-21T00:00:00+09:00" />
+    <meta name="twitter:title" content="JS.29 TensorflowJS で Pose Detection ">
+    <meta name="twitter:description" content="TensorflowJS で Pose Detectionを動かす。">
+    <title>JS.29 TensorflowJS で Pose Detection</title>
+    <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
+    <!-- Added by Shuto Iwasaki. -->
+    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"></script>
+    <script type="text/x-mathjax-config">
+    	MathJax.Hub.Config({
+    		tex2jax: {
+    			inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    			displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    		}
+    	});
+    </script>
+    <!-- Mermaid -->
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
+    <script>
+      mermaid.initialize({
+        startOnLoad:true
+      });
+    </script>
+    <!--[if IE]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body id="index" class="home">
+    <header id="banner" class="body">
+      <h1><a href="https://iwasakishuto.github.io/Front-End/tips/">Shuto's Front-End </a></h1>
+      <nav>
+        <ul>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html">CSS</a></li>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html">HTML</a></li>
+          <li class="active"><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
+        </ul>
+        <form id="search" action"#" onsubmit="javascript:window.open('https://duckduckgo.com/?q='+document.getElementById('keywords').value+'+site:https://iwasakishuto.github.io/Front-End/tips');">
+          <input id="keywords" type="text" />
+        </form>
+      </nav>
+    </header><!-- /#banner -->
+    <div id="loading" style="display: none;">
+      <div class="loading_wrapper">
+        <img class="loading_img" src="https://iwasakishuto.github.io/Front-End/tips/images/Bean Eater-1s-400px.gif">
+        <p class="loading_info">Loading...</p>
+      </div>
+    </div>
+    <section id="content" class="body" style="display: block;">
+      <article>
+        <header>
+          <h1 class="entry-title">
+            <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-29.html" rel="bookmark" title="Permalink to JS.29 TensorflowJS で Pose Detection">JS.29 TensorflowJS で Pose Detection</a>
+          </h1>
+          <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
+          <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
+        </header>
+    
+        <div class="entry-content">
+          <footer class="post-info">
+            <span>2021-02-21(Sun)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tensorflowjs.html">TensorFlow.js</a></span>
+          </footer><!-- /.post-info -->
+          <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+
+          <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
+
+          <div class="nunkiru">
+            <h1>Pose-Estimation</h1>
+            <p>Tensorflow.js を用いて、<b>"Pose-Estimation"</b>をブラウザで実行するアプリを作りました。</p>
+            <form id="arguments" name="ARGS">
+              <select id="showMethod" name="showMethod"><option>Points</option><option>Skeleton</option><option>BoundingBox</option></select>
+            </form>
+            <div id="video-canvas-wrapper" class="video-and-canvas">
+              <video id="video" style="z-index: 10;" playsinline muted autoplay ></video>
+              <canvas id="canvas" style="z-index: 20;"></canvas>
+            </div>
+            <!-- <table id="annotationTable">
+              <thead><tr>
+                <th>leftEye</th><th>rightEye</th><th>leftEar</th><th>rightEar</th><th>leftShoulder</th><th>rightShoulder</th><th>leftElbow</th><th>rightElbow</th><th>leftWrist</th><th>rightWrist</th><th>leftHip</th><th>rightHip</th><th>leftKnee</th><th>rightKnee</th><th>leftAnkle</th><th>rightAnkle</th>
+              </tr></thead>
+              <tbody></tbody>
+            </table> -->
+          </div>
+
+          <script>
+            var model, result;
+            var video = document.getElementById("video");
+            var canvas = document.getElementById("canvas");
+            var context = canvas.getContext("2d");
+            var video_canvas_wrapper = document.getElementById("video-canvas-wrapper");
+            const imageScaleFactor = 0.50;
+            const flipHorizontal = false;
+            const outputStride = 16;
+            const imageElement = document.getElementById("cat");
+            const ARGS = document.getElementById("arguments");
+            // load the posenet model
+            posenet.load().then(function(pretrainedModel){
+              model = pretrainedModel;
+              setupCamera(isFacing=true);
+            });
+            // Setup WebCamera
+            var isFacing = true; 
+            function setupCamera(isFacing=true){
+              navigator.mediaDevices.getUserMedia({
+                audio: false,
+                video: { facingMode: isFacing ? "environment" : "user" },
+                audio: false,
+              }).then(function(stream){
+                video.addEventListener("loadedmetadata", function(){
+                  w = video.offsetWidth; h = video.offsetHeight;
+                  canvas.setAttribute('width', w.toString()); canvas.setAttribute('height', h.toString()); video_canvas_wrapper.style.height = h.toString()+"px";
+                })
+                video.srcObject = stream;
+                video.addEventListener("loadeddata", prediction);
+              })
+            }
+            // Prediction.
+            var prevCompleted=true;
+            const posesProperties = {
+              flipHorizontal: false,
+              internalResolution: 'high',
+              segmentationThreshold: 0.9
+            };
+            function prediction(){
+              if (prevCompleted) {
+                prevCompleted = false;
+                model.estimatePoses(canvas, posesProperties).then(function(poses) {
+                  processResults(canvas, poses);
+                  prevCompleted = true;
+                });
+              }
+              window.requestAnimationFrame(prediction);
+            }
+            // var minConfidence=0.1;
+            var minPoseConfidence=0.1;
+            var minPartConfidence=0.1;
+            var lineWidth=2;
+            var color="red"
+            var boundingBoxColor="green";
+            /**
+            * @license
+            * Copyright 2019 Google LLC. All Rights Reserved.
+            * Licensed under the Apache License, Version 2.0 (the "License");
+            * you may not use this file except in compliance with the License.
+            * You may obtain a copy of the License at
+            *
+            * https://www.apache.org/licenses/LICENSE-2.0
+            *
+            * Unless required by applicable law or agreed to in writing, software
+            * distributed under the License is distributed on an "AS IS" BASIS,
+            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+            * See the License for the specific language governing permissions and
+            * limitations under the License.
+            * =============================================================================
+            */
+            function processResults(canvas, poses){
+              showMethod=ARGS.showMethod.value;
+              context.drawImage(video, 0, 0, video.offsetWidth, video.offsetHeight);
+              poses.forEach(({score, keypoints}) => {
+                if (score >= minPoseConfidence) {
+                  if (showMethod=="Points") {
+                    drawKeypoints(keypoints, minPartConfidence, context);
+                  }
+                  if (showMethod=="Skeleton") {
+                    drawSkeleton(keypoints, minPartConfidence,context);
+                  }
+                  if (showMethod=="BoundingBox") {
+                    drawBoundingBox(keypoints, context);
+                  }
+                }
+              });
+            }
+            function drawPoint(ctx, y, x, r, color) {
+              ctx.beginPath();
+              ctx.arc(x, y, r, 0, 2*Math.PI);
+              ctx.fillStyle = color;
+              ctx.fill();
+            }
+            function drawPoints(ctx, points, radius, color) {
+              var data = points.buffer().values;
+              for (let i=0; i<data.length; i += 2) {
+                const pointY = data[i];
+                const pointX = data[i+1];
+                if (pointX !== 0 && pointY !== 0) {
+                  ctx.beginPath();
+                  ctx.arc(pointX, pointY, radius, 0, 2*Math.PI);
+                  ctx.fillStyle = color;
+                  ctx.fill();
+                }
+              }
+            }
+            function drawKeypoints(keypoints, minConfidence, ctx, scale=1) {
+              for (let i=0; i<keypoints.length; i++) {
+                let keypoint = keypoints[i];
+                if (keypoint.score < minConfidence) {
+                  continue;
+                }
+                let {y, x} = keypoint.position;
+                drawPoint(ctx, y*scale, x*scale, 3, color);
+              }
+            }
+            function toTuple({y, x}) {
+              return [y, x];
+            }
+            function drawSegment([ay, ax], [by, bx], color, scale, ctx) {
+              ctx.beginPath();
+              ctx.moveTo(ax*scale, ay*scale);
+              ctx.lineTo(bx*scale, by*scale);
+              ctx.lineWidth = lineWidth;
+              ctx.strokeStyle = color;
+              ctx.stroke();
+            }
+            function drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
+              posenet.getAdjacentKeyPoints(keypoints, minConfidence).forEach(function(keypoints){
+                drawSegment(toTuple(keypoints[0].position), toTuple(keypoints[1].position), color, scale, ctx);
+              });
+            }
+            function drawBoundingBox(keypoints, ctx) {
+              var boundingBox = posenet.getBoundingBox(keypoints);
+              ctx.rect(boundingBox.minX, boundingBox.minY, boundingBox.maxX-boundingBox.minX, boundingBox.maxY-boundingBox.minY);
+              ctx.strokeStyle = boundingBoxColor;
+              ctx.stroke();
+            }
+          </script>
+
+          <style>
+            .video-and-canvas {
+              position: relative;
+              margin: 0 auto;
+            }
+            #video, #canvas {
+              position: absolute;
+              left: 0;
+              right: 0;
+              margin: 0 auto;
+            }
+          </style>
+        
+        </div><!-- /.entry-content -->
+    
+      </article>
+    </section>
+    <section id="extras" class="body">
+      <div class="blogroll">
+        <h5>other contents</h5>
+        <ul>
+          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Home.png">Home</a></li>
+          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">Blog</a></li>
+          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">University</a></li>
+          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">Kerasy</a></li>
+          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">Python-Charmers</a></li>
+          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">Translation-Gummy</a></li>
+        </ul>
+      </div><!-- /.blogroll -->
+      <div class="social">
+        <h5>social</h5>
+        <ul>
+          <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
+          <li><a href="https://github.com/iwasakishuto">github</a></li>
+        </ul>
+      </div><!-- /.social -->
+    </section><!-- /#extras -->
+
+    <footer id="contentinfo" class="body">
+      <p>Powered by <a href="https://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
+    </footer><!-- /#contentinfo -->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-164333757-3']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+  </body>
+</html>
