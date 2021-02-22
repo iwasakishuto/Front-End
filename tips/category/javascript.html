@@ -131,59 +131,239 @@
   </table>  
 </form>
 
+<!-- Battle Tower -->
+
+<details>
+  <summary class="h2">バトルタワー</summary>
+  <details>
+    <summary class="h3">ルール</summary>
+    出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルタワー_(第三世代)">ポケモンWiki</a>
+    <div class="rule"><ul>
+      <li>シングルバトル、ダブルバトル、マルチバトル、マルチつうしんバトルができる。</li>
+      <li>LV50とオープンレベル(最低Lv60)が選択できる。</li>
+      <li>35戦目と70戦目にフロンティアブレーンのリラとのバトルとなる。</li>
+    </ul></div>
+  </details>
+  <form id="tower_form" name="TOWER">
+  </form>
+</details>
+
+<!-- Battle Dome -->
+
+<details>
+  <summary class="h2">バトルドーム</summary>
+  <details>
+    <summary class="h3">ルール</summary>
+    出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルドーム">ポケモンWiki</a>
+    <div class="rule"><ul>
+      <li>手持ちポケモンから3匹を選択して参加。</li>
+      <li>16人が参加するトーナメントを勝ち抜く。つまり4回勝てば優勝。</li>
+      <li>試合前に対戦相手のポケモン・強さ・戦法・大まかな能力値が表示された対戦カードを見ることができる。</li>
+      <li>カードの情報をもとに、3匹の手持ちから試合に出す2匹を選択してバトル開始。</li>
+      <li>ダブルノックアウトで試合が終了した場合、ランキングの高い方が勝利となる。</li>
+      <li>4連勝で1周。5周目と10周目の決勝戦にはドームスーパースターのヒースが登場する。</li>
+    </ul></div>
+  </details>
+  <form id="dome_form" name="DOME">
+  </form>
+</details>
+
+<!-- Battle Factory -->
+
+<details>
+  <summary class="h2">バトルファクトリー</summary>
+  <details>
+    <summary class="h3">ルール</summary>
+    出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルファクトリー_(第三世代)">ポケモンWiki</a>
+    <div class="rule"><ul>
+      <li>ファクトリーでは自分の手持ちは使わず、レンタルポケモンを使ってバトルする。はじめに、表示される6匹のレンタルポケモンのうち3匹を選択し、手持ちとする。以後、そのポケモンで敵トレーナーと戦って勝てば、任意で敵トレーナーとポケモンを1匹交換することができる。</li>
+      <li>ポケモンバトルの前にヒントを教えてもらえる。内容は相手のポケモンの中で重複しているタイプと、相手の大まかな戦型である。</li>
+      <li>バトルの合間にポケモンの並び替えはできない。</li>
+      <li>7人抜きで1周。3周目と6周目の最後にはダツラとのバトルになる。</li>
+      <li>1周ごとにレンタルポケモンはリセットされる。次の周回では1からレンタルしなおすことになる。</li>
+    </ul></div>
+  </details>  
+  <form id="factory_form" name="FACTORY">
+  </form>
+</details>
+
+<!-- Battle Palace -->
+
 <details>
   <summary class="h2">バトルパレス</summary>
+  <details>
+    <summary class="h3">ルール</summary>
+    出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルパレス">ポケモンWiki</a>
+    <div class="rule"><ul>
+      <li>バトルパレスではトレーナーはポケモンに一切の指示を出すことができない。ただし、ポケモンチェンジはトレーナーの判断で行える。</li>
+      <li>繰り出す技はポケモン自身が考える。</li>
+      <li>ポケモンの性格によって好むわざの種類が異なる。</li>
+      <li>7 連勝で1周。3周目と6周目の最後にはウコンとのバトルになる。</li>
+    </ul></div>
+  </details>
   <form id="palace_form" name="PALACE">
     <details>
       <summary class="h3">技の区表</summary>
-      <table id="move_list">
-        <thead><tr><th colspan="5">
-          <label><input type="checkbox" name="palace_move_class" checked>攻撃技</label>
-          <label><input type="checkbox" name="palace_move_class" checked>防御技</label>
-          <label><input type="checkbox" name="palace_move_class" checked>補助技</label>
-        </th></tr>
-          <tr>
-            <th></td>
-            <th>技</td>
-            <th>タイプ</td>
-            <th>威力</td>
-            <th>区分</td>
-          </tr>
-        </head>
-        <tbody><tr>
-        </tr></tbody>
-      </table> 
+      <div style="width:100%;height:480px;overflow:auto;">
+        <table id="move_list">
+          <thead>
+            <tr><th colspan="5">
+              <label><input type="checkbox" name="palace_move_class" checked>攻撃技</label>
+              <label><input type="checkbox" name="palace_move_class" checked>防御技</label>
+              <label><input type="checkbox" name="palace_move_class" checked>補助技</label>
+            </th></tr>
+            <tr><th></td><th>技</td><th>タイプ</td><th>威力</td><th>区分</td></tr>
+          </thead>
+          <tbody><tr>
+          </tr></tbody>
+        </table>
+      </div>
     </details>
     <details>
       <summary class="h3">性格別の傾向</summary>
-      <table id="seikaku_trend">
-        <thead><tr><th colspan="5">
-          <label><input type="checkbox" name="palace_move_class" checked>攻撃技</label>
-          <label><input type="checkbox" name="palace_move_class" checked>防御技</label>
-          <label><input type="checkbox" name="palace_move_class" checked>補助技</label>
-        </th></tr>
-          <tr>
-            <th></td>
-            <th>技</td>
-            <th>タイプ</td>
-            <th>威力</td>
-            <th>区分</td>
-          </tr>
-        </head>
-        <tbody><tr>
-        </tr></tbody>
-      </table>
+      <div style="width:100%;height:480px;overflow:auto;">
+        <table id="seikaku_trend">
+          <thead>
+            <tr><th></th><th colspan="3">通常時</th><th colspan="3">HP減少時</th></tr>
+            <tr><th>せいかく</th><th>攻撃</th><th>防御</th><th>補助</th><th>攻撃</th><th>防御</th><th>補助</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>さみしがり (A↑ B↓)</th><td class="gp3">20%</td><td class="gp3">25%</td><td class="gp3">55%</td><td class="gp1">84%</td><td class="gp1">8%</td><td class="gp1">8%</td></tr>
+            <tr><th>いじっぱり (A↑ C↓)</th><td class="gp1">38%</td><td class="gp1">31%</td><td class="gp1">31%</td><td class="gp1">70%</td><td class="gp1">15%</td><td class="gp1">15%</td></tr>
+            <tr><th>やんちゃ　 (A↑ D↓)</th><td class="gp2">20%</td><td class="gp2">70%</td><td class="gp2">10%</td><td class="gp1">70%</td><td class="gp1">22%</td><td class="gp1">8%</td></tr>
+            <tr><th>ゆうかん　 (A↑ S↓)</th><td class="gp1">70%</td><td class="gp1">15%</td><td class="gp1">15%</td><td class="gp2">32%</td><td class="gp2">60%</td><td class="gp2">8%</td></tr>
+            <tr><th>ずぶとい　 (B↑ A↓)</th><td class="gp3">30%</td><td class="gp3">20%</td><td class="gp3">50%</td><td class="gp2">32%</td><td class="gp2">58%</td><td class="gp2">10%</td></tr>
+            <tr><th>わんぱく　 (B↑ C↓)</th><td class="gp1">69%</td><td class="gp1">6%</td><td class="gp1">25%</td><td class="gp2">28%</td><td class="gp2">55%</td><td class="gp2">17%</td></tr>
+            <tr><th>のうてんき (B↑ D↓)</th><td class="gp3">35%</td><td class="gp3">10%</td><td class="gp3">55%</td><td class="gp3">29%</td><td class="gp3">6%</td><td class="gp3">65%</td></tr>
+            <tr><th>のんき　　 (B↑ S↓)</th><td class="gp3">25%</td><td class="gp3">15%</td><td class="gp3">60%</td><td class="gp1">75%</td><td class="gp1">15%</td><td class="gp1">10%</td></tr>
+            <tr><th>ひかえめ　 (C↑ A↓)</th><td class="gp2">35%</td><td class="gp2">45%</td><td class="gp2">20%</td><td class="gp2">34%</td><td class="gp2">60%</td><td class="gp2">6%</td></tr>
+            <tr><th>おっとり　 (C↑ B↓)</th><td class="gp2">44%</td><td class="gp2">50%</td><td class="gp2">6%</td><td class="gp3">34%</td><td class="gp3">6%</td><td class="gp3">60%</td></tr>
+            <tr><th>うっかりや (C↑ D↓)</th><td class="gp3">30%</td><td class="gp3">13%</td><td class="gp3">57%</td><td class="gp3">27%</td><td class="gp3">6%</td><td class="gp3">67%</td></tr>
+            <tr><th>れいせい　 (C↑ S↓)</th><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td></tr>
+            <tr><th>おだやか　 (D↑ A↓)</th><td class="gp2">40%</td><td class="gp2">50%</td><td class="gp2">10%</td><td class="gp2">25%</td><td class="gp2">62%</td><td class="gp2">13%</td></tr>
+            <tr><th>おとなしい (D↑ B↓)</th><td class="gp2">18%</td><td class="gp2">70%</td><td class="gp2">12%</td><td class="gp1">90%</td><td class="gp1">5%</td><td class="gp1">5%</td></tr>
+            <tr><th>しんちょう (D↑ C↓)</th><td class="gp2">42%</td><td class="gp2">50%</td><td class="gp2">8%</td><td class="gp3">42%</td><td class="gp3">5%</td><td class="gp3">53%</td></tr>
+            <tr><th>なまいき　 (D↑ S↓)</th><td class="gp1">88%</td><td class="gp1">6%</td><td class="gp1">6%</td><td class="gp3">22%</td><td class="gp3">20%</td><td class="gp3">58%</td></tr>
+            <tr><th>おくびょう (S↑ A↓)</th><td class="gp1">62%</td><td class="gp1">10%</td><td class="gp1">28%</td><td class="gp3">30%</td><td class="gp3">20%</td><td class="gp3">50%</td></tr>
+            <tr><th>せっかち　 (S↑ B↓)</th><td class="gp1">58%</td><td class="gp1">37%</td><td class="gp1">5%</td><td class="gp1">88%</td><td class="gp1">6%</td><td class="gp1">6%</td></tr>
+            <tr><th>ようき　　 (S↑ C↓)</th><td class="gp3">35%</td><td class="gp3">5%</td><td class="gp3">60%</td><td class="gp2">35%</td><td class="gp2">60%</td><td class="gp2">5%</td></tr>
+            <tr><th>むじゃき　 (S↑ D↓)</th><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td></tr>
+            <tr><th>てれや　　 </th><td class="gp2">30%</td><td class="gp2">58%</td><td class="gp2">12%</td><td class="gp2">30%</td><td class="gp2">58%</td><td class="gp2">12%</td></tr>
+            <tr><th>がんばりや </th><td class="gp1">61%</td><td class="gp1">7%</td><td class="gp1">32%</td><td class="gp1">61%</td><td class="gp1">7%</td><td class="gp1">32%</td></tr>
+            <tr><th>すなお　　 </th><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td></tr>
+            <tr><th>きまぐれ　 </th><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td></tr>
+            <tr><th>まじめ　　 </th><td class="gp3">34%</td><td class="gp3">11%</td><td class="gp3">55%</td><td class="gp3">29%</td><td class="gp3">11%</td><td class="gp3">60%</td></tr>
+          </tbody>
+        </table>
+      </div>
     </details>
   </form>
+</details>
+
+<!-- Battle Tube -->
+
+<details>
+  <summary class="h2">バトルチューブ</summary>
+  <details>
+    <summary class="h3">ルール</summary>
+    出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルチューブ">ポケモンWiki</a>
+    <div class="rule"><ul>
+      <li>手持ちポケモン3匹で参加。部屋の奥にある3つの扉から1つを選んで進む。そしてその部屋の中で起こる様々なイベントを突破し、チューブの出口までたどり着けばクリア。</li>
+      <li>扉の先でどんなイベントが起こるかは完全にランダム。ただし、3つの扉を選ぶ部屋にはメイドが立っており、彼女の発言からある程度の推測は立てられる。</li>
+      <li>戦闘後のポケモンの回復は行われない。回復するには特定のイベントを発生させる必要がある。</li>
+      <li>オボンのみなど消費系の道具をポケモンに持たせて使った場合、戦闘後には道具は復活しない。チューブを突破するかリタイアすれば元に戻る。</li>
+      <li>14部屋突破で1周。2周目と10周目の最後にはアザミとのバトルになる。</li>
+    </ul></div>
+  </details>
+  <form id="tube_form" name="TUBE">
+  </form>
+</details>
+
+<!-- Battle Arena -->
+
+<details>
+  <summary class="h2">バトルアリーナ</summary>
+  <details>
+    出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルアリーナ">ポケモンWiki</a>
+    <summary class="h3">ルール</summary>
+    <div class="rule"><ul>
+      <li>手持ちポケモンから3匹を選択して参加。試合形式はシングルバトルのみ。</li>
+      <li>バトルアリーナではポケモンチェンジを行うことができない。ポケモンが倒れたときは次に出すポケモンを選択することはできず、必ず最初に決めた順番でポケモンを繰り出していく。</li>
+      <li>バトンタッチ・ほえる・ふきとばしは必ず失敗する。</li>
+      <li>3ターン以内に互いのポケモンを倒せなかった場合は、勝負は判定に持ち込まれる。ここで判定負けしたポケモンはひんし扱いとなる。</li>
+      <li>判定で引き分けになった場合、両方のポケモンがひんし扱いとなる。</li>
+      <li>試合中に道具は使用できないが、ポケモンに道具を持たせておくのはよい。</li>
+      <li>1試合ごとにポケモンを全回復してもらえる。</li>
+      <li>7試合で1周。4周目と8周目の最後にはコゴミが登場する。</li>
+      <li>バトルアリーナの判定においては、次の3つの観点で戦いが評価され、それぞれの評価を比較し、相手より評価が高ければ○(2点)、相手と同じ評価なら△(1点)、相手より評価が低ければ×(0点)とする。この合計点の多い方が判定での勝者となる。
+      <ul>
+        <li>心：「攻める心を見せた者」。攻撃技(ねこだまし・カウンター・ミラーコートを除く)を多く選択するほど評価が上がり、まもる・みきり・こらえる・ねこだましを多く選択するほど評価が下がる。選択した技の種類で決まるので、技を出したかどうかは関係ない。</li>
+        <li>技：「的確に技を繰り出した者」。技を命中させるほど評価が上がり、命中しない・効果なし・失敗・PP切れの回数が多いほど評価が下がる。</li>
+        <li>体：「溢れる体力を持ちえる者」。判定のときに残っているHPの割合が多いほど評価が上がる。</li></ul>
+      </li>
+    </ul></div>
+  </details>
+</details>
+
+<!-- Battle Pyramid -->
+
+<details>
+  <summary class="h2">バトルピラミッド</summary>
+  <details>
+    <summary class="h3">ルール</summary>
+    出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルピラミッド">ポケモンWiki</a>
+    <div class="rule"><ul>
+      <li>手持ちポケモンから3匹を選択して参加。真っ暗なピラミッドの中を歩き回り、野生ポケモンやトレーナーと戦いながら上への階段を探す。7つの階層をクリアしてピラミッド最上階にたどり着けばクリアとなる。</li>
+      <li>ピラミッドの中は暗くて見通しがきかない。だが、野生ポケモンやトレーナーと戦って勝てば、主人公の周りが少しずつ明るくなって見えやすくなっていく。</li>
+      <li>トレーナーに勝つと、階段の位置や道具についてのヒントがもらえる。</li>
+      <li>バトルピラミッドの中には道具が落ちており、これを専用の鞄・「バトルバッグ」に入れて使うことができる。またピラミッド内で特性ものひろいの効果によって集めた道具も使える。使い切れなかったバトルバッグの道具は次回の挑戦に繰り越されるが、ピラミッド内でポケモンが全滅した場合は、集めた道具は没収される。</li>
+      <li>戦闘後のポケモンの回復は行われない。</li>
+      <li>野生ポケモンからは逃げることもできるが、逃走の成功率は低めになっている。特性「にげあし」を持つポケモンでも確定にはならない。</li>
+      <li>ピラミッドを7階層突破するごとに、出現する野生ポケモンが変わる。</li>
+      <li>移動中には回復道具の使用やポケモンの並び替えができる。</li>
+      <li>バトルバッグに入れられる道具は10種類まで。</li>
+      <li>7階層突破で1周。3周目と10周目の最後にはジンダイとのバトルになる。</li>
+    </ul></div>
+  </details>
+  <form id="pyramid_form" name="PYRAMID">
 </details>
 
 <!-- Load Scripts. -->
 
 <script type="text/javascript" src="https://iwasakishuto.github.io/js/jquery.js"></script>
 
+<script type="text/javascript" src="https://iwasakishuto.github.io/js/tablefilter.js"></script>
+
 <script type="text/javascript" src="theme/js/pokeutils.js"></script>
 
 <script type="text/javascript" src="https://iwasakishuto.github.io/js/custom.js"></script>
+
+<!-- TableFilter Settings -->
+
+<script>
+  var filtersConfig = {
+    btn_reset: true,
+    rows_counter: true,
+    loader: true,
+    status_bar: true,
+    responsive: true,
+    filters_row_index: 2,
+    headers_row_index: 1,
+    col_types: ['string',
+      { type: 'formatted-number', decimal: '%', thousands: '.' },
+      { type: 'formatted-number', decimal: '%', thousands: '.' },
+      { type: 'formatted-number', decimal: '%', thousands: '.' },
+      { type: 'formatted-number', decimal: '%', thousands: '.' },
+      { type: 'formatted-number', decimal: '%', thousands: '.' },
+      { type: 'formatted-number', decimal: '%', thousands: '.' },
+    ],
+    col_0: "checklist",
+    col_widths: ['180px'],
+    extensions:[{name: 'sort'}]
+  };
+  var tf = new TableFilter('seikaku_trend', filtersConfig, 2);
+  tf.init();
+</script>
 
 <!-- My Pokemon Form -->
 
