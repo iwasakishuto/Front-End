@@ -56,489 +56,256 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-28.html">JS.28 ポケモンエメラルドでフロンティア マスターを目指す（その３）</a></h1>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-29.html">JS.29 TensorflowJS で Pose Detection</a></h1>
           <footer class="post-info">
-            <span>2021-02-21(Sun)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a></span>
-          </footer><!-- /.post-info --><h2>フロンティア マスターへの道 〜施設を知る〜</h2>
+            <span>2021-03-06(Sat)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tensorflowjs.html">TensorFlow.js</a></span>
+          </footer><!-- /.post-info --><script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
 
-<p>今回は、フロンティア内の7つの施設ごとのルールを確認しつつ、各施設を攻略する上で便利なツール群を作成します。</p>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
 
-<p>見たい施設のタイトルをクリックして、各ツールを利用してください！！</p>
-
-<p style="color:red">※ 今回の記事も完全に自己満ツール群です🙇‍♂️多分これで終わりです。</p>
-
-<form id="mypoke_form" name="MYPOKE">
-  <h2>自分のポケモン</h2>
-  <p>以下の表で自分のポケモンを設定してください。なお、レベルはバトルフロンティアのポケモンと共通しています。</p>
-  <table class="fixed" id="my-pokemon">
-    <thead><tr><th colspan="7"><label>自分のポケモン（Lv: <input id="lv" type="number" min="1" max="100" value="50" size="3" name="LV">）</label></th></tr></thead>
-    <tbody>
-      <tr class="g1">
-        <td colspan="3">ポケモン</td>
-        <td colspan="4"><select id="poke_name" name="poke"></select></td>
-      </tr>
-      <tr class="g1">
-        <td colspan="3">とくせい</td>
-        <td colspan="4"><select id="ability" name="ability"><option>----</option></select></td>
-      </tr>
-      <tr>
-        <td colspan="3">性別</td>
-        <td colspan="4"><select id="sex" name="sex"><option>--</option></select></td>
-      </tr>
-      <tr class="g2">
-        <td colspan="3">性格</td>
-        <td colspan="4"><select id="seikaku" name="seikaku"><option value="1">さみしがり (A↑ B↓)</option><option value="3">いじっぱり (A↑ C↓)</option><option value="4">やんちゃ　 (A↑ D↓)</option><option value="2">ゆうかん　 (A↑ S↓)</option><option value="5">ずぶとい　 (B↑ A↓)</option><option value="8">わんぱく　 (B↑ C↓)</option><option value="9">のうてんき (B↑ D↓)</option><option value="7">のんき　　 (B↑ S↓)</option><option value="15" selected>ひかえめ　 (C↑ A↓)</option><option value="16">おっとり　 (C↑ B↓)</option><option value="19">うっかりや (C↑ D↓)</option><option value="17">れいせい　 (C↑ S↓)</option><option value="20">おだやか　 (D↑ A↓)</option><option value="21">おとなしい (D↑ B↓)</option><option value="23">しんちょう (D↑ C↓)</option><option value="22">なまいき　 (D↑ S↓)</option><option value="10">おくびょう (S↑ A↓)</option><option value="11">せっかち　 (S↑ B↓)</option><option value="13">ようき　　 (S↑ C↓)</option><option value="14">むじゃき　 (S↑ D↓)</option><option value="18">てれや　　 </option><option value="0">がんばりや </option><option value="6">すなお　　 </option><option value="24">きまぐれ　 </option><option value="12">まじめ　　 </option></select></td>
-      </tr>
-    </tbody>
-    <thead>
-      <tr>
-        <th><div class='overflow-ms'><img></div></th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="only-text">
-        <td>種族値</td><td></td><td></td><td></td><td></td><td></td><td></td>
-      </tr>
-      <tr class="g2">
-        <td>個体値</td>
-        <td><input type="number" min="0" max="31"  value="31" size="3" name="iH"></td>
-        <td><input type="number" min="0" max="31"  value="31" size="3" name="iA"></td>
-        <td><input type="number" min="0" max="31"  value="31" size="3" name="iB"></td>
-        <td><input type="number" min="0" max="31"  value="31" size="3" name="iC"></td>
-        <td><input type="number" min="0" max="31"  value="31" size="3" name="iD"></td>
-        <td><input type="number" min="0" max="31"  value="31" size="3" name="iS"></td>
-      </tr>
-      <tr class="g2">
-        <td>努力値</td>
-        <td><input type="number" min="0" max="255" value="0" size="3" name="eH"></td>
-        <td><input type="number" min="0" max="255" value="0" size="3" name="eA"></td>
-        <td><input type="number" min="0" max="255" value="0" size="3" name="eB"></td>
-        <td><input type="number" min="0" max="255" value="0" size="3" name="eC"></td>
-        <td><input type="number" min="0" max="255" value="0" size="3" name="eD"></td>
-        <td><input type="number" min="0" max="255" value="0" size="3" name="eS"></td>
-      </tr>
-      <tr class="g1 only-text">
-        <td>実数値</td>
-        <td><input type="number" min="1" max="999" value="1" size="3" name="H"></td>
-        <td><input type="number" min="1" max="999" value="1" size="3" name="A"></td>
-        <td><input type="number" min="1" max="999" value="1" size="3" name="B"></td>
-        <td><input type="number" min="1" max="999" value="1" size="3" name="C"></td>
-        <td><input type="number" min="1" max="999" value="1" size="3" name="D"></td>
-        <td><input type="number" min="1" max="999" value="1" size="3" name="S"></td>
-      </tr>
-    </tbody>
-  </table>  
-</form>
-
-<!-- Battle Tower -->
-
-<details>
-  <summary class="h2">バトルタワー</summary>
-  <details>
-    <summary class="h3">ルール</summary>
-    出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルタワー_(第三世代)">ポケモンWiki</a>
-    <div class="rule"><ul>
-      <li>シングルバトル、ダブルバトル、マルチバトル、マルチつうしんバトルができる。</li>
-      <li>LV50とオープンレベル(最低Lv60)が選択できる。</li>
-      <li>35戦目と70戦目にフロンティアブレーンのリラとのバトルとなる。</li>
-    </ul></div>
-  </details>
-  <form id="tower_form" name="TOWER">
+<div class="nunkiru">
+  <h1>Pose-Estimation</h1>
+  <p>Tensorflow.js を用いて、<b>"Pose-Estimation"</b>をブラウザで実行するアプリを作りました。</p>
+  <form id="arguments" name="ARGS">
+    <table id="args-table">
+      <thead>
+        <tr>
+          <th>Argumnets</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>show method</td>
+          <td><select id="showMethod" name="showMethod"><option>Points</option><option>Skeleton</option><option>BoundingBox</option></select></td>
+        </tr>
+        <tr>
+          <td>Pose Confidence</td>
+          <td><input name="minPoseConfidence" id="minPoseConfidence" type="number" min="0" max="1" step="0.01" value="0.1"></td>
+        </tr>
+        <tr>
+          <td>Part Confidence</td>
+          <td><input name="minPartConfidence" id="minPartConfidence" type="number" min="0" max="1" step="0.01" value="0.1"></td>
+        </tr>
+        <tr>
+          <td>switch Camera</td>
+          <td><button type="button" id="switchCamera" onclick="switchFrontBackCamera()">switch</button></td>
+        </tr>
+      </tbody>
+    </table>
   </form>
-</details>
-
-<!-- Battle Dome -->
-
-<details>
-  <summary class="h2">バトルドーム</summary>
-  <details>
-    <summary class="h3">ルール</summary>
-    出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルドーム">ポケモンWiki</a>
-    <div class="rule"><ul>
-      <li>手持ちポケモンから3匹を選択して参加。</li>
-      <li>16人が参加するトーナメントを勝ち抜く。つまり4回勝てば優勝。</li>
-      <li>試合前に対戦相手のポケモン・強さ・戦法・大まかな能力値が表示された対戦カードを見ることができる。</li>
-      <li>カードの情報をもとに、3匹の手持ちから試合に出す2匹を選択してバトル開始。</li>
-      <li>ダブルノックアウトで試合が終了した場合、ランキングの高い方が勝利となる。</li>
-      <li>4連勝で1周。5周目と10周目の決勝戦にはドームスーパースターのヒースが登場する。</li>
-    </ul></div>
-  </details>
-  <form id="dome_form" name="DOME">
-  </form>
-</details>
-
-<!-- Battle Factory -->
-
-<details>
-  <summary class="h2">バトルファクトリー</summary>
-  <details>
-    <summary class="h3">ルール</summary>
-    出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルファクトリー_(第三世代)">ポケモンWiki</a>
-    <div class="rule"><ul>
-      <li>ファクトリーでは自分の手持ちは使わず、レンタルポケモンを使ってバトルする。はじめに、表示される6匹のレンタルポケモンのうち3匹を選択し、手持ちとする。以後、そのポケモンで敵トレーナーと戦って勝てば、任意で敵トレーナーとポケモンを1匹交換することができる。</li>
-      <li>ポケモンバトルの前にヒントを教えてもらえる。内容は相手のポケモンの中で重複しているタイプと、相手の大まかな戦型である。</li>
-      <li>バトルの合間にポケモンの並び替えはできない。</li>
-      <li>7人抜きで1周。3周目と6周目の最後にはダツラとのバトルになる。</li>
-      <li>1周ごとにレンタルポケモンはリセットされる。次の周回では1からレンタルしなおすことになる。</li>
-    </ul></div>
-  </details>  
-  <form id="factory_form" name="FACTORY">
-  </form>
-</details>
-
-<!-- Battle Palace -->
-
-<details>
-  <summary class="h2">バトルパレス</summary>
-  <details>
-    <summary class="h3">ルール</summary>
-    出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルパレス">ポケモンWiki</a>
-    <div class="rule"><ul>
-      <li>バトルパレスではトレーナーはポケモンに一切の指示を出すことができない。ただし、ポケモンチェンジはトレーナーの判断で行える。</li>
-      <li>繰り出す技はポケモン自身が考える。</li>
-      <li>ポケモンの性格によって好むわざの種類が異なる。</li>
-      <li>7 連勝で1周。3周目と6周目の最後にはウコンとのバトルになる。</li>
-    </ul></div>
-  </details>
-  <form id="palace_form" name="PALACE">
-    <details>
-      <summary class="h3">技の区表</summary>
-      <div style="width:100%;height:480px;overflow:auto;">
-        <table id="move_list">
-          <thead>
-            <tr><th colspan="5">
-              <label><input type="checkbox" name="palace_move_class" checked>攻撃技</label>
-              <label><input type="checkbox" name="palace_move_class" checked>防御技</label>
-              <label><input type="checkbox" name="palace_move_class" checked>補助技</label>
-            </th></tr>
-            <tr><th></td><th>技</td><th>タイプ</td><th>威力</td><th>区分</td></tr>
-          </thead>
-          <tbody><tr>
-          </tr></tbody>
-        </table>
-      </div>
-    </details>
-    <details>
-      <summary class="h3">性格別の傾向</summary>
-      <div style="width:100%;height:480px;overflow:auto;">
-        <table id="seikaku_trend">
-          <thead>
-            <tr><th></th><th colspan="3">通常時</th><th colspan="3">HP減少時</th></tr>
-            <tr><th>せいかく</th><th>攻撃</th><th>防御</th><th>補助</th><th>攻撃</th><th>防御</th><th>補助</th></tr>
-          </thead>
-          <tbody>
-            <tr><th>さみしがり (A↑ B↓)</th><td class="gp3">20%</td><td class="gp3">25%</td><td class="gp3">55%</td><td class="gp1">84%</td><td class="gp1">8%</td><td class="gp1">8%</td></tr>
-            <tr><th>いじっぱり (A↑ C↓)</th><td class="gp1">38%</td><td class="gp1">31%</td><td class="gp1">31%</td><td class="gp1">70%</td><td class="gp1">15%</td><td class="gp1">15%</td></tr>
-            <tr><th>やんちゃ　 (A↑ D↓)</th><td class="gp2">20%</td><td class="gp2">70%</td><td class="gp2">10%</td><td class="gp1">70%</td><td class="gp1">22%</td><td class="gp1">8%</td></tr>
-            <tr><th>ゆうかん　 (A↑ S↓)</th><td class="gp1">70%</td><td class="gp1">15%</td><td class="gp1">15%</td><td class="gp2">32%</td><td class="gp2">60%</td><td class="gp2">8%</td></tr>
-            <tr><th>ずぶとい　 (B↑ A↓)</th><td class="gp3">30%</td><td class="gp3">20%</td><td class="gp3">50%</td><td class="gp2">32%</td><td class="gp2">58%</td><td class="gp2">10%</td></tr>
-            <tr><th>わんぱく　 (B↑ C↓)</th><td class="gp1">69%</td><td class="gp1">6%</td><td class="gp1">25%</td><td class="gp2">28%</td><td class="gp2">55%</td><td class="gp2">17%</td></tr>
-            <tr><th>のうてんき (B↑ D↓)</th><td class="gp3">35%</td><td class="gp3">10%</td><td class="gp3">55%</td><td class="gp3">29%</td><td class="gp3">6%</td><td class="gp3">65%</td></tr>
-            <tr><th>のんき　　 (B↑ S↓)</th><td class="gp3">25%</td><td class="gp3">15%</td><td class="gp3">60%</td><td class="gp1">75%</td><td class="gp1">15%</td><td class="gp1">10%</td></tr>
-            <tr><th>ひかえめ　 (C↑ A↓)</th><td class="gp2">35%</td><td class="gp2">45%</td><td class="gp2">20%</td><td class="gp2">34%</td><td class="gp2">60%</td><td class="gp2">6%</td></tr>
-            <tr><th>おっとり　 (C↑ B↓)</th><td class="gp2">44%</td><td class="gp2">50%</td><td class="gp2">6%</td><td class="gp3">34%</td><td class="gp3">6%</td><td class="gp3">60%</td></tr>
-            <tr><th>うっかりや (C↑ D↓)</th><td class="gp3">30%</td><td class="gp3">13%</td><td class="gp3">57%</td><td class="gp3">27%</td><td class="gp3">6%</td><td class="gp3">67%</td></tr>
-            <tr><th>れいせい　 (C↑ S↓)</th><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td></tr>
-            <tr><th>おだやか　 (D↑ A↓)</th><td class="gp2">40%</td><td class="gp2">50%</td><td class="gp2">10%</td><td class="gp2">25%</td><td class="gp2">62%</td><td class="gp2">13%</td></tr>
-            <tr><th>おとなしい (D↑ B↓)</th><td class="gp2">18%</td><td class="gp2">70%</td><td class="gp2">12%</td><td class="gp1">90%</td><td class="gp1">5%</td><td class="gp1">5%</td></tr>
-            <tr><th>しんちょう (D↑ C↓)</th><td class="gp2">42%</td><td class="gp2">50%</td><td class="gp2">8%</td><td class="gp3">42%</td><td class="gp3">5%</td><td class="gp3">53%</td></tr>
-            <tr><th>なまいき　 (D↑ S↓)</th><td class="gp1">88%</td><td class="gp1">6%</td><td class="gp1">6%</td><td class="gp3">22%</td><td class="gp3">20%</td><td class="gp3">58%</td></tr>
-            <tr><th>おくびょう (S↑ A↓)</th><td class="gp1">62%</td><td class="gp1">10%</td><td class="gp1">28%</td><td class="gp3">30%</td><td class="gp3">20%</td><td class="gp3">50%</td></tr>
-            <tr><th>せっかち　 (S↑ B↓)</th><td class="gp1">58%</td><td class="gp1">37%</td><td class="gp1">5%</td><td class="gp1">88%</td><td class="gp1">6%</td><td class="gp1">6%</td></tr>
-            <tr><th>ようき　　 (S↑ C↓)</th><td class="gp3">35%</td><td class="gp3">5%</td><td class="gp3">60%</td><td class="gp2">35%</td><td class="gp2">60%</td><td class="gp2">5%</td></tr>
-            <tr><th>むじゃき　 (S↑ D↓)</th><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td></tr>
-            <tr><th>てれや　　 </th><td class="gp2">30%</td><td class="gp2">58%</td><td class="gp2">12%</td><td class="gp2">30%</td><td class="gp2">58%</td><td class="gp2">12%</td></tr>
-            <tr><th>がんばりや </th><td class="gp1">61%</td><td class="gp1">7%</td><td class="gp1">32%</td><td class="gp1">61%</td><td class="gp1">7%</td><td class="gp1">32%</td></tr>
-            <tr><th>すなお　　 </th><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td></tr>
-            <tr><th>きまぐれ　 </th><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td></tr>
-            <tr><th>まじめ　　 </th><td class="gp3">34%</td><td class="gp3">11%</td><td class="gp3">55%</td><td class="gp3">29%</td><td class="gp3">11%</td><td class="gp3">60%</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </details>
-  </form>
-</details>
-
-<!-- Battle Tube -->
-
-<details>
-  <summary class="h2">バトルチューブ</summary>
-  <details>
-    <summary class="h3">ルール</summary>
-    出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルチューブ">ポケモンWiki</a>
-    <div class="rule"><ul>
-      <li>手持ちポケモン3匹で参加。部屋の奥にある3つの扉から1つを選んで進む。そしてその部屋の中で起こる様々なイベントを突破し、チューブの出口までたどり着けばクリア。</li>
-      <li>扉の先でどんなイベントが起こるかは完全にランダム。ただし、3つの扉を選ぶ部屋にはメイドが立っており、彼女の発言からある程度の推測は立てられる。</li>
-      <li>戦闘後のポケモンの回復は行われない。回復するには特定のイベントを発生させる必要がある。</li>
-      <li>オボンのみなど消費系の道具をポケモンに持たせて使った場合、戦闘後には道具は復活しない。チューブを突破するかリタイアすれば元に戻る。</li>
-      <li>14部屋突破で1周。2周目と10周目の最後にはアザミとのバトルになる。</li>
-    </ul></div>
-  </details>
-  <form id="tube_form" name="TUBE">
-  </form>
-</details>
-
-<!-- Battle Arena -->
-
-<details>
-  <summary class="h2">バトルアリーナ</summary>
-  <details>
-    出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルアリーナ">ポケモンWiki</a>
-    <summary class="h3">ルール</summary>
-    <div class="rule"><ul>
-      <li>手持ちポケモンから3匹を選択して参加。試合形式はシングルバトルのみ。</li>
-      <li>バトルアリーナではポケモンチェンジを行うことができない。ポケモンが倒れたときは次に出すポケモンを選択することはできず、必ず最初に決めた順番でポケモンを繰り出していく。</li>
-      <li>バトンタッチ・ほえる・ふきとばしは必ず失敗する。</li>
-      <li>3ターン以内に互いのポケモンを倒せなかった場合は、勝負は判定に持ち込まれる。ここで判定負けしたポケモンはひんし扱いとなる。</li>
-      <li>判定で引き分けになった場合、両方のポケモンがひんし扱いとなる。</li>
-      <li>試合中に道具は使用できないが、ポケモンに道具を持たせておくのはよい。</li>
-      <li>1試合ごとにポケモンを全回復してもらえる。</li>
-      <li>7試合で1周。4周目と8周目の最後にはコゴミが登場する。</li>
-      <li>バトルアリーナの判定においては、次の3つの観点で戦いが評価され、それぞれの評価を比較し、相手より評価が高ければ○(2点)、相手と同じ評価なら△(1点)、相手より評価が低ければ×(0点)とする。この合計点の多い方が判定での勝者となる。
-      <ul>
-        <li>心：「攻める心を見せた者」。攻撃技(ねこだまし・カウンター・ミラーコートを除く)を多く選択するほど評価が上がり、まもる・みきり・こらえる・ねこだましを多く選択するほど評価が下がる。選択した技の種類で決まるので、技を出したかどうかは関係ない。</li>
-        <li>技：「的確に技を繰り出した者」。技を命中させるほど評価が上がり、命中しない・効果なし・失敗・PP切れの回数が多いほど評価が下がる。</li>
-        <li>体：「溢れる体力を持ちえる者」。判定のときに残っているHPの割合が多いほど評価が上がる。</li></ul>
-      </li>
-    </ul></div>
-  </details>
-</details>
-
-<!-- Battle Pyramid -->
-
-<details>
-  <summary class="h2">バトルピラミッド</summary>
-  <details>
-    <summary class="h3">ルール</summary>
-    出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルピラミッド">ポケモンWiki</a>
-    <div class="rule"><ul>
-      <li>手持ちポケモンから3匹を選択して参加。真っ暗なピラミッドの中を歩き回り、野生ポケモンやトレーナーと戦いながら上への階段を探す。7つの階層をクリアしてピラミッド最上階にたどり着けばクリアとなる。</li>
-      <li>ピラミッドの中は暗くて見通しがきかない。だが、野生ポケモンやトレーナーと戦って勝てば、主人公の周りが少しずつ明るくなって見えやすくなっていく。</li>
-      <li>トレーナーに勝つと、階段の位置や道具についてのヒントがもらえる。</li>
-      <li>バトルピラミッドの中には道具が落ちており、これを専用の鞄・「バトルバッグ」に入れて使うことができる。またピラミッド内で特性ものひろいの効果によって集めた道具も使える。使い切れなかったバトルバッグの道具は次回の挑戦に繰り越されるが、ピラミッド内でポケモンが全滅した場合は、集めた道具は没収される。</li>
-      <li>戦闘後のポケモンの回復は行われない。</li>
-      <li>野生ポケモンからは逃げることもできるが、逃走の成功率は低めになっている。特性「にげあし」を持つポケモンでも確定にはならない。</li>
-      <li>ピラミッドを7階層突破するごとに、出現する野生ポケモンが変わる。</li>
-      <li>移動中には回復道具の使用やポケモンの並び替えができる。</li>
-      <li>バトルバッグに入れられる道具は10種類まで。</li>
-      <li>7階層突破で1周。3周目と10周目の最後にはジンダイとのバトルになる。</li>
-    </ul></div>
-  </details>
-  <form id="pyramid_form" name="PYRAMID">
-</details>
-
-<!-- Load Scripts. -->
-
-<script type="text/javascript" src="https://iwasakishuto.github.io/js/jquery.js"></script>
-
-<script type="text/javascript" src="https://iwasakishuto.github.io/js/tablefilter.js"></script>
-
-<script type="text/javascript" src="theme/js/pokeutils.js"></script>
-
-<script type="text/javascript" src="https://iwasakishuto.github.io/js/custom.js"></script>
-
-<!-- TableFilter Settings -->
+  <div id="video-canvas-wrapper" class="video-and-canvas">
+    <video id="video" style="z-index: 10;" playsinline muted autoplay ></video>
+    <canvas id="canvas" style="z-index: 20;"></canvas>
+  </div>
+</div>
 
 <script>
-  var filtersConfig = {
-    btn_reset: true,
-    rows_counter: true,
-    loader: true,
-    status_bar: true,
-    responsive: true,
-    filters_row_index: 2,
-    headers_row_index: 1,
-    col_types: ['string',
-      { type: 'formatted-number', decimal: '%', thousands: '.' },
-      { type: 'formatted-number', decimal: '%', thousands: '.' },
-      { type: 'formatted-number', decimal: '%', thousands: '.' },
-      { type: 'formatted-number', decimal: '%', thousands: '.' },
-      { type: 'formatted-number', decimal: '%', thousands: '.' },
-      { type: 'formatted-number', decimal: '%', thousands: '.' },
-    ],
-    col_0: "checklist",
-    col_widths: ['180px'],
-    extensions:[{name: 'sort'}]
-  };
-  var tf = new TableFilter('seikaku_trend', filtersConfig, 2);
-  tf.init();
-</script>
-
-<!-- My Pokemon Form -->
-
-<script>
-  const MPtable = document.getElementById("my-pokemon");
-  const MPT_base_statsIdx = 6;
-  const MPT_ivIdx = 7;
-  const MPT_evIdx = 8;
-  const MPT_statsIdx = 9;
-  // Set pokemon seletions.
-  var select = document.getElementById("poke_name")
-  for (let name in POKENAME2DATA) {
-    let e = document.createElement("option");
-    e.innerText = name
-    select.appendChild(e)
+  var model, result;
+  var video = document.getElementById("video");
+  var canvas = document.getElementById("canvas");
+  var context = canvas.getContext("2d");
+  var video_canvas_wrapper = document.getElementById("video-canvas-wrapper");
+  const imageScaleFactor = 0.50;
+  const flipHorizontal = false;
+  const outputStride = 16;
+  const imageElement = document.getElementById("cat");
+  var isFacing = true; 
+  var minPoseConfidence = 0.1;
+  var minPartConfidence = 0.1;
+  var showMethod, minPoseConfidence, minPartConfidence;
+  var lineWidth = 2;
+  var color = "red"
+  var boundingBoxColor = "green";
+  // load the posenet model
+  posenet.load().then(function(pretrainedModel){
+    model = pretrainedModel;
+    setupCamera(isFacing=isFacing);
+  });
+  // Setup WebCamera
+  function switchFrontBackCamera(){
+    isFacing = !isFacing;
+    setupCamera(isFacing=isFacing)
   }
-  function set_pokemon_options(MYPOKE){
-    var pokename = MYPOKE.poke.value
-    var data = POKENAME2DATA[pokename];
-    // If pokemon has multiple abilities, show all.
-    var ability_options = "";
-    ability_options += "<option>" + data[Pdata_abilityIdx] + "</option>";
-    if(data[Pdata_abilityIdx+1] != "") ability_options += '<option>' + data[Pdata_abilityIdx+1] + '</option>';
-    MYPOKE.ability.innerHTML = ability_options;
-    // Add sex option from sex description.
-    var sex_options = "";
-    var sex_desc = data[Pdata_sexIdx];
-    if (["ふめい", "-"].indexOf(sex_desc) == -1){
-      if (sex_desc != "♀のみ") sex_options += '<option>♂</option>';
-      if (sex_desc != "♂のみ") sex_options += '<option>♀</option>';
-    }
-    MYPOKE.sex.innerHTML = sex_options;
-    // Set Base States & Image.
-    var base_states = MPtable.getElementsByTagName("tr")[MPT_base_statsIdx].querySelectorAll("td");
-    for (let i=1; i<7; i++){
-      base_states[i].innerHTML = data[Pdata_statusIdx+i-1];
-    }
-    MPtable.querySelector("img").setAttribute("src", data[Pdata_imgIdx]);
-    calculate_mypoke_statistics(MYPOKE);
-    generate_move_table(MYPOKE, document.PALACE);
-  }
-  function calculate_mypoke_statistics(MYPOKE){
-    var poke_name = MYPOKE.poke.value;
-    var lv = parseInt(MYPOKE.LV.value);
-    var seikaku = parseInt(MYPOKE.seikaku.value);
-    var ivals = [];
-    var evals = [];
-    var MPtrs = MPtable.getElementsByTagName("tr");
-    // Get Individual values & Effort Values.
-    var iv_inputs = MPtrs[MPT_ivIdx].querySelectorAll("input");
-    var ev_inputs = MPtrs[MPT_evIdx].querySelectorAll("input");
-    for (let i=0; i<6; i++){ivals.push(parseInt(iv_inputs[i].value))};
-    for (let i=0; i<6; i++){evals.push(parseInt(ev_inputs[i].value))};
-    // Calculate Statistics.
-    var stats_tds = MPtrs[MPT_statsIdx].querySelectorAll("td");
-    var stats = calculate_statistics(name=poke_name, ivals=ivals, evals=evals, seikaku=seikaku, lv=lv);
-    for (let i=0; i<6; i++){
-      stats_tds[i+1].innerHTML = stats[i];
-    }
-  }
-</script>
-
-<!-- Move List -->
-
-<script>
-  function generate_move_table(MYPOKE, PALACE){
-    var move_table = PALACE.querySelector("table#move_list");
-    var pokename = MYPOKE.poke.value;
-    var checkboxes = PALACE.palace_move_class;
-    var type2appear={}
-    PALACE.palace_move_class.forEach(function(e,i){type2appear[e.parentElement.textContent.slice(0,-1)] = e.checked})
-    var move_tbody = ""
-    var type2classname={"攻撃":"gp1","防御":"gp2","補助":"gp3",} 
-    POKENAME2MOVE[pokename].forEach(function(e,i){
-      let m = e.split(".")
-      let d = MOVENAME2DATA[m[1]]
-      let t = d[Mdata_palaceIdx]
-      if (type2appear[t]){
-        move_tbody += "<tr class='" + type2classname[t] + "'><th>" + m[0] + "</td><th>" + m[1] + "</td><th>" + d[Mdata_typeIdx] + "</td><th>" + d[Mdata_powerIdx] + "</td><th>" + t + "</td></tr>"
-      }
+  function setupCamera(isFacing=true){
+    navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: { facingMode: isFacing ? "environment" : "user" },
+      audio: false,
+    }).then(function(stream){
+      video.addEventListener("loadedmetadata", function(){
+        w = video.offsetWidth; h = video.offsetHeight;
+        canvas.setAttribute('width', w.toString()); canvas.setAttribute('height', h.toString()); video_canvas_wrapper.style.height = h.toString()+"px";
+      })
+      video.srcObject = stream;
+      video.addEventListener("loadeddata", prediction);
     })
-    move_table.querySelector("tbody").innerHTML = move_tbody
+  }
+  // Prediction.
+  var prevCompleted=true;
+  const posesProperties = {
+    flipHorizontal: false,
+    internalResolution: 'high',
+    segmentationThreshold: 0.9
+  };
+  function prediction(){
+    if (prevCompleted) {
+      prevCompleted = false;
+      model.estimatePoses(canvas, posesProperties).then(function(poses) {
+        processResults(canvas, poses);
+        prevCompleted = true;
+      });
+    }
+    window.requestAnimationFrame(prediction);
+  }
+  /**
+  * @license
+  * Copyright 2019 Google LLC. All Rights Reserved.
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  *
+  * https://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  * =============================================================================
+  */
+  function processResults(canvas, poses){
+    context.drawImage(video, 0, 0, video.offsetWidth, video.offsetHeight);
+    poses.forEach(({score, keypoints}) => {
+      if (score >= minPoseConfidence) {
+        if (showMethod=="Points") {
+          drawKeypoints(keypoints, minPartConfidence, context);
+        }
+        if (showMethod=="Skeleton") {
+          drawSkeleton(keypoints, minPartConfidence,context);
+        }
+        if (showMethod=="BoundingBox") {
+          drawBoundingBox(keypoints, context);
+        }
+      }
+    });
+  }
+  function drawPoint(ctx, y, x, r, color) {
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, 2*Math.PI);
+    ctx.fillStyle = color;
+    ctx.fill();
+  }
+  function drawPoints(ctx, points, radius, color) {
+    var data = points.buffer().values;
+    for (let i=0; i<data.length; i += 2) {
+      const pointY = data[i];
+      const pointX = data[i+1];
+      if (pointX !== 0 && pointY !== 0) {
+        ctx.beginPath();
+        ctx.arc(pointX, pointY, radius, 0, 2*Math.PI);
+        ctx.fillStyle = color;
+        ctx.fill();
+      }
+    }
+  }
+  function drawKeypoints(keypoints, minConfidence, ctx, scale=1) {
+    for (let i=0; i<keypoints.length; i++) {
+      let keypoint = keypoints[i];
+      if (keypoint.score < minConfidence) {
+        continue;
+      }
+      let {y, x} = keypoint.position;
+      drawPoint(ctx, y*scale, x*scale, 3, color);
+    }
+  }
+  function toTuple({y, x}) {
+    return [y, x];
+  }
+  function drawSegment([ay, ax], [by, bx], color, scale, ctx) {
+    ctx.beginPath();
+    ctx.moveTo(ax*scale, ay*scale);
+    ctx.lineTo(bx*scale, by*scale);
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = color;
+    ctx.stroke();
+  }
+  function drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
+    posenet.getAdjacentKeyPoints(keypoints, minConfidence).forEach(function(keypoints){
+      drawSegment(toTuple(keypoints[0].position), toTuple(keypoints[1].position), color, scale, ctx);
+    });
+  }
+  function drawBoundingBox(keypoints, ctx) {
+    var boundingBox = posenet.getBoundingBox(keypoints);
+    ctx.rect(boundingBox.minX, boundingBox.minY, boundingBox.maxX-boundingBox.minX, boundingBox.maxY-boundingBox.minY);
+    ctx.strokeStyle = boundingBoxColor;
+    ctx.stroke();
   }
 </script>
-
-<!-- On load -->
 
 <script>
+  const args_form = document.getElementById("arguments");
   window.onload = function(){
-    // My Pokemon Forms.
-    var mypoke_form = document.getElementById("mypoke_form");
-    for(let i=0; i<mypoke_form.length; i++){
-      let e = mypoke_form.elements[i];
-      if (e.id == "poke_name"){
-        e.onchange = function(){
-          set_pokemon_options(document.MYPOKE);
-        };
-      }else{
+    for(let i=0; i<args_form.length; i++){
+      let e = args_form.elements[i];
+      if (e.tagName != "BUTTON"){
         e.onkeyup = function(){
-          calculate_mypoke_statistics(document.MYPOKE);
+          set_arguments(args_form);
         };
         e.onchange = function(){
-          calculate_mypoke_statistics(document.MYPOKE);
+          set_arguments(args_form);
         };
       }
     }
-    set_pokemon_options(document.MYPOKE);
-    // Battle Palace.
-    var palace_form = document.getElementById("palace_form");
-    var palace_move_table = document.getElementById("move_list");
-    for(let i=0; i<palace_form.length; i++){
-      let e = palace_form.elements[i];
-      if (e.id == "show_palace_move_table"){
-        e.addEventListener('change', function(evt){
-          palace_move_table.style.display = e.checked ? "table" : "none";
-        });
-      }else{
-        e.addEventListener('change', function(){
-          generate_move_table(document.MYPOKE, document.PALACE);
-        });
-      }
-    }
-    generate_move_table(document.MYPOKE, document.PALACE);
   }
+  function set_arguments(ARGS){
+    showMethod = ARGS.showMethod.value;
+    minPoseConfidence = Number(ARGS.minPoseConfidence.value);
+    minPartConfidence = Number(ARGS.minPartConfidence.value);
+  }
+  set_arguments(args_form)
 </script>
-
-<!-- Stylesheet -->
 
 <style>
-  table#my-pokemon *{
-    vertical-align: middle;
-    text-align: center;
+  .video-and-canvas {
+    position: relative;
+    margin: 0 auto;
   }
-  table#my-pokemon select, table#my-pokemon input{
+  #video, #canvas {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+  }
+  table#args-table * {
+    text-align: center;
+    vertical-align: middle;
+  }
+  table#args-table input{
+    text-align: center;
     border: 0;
+    width: 100%;
     padding: .5em .4em;
     background-color: transparent;
     font-family: Monaco, monospace, sans-serif;
   }
-  table#my-pokemon select{
-    width: 100%;
+  table#args-table button,
+  table#args-table select {
+    text-align-last: center;
+    width: 200px;
+    margin: 10px auto;
+    font-family: inherit;
+    text-decoration: none;
+    display: block;
+    padding: 8px 10px;
+    color: #fff;
   }
-  table#my-pokemon tr:not(.only-text) td{
-    padding: 0;
-  }
-  .g1{
-    background-color: lightgoldenrodyellow;
-  }
-  .g2{
-    background-color: azure;
-  }
-  .gp1{
-    background-color: #ffcfdf;
-  }
-  .gp2{
-    background-color: #a5dee5;
-  }
-  .gp3{
-    background-color: #e0f9b5;
-  }
-  div.overflow-ms{
-    width: 32px;
-    height: 32px;
-    overflow: visible;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-  }
-  div.overflow-ms img {
-    border: 0!important;
-    margin: 0!important;
-    padding: 0!important;
-    width: 200%!important;
-    vertical-align: middle;
+  table#args-table button {background-color: #008db8 }
+  table#args-table select {background-color: #b90202 }
+  table#args-table thead th {
+    background-color: black;
+    color: white;
   }
 </style>                </article>
             </aside><!-- /#featured -->
@@ -548,16 +315,16 @@
 
             <li><article class="hentry">
                 <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-29.html" rel="bookmark"
-                           title="Permalink to JS.29 TensorflowJS で Pose Detection">JS.29 TensorflowJS で Pose Detection</a></h1>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-28.html" rel="bookmark"
+                           title="Permalink to JS.28 ポケモンエメラルドでフロンティア マスターを目指す（その３）">JS.28 ポケモンエメラルドでフロンティア マスターを目指す（その３）</a></h1>
                 </header>
 
                 <div class="entry-content">
           <footer class="post-info">
             <span>2021-02-21(Sun)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tensorflowjs.html">TensorFlow.js</a></span>
-          </footer><!-- /.post-info -->                <p>TensorflowJS で Pose Detectionを動かす。</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-29.html">read more</a>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a></span>
+          </footer><!-- /.post-info -->                <p>ポケモンエメラルドでフロンティア マスターを目指す（その３）</p>
+                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-28.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
 
