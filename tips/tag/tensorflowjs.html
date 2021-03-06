@@ -68,18 +68,37 @@
   <h1>Pose-Estimation</h1>
   <p>Tensorflow.js を用いて、<b>"Pose-Estimation"</b>をブラウザで実行するアプリを作りました。</p>
   <form id="arguments" name="ARGS">
-    <select id="showMethod" name="showMethod"><option>Points</option><option>Skeleton</option><option>BoundingBox</option></select>
+    <table id="args-table">
+      <thead>
+        <tr>
+          <th>Argumnets</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>show method</td>
+          <td><select id="showMethod" name="showMethod"><option>Points</option><option>Skeleton</option><option>BoundingBox</option></select></td>
+        </tr>
+        <tr>
+          <td>Pose Confidence</td>
+          <td><input name="minPoseConfidence" id="minPoseConfidence" type="number" min="0" max="1" step="0.01" value="0.1"></td>
+        </tr>
+        <tr>
+          <td>Part Confidence</td>
+          <td><input name="minPartConfidence" id="minPartConfidence" type="number" min="0" max="1" step="0.01" value="0.1"></td>
+        </tr>
+        <tr>
+          <td>switch Camera</td>
+          <td><button id="switchCamera">switch</button></td>
+        </tr>
+      </tbody>
+    </table>
   </form>
   <div id="video-canvas-wrapper" class="video-and-canvas">
     <video id="video" style="z-index: 10;" playsinline muted autoplay ></video>
     <canvas id="canvas" style="z-index: 20;"></canvas>
   </div>
-  <!-- <table id="annotationTable">
-    <thead><tr>
-      <th>leftEye</th><th>rightEye</th><th>leftEar</th><th>rightEar</th><th>leftShoulder</th><th>rightShoulder</th><th>leftElbow</th><th>rightElbow</th><th>leftWrist</th><th>rightWrist</th><th>leftHip</th><th>rightHip</th><th>leftKnee</th><th>rightKnee</th><th>leftAnkle</th><th>rightAnkle</th>
-    </tr></thead>
-    <tbody></tbody>
-  </table> -->
 </div>
 
 <script>
@@ -92,14 +111,23 @@
   const flipHorizontal = false;
   const outputStride = 16;
   const imageElement = document.getElementById("cat");
-  const ARGS = document.getElementById("arguments");
+  var isFacing = true; 
+  var minPoseConfidence = 0.1;
+  var minPartConfidence = 0.1;
+  var showMethod, minPoseConfidence, minPartConfidence;
+  var lineWidth = 2;
+  var color = "red"
+  var boundingBoxColor = "green";
   // load the posenet model
   posenet.load().then(function(pretrainedModel){
     model = pretrainedModel;
-    setupCamera(isFacing=true);
+    setupCamera(isFacing=isFacing);
   });
   // Setup WebCamera
-  var isFacing = true; 
+  function switchFrontBackCamera(){
+    isFacing = !isFacing;
+    setupCamera(isFacing=isFacing)
+  }
   function setupCamera(isFacing=true){
     navigator.mediaDevices.getUserMedia({
       audio: false,
@@ -131,12 +159,6 @@
     }
     window.requestAnimationFrame(prediction);
   }
-  // var minConfidence=0.1;
-  var minPoseConfidence=0.1;
-  var minPartConfidence=0.1;
-  var lineWidth=2;
-  var color="red"
-  var boundingBoxColor="green";
   /**
   * @license
   * Copyright 2019 Google LLC. All Rights Reserved.
@@ -154,7 +176,6 @@
   * =============================================================================
   */
   function processResults(canvas, poses){
-    showMethod=ARGS.showMethod.value;
     context.drawImage(video, 0, 0, video.offsetWidth, video.offsetHeight);
     poses.forEach(({score, keypoints}) => {
       if (score >= minPoseConfidence) {
@@ -223,6 +244,29 @@
   }
 </script>
 
+<script>
+  const args_form = document.getElementById("arguments");
+  window.onload = function(){
+    for(let i=0; i<args_form.length; i++){
+      let e = args_form.elements[i];
+      if (e.tagName != "BUTTON"){
+        e.onkeyup = function(){
+          set_arguments(args_form);
+        };
+        e.onchange = function(){
+          set_arguments(args_form);
+        };
+      }
+    }
+  }
+  function set_arguments(ARGS){
+    showMethod = ARGS.showMethod.value;
+    minPoseConfidence = Number(ARGS.minPoseConfidence.value);
+    minPartConfidence = Number(ARGS.minPartConfidence.value);
+  }
+  set_arguments(args_form)
+</script>
+
 <style>
   .video-and-canvas {
     position: relative;
@@ -233,6 +277,35 @@
     left: 0;
     right: 0;
     margin: 0 auto;
+  }
+  table#args-table * {
+    text-align: center;
+    vertical-align: middle;
+  }
+  table#args-table input{
+    text-align: center;
+    border: 0;
+    width: 100%;
+    padding: .5em .4em;
+    background-color: transparent;
+    font-family: Monaco, monospace, sans-serif;
+  }
+  table#args-table button,
+  table#args-table select {
+    text-align-last: center;
+    width: 200px;
+    margin: 10px auto;
+    font-family: inherit;
+    text-decoration: none;
+    display: block;
+    padding: 8px 10px;
+    color: #fff;
+  }
+  table#args-table button {background-color: #008db8 }
+  table#args-table select {background-color: #b90202 }
+  table#args-table thead th {
+    background-color: black;
+    color: white;
   }
 </style>                </article>
             </aside><!-- /#featured -->

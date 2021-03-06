@@ -415,11 +415,11 @@
               <tbody>
                 <tr>
                   <td style="text-align: center">対象（一部）</td>
-                  <td style="text-align: left"><select name="target"><option value="は">H 努力値</option><option value="ひ">A 努力値</option><option value="ふ">B 努力値</option><option value="ほ">C 努力値</option><option value="ま">D 努力値</option><option value="へ">S 努力値</option><option value="み">懐き度</option><option value="も">出会った場所</option><option value="や">入手レベル</option><option value="よ">ボール</option></select></td>
+                  <td style="text-align: left"><select name="target"><option value="は">H 努力値</option><option value="ひ">A 努力値</option><option value="ふ">B 努力値</option><option value="ほ">C 努力値</option><option value="ま">D 努力値</option><option value="へ">S 努力値</option><option value="み">懐き度</option><option value="も">出会った場所</option><option value="や">入手レベル</option><option value="よ">ボール</option><option value="ら">H 個体値</option><option value="り">A 個体値</option><option value="る">B 個体値</option><option value="ろ">C 個体値</option><option value="わ">D 個体値</option><option value="れ">S 個体値</option><option value="ぎ">レベル</option></select></td>
                 </tr>
                 <tr>
                   <td style="text-align: center">数値</td>
-                  <td style="text-align: left"><input type="number" min="0" max="255" value="255" size="3" name="val"></td>
+                  <td style="text-align: left"><input type="number" min="0" max="255" value="252" size="3" name="val"></td>
                 </tr>
                 <tr>
                   <td style="text-align: center">場所</td>
@@ -1088,7 +1088,7 @@
               var rets = useAuxiliary_4(hex);
               var pokestring = decode2Pokestring(hex);
               box1_data_event.textContent = "[に　ィ" + decode2Pokestring(rets[0]) + "　　ビ]";
-              box2_data_event.textContent = "[に　ィ" + decode2Pokestring(rets[1]) + "　　ビ]";
+              box2_data_event.textContent = "[ぬ　ィ" + decode2Pokestring(rets[1]) + "　　ビ]";
               box14_data_text.textContent = "[" + decode2Pokestring(hex) + "　　　　　　]";
               box6_data_event.textContent = "[ア" + target_pokestring + "む６ば]";
               box6_data_text.textContent  = "[ア" + target_pokestring + "む６ば]";
@@ -1193,8 +1193,7 @@
             table.fixed {
               table-layout: fixed;
             } 
-            table#basic select, 
-            table#result_data select{
+            table#basic select, table#result_data select{
               border: 0;
               width: 100%;
               padding: .5em .4em;
