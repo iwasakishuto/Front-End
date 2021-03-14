@@ -11,16 +11,16 @@
     <meta name="twitter:card" content="summary">
     <meta name="keywords" content="JavaScript, TensorFlow.js, JavaScript, " />
     <meta property="og:image" content="https://github.com/tensorflow/tfjs-models/raw/master/posenet/demos/camera.gif"/>
-    <meta property="og:title" content="JS.29 TensorflowJS で Pose Detection "/>
+    <meta property="og:title" content="JS.29 TensorflowJS で Pose-Estimation "/>
     <meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-29.html" />
-    <meta property="og:description" content="TensorflowJS で Pose Detectionを動かす。" />
+    <meta property="og:description" content="TensorflowJS で Pose-Estimationを動かす。" />
     <meta property="og:site_name" content="Shuto&#39;s Front-End" />
     <meta property="og:article:author" content="Shuto" />
     <meta property="og:article:published_time" content="2021-03-06T00:00:00+09:00" />
     <meta property="og:article:modified_time" content="2020-03-06T00:00:00+09:00" />
-    <meta name="twitter:title" content="JS.29 TensorflowJS で Pose Detection ">
-    <meta name="twitter:description" content="TensorflowJS で Pose Detectionを動かす。">
-    <title>JS.29 TensorflowJS で Pose Detection</title>
+    <meta name="twitter:title" content="JS.29 TensorflowJS で Pose-Estimation ">
+    <meta name="twitter:description" content="TensorflowJS で Pose-Estimationを動かす。">
+    <title>JS.29 TensorflowJS で Pose-Estimation</title>
     <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
     <!-- Added by Shuto Iwasaki. -->
     <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
@@ -74,7 +74,7 @@
       <article>
         <header>
           <h1 class="entry-title">
-            <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-29.html" rel="bookmark" title="Permalink to JS.29 TensorflowJS で Pose Detection">JS.29 TensorflowJS で Pose Detection</a>
+            <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-29.html" rel="bookmark" title="Permalink to JS.29 TensorflowJS で Pose-Estimation">JS.29 TensorflowJS で Pose-Estimation</a>
           </h1>
           <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
           <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
@@ -135,7 +135,6 @@
             const imageScaleFactor = 0.50;
             const flipHorizontal = false;
             const outputStride = 16;
-            const imageElement = document.getElementById("cat");
             var isFacing = true; 
             var minPoseConfidence = 0.1;
             var minPartConfidence = 0.1;

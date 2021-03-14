@@ -56,9 +56,9 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-29.html">JS.29 TensorflowJS で Pose Detection</a></h1>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-30.html">JS.30 Pose-Estimation で正解の動きとの誤差を知る。</a></h1>
           <footer class="post-info">
-            <span>2021-03-06(Sat)</span>
+            <span>2021-03-10(Wed)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tensorflowjs.html">TensorFlow.js</a></span>
           </footer><!-- /.post-info --><script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
 
@@ -66,51 +66,64 @@
 
 <div class="nunkiru">
   <h1>Pose-Estimation</h1>
-  <p>Tensorflow.js を用いて、<b>"Pose-Estimation"</b>をブラウザで実行するアプリを作りました。</p>
-  <form id="arguments" name="ARGS">
-    <table id="args-table">
-      <thead>
-        <tr>
-          <th>Argumnets</th>
-          <th>Value</th>
-        </tr>
-      </thead>
+  <p>Tensorflow.js を用いて、<b>"Pose-Estimation"</b>をブラウザで実行し、正解データから誤りを検出します。</p>
+    <table>
+      <thead><tr><th>Video</th></tr></thead>
       <tbody>
-        <tr>
-          <td>show method</td>
-          <td><select id="showMethod" name="showMethod"><option>Points</option><option>Skeleton</option><option>BoundingBox</option></select></td>
-        </tr>
-        <tr>
-          <td>Pose Confidence</td>
-          <td><input name="minPoseConfidence" id="minPoseConfidence" type="number" min="0" max="1" step="0.01" value="0.1"></td>
-        </tr>
-        <tr>
-          <td>Part Confidence</td>
-          <td><input name="minPartConfidence" id="minPartConfidence" type="number" min="0" max="1" step="0.01" value="0.1"></td>
-        </tr>
-        <tr>
-          <td>switch Camera</td>
-          <td><button type="button" id="switchCamera" onclick="switchFrontBackCamera()">switch</button></td>
-        </tr>
+        <tr><td id="answer-video-canvas-wrapper" class="video-and-canvas">
+          <video id="answer-video" style="z-index:10;" autoplay loop><source src="theme/video/radio_calisthenics.mp4" type="video/mp4"></video>
+          <canvas id="answer-canvas" style="z-index:20;"></canvas>
+          <table id="answer-video-controls" style="z-index:30;">
+            <thead>
+              <tr>
+                <th><label>Mute <input id="video-mute" type="checkbox"></label></th>
+                <th>Curt</th>
+                <th>
+                  <button id="video-back-10s" class="back">Back 10s</button>
+                  <button id="video-start-stop" class="playing">Pause</button>
+                  <button id="video-skip-10s" class="skip">Skip 10s</button>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Speed</td>
+                <td><span id="video-curt-speed">1.0</span></td>
+                <td>0.5 <input id="video-speed" type="range" min="0.5" max="5" step="0.1" value="1"> 5</td>
+              </tr>
+              <tr>
+                <td>Position</td>
+                <td><span id="video-curt-position">0</span></td>
+                <td>00:00 <input id="video-position" type="range" min="0" step="0.2" value="0"> <span id="video-max-position"> 03:11</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </td></tr>
+      </tbody>
+      <thead><tr><th>You</th></tr></thead>
+      <tbody>
+        <tr><td id="your-video-canvas-wrapper" class="video-and-canvas">
+          <video id="your-video" style="z-index:10;" playsinline muted autoplay></video>
+          <canvas id="your-canvas" style="z-index:20;"></canvas>
+        </td></tr>
       </tbody>
     </table>
   </form>
-  <div id="video-canvas-wrapper" class="video-and-canvas">
-    <video id="video" style="z-index: 10;" playsinline muted autoplay ></video>
-    <canvas id="canvas" style="z-index: 20;"></canvas>
-  </div>
 </div>
 
 <script>
   var model, result;
-  var video = document.getElementById("video");
-  var canvas = document.getElementById("canvas");
-  var context = canvas.getContext("2d");
-  var video_canvas_wrapper = document.getElementById("video-canvas-wrapper");
+  var answer_video_canvas_wrapper = document.getElementById("answer-video-canvas-wrapper");
+  var answer_video = document.getElementById("answer-video");
+  var answer_canvas = document.getElementById("answer-canvas");
+  var answer_context = answer_canvas.getContext("2d");
+  var your_video_canvas_wrapper = document.getElementById("your-video-canvas-wrapper");
+  var your_video = document.getElementById("your-video");
+  var your_canvas = document.getElementById("your-canvas");
+  var your_context = your_canvas.getContext("2d");
   const imageScaleFactor = 0.50;
   const flipHorizontal = false;
   const outputStride = 16;
-  const imageElement = document.getElementById("cat");
   var isFacing = true; 
   var minPoseConfidence = 0.1;
   var minPartConfidence = 0.1;
@@ -134,27 +147,43 @@
       video: { facingMode: isFacing ? "environment" : "user" },
       audio: false,
     }).then(function(stream){
-      video.addEventListener("loadedmetadata", function(){
-        w = video.offsetWidth; h = video.offsetHeight;
-        canvas.setAttribute('width', w.toString()); canvas.setAttribute('height', h.toString()); video_canvas_wrapper.style.height = h.toString()+"px";
+      your_video.addEventListener("loadedmetadata", function(){
+        w = your_video.offsetWidth; h = your_video.offsetHeight;
+        your_canvas.setAttribute('width', w.toString()); 
+        your_canvas.setAttribute('height', h.toString()); 
+        your_video_canvas_wrapper.style.height = h.toString()+"px";
       })
-      video.srcObject = stream;
-      video.addEventListener("loadeddata", prediction);
+      your_video.srcObject = stream;
+      your_video.addEventListener("loadeddata", prediction);
+      // Answer Video
+      answer_video.play()
+      answer_video.addEventListener("timeupdate", function(){
+        w = answer_video.offsetWidth; h = answer_video.offsetHeight;
+        answer_canvas.setAttribute('width', w.toString()); 
+        answer_canvas.setAttribute('height', h.toString()); 
+        answer_video_canvas_wrapper.style.height = h.toString()+"px";
+        answer_canvas.getContext("2d").drawImage(answer_video, 0, 0, w, h); 
+        video_curt_position.textContent = answer_video.currentTime.toFixed(1);
+      }, true);
     })
   }
   // Prediction.
-  var prevCompleted=true;
+  var prevAnsCompleted = prevYourCompleted = true;
   const posesProperties = {
     flipHorizontal: false,
     internalResolution: 'high',
     segmentationThreshold: 0.9
   };
   function prediction(){
-    if (prevCompleted) {
-      prevCompleted = false;
-      model.estimatePoses(canvas, posesProperties).then(function(poses) {
-        processResults(canvas, poses);
-        prevCompleted = true;
+    if (prevAnsCompleted && prevYourCompleted) {
+      prevAnsCompleted = prevYourCompleted = false;
+      model.estimatePoses(your_canvas, posesProperties).then(function(poses) {
+        processResults(your_canvas, your_video, poses, your_context);
+        prevYourCompleted = true;
+      });
+      model.estimatePoses(answer_canvas, posesProperties).then(function(poses) {
+        processResults(answer_canvas, answer_video, poses, answer_context);
+        prevAnsCompleted = true;
       });
     }
     window.requestAnimationFrame(prediction);
@@ -175,27 +204,21 @@
   * limitations under the License.
   * =============================================================================
   */
-  function processResults(canvas, poses){
+  function processResults(canvas, video, poses, context){
     context.drawImage(video, 0, 0, video.offsetWidth, video.offsetHeight);
     poses.forEach(({score, keypoints}) => {
       if (score >= minPoseConfidence) {
-        if (showMethod=="Points") {
-          drawKeypoints(keypoints, minPartConfidence, context);
-        }
-        if (showMethod=="Skeleton") {
-          drawSkeleton(keypoints, minPartConfidence,context);
-        }
-        if (showMethod=="BoundingBox") {
-          drawBoundingBox(keypoints, context);
-        }
+        drawKeypoints(keypoints, minPartConfidence, context);
+        drawSkeleton(keypoints, minPartConfidence, context);
       }
     });
   }
-  function drawPoint(ctx, y, x, r, color) {
+  function drawPoint(ctx, y, x, r, color, text="") {
     ctx.beginPath();
     ctx.arc(x, y, r, 0, 2*Math.PI);
     ctx.fillStyle = color;
     ctx.fill();
+    ctx.fillText(text, x+5, y-5);
   }
   function drawPoints(ctx, points, radius, color) {
     var data = points.buffer().values;
@@ -217,7 +240,7 @@
         continue;
       }
       let {y, x} = keypoint.position;
-      drawPoint(ctx, y*scale, x*scale, 3, color);
+      drawPoint(ctx, y*scale, x*scale, 3, color, keypoint.part);
     }
   }
   function toTuple({y, x}) {
@@ -236,35 +259,65 @@
       drawSegment(toTuple(keypoints[0].position), toTuple(keypoints[1].position), color, scale, ctx);
     });
   }
-  function drawBoundingBox(keypoints, ctx) {
-    var boundingBox = posenet.getBoundingBox(keypoints);
-    ctx.rect(boundingBox.minX, boundingBox.minY, boundingBox.maxX-boundingBox.minX, boundingBox.maxY-boundingBox.minY);
-    ctx.strokeStyle = boundingBoxColor;
-    ctx.stroke();
-  }
 </script>
 
 <script>
-  const args_form = document.getElementById("arguments");
-  window.onload = function(){
-    for(let i=0; i<args_form.length; i++){
-      let e = args_form.elements[i];
-      if (e.tagName != "BUTTON"){
-        e.onkeyup = function(){
-          set_arguments(args_form);
-        };
-        e.onchange = function(){
-          set_arguments(args_form);
-        };
-      }
+  var playtimer = null
+  const startTimer = function(){
+    playtimer = setInterval(function(){
+      video_position_control.value = answer_video.currentTime.toFixed(1);
+    }, 100);
+  };
+  const stopTimer = function(){
+    clearInterval(playtimer);
+  };
+  const video_start_stop_btn   = document.querySelector("button#video-start-stop")
+  const video_skip_10s         = document.querySelector("button#video-skip-10s");
+  const video_back_10s         = document.querySelector("button#video-back-10s");
+  const video_curt_speed       = document.querySelector("span#video-curt-speed");
+  const video_speed_control    = document.querySelector("input#video-speed");
+  const video_curt_position    = document.querySelector("span#video-curt-position");
+  const video_position_control = document.querySelector("input#video-position");
+  const video_mute_btn         = document.querySelector("input#video-mute");
+  const video_max_position     = document.querySelector("span#video-max-position");
+  video_skip_10s.addEventListener("click", function(){
+    answer_video.currentTime = Math.min(answer_video.currentTime+10, answer_video.duration)
+  })
+  video_back_10s.addEventListener("click", function(){
+    answer_video.currentTime = Math.max(answer_video.currentTime-10, 0)
+  })
+  video_start_stop_btn.addEventListener("click", function(){
+    if (video_start_stop_btn.classList.contains("playing")){
+      answer_video.pause();
+      stopTimer();
+      video_start_stop_btn.classList.add("pausing")
+      video_start_stop_btn.classList.remove("playing")
+      video_start_stop_btn.innerHTML = "Play"
+    }else{
+      answer_video.play();
+      startTimer();
+      video_start_stop_btn.classList.add("playing")
+      video_start_stop_btn.classList.remove("pausing")
+      video_start_stop_btn.innerHTML = "Pause"
     }
-  }
-  function set_arguments(ARGS){
-    showMethod = ARGS.showMethod.value;
-    minPoseConfidence = Number(ARGS.minPoseConfidence.value);
-    minPartConfidence = Number(ARGS.minPartConfidence.value);
-  }
-  set_arguments(args_form)
+  })
+  video_speed_control.addEventListener('change', function() {
+    let curt_speed = video_speed_control.value;
+    answer_video.playbackRate = curt_speed;
+    video_curt_speed.textContent = curt_speed;
+  });
+  video_position_control.addEventListener('input', function() {
+    answer_video.currentTime = video_position_control.value
+    stopTimer()
+  });
+  video_position_control.addEventListener('change', function() {
+    answer_video.currentTime = video_position_control.value;
+    startTimer()
+  });
+  video_mute_btn.addEventListener('click', function() {
+    answer_video.muted = video_mute_btn.checked;
+  });
+  startTimer();
 </script>
 
 <style>
@@ -272,46 +325,64 @@
     position: relative;
     margin: 0 auto;
   }
-  #video, #canvas {
+  .video-and-canvas video, .video-and-canvas canvas{
     position: absolute;
     left: 0;
     right: 0;
     margin: 0 auto;
   }
-  table#args-table * {
-    text-align: center;
-    vertical-align: middle;
-  }
-  table#args-table input{
-    text-align: center;
-    border: 0;
-    width: 100%;
-    padding: .5em .4em;
-    background-color: transparent;
-    font-family: Monaco, monospace, sans-serif;
-  }
-  table#args-table button,
-  table#args-table select {
-    text-align-last: center;
-    width: 200px;
-    margin: 10px auto;
-    font-family: inherit;
-    text-decoration: none;
-    display: block;
-    padding: 8px 10px;
-    color: #fff;
-  }
-  table#args-table button {background-color: #008db8 }
-  table#args-table select {background-color: #b90202 }
-  table#args-table thead th {
+  table#answer-video-controls{
+    position: relative;
+    margin-top: 360px;
     background-color: black;
     color: white;
+  }
+  #answer-video-canvas-wrapper, #answer-video, #answer-canvas{
+    height:360px;
+  }
+  #answer-video, #answer-canvas, #answer-video-controls{
+    width:640px
+  }
+  input[type="range"]{
+    width: 70%;
+  }
+  button{
+    display: inline-block;
+    position: relative;
+    font-family: monaco;
+    color: #000;
+    padding: .75em 1.5em;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  button.pausing {
+    background-color: red;
+    color: white;
+  }
+  button.playing{
+    background-color: blue
+    color:white;
   }
 </style>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
                     <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-29.html" rel="bookmark"
+                           title="Permalink to JS.29 TensorflowJS で Pose-Estimation">JS.29 TensorflowJS で Pose-Estimation</a></h1>
+                </header>
+
+                <div class="entry-content">
+          <footer class="post-info">
+            <span>2021-03-06(Sat)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tensorflowjs.html">TensorFlow.js</a></span>
+          </footer><!-- /.post-info -->                <p>TensorflowJS で Pose-Estimationを動かす。</p>
+                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-29.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -430,21 +501,6 @@
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
           </footer><!-- /.post-info -->                <p>キー入力に対応するラベルを付けることができ、アノテーション作業の効率を高める。ラベルデータはjson形式でダウンロード可能。</p>
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-21.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-20.html" rel="bookmark"
-                           title="Permalink to JS.20 Formの登録内容を可視化する。">JS.20 Formの登録内容を可視化する。</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2020-11-08(Sun)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-          </footer><!-- /.post-info -->                <p>Formの登録内容を可視化する。</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-20.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
             </ol><!-- /#posts-list -->

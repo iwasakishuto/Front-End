@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Shuto" />
+    <meta name="twitter:creator" content="@cabernet_rock">
+    <meta name="twitter:site" content="@cabernet_rock">
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary">
+    <meta name="keywords" content="JavaScript, TensorFlow.js, JavaScript, " />
+    <meta property="og:image" content="https://github.com/tensorflow/tfjs-models/raw/master/posenet/demos/camera.gif"/>
+    <meta property="og:title" content="JS.30 Pose-Estimation で正解の動きとの誤差を知る。 "/>
+    <meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-30.html" />
+    <meta property="og:description" content="Pose-Estimation で正解の動きとの誤差を知る。" />
+    <meta property="og:site_name" content="Shuto&#39;s Front-End" />
+    <meta property="og:article:author" content="Shuto" />
+    <meta property="og:article:published_time" content="2021-03-10T00:00:00+09:00" />
+    <meta property="og:article:modified_time" content="2020-03-10T00:00:00+09:00" />
+    <meta name="twitter:title" content="JS.30 Pose-Estimation で正解の動きとの誤差を知る。 ">
+    <meta name="twitter:description" content="Pose-Estimation で正解の動きとの誤差を知る。">
+    <title>JS.30 Pose-Estimation で正解の動きとの誤差を知る。</title>
+    <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
+    <!-- Added by Shuto Iwasaki. -->
+    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"></script>
+    <script type="text/x-mathjax-config">
+    	MathJax.Hub.Config({
+    		tex2jax: {
+    			inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    			displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    		}
+    	});
+    </script>
+    <!-- Mermaid -->
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
+    <script>
+      mermaid.initialize({
+        startOnLoad:true
+      });
+    </script>
+    <!--[if IE]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body id="index" class="home">
+    <header id="banner" class="body">
+      <h1><a href="https://iwasakishuto.github.io/Front-End/tips/">Shuto's Front-End </a></h1>
+      <nav>
+        <ul>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html">CSS</a></li>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html">HTML</a></li>
+          <li class="active"><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
+        </ul>
+        <form id="search" action"#" onsubmit="javascript:window.open('https://duckduckgo.com/?q='+document.getElementById('keywords').value+'+site:https://iwasakishuto.github.io/Front-End/tips');">
+          <input id="keywords" type="text" />
+        </form>
+      </nav>
+    </header><!-- /#banner -->
+    <div id="loading" style="display: none;">
+      <div class="loading_wrapper">
+        <img class="loading_img" src="https://iwasakishuto.github.io/Front-End/tips/images/Bean Eater-1s-400px.gif">
+        <p class="loading_info">Loading...</p>
+      </div>
+    </div>
+    <section id="content" class="body" style="display: block;">
+      <article>
+        <header>
+          <h1 class="entry-title">
+            <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-30.html" rel="bookmark" title="Permalink to JS.30 Pose-Estimation で正解の動きとの誤差を知る。">JS.30 Pose-Estimation で正解の動きとの誤差を知る。</a>
+          </h1>
+          <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
+          <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
+        </header>
+    
+        <div class="entry-content">
+          <footer class="post-info">
+            <span>2021-03-10(Wed)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tensorflowjs.html">TensorFlow.js</a></span>
+          </footer><!-- /.post-info -->
+          <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+
+          <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
+
+          <div class="nunkiru">
+            <h1>Pose-Estimation</h1>
+            <p>Tensorflow.js を用いて、<b>"Pose-Estimation"</b>をブラウザで実行し、正解データから誤りを検出します。</p>
+              <table>
+                <thead><tr><th>Video</th></tr></thead>
+                <tbody>
+                  <tr><td id="answer-video-canvas-wrapper" class="video-and-canvas">
+                    <video id="answer-video" style="z-index:10;" autoplay loop><source src="theme/video/radio_calisthenics.mp4" type="video/mp4"></video>
+                    <canvas id="answer-canvas" style="z-index:20;"></canvas>
+                    <table id="answer-video-controls" style="z-index:30;">
+                      <thead>
+                        <tr>
+                          <th><label>Mute <input id="video-mute" type="checkbox"></label></th>
+                          <th>Curt</th>
+                          <th>
+                            <button id="video-back-10s" class="back">Back 10s</button>
+                            <button id="video-start-stop" class="playing">Pause</button>
+                            <button id="video-skip-10s" class="skip">Skip 10s</button>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Speed</td>
+                          <td><span id="video-curt-speed">1.0</span></td>
+                          <td>0.5 <input id="video-speed" type="range" min="0.5" max="5" step="0.1" value="1"> 5</td>
+                        </tr>
+                        <tr>
+                          <td>Position</td>
+                          <td><span id="video-curt-position">0</span></td>
+                          <td>00:00 <input id="video-position" type="range" min="0" step="0.2" value="0"> <span id="video-max-position"> 03:11</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td></tr>
+                </tbody>
+                <thead><tr><th>You</th></tr></thead>
+                <tbody>
+                  <tr><td id="your-video-canvas-wrapper" class="video-and-canvas">
+                    <video id="your-video" style="z-index:10;" playsinline muted autoplay></video>
+                    <canvas id="your-canvas" style="z-index:20;"></canvas>
+                  </td></tr>
+                </tbody>
+              </table>
+            </form>
+          </div>
+
+          <script>
+            var model, result;
+            var answer_video_canvas_wrapper = document.getElementById("answer-video-canvas-wrapper");
+            var answer_video = document.getElementById("answer-video");
+            var answer_canvas = document.getElementById("answer-canvas");
+            var answer_context = answer_canvas.getContext("2d");
+            var your_video_canvas_wrapper = document.getElementById("your-video-canvas-wrapper");
+            var your_video = document.getElementById("your-video");
+            var your_canvas = document.getElementById("your-canvas");
+            var your_context = your_canvas.getContext("2d");
+            const imageScaleFactor = 0.50;
+            const flipHorizontal = false;
+            const outputStride = 16;
+            var isFacing = true; 
+            var minPoseConfidence = 0.1;
+            var minPartConfidence = 0.1;
+            var showMethod, minPoseConfidence, minPartConfidence;
+            var lineWidth = 2;
+            var color = "red"
+            var boundingBoxColor = "green";
+            // load the posenet model
+            posenet.load().then(function(pretrainedModel){
+              model = pretrainedModel;
+              setupCamera(isFacing=isFacing);
+            });
+            // Setup WebCamera
+            function switchFrontBackCamera(){
+              isFacing = !isFacing;
+              setupCamera(isFacing=isFacing)
+            }
+            function setupCamera(isFacing=true){
+              navigator.mediaDevices.getUserMedia({
+                audio: false,
+                video: { facingMode: isFacing ? "environment" : "user" },
+                audio: false,
+              }).then(function(stream){
+                your_video.addEventListener("loadedmetadata", function(){
+                  w = your_video.offsetWidth; h = your_video.offsetHeight;
+                  your_canvas.setAttribute('width', w.toString()); 
+                  your_canvas.setAttribute('height', h.toString()); 
+                  your_video_canvas_wrapper.style.height = h.toString()+"px";
+                })
+                your_video.srcObject = stream;
+                your_video.addEventListener("loadeddata", prediction);
+                // Answer Video
+                answer_video.play()
+                answer_video.addEventListener("timeupdate", function(){
+                  w = answer_video.offsetWidth; h = answer_video.offsetHeight;
+                  answer_canvas.setAttribute('width', w.toString()); 
+                  answer_canvas.setAttribute('height', h.toString()); 
+                  answer_video_canvas_wrapper.style.height = h.toString()+"px";
+                  answer_canvas.getContext("2d").drawImage(answer_video, 0, 0, w, h); 
+                  video_curt_position.textContent = answer_video.currentTime.toFixed(1);
+                }, true);
+              })
+            }
+            // Prediction.
+            var prevAnsCompleted = prevYourCompleted = true;
+            const posesProperties = {
+              flipHorizontal: false,
+              internalResolution: 'high',
+              segmentationThreshold: 0.9
+            };
+            function prediction(){
+              if (prevAnsCompleted && prevYourCompleted) {
+                prevAnsCompleted = prevYourCompleted = false;
+                model.estimatePoses(your_canvas, posesProperties).then(function(poses) {
+                  processResults(your_canvas, your_video, poses, your_context);
+                  prevYourCompleted = true;
+                });
+                model.estimatePoses(answer_canvas, posesProperties).then(function(poses) {
+                  processResults(answer_canvas, answer_video, poses, answer_context);
+                  prevAnsCompleted = true;
+                });
+              }
+              window.requestAnimationFrame(prediction);
+            }
+            /**
+            * @license
+            * Copyright 2019 Google LLC. All Rights Reserved.
+            * Licensed under the Apache License, Version 2.0 (the "License");
+            * you may not use this file except in compliance with the License.
+            * You may obtain a copy of the License at
+            *
+            * https://www.apache.org/licenses/LICENSE-2.0
+            *
+            * Unless required by applicable law or agreed to in writing, software
+            * distributed under the License is distributed on an "AS IS" BASIS,
+            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+            * See the License for the specific language governing permissions and
+            * limitations under the License.
+            * =============================================================================
+            */
+            function processResults(canvas, video, poses, context){
+              context.drawImage(video, 0, 0, video.offsetWidth, video.offsetHeight);
+              poses.forEach(({score, keypoints}) => {
+                if (score >= minPoseConfidence) {
+                  drawKeypoints(keypoints, minPartConfidence, context);
+                  drawSkeleton(keypoints, minPartConfidence, context);
+                }
+              });
+            }
+            function drawPoint(ctx, y, x, r, color, text="") {
+              ctx.beginPath();
+              ctx.arc(x, y, r, 0, 2*Math.PI);
+              ctx.fillStyle = color;
+              ctx.fill();
+              ctx.fillText(text, x+5, y-5);
+            }
+            function drawPoints(ctx, points, radius, color) {
+              var data = points.buffer().values;
+              for (let i=0; i<data.length; i += 2) {
+                const pointY = data[i];
+                const pointX = data[i+1];
+                if (pointX !== 0 && pointY !== 0) {
+                  ctx.beginPath();
+                  ctx.arc(pointX, pointY, radius, 0, 2*Math.PI);
+                  ctx.fillStyle = color;
+                  ctx.fill();
+                }
+              }
+            }
+            function drawKeypoints(keypoints, minConfidence, ctx, scale=1) {
+              for (let i=0; i<keypoints.length; i++) {
+                let keypoint = keypoints[i];
+                if (keypoint.score < minConfidence) {
+                  continue;
+                }
+                let {y, x} = keypoint.position;
+                drawPoint(ctx, y*scale, x*scale, 3, color, keypoint.part);
+              }
+            }
+            function toTuple({y, x}) {
+              return [y, x];
+            }
+            function drawSegment([ay, ax], [by, bx], color, scale, ctx) {
+              ctx.beginPath();
+              ctx.moveTo(ax*scale, ay*scale);
+              ctx.lineTo(bx*scale, by*scale);
+              ctx.lineWidth = lineWidth;
+              ctx.strokeStyle = color;
+              ctx.stroke();
+            }
+            function drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
+              posenet.getAdjacentKeyPoints(keypoints, minConfidence).forEach(function(keypoints){
+                drawSegment(toTuple(keypoints[0].position), toTuple(keypoints[1].position), color, scale, ctx);
+              });
+            }
+          </script>
+
+          <script>
+            var playtimer = null
+            const startTimer = function(){
+              playtimer = setInterval(function(){
+                video_position_control.value = answer_video.currentTime.toFixed(1);
+              }, 100);
+            };
+            const stopTimer = function(){
+              clearInterval(playtimer);
+            };
+            const video_start_stop_btn   = document.querySelector("button#video-start-stop")
+            const video_skip_10s         = document.querySelector("button#video-skip-10s");
+            const video_back_10s         = document.querySelector("button#video-back-10s");
+            const video_curt_speed       = document.querySelector("span#video-curt-speed");
+            const video_speed_control    = document.querySelector("input#video-speed");
+            const video_curt_position    = document.querySelector("span#video-curt-position");
+            const video_position_control = document.querySelector("input#video-position");
+            const video_mute_btn         = document.querySelector("input#video-mute");
+            const video_max_position     = document.querySelector("span#video-max-position");
+            video_skip_10s.addEventListener("click", function(){
+              answer_video.currentTime = Math.min(answer_video.currentTime+10, answer_video.duration)
+            })
+            video_back_10s.addEventListener("click", function(){
+              answer_video.currentTime = Math.max(answer_video.currentTime-10, 0)
+            })
+            video_start_stop_btn.addEventListener("click", function(){
+              if (video_start_stop_btn.classList.contains("playing")){
+                answer_video.pause();
+                stopTimer();
+                video_start_stop_btn.classList.add("pausing")
+                video_start_stop_btn.classList.remove("playing")
+                video_start_stop_btn.innerHTML = "Play"
+              }else{
+                answer_video.play();
+                startTimer();
+                video_start_stop_btn.classList.add("playing")
+                video_start_stop_btn.classList.remove("pausing")
+                video_start_stop_btn.innerHTML = "Pause"
+              }
+            })
+            video_speed_control.addEventListener('change', function() {
+              let curt_speed = video_speed_control.value;
+              answer_video.playbackRate = curt_speed;
+              video_curt_speed.textContent = curt_speed;
+            });
+            video_position_control.addEventListener('input', function() {
+              answer_video.currentTime = video_position_control.value
+              stopTimer()
+            });
+            video_position_control.addEventListener('change', function() {
+              answer_video.currentTime = video_position_control.value;
+              startTimer()
+            });
+            video_mute_btn.addEventListener('click', function() {
+              answer_video.muted = video_mute_btn.checked;
+            });
+            startTimer();
+          </script>
+
+          <style>
+            .video-and-canvas {
+              position: relative;
+              margin: 0 auto;
+            }
+            .video-and-canvas video, .video-and-canvas canvas{
+              position: absolute;
+              left: 0;
+              right: 0;
+              margin: 0 auto;
+            }
+            table#answer-video-controls{
+              position: relative;
+              margin-top: 360px;
+              background-color: black;
+              color: white;
+            }
+            #answer-video-canvas-wrapper, #answer-video, #answer-canvas{
+              height:360px;
+            }
+            #answer-video, #answer-canvas, #answer-video-controls{
+              width:640px
+            }
+            input[type="range"]{
+              width: 70%;
+            }
+            button{
+              display: inline-block;
+              position: relative;
+              font-family: monaco;
+              color: #000;
+              padding: .75em 1.5em;
+              cursor: pointer;
+              border-radius: 5px;
+            }
+            button.pausing {
+              background-color: red;
+              color: white;
+            }
+            button.playing{
+              background-color: blue
+              color:white;
+            }
+          </style>
+        
+        </div><!-- /.entry-content -->
+    
+      </article>
+    </section>
+    <section id="extras" class="body">
+      <div class="blogroll">
+        <h5>other contents</h5>
+        <ul>
+          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Home.png">Home</a></li>
+          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">Blog</a></li>
+          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">University</a></li>
+          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">Kerasy</a></li>
+          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">Python-Charmers</a></li>
+          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">Translation-Gummy</a></li>
+        </ul>
+      </div><!-- /.blogroll -->
+      <div class="social">
+        <h5>social</h5>
+        <ul>
+          <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
+          <li><a href="https://github.com/iwasakishuto">github</a></li>
+        </ul>
+      </div><!-- /.social -->
+    </section><!-- /#extras -->
+
+    <footer id="contentinfo" class="body">
+      <p>Powered by <a href="https://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
+    </footer><!-- /#contentinfo -->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-164333757-3']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+  </body>
+</html>
