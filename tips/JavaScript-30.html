@@ -156,6 +156,28 @@
             var lineWidth = 2;
             var color = "red"
             var boundingBoxColor = "green";
+            var ans_poses = your_poses = [{
+              score: 0, 
+              keypoints: [
+                {score: 0, part: "nose",          position: {x:0,y:0}},
+                {score: 0, part: "leftEye",       position: {x:0,y:0}},
+                {score: 0, part: "rightEye",      position: {x:0,y:0}},
+                {score: 0, part: "leftEar",       position: {x:0,y:0}},
+                {score: 0, part: "rightEar",      position: {x:0,y:0}},
+                {score: 0, part: "leftShoulder",  position: {x:0,y:0}},
+                {score: 0, part: "rightShoulder", position: {x:0,y:0}},
+                {score: 0, part: "leftElbow",     position: {x:0,y:0}},
+                {score: 0, part: "rightElbow",    position: {x:0,y:0}},
+                {score: 0, part: "leftWrist",     position: {x:0,y:0}},
+                {score: 0, part: "rightWrist",    position: {x:0,y:0}},
+                {score: 0, part: "leftHip",       position: {x:0,y:0}},
+                {score: 0, part: "rightHip",      position: {x:0,y:0}},
+                {score: 0, part: "leftKnee",      position: {x:0,y:0}},
+                {score: 0, part: "rightKnee",     position: {x:0,y:0}},
+                {score: 0, part: "leftAnkle",     position: {x:0,y:0}},
+                {score: 0, part: "rightAnkle",    position: {x:0,y:0}},
+              ]
+            }];
             // load the posenet model
             posenet.load().then(function(pretrainedModel){
               model = pretrainedModel;
@@ -202,13 +224,16 @@
             function prediction(){
               if (prevAnsCompleted && prevYourCompleted) {
                 prevAnsCompleted = prevYourCompleted = false;
-                model.estimatePoses(your_canvas, posesProperties).then(function(poses) {
-                  processResults(your_canvas, your_video, poses, your_context);
-                  prevYourCompleted = true;
-                });
                 model.estimatePoses(answer_canvas, posesProperties).then(function(poses) {
+                  ans_poses = poses;
                   processResults(answer_canvas, answer_video, poses, answer_context);
                   prevAnsCompleted = true;
+                });
+                model.estimatePoses(your_canvas, posesProperties).then(function(poses) {
+                  your_poses = poses;
+                  processResults(your_canvas, your_video, poses, your_context);
+                  prevYourCompleted = true;
+                  visualizeDifference(ans_poses[0]["keypoints"], your_poses[0]["keypoints"])
                 });
               }
               window.requestAnimationFrame(prediction);
@@ -229,6 +254,62 @@
             * limitations under the License.
             * =============================================================================
             */
+            function getApexAngle(x1, y1, x2, y2, x3, y3) {
+              let apex = (Math.atan2 (y2-y1, x2-x1) - Math.atan2 (y3-y1, x3-x1)) / (Math.PI / 180);
+              if( -180 <= apex && apex < 180 ) return Math.abs(apex);
+              return Math.abs(360-Math.abs(apex));
+            }
+            function visualizeDifference(ans_keypoints, your_keypoints){
+              points = [
+                [5,7,9],[5,7,11],[5,6,11],[5,11,12],[12,11,13],[11,13,15],[6,8,10],[6,8,12],[5,6,12],[6,12,11],[11,12,14],[12,14,16]
+              ]
+              var max_score = 0; 
+              var max_idx = 0;
+              points.forEach(function(point, idx){
+                if ((ans_keypoints[point[0]] >= minPoseConfidence) 
+                && (ans_keypoints[point[1]] >= minPoseConfidence)
+                && (ans_keypoints[point[2]] >= minPoseConfidence)
+                && (your_keypoints[point[0]] >= minPoseConfidence)
+                && (your_keypoints[point[1]] >= minPoseConfidence)
+                && (your_keypoints[point[2]] >= minPoseConfidence)){
+                  ans_angles = getApexAngle(
+                    ans_keypoints[point[0]]["position"]["x"],
+                    ans_keypoints[point[0]]["position"]["y"],
+                    ans_keypoints[point[1]]["position"]["x"],
+                    ans_keypoints[point[1]]["position"]["y"],
+                    ans_keypoints[point[2]]["position"]["x"],
+                    ans_keypoints[point[2]]["position"]["y"],
+                  )
+                  your_angles = getApexAngle(
+                    your_keypoints[point[0]]["position"]["x"],
+                    your_keypoints[point[0]]["position"]["y"],
+                    your_keypoints[point[1]]["position"]["x"],
+                    your_keypoints[point[1]]["position"]["y"],
+                    your_keypoints[point[2]]["position"]["x"],
+                    your_keypoints[point[2]]["position"]["y"],
+                  )
+                  score = Math.abs(ans_angles-your_angles)
+                  if (score>max_score){
+                    max_score = score;
+                    max_idx = idx;
+                  }
+                }
+              })
+              drawSegment(
+                toTuple(your_keypoints[points[max_idx][0]].position), 
+                toTuple(your_keypoints[points[max_idx][1]].position),
+                "blue",
+                2,
+                your_context,
+              )
+              drawSegment(
+                toTuple(your_keypoints[points[max_idx][1]].position), 
+                toTuple(your_keypoints[points[max_idx][2]].position),
+                "blue",
+                2,
+                your_context,
+              )
+            }
             function processResults(canvas, video, poses, context){
               context.drawImage(video, 0, 0, video.offsetWidth, video.offsetHeight);
               poses.forEach(({score, keypoints}) => {
@@ -265,7 +346,8 @@
                   continue;
                 }
                 let {y, x} = keypoint.position;
-                drawPoint(ctx, y*scale, x*scale, 3, color, keypoint.part);
+                // drawPoint(ctx, y*scale, x*scale, 3, color, keypoint.part);
+                drawPoint(ctx, y*scale, x*scale, 3, color, "");
               }
             }
             function toTuple({y, x}) {
