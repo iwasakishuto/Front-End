@@ -240,7 +240,7 @@
     points = [
       [5,7,9],[5,7,11],[5,6,11],[5,11,12],[12,11,13],[11,13,15],[6,8,10],[6,8,12],[5,6,12],[6,12,11],[11,12,14],[12,14,16]
     ]
-    var max_score = 0; 
+    var max_score = -1; 
     var max_idx = 0;
     points.forEach(function(point, idx){
       if ((ans_keypoints[point[0]].score >= minPoseConfidence) 
@@ -265,29 +265,29 @@
           your_keypoints[point[2]]["position"]["x"],
           your_keypoints[point[2]]["position"]["y"],
         )
-        score = Math.abs(ans_angles-your_angles)
+        score = Math.abs(ans_angles-your_angles);
         if (score>max_score){
           max_score = score;
           max_idx = idx;
         }
       }
     })
-    console.log("max_score", max_score)
-    console.log("max_idx", max_idx)
-    drawSegment(
-      toTuple(your_keypoints[points[max_idx][0]].position), 
-      toTuple(your_keypoints[points[max_idx][1]].position),
-      "blue",
-      2,
-      your_context,
-    )
-    drawSegment(
-      toTuple(your_keypoints[points[max_idx][1]].position), 
-      toTuple(your_keypoints[points[max_idx][2]].position),
-      "blue",
-      2,
-      your_context,
-    )
+    if (max_idx >=0){
+      drawSegment(
+        toTuple(your_keypoints[points[max_idx][0]].position), 
+        toTuple(your_keypoints[points[max_idx][1]].position),
+        "blue",
+        3,
+        your_context,
+      )
+      drawSegment(
+        toTuple(your_keypoints[points[max_idx][1]].position), 
+        toTuple(your_keypoints[points[max_idx][2]].position),
+        "blue",
+        3,
+        your_context,
+      )
+    }
   }
   function processResults(canvas, video, poses, context){
     context.drawImage(video, 0, 0, video.offsetWidth, video.offsetHeight);
