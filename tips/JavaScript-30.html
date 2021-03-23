@@ -274,23 +274,21 @@
                 && (your_keypoints[point[0]].score >= minPoseConfidence)
                 && (your_keypoints[point[1]].score >= minPoseConfidence)
                 && (your_keypoints[point[2]].score >= minPoseConfidence)){
-                  ans_angles = getApexAngle(
+                  let score = Math.abs(getApexAngle(
                     ans_keypoints[point[0]]["position"]["x"],
                     ans_keypoints[point[0]]["position"]["y"],
                     ans_keypoints[point[1]]["position"]["x"],
                     ans_keypoints[point[1]]["position"]["y"],
                     ans_keypoints[point[2]]["position"]["x"],
                     ans_keypoints[point[2]]["position"]["y"],
-                  )
-                  your_angles = getApexAngle(
+                  ) - getApexAngle(
                     your_keypoints[point[0]]["position"]["x"],
                     your_keypoints[point[0]]["position"]["y"],
                     your_keypoints[point[1]]["position"]["x"],
                     your_keypoints[point[1]]["position"]["y"],
                     your_keypoints[point[2]]["position"]["x"],
                     your_keypoints[point[2]]["position"]["y"],
-                  )
-                  score = Math.abs(ans_angles-your_angles);
+                  ));
                   if (score>max_score){
                     max_score = score;
                     max_idx = idx;
@@ -302,14 +300,16 @@
                   toTuple(your_keypoints[points[max_idx][0]].position), 
                   toTuple(your_keypoints[points[max_idx][1]].position),
                   "blue",
-                  3,
+                  1,
+                  5,
                   your_context,
                 )
                 drawSegment(
                   toTuple(your_keypoints[points[max_idx][1]].position), 
                   toTuple(your_keypoints[points[max_idx][2]].position),
                   "blue",
-                  3,
+                  1,
+                  5,
                   your_context,
                 )
               }
@@ -357,17 +357,17 @@
             function toTuple({y, x}) {
               return [y, x];
             }
-            function drawSegment([ay, ax], [by, bx], color, scale, ctx) {
+            function drawSegment([ay, ax], [by, bx], color, scale, linewidth, ctx) {
               ctx.beginPath();
               ctx.moveTo(ax*scale, ay*scale);
               ctx.lineTo(bx*scale, by*scale);
-              ctx.lineWidth = lineWidth;
+              ctx.lineWidth = linewidth;
               ctx.strokeStyle = color;
               ctx.stroke();
             }
             function drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
               posenet.getAdjacentKeyPoints(keypoints, minConfidence).forEach(function(keypoints){
-                drawSegment(toTuple(keypoints[0].position), toTuple(keypoints[1].position), color, scale, ctx);
+                drawSegment(toTuple(keypoints[0].position), toTuple(keypoints[1].position), color, scale, lineWidth, ctx);
               });
             }
           </script>
