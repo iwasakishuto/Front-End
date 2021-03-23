@@ -67,48 +67,48 @@
 <div class="nunkiru">
   <h1>Pose-Estimation</h1>
   <p>Tensorflow.js を用いて、<b>"Pose-Estimation"</b>をブラウザで実行し、正解データから誤りを検出します。</p>
-    <table>
-      <thead><tr><th>Video</th></tr></thead>
-      <tbody>
-        <tr><td id="answer-video-canvas-wrapper" class="video-and-canvas">
-          <video id="answer-video" style="z-index:10;" autoplay loop><source src="https://iwasakishuto.github.io/Front-End/tips/theme/video/radio_calisthenics.mp4" type="video/mp4"></video>
-          <canvas id="answer-canvas" style="z-index:20;"></canvas>
-          <table id="answer-video-controls" style="z-index:30;">
-            <thead>
-              <tr>
-                <th><label>Mute <input id="video-mute" type="checkbox"></label></th>
-                <th>Curt</th>
-                <th>
-                  <button id="video-back-10s" class="back">Back 10s</button>
-                  <button id="video-start-stop" class="playing">Pause</button>
-                  <button id="video-skip-10s" class="skip">Skip 10s</button>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Speed</td>
-                <td><span id="video-curt-speed">1.0</span></td>
-                <td>0.5 <input id="video-speed" type="range" min="0.5" max="5" step="0.1" value="1"> 5</td>
-              </tr>
-              <tr>
-                <td>Position</td>
-                <td><span id="video-curt-position">0</span></td>
-                <td>00:00 <input id="video-position" type="range" min="0" step="0.2" value="0"> <span id="video-max-position"> 03:11</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </td></tr>
-      </tbody>
-      <thead><tr><th>You</th></tr></thead>
-      <tbody>
-        <tr><td id="your-video-canvas-wrapper" class="video-and-canvas">
-          <video id="your-video" style="z-index:10;" playsinline muted autoplay></video>
-          <canvas id="your-canvas" style="z-index:20;"></canvas>
-        </td></tr>
-      </tbody>
-    </table>
-  </form>
+  <p>※ 正解動画との角度が最も異なる部分を青く出力しています。</p>
+  <table>
+    <thead><tr><th>Video</th></tr></thead>
+    <tbody>
+      <tr><td id="answer-video-canvas-wrapper" class="video-and-canvas">
+        <video id="answer-video" style="z-index:10;" autoplay loop><source src="https://iwasakishuto.github.io/Front-End/tips/theme/video/radio_calisthenics.mp4" type="video/mp4"></video>
+        <canvas id="answer-canvas" style="z-index:20;"></canvas>
+        <table id="answer-video-controls" style="z-index:30;">
+          <thead>
+            <tr>
+              <th><label>Mute <input id="video-mute" type="checkbox"></label></th>
+              <th>Curt</th>
+              <th>
+                <button id="video-back-10s" class="back">Back 10s</button>
+                <button id="video-start-stop" class="playing">Pause</button>
+                <button id="video-skip-10s" class="skip">Skip 10s</button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Speed</td>
+              <td><span id="video-curt-speed">1.0</span></td>
+              <td>0.5 <input id="video-speed" type="range" min="0.5" max="5" step="0.1" value="1"> 5</td>
+            </tr>
+            <tr>
+              <td>Position</td>
+              <td><span id="video-curt-position">0</span></td>
+              <td>00:00 <input id="video-position" type="range" min="0" step="0.2" value="0"> <span id="video-max-position"> 03:11</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </td></tr>
+    </tbody>
+    <thead><tr><th>You</th></tr></thead>
+    <tbody>
+      <tr><td id="your-video-canvas-wrapper" class="video-and-canvas">
+        <video id="your-video" style="z-index:10;" playsinline muted autoplay></video>
+        <canvas id="your-canvas" style="z-index:20;"></canvas>
+      </td></tr>
+    </tbody>
+  </table>
 </div>
 
 <script>
@@ -231,14 +231,20 @@
   * limitations under the License.
   * =============================================================================
   */
+  /** 
+  * Calculate Angles of 3 points.
+  * @param {Number} x1, y1 Apex.
+  * @param {string} x2, y2, x3, y3 Other Points.
+  */
   function getApexAngle(x1, y1, x2, y2, x3, y3) {
     let apex = (Math.atan2 (y2-y1, x2-x1) - Math.atan2 (y3-y1, x3-x1)) / (Math.PI / 180);
     if( -180 <= apex && apex < 180 ) return Math.abs(apex);
     return Math.abs(360-Math.abs(apex));
   }
   function visualizeDifference(ans_keypoints, your_keypoints){
+    // Middle point is Apex.
     points = [
-      [5,7,9],[5,7,11],[5,6,11],[5,11,12],[12,11,13],[11,13,15],[6,8,10],[6,8,12],[5,6,12],[6,12,11],[11,12,14],[12,14,16]
+      [5,7,9],[7,5,11],[6,5,11],[5,11,12],[12,11,13],[11,13,15],[6,8,10],[8,6,12],[5,6,12],[6,12,11],[11,12,14],[12,14,16]
     ]
     var max_score = -1; 
     var max_idx = 0;
@@ -250,17 +256,17 @@
       && (your_keypoints[point[1]].score >= minPoseConfidence)
       && (your_keypoints[point[2]].score >= minPoseConfidence)){
         let score = Math.abs(getApexAngle(
-          ans_keypoints[point[0]]["position"]["x"],
-          ans_keypoints[point[0]]["position"]["y"],
           ans_keypoints[point[1]]["position"]["x"],
           ans_keypoints[point[1]]["position"]["y"],
+          ans_keypoints[point[0]]["position"]["x"],
+          ans_keypoints[point[0]]["position"]["y"],
           ans_keypoints[point[2]]["position"]["x"],
           ans_keypoints[point[2]]["position"]["y"],
         ) - getApexAngle(
-          your_keypoints[point[0]]["position"]["x"],
-          your_keypoints[point[0]]["position"]["y"],
           your_keypoints[point[1]]["position"]["x"],
           your_keypoints[point[1]]["position"]["y"],
+          your_keypoints[point[0]]["position"]["x"],
+          your_keypoints[point[0]]["position"]["y"],
           your_keypoints[point[2]]["position"]["x"],
           your_keypoints[point[2]]["position"]["y"],
         ));
