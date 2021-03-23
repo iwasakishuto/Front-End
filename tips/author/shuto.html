@@ -208,7 +208,9 @@
         your_poses = poses;
         processResults(your_canvas, your_video, poses, your_context);
         prevYourCompleted = true;
-        visualizeDifference(ans_poses[0]["keypoints"], your_poses[0]["keypoints"])
+        if (your_pose.length >= 1) && (ans_poses.length >= 1){
+          visualizeDifference(ans_poses[0]["keypoints"], your_poses[0]["keypoints"])
+        }
       });
     }
     window.requestAnimationFrame(prediction);
@@ -270,6 +272,8 @@
         }
       }
     })
+    console.log("max_score", max_score)
+    console.log("max_idx", max_idx)
     drawSegment(
       toTuple(your_keypoints[points[max_idx][0]].position), 
       toTuple(your_keypoints[points[max_idx][1]].position),
