@@ -268,17 +268,12 @@
               var max_score = 0; 
               var max_idx = 0;
               points.forEach(function(point, idx){
-                console.log(
-                  idx, 
-                  ans_keypoints[point[0]], ans_keypoints[point[1]], ans_keypoints[point[2]],
-                  your_keypoints[point[0]], your_keypoints[point[1]], your_keypoints[point[2]],
-                )
-                if ((ans_keypoints[point[0]] >= minPoseConfidence) 
-                && (ans_keypoints[point[1]] >= minPoseConfidence)
-                && (ans_keypoints[point[2]] >= minPoseConfidence)
-                && (your_keypoints[point[0]] >= minPoseConfidence)
-                && (your_keypoints[point[1]] >= minPoseConfidence)
-                && (your_keypoints[point[2]] >= minPoseConfidence)){
+                if ((ans_keypoints[point[0]].score >= minPoseConfidence) 
+                && (ans_keypoints[point[1]].score >= minPoseConfidence)
+                && (ans_keypoints[point[2]].score >= minPoseConfidence)
+                && (your_keypoints[point[0]].score >= minPoseConfidence)
+                && (your_keypoints[point[1]].score >= minPoseConfidence)
+                && (your_keypoints[point[2]].score >= minPoseConfidence)){
                   ans_angles = getApexAngle(
                     ans_keypoints[point[0]]["position"]["x"],
                     ans_keypoints[point[0]]["position"]["y"],
