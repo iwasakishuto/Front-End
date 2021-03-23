@@ -243,6 +243,11 @@
     var max_score = 0; 
     var max_idx = 0;
     points.forEach(function(point, idx){
+      console.log(
+        idx, 
+        ans_keypoints[point[0]], ans_keypoints[point[1]], ans_keypoints[point[2]],
+        your_keypoints[point[0]], your_keypoints[point[1]], your_keypoints[point[2]],
+      )
       if ((ans_keypoints[point[0]] >= minPoseConfidence) 
       && (ans_keypoints[point[1]] >= minPoseConfidence)
       && (ans_keypoints[point[2]] >= minPoseConfidence)
