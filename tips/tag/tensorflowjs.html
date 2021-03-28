@@ -68,11 +68,13 @@
   <h1>Pose-Estimation</h1>
   <p>Tensorflow.js を用いて、<b>"Pose-Estimation"</b>をブラウザで実行し、正解データから誤りを検出します。</p>
   <p>※ 正解動画との角度が最も異なる部分を青く出力しています。</p>
-  <table>
-    <thead><tr><th>Video</th></tr></thead>
+  <table id="fitness-mirror">
+    <thead><tr><th>Video</th><th><select id="answer-video-select"><option value="https://iwasakishuto.github.io/Front-End/tips/theme/video/radio_calisthenics.mp4" selected>ラジオ体操</option><option value="https://iwasakishuto.github.io/Front-End/tips/theme/video/akari_doi.mp4">Akari Doi</option></select></th></tr></thead>
     <tbody>
-      <tr><td id="answer-video-canvas-wrapper" class="video-and-canvas">
-        <video id="answer-video" style="z-index:10;" autoplay loop><source src="https://iwasakishuto.github.io/Front-End/tips/theme/video/akari_doi.mp4" type="video/mp4"></video>
+      <tr><td colspan="2" id="answer-video-canvas-wrapper" class="video-and-canvas">
+        <video id="answer-video" style="z-index:10;" autoplay loop>
+          <source id="answer-video-source" src="" type="video/mp4">
+        </video>
         <canvas id="answer-canvas" style="z-index:20;"></canvas>
         <table id="answer-video-controls" style="z-index:30;">
           <thead>
@@ -101,9 +103,9 @@
         </table>
       </td></tr>
     </tbody>
-    <thead><tr><th>You</th></tr></thead>
+    <thead><tr><th colspan="2">You</th></tr></thead>
     <tbody>
-      <tr><td id="your-video-canvas-wrapper" class="video-and-canvas">
+      <tr><td id="your-video-canvas-wrapper" class="video-and-canvas" colspan="2">
         <video id="your-video" style="z-index:10;" playsinline muted autoplay></video>
         <canvas id="your-canvas" style="z-index:20;"></canvas>
       </td></tr>
@@ -113,6 +115,9 @@
 
 <script>
   var model, result;
+  var answer_video_select = document.getElementById("answer-video-select");
+  var answer_video_source = document.getElementById("answer-video-source");
+  var answer_video_controls = document.getElementById("answer-video-controls");
   var answer_video_canvas_wrapper = document.getElementById("answer-video-canvas-wrapper");
   var answer_video = document.getElementById("answer-video");
   var answer_canvas = document.getElementById("answer-canvas");
@@ -177,18 +182,24 @@
       })
       your_video.srcObject = stream;
       your_video.addEventListener("loadeddata", prediction);
-      // Answer Video
-      answer_video.play()
-      answer_video.addEventListener("timeupdate", function(){
-        w = answer_video.offsetWidth; h = answer_video.offsetHeight;
-        answer_canvas.setAttribute('width', w.toString()); 
-        answer_canvas.setAttribute('height', h.toString()); 
-        answer_video_canvas_wrapper.style.height = h.toString()+"px";
-        answer_canvas.getContext("2d").drawImage(answer_video, 0, 0, w, h); 
-        video_curt_position.textContent = answer_video.currentTime.toFixed(1);
-      }, true);
+      setupAnswerVideo()
     })
   }
+  function setupAnswerVideo(){
+    answer_video_source.src = answer_video_select.value;
+    answer_video.load();
+    answer_video.play();
+    answer_video.addEventListener("timeupdate", function(){
+      w = answer_video.offsetWidth; h = answer_video.offsetHeight;
+      answer_canvas.setAttribute('width', w.toString()); 
+      answer_canvas.setAttribute('height', h.toString()); 
+      answer_video_canvas_wrapper.style.height = h.toString()+"px";
+      answer_video_controls.style.marginTop = (h+15).toString()+"px";
+      answer_canvas.getContext("2d").drawImage(answer_video, 0, 0, w, h); 
+      video_curt_position.textContent = answer_video.currentTime.toFixed(1);
+    }, true);
+  }
+  answer_video_select.onchange = setupAnswerVideo;
   // Prediction.
   var prevAnsCompleted = prevYourCompleted = true;
   const posesProperties = {
@@ -425,15 +436,28 @@
   }
   table#answer-video-controls{
     position: relative;
-    margin-top: 360px;
+    /* margin-top: 360px; */
     background-color: black;
     color: white;
   }
-  #answer-video-canvas-wrapper, #answer-video, #answer-canvas{
+  /* #answer-video-canvas-wrapper, #answer-video, #answer-canvas{
     height:360px;
   }
   #answer-video, #answer-canvas, #answer-video-controls{
     width:640px
+  } */
+  table#fitness-mirror thead {
+    background-color: black;
+    color: white;
+  }
+  table#fitness-mirror th {
+    vertical-align: middle;
+    text-align: center;
+  }
+  table#fitness-mirror select {
+    border: 0;
+    width: 100%;
+    padding: .5em .4em;
   }
   input[type="range"]{
     width: 70%;
