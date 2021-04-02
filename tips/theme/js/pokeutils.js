@@ -169,6 +169,7 @@ function calculate_damage(name, lv=50,
     if (hit_critical){
       Ar=Math.max(1, Ar); Dr=Math.min(1, Dr)
     }
+    A = Math.floor(A*Ar); D = Math.floor(D*Dr);
     // Damage compensation
     Ma = (hit_critical ? 1 : has_shield ? attack_multiple ? 2/3 : 0.5 : 1)
        * ((is_flash_fire && move_type=="ほのお") ? 1.5 : 1)

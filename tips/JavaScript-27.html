@@ -463,7 +463,7 @@
               var Astats, Atypes, Aability, Aitem, Aranks, Dstats, Dtypes, Dability, Ditem, Dranks, move_name;
               var lv = parseInt(document.getElementById("lv").value);
               var my_item = document.getElementById("my_item").value;
-              var my_rank = parseInt(DAMAGE.my_rank.value);
+              var my_rank = DAMAGE.my_rank.value; // String!!
               var my_ranks = [my_rank, my_rank, my_rank, my_rank, my_rank, my_rank];
               var my_stats = [];
               MPtable.getElementsByTagName("tr")[MPT_statsIdx].querySelectorAll("td").forEach(function(e,i){if (i>0) my_stats.push(parseInt(e.textContent))});
@@ -471,7 +471,7 @@
               var my_poke_data = POKENAME2DATA[document.getElementById("poke_name").value];
               var my_types = [my_poke_data[Pdata_typeIdx], my_poke_data[Pdata_typeIdx+1]];
               var my_move = document.getElementById("move").value;
-              var op_rank = parseInt(DAMAGE.opponent_rank.value);
+              var op_rank = DAMAGE.opponent_rank.value; // String!!
               var op_ranks = [op_rank, op_rank, op_rank, op_rank, op_rank, op_rank];
               var helping_hand = DAMAGE.helping_hand.checked;
               var is_charged = DAMAGE.charged.checked;
