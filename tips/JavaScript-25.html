@@ -363,6 +363,18 @@
             </table>
           </form>
 
+          <!-- <form id="trainer_form" name="TRAINER">
+            <table class="fixed" id="result_move">
+              <thead><tr><th style="text-align: center">トレーナー再戦</th><th><select onchange="rematch_trainer(document.TRAINER)" id="trainer-select"><option value="0x01D3">ツツジ</option><option value="0x01D4">トウキ</option><option value="0x01D5">テッセン</option><option value="0x01D6">アスナ</option><option value="0x0132">センリ</option><option value="0x01D7">ナギ</option><option value="0x01D8">フウとラン</option><option value="0x01D9">アダン</option></select></th></tr></thead>
+              <tbody>
+                <tr class="g4">
+                  <td style="text-align: center">ボックス名1</td>
+                  <td id="box1_TR" style="text-align: left">[]</td>
+                </tr>
+              </tbody>
+            </table>
+          </form> -->
+
           <form id="move_form" name="MOVE">
             <table class="fixed" id="result_move">
               <thead><tr><th colspan="2" style="text-align: center">任意技教え</th></tr></thead>
@@ -1034,6 +1046,15 @@
               document.getElementById("box1_BP").innerHTML = "[にえィ" + decode2Pokestring(decimal2hex(PROPERTY.BP.value).slice(-4)) + "ゆＭあ]";
             }
           </script>
+
+          <!-- Trainer -->
+
+          <!-- <script>
+            function rematch_trainer(TRAINER){
+              document.getElementById("box1_TR").innerHTML = "[る" + decode2Pokestring(TRAINER.querySelector("#trainer-select").value) + "]";
+            }
+            rematch_trainer(document.TRAINER)
+          </script> -->
 
           <!-- Move teacher -->
 
