@@ -209,6 +209,34 @@
               </ul></div>
             </details>  
             <form id="factory_form" name="FACTORY">
+              <details>
+                <summary class="h3">レンタルポケモン</summary>
+                <p>一覧は、<a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-27.html">JS.27 ポケモンエメラルドでフロンティア マスターを目指す（その２）</a>を参照。</p>
+                <table id="rental-pokemon-form" class="fixed">
+                  <thead><tr><th colspan="4">ファクトリーの設定</th></tr></thead>
+                  <tbody>
+                    <tr><td>連勝数</td><td class="g1"><select name="winStreak"><option value="0">0 ~ 7</option><option value="1">7 ~ 14</option><option value="2">14 ~ 21</option><option value="3">21 ~ 28</option><option value="4">28 ~ 35</option><option value="5">35 ~ 42</option><option value="6">42 ~ 49</option><option value="7">49 ~ 56</option><option value="8" selected>56 ~</option></select></td><td>challengeNum</td><td id="challengeNum"></td></tr>
+                    <tr><td>交換数</td><td class="g1"><select name="rentalCount"><option value="0">0 ~ 14</option><option value="1">15 ~ 21</option><option value="2">22 ~ 28</option><option value="3">29 ~ 35</option><option value="4">36 ~ 42</option><option value="5">43 ~</option></select></td><td>rentalRank</td><td id="rentalRank"></td></tr>
+                    <tr><td>Lv モード</td><td class="g1"><select name="LvlMode"><option value="0">Lv.50</option><option value="8">LV.OPEN</option></select></td><td>出現ポケモン</td><td id="monRange"></td></tr>
+                  </tbody>
+                </table>
+                <div style="width:100%; overflow:auto;" id="rental-pokemon-wrapper">
+                </div>
+                <table id="selected-rental-pokemon">
+                  <thead id="selected-rental-pokemon-images"><tr><th><div class="overflow-ms"><img sr=""></div></th><th><div class="overflow-ms"><img sr=""></div></th><th><div class="overflow-ms"><img sr=""></div></th><th><div class="overflow-ms"><img sr=""></div></th><th><div class="overflow-ms"><img sr=""></div></th><th><div class="overflow-ms"><img sr=""></div></th></tr></thead>
+                  <tbody>
+                    <tr><td colspan="3">[ボックス1]</td><td colspan="3">[にえィす　もけぬ]</td></tr>
+                    <tr><td colspan="3">[ボックス2]</td><td colspan="3">[い　ゆｚ　　　ビ]</td></tr>
+                    <tr><td colspan="3">[ボックス3]</td><td colspan="3">[にえィか　　　ビ]</td></tr>
+                    <tr><td colspan="3">[ボックス4]</td><td colspan="3">[ゆｚ　]</td></tr>
+                    <tr><td colspan="3">[ボックス5]</td><td colspan="3">[かッンＮテぞさタ]</td></tr>
+                    <tr><td colspan="3">[ボックス6]</td><td colspan="3">[アぃＢＦＣ]</td></tr>
+                    <tr><td colspan="3">[ボックス7]</td><td colspan="3">不問</td></tr>
+                    <tr><td colspan="3">[ボックス8]</td><td colspan="3">アｌコ　う</td></tr>
+                    <tr><td colspan="3">[ボックス9]</td><td colspan="3">①②③④❶❷❸❹</td></tr>
+                  </tbody>
+                </table>
+              </details>
             </form>
           </details>
 
@@ -474,6 +502,153 @@
             }
           </script>
 
+          <!-- Factory Rental Pokemon -->
+
+          <script>
+            const sFixedIVTable = [
+                [3, 6], // Fixed Ivs of MyPokemon & OpTrainer(~6th), That of OpTrainer(7th)
+                [6, 9],
+                [9, 12],
+                [12, 15],
+                [15, 18],
+                [21, 31],
+                [31, 31],
+                [31, 31],
+            ]
+            const sInitialRentalMonRanges = [
+                // Level 50.
+                [110,199],
+                [162,266],
+                [267,371],
+                [372,467],
+                [468,563],
+                [564,659],
+                [660,755],
+                [372,849],
+                // Open Level.
+                [372,467],
+                [468,563],
+                [564,659],
+                [660,755],
+                [372,881],
+                [372,881],
+                [372,881],
+            ]
+            var challengeNum_area      = document.getElementById("challengeNum");
+            var rentalRank_area        = document.getElementById("rentalRank");
+            var monRange_area          = document.getElementById("monRange");
+            var rental_pokemon_wrapper = document.getElementById("rental-pokemon-wrapper")
+            var id2rowIndex;
+            function set_factory_condition(FACTORY){
+              var lv = parseInt(document.getElementById("lv").value);
+              var challengeNum = Math.min(parseInt(FACTORY.winStreak.value), 7);
+              var rentalRank = parseInt(FACTORY.rentalCount.value);
+              var LvlMode = parseInt(FACTORY.LvlMode.value);
+              var monRanges = sInitialRentalMonRanges[LvlMode+challengeNum];
+              var ivs = [sFixedIVTable[challengeNum][0]]
+              var monRanges_str = `${monRanges.join("~")}(${ivs[0]})`;
+              var monRanges_cond = `(${monRanges[0]} <= i && i <= ${monRanges[1]}) ? 1 : 0`
+              if ((challengeNum < 7) && (rentalRank>0)){
+                var monRanges = sInitialRentalMonRanges[LvlMode+challengeNum+1];
+                ivs.push(sFixedIVTable[challengeNum+1][0])
+                monRanges_str +=  `, ${monRanges.join("~")}(${ivs[1]})`
+                monRanges_cond = monRanges_cond.slice(0,-1) + `(${monRanges[0]} <= i && i <= ${monRanges[1]}) ? 2 : 0`;
+              }
+              challengeNum_area.innerHTML = challengeNum
+              rentalRank_area.innerHTML = rentalRank
+              monRange_area.innerHTML = monRanges_str;
+              // Generate Rental Pokemon Table.
+              rental_pokemon_list = `<table id="rental-pokemon-list">
+                <thead><tr><th>ID</th><th>No</th><th><input type="checkbox"/>ポケモン</th><th>もちもの</th><th>技1</th><th>技2</th><th>技3</th><th>技4</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th><th>せいかく</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th></tr></thead>
+                <tbody id="rental-pokemon">
+              `
+              id2rowIndex = {}
+              var rowIndex = 0
+              RENTAL_POKEMON_LIST.forEach(function(e,i){
+                var flag = eval(monRanges_cond)
+                if (flag>0){
+                  var iv = ivs[flag-1];
+                  var rstats = calculate_statistics(e[2], [iv,iv,iv,iv,iv,iv], e.slice(10,16), e[9], lv=lv)
+                  var tmp = e.slice(0,2);
+                  tmp.push(`<label><input type="checkbox"/>${e[2]}</label>`)
+                  tmp = tmp.concat(e.slice(4,9))
+                  tmp = tmp.concat(rstats)
+                  tmp = tmp.concat(e.slice(9))
+                  rental_pokemon_list += "<tr><td>" + tmp.join("</td><td>") + "</td></tr>";
+                  id2rowIndex[e[0]] = rowIndex++;
+                }
+              })
+              rental_pokemon_wrapper.innerHTML = rental_pokemon_list + "</tbody></table>";
+              rental_filterTable();
+              // Coloring based on Nature.
+              rental_pokemon_tbody = document.getElementById("rental-pokemon");
+              rental_pokemon_tbody.querySelectorAll("tr").forEach(function(e){
+                tds = e.querySelectorAll("td");
+                seikaku_corr = seikakuid2corr[seikaku2id[tds[14].textContent]];
+                for (let i=0; i<5; i++){
+                  if (seikaku_corr[i]>1.0){
+                    tds[9+i].style.backgroundColor = "hotpink";
+                    tds[16+i].style.backgroundColor = "hotpink";
+                  }else if(seikaku_corr[i]<1.0){
+                    tds[9+i].style.backgroundColor = "cornflowerblue";
+                    tds[16+i].style.backgroundColor = "cornflowerblue";
+                  }
+                }
+              })
+            }
+            function rental_filterTable(){
+              var filtersConfig = {
+                btn_reset: true,
+                rows_counter: true,
+                loader: true,
+                status_bar: true,
+                responsive: true,
+                grid_layout: {
+                  width: '100%',
+                },
+                col_3  : 'select',
+                col_4  : 'none',
+                col_5  : 'none',
+                col_6  : 'none',
+                col_7  : 'none',
+                col_14 : 'select',
+                col_21 : 'select',
+                col_types: ['number', 'number', 'string', 'string', 'string', 'string', 'string', 'string', 'number', 'number', 'number', 'number', 'number', 'number', 'string', 'number', 'number', 'number', 'number', 'number', 'number', 'number'],
+                col_widths: ['50px', '50px', '120px', '135px', '120px', '120px', '120px', '120px', '50px', '50px', '50px', '50px', '50px', '50px', '95px', '50px', '50px', '50px', '50px', '50px', '50px', '90px'],
+                extensions:[{name: 'sort'}]
+              };
+              var tf = new TableFilter('rental-pokemon-list', filtersConfig);
+              tf.init();
+              initSelectionListeners(tf, c=2, d=0);
+              // Improves the appearance when scrolling horizontally.
+              document.querySelectorAll("#rental-pokemon-list tr").forEach(function(e,i){
+                var tds = e.querySelectorAll("td")
+                tds[0].classList.add("fixed-tcol");
+                tds[1].classList.add("fixed-tcol");
+                tds[2].classList.add("fixed-tcol");
+              })
+              document.querySelectorAll(".grd_headTblCont tr").forEach(function(e,i){
+                var ths = e.querySelectorAll("th, td")
+                ths[0].classList.add("fixed-tcol");
+                ths[1].classList.add("fixed-tcol");
+                ths[2].classList.add("fixed-tcol");
+              })
+              document.querySelector("div.grd_Cont").querySelectorAll("input[type='checkbox']").forEach(function(e,i){
+                e.addEventListener("change", generate_rental_pokemon_images)
+              })
+            }
+            var selected_rental_pokemon_images = document.getElementById("selected-rental-pokemon-images").querySelectorAll("img");
+            function generate_rental_pokemon_images(){
+              var rental_pokemon_trows = document.getElementById("rental-pokemon").querySelectorAll("tr");
+              var tds = rental_pokemon_tbody
+              TFselectedRows.slice(-6).forEach(function(e,i){
+                let tds = rental_pokemon_trows[id2rowIndex[e]].querySelectorAll("td");
+                let pokedata = POKENAME2DATA[tds[2].textContent];
+                selected_rental_pokemon_images[i].setAttribute("src", pokedata[Pdata_imgIdx])
+              })    
+            }
+          </script>
+
           <!-- On load -->
 
           <script>
@@ -512,6 +687,15 @@
                 }
               }
               generate_move_table(document.MYPOKE, document.PALACE);
+              // Battle Factory
+              var rental_pokemon_form = document.querySelectorAll("form#factory_form table#rental-pokemon-form select");
+              for(let i=0; i<rental_pokemon_form.length; i++){
+                let e = rental_pokemon_form[i];
+                e.addEventListener('change', function(){
+                  set_factory_condition(document.FACTORY);
+                });
+              }
+              set_factory_condition(document.FACTORY);
             }
           </script>
 
@@ -564,6 +748,19 @@
               padding: 0!important;
               width: 200%!important;
               vertical-align: middle;
+            }
+            table.fixed{
+              table-layout: fixed;
+            }
+            table#rental-pokemon-form *, table#selected-rental-pokemon *{
+              vertical-align: middle;
+              text-align: center;
+            }
+            table#rental-pokemon-form select {
+              width: 100%;
+              border: 0;
+              background-color: transparent;
+              font-family: Monaco, monospace, sans-serif;
             }
           </style>
         
