@@ -209,7 +209,8 @@
           <tr><td colspan="3">[ボックス7]</td><td colspan="3">不問</td></tr>
           <tr><td colspan="3">[ボックス8]</td><td colspan="3">[アｌコ　う]</td></tr>
           <tr class="g2"><td colspan="3">[ボックス9]</td><td id="factory_box9" colspan="3">[①②③④❶❷❸❹]</td></tr>
-          <tr><td>seed</td><td class="g1"><input type="number" min="0" max="4294967296" value="0" size="3" name="lb"></td><td>~</td><td class="g1"><input type="number" min="0" max="4294967296" value="1000000" size="3" name="ub"></td><td colspan="2"><a class="btn--shadow btn--red" onclick="find_desired_rental_seed(document.FACTORY)">Find a desired SEED</a></td></tr>
+          <tr><td rowspan="2">seed</td><td class="g1"><input type="number" min="0" max="4294967296" value="0" size="3" name="lb"></td><td>~</td><td class="g1"><input type="number" min="0" max="4294967296" value="1000000" size="3" name="ub"></td><td colspan="2"><a class="btn--click btn--shadow btn--red" onclick="find_desired_rental_seed(document.FACTORY)">Find a desired SEED</a></td></tr>
+          <tr><td class="g1" colspan="3"><input type="number" min="0" max="4294967296" value="0" size="3" name="frontierSeed"></td><td colspan="2"><a class="btn--click btn--shadow btn--blue" onclick="generate_rental_pokemon(document.FACTORY)">Generate the Poke</a></td></tr>
           <tr id="generated_rental_party"><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td></tr>
         </tbody>
       </table>
@@ -648,7 +649,7 @@
       Random()
       var i=c=0;
       while (i != party_size){
-        if (c++>30) break
+        if (c++ > 30) break
         if (i < rentalRank){
           monId = GetFactoryMonId(lvMode, challengeNum, true)
         }else{
@@ -664,6 +665,38 @@
         i++;
       }
       if (target_pokemon_Id.every(tId => monIds.indexOf(tId)>=0)) break
+    }
+    FACTORY.frontierSeed.value = seed;
+    generate_rental_pokemon(FACTORY);
+    return false;
+  }
+  function generate_rental_pokemon(FACTORY){
+    var seed = parseInt(FACTORY.frontierSeed.value);
+    var target_pokemon_Id = TFselectedRows.slice(-6).map( str => parseInt(str, 10) );
+    var challengeNum = parseInt(challengeNum_area.textContent);
+    var rentalRank = parseInt(rentalRank_area.textContent);
+    var lvMode = parseInt(FACTORY.LvlMode.value);
+    var monIds=[0,0,0,0,0,0];
+    var species=["","","","","",""];
+    var heldItems=["","","","","",""];
+    gRngValue = seed;
+    Random()
+    var i=c=0;
+    while (i != party_size){
+      if (c++ > 30) break
+      if (i < rentalRank){
+        monId = GetFactoryMonId(lvMode, challengeNum, true)
+      }else{
+        monId = GetFactoryMonId(lvMode, challengeNum, false)
+      }
+      for (var j=0; j<i; j++){
+        if ((monIds[j]==monId) || (species[j]==RENTAL_POKEMON_LIST[monId][Rental_Pokemon_nameIdx]) || (heldItems[j]==RENTAL_POKEMON_LIST[monId][Rental_Pokemon_itemIdx])) break;
+      }
+      if (j!=i) continue
+      monIds[i] = monId;
+      species[i] = RENTAL_POKEMON_LIST[monId][Rental_Pokemon_nameIdx];
+      heldItems[i] = RENTAL_POKEMON_LIST[monId][Rental_Pokemon_itemIdx];
+      i++;
     }
     // Generate Party Images.
     document.querySelectorAll("tr#generated_rental_party td").forEach(function(e,i){
@@ -684,7 +717,6 @@
       box9 += decode2Pokestring(e);
     })
     factory_box9_name.innerHTML = "[" + box9 + "]";
-    // Return False.
     return false;
   }
   function Random(){
@@ -760,6 +792,10 @@
       });
     }
     set_factory_condition(document.FACTORY);
+    document.FACTORY.frontierSeed.addEventListener('change', function(){
+      generate_rental_pokemon(document.FACTORY);
+    });
+    generate_rental_pokemon(document.FACTORY);
   }
 </script>
 
@@ -829,19 +865,35 @@
     background-color: transparent;
     font-family: Monaco, monospace, sans-serif;
   }
-  table#selected-rental-pokemon a.btn--red {
+  a.btn--click {
     color: #fff;
-    background-color: #c94663;
-    border-bottom: 5px solid #8a1010;
+    background-color: black;
+    border-bottom: 5px solid black;
     display: inline-block;
     padding: 0.3em 1em;
     text-decoration: none;
   }
-  table#selected-rental-pokemon a.btn--red:hover {
+  a.btn--click:hover {
     margin-top: 3px;
     color: #fff;
+    background: black;
+    border-bottom: 2px solid black;
+  }
+  table#selected-rental-pokemon a.btn--blue {
+    background-color: #04aee2;
+    border-bottom-color: #008db8;
+  }
+  table#selected-rental-pokemon a.btn--blue:hover{
+    background: #04aee2;
+    border-bottom-color: #008db8;
+  }
+  table#selected-rental-pokemon a.btn--red {
+    background-color: #c94663;
+    border-bottom-color: #8a1010;
+  }
+  table#selected-rental-pokemon a.btn--red:hover{
     background: #c94663;
-    border-bottom: 2px solid #8a1010;
+    border-bottom-color: #8a1010;
   }
   table#selected-rental-pokemon a.btn--shadow {
     -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
