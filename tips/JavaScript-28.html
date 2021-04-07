@@ -233,8 +233,8 @@
                     <tr><td colspan="3">[ボックス6]</td><td colspan="3">[アぃＢＦＣ]</td></tr>
                     <tr><td colspan="3">[ボックス7]</td><td colspan="3">不問</td></tr>
                     <tr><td colspan="3">[ボックス8]</td><td colspan="3">[アｌコ　う]</td></tr>
-                    <tr class="g2"><td colspan="3">[ボックス9]</td><td id="factory_box9" colspan="3">①②③④❶❷❸❹</td></tr>
-                    <tr><td>seed</td><td><input type="number" min="0" max="4294967296" value="0" size="3" name="lb"></td><td>~</td><td><input type="number" min="0" max="4294967296" value="1000000" size="3" name="ub"></td><td colspan="2"><button type="button" onclick="calculate_rental_seed(document.FACTORY)">Calculate Seed</button></td></tr>
+                    <tr class="g2"><td colspan="3">[ボックス9]</td><td id="factory_box9" colspan="3">[①②③④❶❷❸❹]</td></tr>
+                    <tr><td>seed</td><td class="g1"><input type="number" min="0" max="4294967296" value="0" size="3" name="lb"></td><td>~</td><td class="g1"><input type="number" min="0" max="4294967296" value="1000000" size="3" name="ub"></td><td colspan="2"><a class="btn--shadow btn--red" onclick="find_desired_rental_seed(document.FACTORY)">Find a desired SEED</a></td></tr>
                     <tr id="generated_rental_party"><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td></tr>
                   </tbody>
                 </table>
@@ -653,11 +653,11 @@
                 curtPartyIndex = i;
               })
               for (let i=curtPartyIndex+1; i<party_size; i++){
-                selected_rental_pokemon_images[i].setAttribute("src", "")
+                selected_rental_pokemon_images[i].setAttribute("src", "https://cdn.bulbagarden.net/upload/9/93/Bag_Pok%C3%A9_Ball_Sprite.png")
               }
             }
             var gRngValue;
-            function calculate_rental_seed(FACTORY){
+            function find_desired_rental_seed(FACTORY){
               var target_pokemon_Id = TFselectedRows.slice(-6).map( str => parseInt(str, 10) );
               var challengeNum = parseInt(challengeNum_area.textContent);
               var rentalRank = parseInt(rentalRank_area.textContent);
@@ -691,8 +691,14 @@
                 if (target_pokemon_Id.every(tId => monIds.indexOf(tId)>=0)) break
               }
               // Generate Party Images.
-              document.querySelectorAll("tr#generated_rental_party img").forEach(function(e,i){
-                e.setAttribute("src", POKENAME2DATA[species[i]][Pdata_imgIdx])
+              document.querySelectorAll("tr#generated_rental_party td").forEach(function(e,i){
+                e.querySelector("img").setAttribute("src", POKENAME2DATA[species[i]][Pdata_imgIdx])
+                if (target_pokemon_Id.indexOf(monIds[i])>=0){
+                  e.classList.add("g3")
+                }
+                else{
+                  e.classList.remove("g3")
+                }
               })
               // Calculate Box Name
               var box9 = ""
@@ -807,6 +813,9 @@
             .g2{
               background-color: azure;
             }
+            .g3 {
+              background-color: lightgreen;
+            }
             .gp1{
               background-color: #ffcfdf;
             }
@@ -839,11 +848,29 @@
               vertical-align: middle;
               text-align: center;
             }
-            table#rental-pokemon-form select {
+            table#rental-pokemon-form select, table#selected-rental-pokemon input {
               width: 100%;
               border: 0;
               background-color: transparent;
               font-family: Monaco, monospace, sans-serif;
+            }
+            table#selected-rental-pokemon a.btn--red {
+              color: #fff;
+              background-color: #c94663;
+              border-bottom: 5px solid #8a1010;
+              display: inline-block;
+              padding: 0.3em 1em;
+              text-decoration: none;
+            }
+            table#selected-rental-pokemon a.btn--red:hover {
+              margin-top: 3px;
+              color: #fff;
+              background: #c94663;
+              border-bottom: 2px solid #8a1010;
+            }
+            table#selected-rental-pokemon a.btn--shadow {
+              -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+              box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
             }
           </style>
         
