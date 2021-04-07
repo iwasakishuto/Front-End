@@ -197,8 +197,8 @@
       </table>
       <div style="width:100%; overflow:auto;" id="rental-pokemon-wrapper">
       </div>
-      <table id="selected-rental-pokemon">
-        <thead id="selected-rental-pokemon-images"><tr><th><div class="overflow-ms"><img sr=""></div></th><th><div class="overflow-ms"><img sr=""></div></th><th><div class="overflow-ms"><img sr=""></div></th><th><div class="overflow-ms"><img sr=""></div></th><th><div class="overflow-ms"><img sr=""></div></th><th><div class="overflow-ms"><img sr=""></div></th></tr></thead>
+      <table id="selected-rental-pokemon" class="fixed">
+        <thead id="selected-rental-pokemon-images"><tr><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th></tr></thead>
         <tbody>
           <tr><td colspan="3">[ボックス1]</td><td colspan="3">[にえィす　もけぬ]</td></tr>
           <tr><td colspan="3">[ボックス2]</td><td colspan="3">[い　ゆｚ　　　ビ]</td></tr>
@@ -207,8 +207,10 @@
           <tr><td colspan="3">[ボックス5]</td><td colspan="3">[かッンＮテぞさタ]</td></tr>
           <tr><td colspan="3">[ボックス6]</td><td colspan="3">[アぃＢＦＣ]</td></tr>
           <tr><td colspan="3">[ボックス7]</td><td colspan="3">不問</td></tr>
-          <tr><td colspan="3">[ボックス8]</td><td colspan="3">アｌコ　う</td></tr>
-          <tr><td colspan="3">[ボックス9]</td><td colspan="3">①②③④❶❷❸❹</td></tr>
+          <tr><td colspan="3">[ボックス8]</td><td colspan="3">[アｌコ　う]</td></tr>
+          <tr class="g2"><td colspan="3">[ボックス9]</td><td id="factory_box9" colspan="3">①②③④❶❷❸❹</td></tr>
+          <tr><td>seed</td><td><input type="number" min="0" max="4294967296" value="0" size="3" name="lb"></td><td>~</td><td><input type="number" min="0" max="4294967296" value="1000000" size="3" name="ub"></td><td colspan="2"><button type="button" onclick="calculate_rental_seed(document.FACTORY)">Calculate Seed</button></td></tr>
+          <tr id="generated_rental_party"><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td></tr>
         </tbody>
       </table>
     </details>
@@ -481,9 +483,9 @@
 
 <script>
   const sFixedIVTable = [
-      [3, 6], // Fixed Ivs of MyPokemon & OpTrainer(~6th), That of OpTrainer(7th)
-      [6, 9],
-      [9, 12],
+      [3,  6], // Fixed Ivs of MyPokemon & OpTrainer(~6th), That of OpTrainer(7th)
+      [6,  9],
+      [9,  12],
       [12, 15],
       [15, 18],
       [21, 31],
@@ -512,7 +514,8 @@
   var challengeNum_area      = document.getElementById("challengeNum");
   var rentalRank_area        = document.getElementById("rentalRank");
   var monRange_area          = document.getElementById("monRange");
-  var rental_pokemon_wrapper = document.getElementById("rental-pokemon-wrapper")
+  var rental_pokemon_wrapper = document.getElementById("rental-pokemon-wrapper");
+  var factory_box9_name      = document.getElementById("factory_box9");
   var id2rowIndex;
   function set_factory_condition(FACTORY){
     var lv = parseInt(document.getElementById("lv").value);
@@ -612,15 +615,95 @@
       e.addEventListener("change", generate_rental_pokemon_images)
     })
   }
+  var party_size = 6;
   var selected_rental_pokemon_images = document.getElementById("selected-rental-pokemon-images").querySelectorAll("img");
   function generate_rental_pokemon_images(){
     var rental_pokemon_trows = document.getElementById("rental-pokemon").querySelectorAll("tr");
-    var tds = rental_pokemon_tbody
+    var tds = rental_pokemon_tbody;
+    var curtPartyIndex = -1;
     TFselectedRows.slice(-6).forEach(function(e,i){
       let tds = rental_pokemon_trows[id2rowIndex[e]].querySelectorAll("td");
       let pokedata = POKENAME2DATA[tds[2].textContent];
       selected_rental_pokemon_images[i].setAttribute("src", pokedata[Pdata_imgIdx])
-    })    
+      curtPartyIndex = i;
+    })
+    for (let i=curtPartyIndex+1; i<party_size; i++){
+      selected_rental_pokemon_images[i].setAttribute("src", "")
+    }
+  }
+  var gRngValue;
+  function calculate_rental_seed(FACTORY){
+    var target_pokemon_Id = TFselectedRows.slice(-6).map( str => parseInt(str, 10) );
+    var challengeNum = parseInt(challengeNum_area.textContent);
+    var rentalRank = parseInt(rentalRank_area.textContent);
+    var lvMode = parseInt(FACTORY.LvlMode.value);
+    var lb = parseInt(FACTORY.lb.value);
+    var ub = parseInt(FACTORY.ub.value);
+    if (lb>ub) ub=lb+100;
+    var monIds=[0,0,0,0,0,0];
+    var species=["","","","","",""];
+    var heldItems=["","","","","",""];
+    for (var seed=lb; seed<ub; seed++){
+      gRngValue = seed;
+      Random()
+      var i=c=0;
+      while (i != party_size){
+        if (c++>30) break
+        if (i < rentalRank){
+          monId = GetFactoryMonId(lvMode, challengeNum, true)
+        }else{
+          monId = GetFactoryMonId(lvMode, challengeNum, false)
+        }
+        for (var j=0; j<i; j++){
+          if ((monIds[j]==monId) || (species[j]==RENTAL_POKEMON_LIST[monId][Rental_Pokemon_nameIdx]) || (heldItems[j]==RENTAL_POKEMON_LIST[monId][Rental_Pokemon_itemIdx])) break;
+        }
+        if (j!=i) continue
+        monIds[i] = monId;
+        species[i] = RENTAL_POKEMON_LIST[monId][Rental_Pokemon_nameIdx];
+        heldItems[i] = RENTAL_POKEMON_LIST[monId][Rental_Pokemon_itemIdx];
+        i++;
+      }
+      if (target_pokemon_Id.every(tId => monIds.indexOf(tId)>=0)) break
+    }
+    // Generate Party Images.
+    document.querySelectorAll("tr#generated_rental_party img").forEach(function(e,i){
+      e.setAttribute("src", POKENAME2DATA[species[i]][Pdata_imgIdx])
+    })
+    // Calculate Box Name
+    var box9 = ""
+    seed = decimal2hex(seed);
+    pre_seeds  = useAuxiliary_4(seed.slice(-8,-4));
+    post_seeds = useAuxiliary_4(seed.slice(-4));
+    [post_seeds[0], pre_seeds[0], post_seeds[1], pre_seeds[1]].forEach(function(e,i){
+      box9 += decode2Pokestring(e);
+    })
+    factory_box9_name.innerHTML = "[" + box9 + "]";
+    // Return False.
+    return false;
+  }
+  function Random(){
+    gRngValue = makeR(gRngValue)
+    return gRngValue >>> 16;
+  }
+  function GetFactoryMonId(lvlMode, challengeNum, useBetterRange){
+    if (challengeNum < 7){
+      if (useBetterRange){
+          numMons = (sInitialRentalMonRanges[lvlMode + challengeNum + 1][1] - sInitialRentalMonRanges[lvlMode + challengeNum + 1][0]) + 1;
+          monId = Random() % numMons;
+          monId += sInitialRentalMonRanges[lvlMode + challengeNum + 1][0];
+      }
+      else{
+          numMons = (sInitialRentalMonRanges[lvlMode + challengeNum][1] - sInitialRentalMonRanges[lvlMode + challengeNum][0]) + 1;
+          monId = Random() % numMons;
+          monId += sInitialRentalMonRanges[lvlMode + challengeNum][0];
+      }
+    }else{
+        challengeNum = 7;
+        numMons = (sInitialRentalMonRanges[lvlMode + challengeNum][1] - sInitialRentalMonRanges[lvlMode + challengeNum][0]) + 1;
+        monId = Random() % numMons;
+        monId += sInitialRentalMonRanges[lvlMode + challengeNum][0];
+    }
+    return monId;
   }
 </script>
 
