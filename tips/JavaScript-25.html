@@ -408,6 +408,33 @@
             <p>※ 技コードは<a href="https://wikiwiki.jp/pokemonhack/技コード">https://wikiwiki.jp/pokemonhack/技コード</a>を参照した。</p>
           </form>
 
+          <form id="pokeblock_form" name="POKEBLOCK">
+            <table class="fixed" id="result_pokeblock">
+              <thead><th colspan="6" style="text-align: center">任意ポロック生成</th></thead>
+              <tbody>
+                <tr class="g1">
+                  <td style="text-align: center">滑</td><td style="text-align: center">辛</td><td style="text-align: center">渋</td><td style="text-align: center">甘</td><td style="text-align: center">苦</td><td style="text-align: center">酸</td>
+                </tr>
+                <tr class="g1">
+                  <td style="text-align: center"><input type="number" min="0" max="238" value="0" size="3" name="Smoothness"></td>
+                  <td style="text-align: center"><input type="number" min="0" max="238" value="0" size="3" name="Spicy"></td>
+                  <td style="text-align: center"><input type="number" min="0" max="238" value="0" size="3" name="Dry"></td>
+                  <td style="text-align: center"><input type="number" min="0" max="238" value="0" size="3" name="Sweet"></td>
+                  <td style="text-align: center"><input type="number" min="0" max="238" value="0" size="3" name="Bitter"></td>
+                  <td style="text-align: center"><input type="number" min="0" max="238" value="0" size="3" name="Sour"></td>
+                </tr>
+                <tr class="g1"><td colspan="3">ポロック名</td><td colspan="3"><select id="pokeblock_color"><option value="0"></option><option value="1">あかいポロック</option><option value="2">あおいポロック</option><option value="3">ももいろポロック</option><option value="4">みどりのポロック</option><option value="5">きいろのポロック</option><option value="6">むらさきポロック</option><option value="7">こんいろポロック</option><option value="8">ちゃいろポロック</option><option value="9">そらいろポロック</option><option value="10">きみどりポロック</option><option value="11">はいいろポロック</option><option value="12">しろいポロック</option><option value="13">くろいポロック</option><option value="14">きんいろポロック</option></select></td></tr>
+                <tr><td colspan="3">ボックス名1</td><td colspan="3">[もけぬうい]</td></tr>
+                <tr><td colspan="3">ボックス名5</td><td colspan="3">[かッンＮＯネくめ]</td></tr>
+                <tr><td colspan="3">ボックス名6</td><td colspan="3">[アついぶぇ　ｌ]</td></tr>
+                <tr><td colspan="3">ボックス名7</td><td colspan="3">[アねねＧぃＢＦＣ]</td></tr>
+                <tr><td colspan="3">ボックス名8</td><td colspan="3">[アｌコ　う]</td></tr>
+                <tr class="g4"><td colspan="3">ボックス名9</td><td colspan="3" id="box9_pokeblock">[色辛渋甘苦酸滑う]</td></tr>
+              </tbody>
+            </table>
+            <p>※ 全てのコンディションをMaxにする最適なポロックは<a href="http://www2u.biglobe.ne.jp/kakeru/pokemon_a/porock.htm">ポロック大百科</a>を参照するとわかります。</p>
+          </form>
+
           <form id="id_form" name="ID">
             <table class="fixed" id="result_id">
               <thead><tr><th colspan="2" style="text-align: center">ID変更（表ID:<input id="TID" onchange="ID_calculate(document.ID)" name="TID" type="number" min="0" max="65535" value="0" size="4">, 裏ID: <input id="SID" onchange="ID_calculate(document.ID)" name="SID" type="number" min="0" max="65535" value="0" size="4">）</th></tr></thead>
@@ -704,6 +731,56 @@
             }
           </script>
 
+          <!-- Pokeblock -->
+
+          <script>
+            var pokeblock_color_select = document.getElementById("pokeblock_color");
+            function pokeblock_calculate(POKEBLOCK){
+              var v0 = parseInt(POKEBLOCK.Smoothness.value),
+                  v1 = parseInt(POKEBLOCK.Spicy.value),
+                  v2 = parseInt(POKEBLOCK.Dry.value),
+                  v3 = parseInt(POKEBLOCK.Sweet.value),
+                  v4 = parseInt(POKEBLOCK.Bitter.value),
+                  v5 = parseInt(POKEBLOCK.Sour.value);
+              var flavor = [v1, v2, v3, v4, v5];
+              var num_non_zero = flavor.filter(function(val){return val>0}).length;
+              var max_idx = flavor.indexOf(Math.max(...flavor));
+              var max_val = Math.max(...flavor);
+              var color=0;
+              if (1<=num_non_zero && num_non_zero<=2){
+                if (max_val>=51){
+                  color = 14; // Gold
+                }else{
+                  if(num_non_zero==1){
+                    color = 1+max_idx; // RED,BLUE,PINK,GREEN,YELLOW
+                  }else{
+                    color = 6+max_idx // PURPLE,INDIGO,BROWN,LITE_BLUE,OLIVE
+                  }
+                }
+              }else if(num_non_zero==3){
+                color = 11;
+              }else if (num_non_zero==4){
+                color = 13;
+              }
+              pokeblock_color_select.selectedIndex=color;
+              document.getElementById("box9_pokeblock").innerHTML = "[" + 
+              decode2Pokestring(decimal2hex(color)).slice(0,1) +
+              decode2Pokestring(decimal2hex(v1)).slice(0,1) + 
+              decode2Pokestring(decimal2hex(v2)).slice(0,1) + 
+              decode2Pokestring(decimal2hex(v3)).slice(0,1) + 
+              decode2Pokestring(decimal2hex(v4)).slice(0,1) + 
+              decode2Pokestring(decimal2hex(v5)).slice(0,1) + 
+              decode2Pokestring(decimal2hex(v0)).slice(0,1) + 
+              "う]"
+            }
+            function pokeblock_change_color(POKEBLOCK){
+              var tmp = document.getElementById("box9_pokeblock").textContent;
+              document.getElementById("box9_pokeblock").innerHTML = "[" + 
+              decode2Pokestring(decimal2hex(parseInt(pokeblock_color_select.value))).slice(0,1) + 
+              tmp.slice(2);
+            }
+          </script>
+
           <!-- Decoration -->
 
           <script>
@@ -929,6 +1006,27 @@
                 };
               }
               data_overwrite_calculate(document.DATA);
+              // Pokeblock
+              var pokeblock_form = document.getElementById("pokeblock_form");
+                for(let i = 0; i < pokeblock_form.length; i++){
+                let e = pokeblock_form.elements[i];
+                if (e.id=="pokeblock_color"){
+                  e.onkeyup = function(){
+                    pokeblock_change_color(document.POKEBLOCK);
+                  }
+                  e.onchange = function(){
+                    pokeblock_change_color(document.POKEBLOCK);
+                  };
+                }else{
+                  e.onkeyup = function(){
+                    pokeblock_calculate(document.POKEBLOCK);
+                  };
+                  e.onchange = function(){
+                    pokeblock_calculate(document.POKEBLOCK);
+                  };
+                }
+              }
+              pokeblock_calculate(document.POKEBLOCK);
             };
           </script>
 
