@@ -373,6 +373,13 @@
                   <td id="box1_ASH" style="text-align: left">[]</td>
                 </tr>
               </tbody>
+              <thead><tr><th colspan="2" style="text-align: center">所持コイン加算： <input onchange="COIN_calculate(document.PROPERTY)" name="COIN" type="number" min="1" max="9999" value="9999" size="4"> コイン</th></tr></thead>
+              <tbody>
+                <tr class="g4">
+                  <td style="text-align: center">ボックス名1</td>
+                  <td id="box1_COIN" style="text-align: left">[]</td>
+                </tr>
+              </tbody>
             </table>
           </form>
 
@@ -858,6 +865,9 @@
             function ASH_calculate(PROPERTY){
               document.getElementById("box1_ASH").innerHTML = "[にぶぞ" + decode2Pokestring(decimal2hex(PROPERTY.ASH.value).slice(-4)) + "]";
             }
+            function COIN_calculate(PROPERTY){
+              document.getElementById("box1_COIN").innerHTML = "[」" + decode2Pokestring(decimal2hex(PROPERTY.COIN.value).slice(-4)) + "]";
+            }
           </script>
 
           <!-- Trainer -->
@@ -1035,6 +1045,7 @@
               money_calculate(document.PROPERTY);
               BP_calculate(document.PROPERTY);
               ASH_calculate(document.PROPERTY);
+              COIN_calculate(document.PROPERTY);
               // BERRY
               var berry_form = document.getElementById("berry_form");
               for(let i = 0; i < berry_form.length; i++){
