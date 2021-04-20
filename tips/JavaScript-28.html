@@ -457,7 +457,7 @@
               for (let i=1; i<7; i++){
                 base_states[i].innerHTML = data[Pdata_statusIdx+i-1];
               }
-              MPtable.querySelector("img").setAttribute("src", data[Pdata_imgIdx]);
+              MPtable.querySelector("img").setAttribute("src", Pdata_img_baseurl + data[Pdata_imgIdx]);
               calculate_mypoke_statistics(MYPOKE);
               generate_move_table(MYPOKE, document.PALACE);
             }
@@ -654,7 +654,7 @@
               TFselectedRows.slice(-6).forEach(function(e,i){
                 let tds = rental_pokemon_trows[id2rowIndex[e]].querySelectorAll("td");
                 let pokedata = POKENAME2DATA[tds[2].textContent];
-                selected_rental_pokemon_images[i].setAttribute("src", pokedata[Pdata_imgIdx])
+                selected_rental_pokemon_images[i].setAttribute("src", Pdata_img_baseurl + pokedata[Pdata_imgIdx])
                 curtPartyIndex = i;
               })
               for (let i=curtPartyIndex+1; i<party_size; i++){
@@ -729,7 +729,7 @@
               }
               // Generate Party Images.
               document.querySelectorAll("tr#generated_rental_party td").forEach(function(e,i){
-                e.querySelector("img").setAttribute("src", POKENAME2DATA[species[i]][Pdata_imgIdx])
+                e.querySelector("img").setAttribute("src", Pdata_img_baseurl + POKENAME2DATA[species[i]][Pdata_imgIdx])
                 if (target_pokemon_Id.indexOf(monIds[i])>=0){
                   e.classList.add("g3")
                 }

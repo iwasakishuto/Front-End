@@ -366,7 +366,7 @@
                   <td id="box1_BP" style="text-align: left">[]</td>
                 </tr>
               </tbody>
-              <thead><tr><th colspan="2" style="text-align: center">所持火山灰変更： <input onchange="ASH_calculate(document.PROPERTY)" name="ASH" type="number" min="1" max="99999" value="99999" size="4"> 歩分</th></tr></thead>
+              <thead><tr><th colspan="2" style="text-align: center">所持火山灰変更： <input onchange="ASH_calculate(document.PROPERTY)" name="ASH" type="number" min="1" max="9999" value="9999" size="4"> 歩分</th></tr></thead>
               <tbody>
                 <tr class="g4">
                   <td style="text-align: center">ボックス名1</td>
@@ -632,7 +632,7 @@
                 // Set Base States
                 var confirmation_tabel = document.getElementById("confirmation");
                 confirmation_tabel.querySelector("th").innerText = poke_name;
-                confirmation_tabel.querySelector("img").setAttribute("src", data[Pdata_imgIdx])
+                confirmation_tabel.querySelector("img").setAttribute("src", Pdata_img_baseurl + data[Pdata_imgIdx])
                 var base_states = document.getElementById("base_states").querySelectorAll("td");
                 var tot = 0;
                 for (var i=1; i<7; i++){
