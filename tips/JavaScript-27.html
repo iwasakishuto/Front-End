@@ -185,9 +185,14 @@
                   <td colspan="4"><select id="my_item" name="my_item"><option>シルクのスカーフ</option><option>もくたん</option><option>しんぴのしずく</option><option>じしゃく</option><option>きせきのタネ</option><option>とけないこおり</option><option>くろおび</option><option>どくバリ</option><option>やわらかいすな</option><option>するどいくちばし</option><option>まがったスプーン</option><option>ぎんのこな</option><option>かたいいし</option><option>のろいのおふだ</option><option>りゅうのキバ</option><option>くろいメガネ</option><option>メタルコート</option><option>こだわりハチマキ</option><option>おうじゃのしるし</option><option>うしおのおこう</option><option>のんきのおこう</option><option>しんかいのウロコ</option><option>しんかいのキバ</option><option>でんきだま</option><option>きあいのハチマキ</option><option>きょうせいギプス</option><option>ひかりのこな</option><option>せんせいのつめ</option><option>ピントレンズ</option><option>メンタルハーブ</option><option>たべのこし</option><option>しろいハーブ</option><option>かいがらのすず</option><option>クラボのみ</option><option>カゴのみ</option><option>モモンのみ</option><option>チーゴのみ</option><option>ナナシのみ</option><option>ヒメリのみ</option><option>オレンのみ</option><option>キーのみ</option><option>ラムのみ</option><option>オボンのみ</option><option>フィラのみ</option><option>ウイのみ</option><option>マゴのみ</option><option>バンジのみ</option><option>イアのみ</option><option>チイラのみ</option><option>リュガのみ</option><option>カムラのみ</option><option>ヤタピのみ</option><option>ズアのみ</option><option>サンのみ</option><option>スターのみ</option></select></td>
                 </tr>
                 <tr class="g1">
-                  <td colspan="3">技</td>
-                  <td colspan="2"><select id="move" name="move"></select></td>
-                  <td colspan="2"></td>
+                  <td colspan="3" rowspan="2">技</td>
+                  <td colspan="4"><select id="move" name="move"></select></td>
+                </tr>
+                <tr class="g1">
+                  <td><select name="move_type"><option>ノーマル</option><option>ほのお</option><option>みず</option><option>でんき</option><option>くさ</option><option>こおり</option><option>かくとう</option><option>どく</option><option>じめん</option><option>ひこう</option><option>エスパー</option><option>むし</option><option>いわ</option><option>ゴースト</option><option>ドラゴン</option><option>あく</option><option>はがね</option></select></td>
+                  <td><select name="move_class"><option>攻撃</option><option>特殊</option><option>変化</option><option>その他</option></select></td>
+                  <td><select name="move_range"><option>ランダム</option><option>不定</option><option>全体</option><option>味方全体</option><option>味方１匹</option><option>味方２匹</option><option>相手２匹</option><option>自分</option><option>自分/相手</option><option>自分以外</option><option>１匹</option></select></td>
+                  <td><input type="number" min="0" max="250" size="3" value="0" name="move_base_power"></td>
                 </tr>
               </tbody>
               <thead>
@@ -366,10 +371,10 @@
 
           <script>
             const MPtable = document.getElementById("my-pokemon");
-            const MPT_base_statsIdx = 8;
-            const MPT_ivIdx = 9;
-            const MPT_evIdx = 10;
-            const MPT_statsIdx = 11;
+            const MPT_base_statsIdx = 9;
+            const MPT_ivIdx = 10;
+            const MPT_evIdx = 11;
+            const MPT_statsIdx = 12;
             // Set pokemon seletions.
             var select = document.getElementById("poke_name")
             for (let name in POKENAME2DATA) {
@@ -399,7 +404,7 @@
                 move_options += "<option value='" + e.split(".")[1] + "'>" + e + "</option>"
               })
               MYPOKE.move.innerHTML = move_options;
-              output_move_power(MYPOKE.move.value, MYPOKE.move.parentElement.nextElementSibling);
+              output_move_info(MYPOKE);
               // Set Base States & Image.
               var base_states = MPtable.getElementsByTagName("tr")[MPT_base_statsIdx].querySelectorAll("td");
               for (let i=1; i<7; i++){
@@ -468,10 +473,10 @@
               Result_table.querySelectorAll("select").forEach(function(e,i){
                 if (e.name=="move"){
                   e.addEventListener("change", function(){
+                    output_opmove_info(e);
                     calculate_damage_rates(document.DAMAGE);
-                    output_move_power(e.value, e.parentElement.nextElementSibling);
                   })
-                  output_move_power(e.value, e.parentElement.nextElementSibling);
+                  output_opmove_info(e);
                 }else{
                   e.addEventListener("change", function(){
                     calculate_damage_rates(document.DAMAGE);
@@ -480,8 +485,15 @@
               })
               calculate_damage_rates(document.DAMAGE);
             }
-            function output_move_power(name, e){
-              e.innerHTML=MOVENAME2DATA[name][Mdata_powerIdx];
+            function output_opmove_info(e, DAMAGE){
+              e.parentElement.nextElementSibling.innerHTML = MOVENAME2DATA[e.value][Mdata_powerIdx];
+            }
+            function output_move_info(MYPOKE){
+              var move_data = MOVENAME2DATA[MYPOKE.move.value];
+              MYPOKE.move_type.value = move_data[Mdata_typeIdx];
+              MYPOKE.move_class.value = move_data[Mdata_classIdx];
+              MYPOKE.move_range.value = move_data[Mdata_rangeIdx];
+              MYPOKE.move_base_power.value = move_data[Mdata_powerIdx];
             }
             // Add EventListeners.
             // checkbox "change" event fires when "USER" checked it, so add event to "toggleAll" checkbox.
@@ -533,17 +545,21 @@
                 op_item = tds[RT_oppokeitemIdx].textContent;
                 if (document.getElementById("switchAD").checked){
                   // Battle Frontier: Defense, My Pokemon: Attack.
-                  move_name = my_move;
+                  move_name = my_move; 
+                  MYPOKE = document.MYPOKE;
+                  move_type = MYPOKE.move_type.value; move_class = MYPOKE.move_class.value; move_range = MYPOKE.move_range.value; move_base_power = MYPOKE.move_base_power.value;
                   Astats=my_stats, Atypes=my_types, Aability=my_ability, Aitem=my_item, Aranks=my_ranks,
                   Dstats=op_stats, Dtypes=op_types, Dability=op_ability, Ditem=op_item, Dranks=op_ranks;
                 }else{
                   // Battle Frontier: Attack, My Pokemon: Defense.
                   move_name = tds[RT_oppokemoveIdx].querySelector("select").value;
+                  move_type = NaN; move_class = NaN; move_range = NaN; move_base_power = NaN;
                   Astats=op_stats, Atypes=op_types, Aability=op_ability, Aitem=op_item, Aranks=op_ranks
                   Dstats=my_stats, Dtypes=my_types, Dability=my_ability, Ditem=my_item, Dranks=my_ranks;
                 }
                 var ret = calculate_damage(
-                  name=move_name, lv=lv, Astats=Astats, Dstats=Dstats, Atypes=Atypes, Dtypes=Dtypes, 
+                  move_name=move_name, move_type=move_type, move_class=move_class, move_range=move_range, move_base_power=move_base_power,
+                  lv=lv, Astats=Astats, Dstats=Dstats, Atypes=Atypes, Dtypes=Dtypes, 
                   Aability=Aability, Dability=Dability, Aitem=Aitem, Ditem=Ditem, Aranks=Aranks, 
                   Dranks=Dranks, AHP=1.0, DHP=1.0, helping_hand=helping_hand, 
                   is_charged=is_charged, is_mudsport_field=is_mudsport_field, 
@@ -590,7 +606,7 @@
                   };
                 } else if (e.id == "move"){
                   e.onchange = function(){
-                    output_move_power(e.value, e.parentElement.nextElementSibling);
+                    output_move_info(document.MYPOKE);
                     calculate_mypoke_statistics(document.MYPOKE);
                   };
                 }else{

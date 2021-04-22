@@ -112,7 +112,11 @@ const POKEWEATHERS = ["", "にほんばれ", "あめ", "すなあらし", "あ�
  * @ref https://wiki.xn--rckteqa2e.com/wiki/ダメージ
  * @ref https://wiki.xn--rckteqa2e.com/wiki/威力
  * @todo Calculation of moves that change the basic power.
- * @param {number} name Move Name.
+ * @param {number} move_name Move Name.
+ * @param {string} move_type Move Type (default=NaN)
+ * @param {string} move_class Move Class (default=NaN)
+ * @param {string} move_range Move Range (default=NaN)
+ * @param {string} move_base_power Move Base Power (default=NaN)
  * @param {number} lv Level.
  * @param {number} Astats Stats on the Attacking side. [H,A,B,C,D,S]
  * @param {number} Dstats Stats on the Defending side. [H,A,B,C,D,S]
@@ -136,62 +140,67 @@ const POKEWEATHERS = ["", "にほんばれ", "あめ", "すなあらし", "あ�
  * @param {bool} hit_critical Whether the move hit critical.
  * @return {list} [lb, ub] The range of Power.
 */
-function calculate_damage(name, lv=50, 
+
+function calculate_damage(move_name, move_type=NaN, move_class=NaN, move_range=NaN, move_base_power=NaN, lv=50,
                           Astats=[], Dstats=[], Atypes=[], Dtypes=[], Aability="", Dability="", 
                           Aitem="", Ditem="", Aranks=[], Dranks=[], AHP=1.0, DHP=1.0, 
                           helping_hand=false, is_charged=false, is_mudsport_field=false, is_watersport_field=false,
                           is_single=true, has_shield=false, is_flash_fire=false, 
                           weather="", is_burned_state=false, hit_critical=false){
-  if (name in MOVENAME2DATA){
-    var data = MOVENAME2DATA[name];
-    var move_type = data[Mdata_typeIdx];
-    var move_class = data[Mdata_classIdx];
-    var attack_multiple = data[Mdata_rangeIdx] == "相手２匹";
-    // Power correction
-    var base_power = parseInt(data[Mdata_powerIdx]) || 0
-    var power = (helping_hand ? 1.5 : 1)
-              * base_power || 0
-              * (POKETYPE2ITEM[move_type].indexOf(Aitem)!=-1 ? 1.1 : 1)
-              * ((is_mudsport_field && move_type=="でんき") ? 0.5 : 1)
-              * ((is_watersport_field && move_type=="ほのお") ? 0.5 : 1)
-              * (AHP<=(1/3) ? ((Aability=="もうか" && move_type=="ほのお") || (Aability=="しんりょく" && move_type=="くさ") || (Aability=="げきりゅう" && move_type=="みず") || (Aability=="むしのしらせ" && move_type=="むし")) ? 1.5 : 1 : 1)
-              * ((Dability=="あついしぼう" && ["ほのお", "こおり"].indexOf(move_type)!=-1) ? 0.5 : 1)
-    // Rank compensation
-    var A,D,Ar,Dr,Ma,Mb;
-    if (move_class=="攻撃"){
-      A=Astats[1]; D=Dstats[2]; Ar=Aranks[1]; Dr=Dranks[2];
-    }else if (move_class=="特殊"){
-      A=Astats[3]; D=Dstats[4]; Ar=Aranks[3]; Dr=Dranks[4]
-    }else{
-      console.log(name + "は「" + move_class + "」の技です。「攻撃」もしくは「特殊」の技でないと計算できません。")
-      A=0;D=100;Ar=1;Dr=1;
-    }
-    Ar=RANK2MAGNIFICATION[Ar]; Dr=RANK2MAGNIFICATION[Dr];
-    if (hit_critical){
-      Ar=Math.max(1, Ar); Dr=Math.min(1, Dr)
-    }
-    A = Math.floor(A*Ar); D = Math.floor(D*Dr);
-    // Damage compensation
-    Ma = (hit_critical ? 1 : has_shield ? attack_multiple ? 2/3 : 0.5 : 1)
-       * ((is_flash_fire && move_type=="ほのお") ? 1.5 : 1)
-       * (weather=="あめ" ? move_type=="ほのお" ? 0.5 : move_type=="みず" ? 2 : name=="ソーラービーム" ? 0.5 : 1 :
-           weather=="にほんばれ" ? move_type=="みず" ? 0.5 : move_type=="ほのお" ? 2 : 1 :
-           (["すなあらし", "あられ"].indexOf(weather)!=-1 && name=="ソーラービーム") ? 0.5 : 1)
-       * ((is_burned_state && move_class=="攻撃") ? 0.5 : 1)
-       * ((!is_single && attack_multiple) ? 0.5 : 1)
-    Mb = (hit_critical ? 2 : 1)
-       * (Atypes.indexOf(move_type)!=-1 ? Aability=="てきおうりょく" ? 2 : 1.5 : 1)
-       * (type_compatibility(move_type, Dtypes[0]) * type_compatibility(move_type, Dtypes[1]));
-    var damage = Math.floor(Math.floor(Math.floor(Math.floor(lv*2/5+2)*power*A/D)/50*Ma+2)*Mb);
-    var damages = arrange_damage(damage, name, base_power);
-    // Charge
-    if (is_charged && move_type=="でんき"){
-      damages[0]*=2; damages[1]*=2;
-    }
-    return damages;
-  }else{
-    alert("技 " + name + " は対応していません。（エメラルドまでです。）")
+  var has_movedata = [move_type, move_class, move_range, move_base_power].every(e => !isNaN(e));
+  if (move_name in MOVENAME2DATA){
+    var data = MOVENAME2DATA[move_name];
+    move_type = move_type || data[Mdata_typeIdx];
+    move_class = move_class || data[Mdata_classIdx];
+    move_range = move_range || data[Mdata_rangeIdx];
+    move_base_power = move_base_power || parseInt(data[Mdata_powerIdx]) || 0
+  }else if (!has_movedata){
+    alert(`技 ${name} は対応していません。（エメラルドまでです。）データを入力してください。`);
+    return [0, 0]
   }
+  var attack_multiple = move_range == "相手２匹";
+  // Calculate Power
+  var power = (helping_hand ? 1.5 : 1)
+            * move_base_power || 0
+            * (POKETYPE2ITEM[move_type].indexOf(Aitem)!=-1 ? 1.1 : 1)
+            * ((is_mudsport_field && move_type=="でんき") ? 0.5 : 1)
+            * ((is_watersport_field && move_type=="ほのお") ? 0.5 : 1)
+            * (AHP<=(1/3) ? ((Aability=="もうか" && move_type=="ほのお") || (Aability=="しんりょく" && move_type=="くさ") || (Aability=="げきりゅう" && move_type=="みず") || (Aability=="むしのしらせ" && move_type=="むし")) ? 1.5 : 1 : 1)
+            * ((Dability=="あついしぼう" && ["ほのお", "こおり"].indexOf(move_type)!=-1) ? 0.5 : 1)
+  // Rank compensation
+  var A,D,Ar,Dr,Ma,Mb;
+  if (move_class=="攻撃"){
+    A=Astats[1]; D=Dstats[2]; Ar=Aranks[1]; Dr=Dranks[2];
+  }else if (move_class=="特殊"){
+    A=Astats[3]; D=Dstats[4]; Ar=Aranks[3]; Dr=Dranks[4]
+  }else{
+    console.log(`技 "${move_name}" は "${move_class}" の技です。"攻撃" もしくは "特殊" の技でないと計算できません。`)
+    A=0;D=100;Ar=1;Dr=1;
+  }
+  Ar=RANK2MAGNIFICATION[Ar]; Dr=RANK2MAGNIFICATION[Dr];
+  if (hit_critical){
+    Ar=Math.max(1, Ar); Dr=Math.min(1, Dr)
+  }
+  A = Math.floor(A*Ar); D = Math.floor(D*Dr);
+  // Damage compensation
+  Ma = (hit_critical ? 1 : has_shield ? attack_multiple ? 2/3 : 0.5 : 1)
+      * ((is_flash_fire && move_type=="ほのお") ? 1.5 : 1)
+      * (weather=="あめ" ? move_type=="ほのお" ? 0.5 : move_type=="みず" ? 2 : name=="ソーラービーム" ? 0.5 : 1 :
+          weather=="にほんばれ" ? move_type=="みず" ? 0.5 : move_type=="ほのお" ? 2 : 1 :
+          (["すなあらし", "あられ"].indexOf(weather)!=-1 && name=="ソーラービーム") ? 0.5 : 1)
+      * ((is_burned_state && move_class=="攻撃") ? 0.5 : 1)
+      * ((!is_single && attack_multiple) ? 0.5 : 1)
+  Mb = (hit_critical ? 2 : 1)
+      * (Atypes.indexOf(move_type)!=-1 ? Aability=="てきおうりょく" ? 2 : 1.5 : 1)
+      * (type_compatibility(move_type, Dtypes[0]) * type_compatibility(move_type, Dtypes[1]));
+  var damage = Math.floor(Math.floor(Math.floor(Math.floor(lv*2/5+2)*power*A/D)/50*Ma+2)*Mb);
+  var damages = arrange_damage(damage, name, move_base_power);
+  // Charge
+  if (is_charged && move_type=="でんき"){
+    damages[0]*=2; damages[1]*=2;
+  }
+  return damages;
+  // Function for Arranging Damage.
   function arrange_damage(damage, name, base_power){
     var damages;
     if (name=="ソニックブーム") damages=[20,20];
