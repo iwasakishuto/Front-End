@@ -393,7 +393,7 @@
             for (let i=0; i<6; i++){
               stats_ths[i+1].onclick = function(){
                 let curt_val = ev_inputs[i].value;
-                sev_inputs[i].value = curt_val==0 ? 252 : curt_val==252 ? 6 : 0
+                ev_inputs[i].value = curt_val==0 ? 252 : curt_val==252 ? 6 : 0
                 calculate_mypoke_statistics(document.MYPOKE)
               }
               stats_ths[i+1].style.cursor = "pointer";
@@ -536,7 +536,7 @@
               var my_rank = DAMAGE.my_rank.value; // String!!
               var my_ranks = [my_rank, my_rank, my_rank, my_rank, my_rank, my_rank];
               var my_stats = [];
-              MPtable.getElementsByTagName("tr")[MPT_statsIdx].querySelectorAll("td").forEach(function(e,i){if (i>0) my_stats.push(parseInt(e.value))});
+              MPtable.getElementsByTagName("tr")[MPT_statsIdx].querySelectorAll("input").forEach(function(e,i){ my_stats.push(parseInt(e.value)) });
               var my_ability = document.getElementById("ability").value;
               var my_poke_data = POKENAME2DATA[document.getElementById("poke_name").value];
               var my_types = [my_poke_data[Pdata_typeIdx], my_poke_data[Pdata_typeIdx+1]];
