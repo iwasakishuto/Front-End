@@ -222,14 +222,14 @@
                   <td><input type="number" min="0" max="255" value="0" size="3" name="eD"></td>
                   <td><input type="number" min="0" max="255" value="0" size="3" name="eS"></td>
                 </tr>
-                <tr class="g1 only-text">
+                <tr class="g1">
                   <td>実数値</td>
-                  <td><input type="number" min="1" max="999" value="1" size="3" name="H"></td>
-                  <td><input type="number" min="1" max="999" value="1" size="3" name="A"></td>
-                  <td><input type="number" min="1" max="999" value="1" size="3" name="B"></td>
-                  <td><input type="number" min="1" max="999" value="1" size="3" name="C"></td>
-                  <td><input type="number" min="1" max="999" value="1" size="3" name="D"></td>
-                  <td><input type="number" min="1" max="999" value="1" size="3" name="S"></td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="rstatsH"></td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="rstatsA"></td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="rstatsB"></td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="rstatsC"></td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="rstatsD"></td>
+                  <td><input type="number" min="1" max="999" value="1" size="3" name="rstatsS"></td>
                 </tr>
               </tbody>
             </table>  
@@ -377,12 +377,12 @@
             const MPT_evIdx = 11;
             const MPT_statsIdx = 12;
             // Set pokemon seletions.
-            var select = document.getElementById("poke_name")
-            for (let name in POKENAME2DATA) {
-              let e = document.createElement("option");
-              e.innerText = name
-              select.appendChild(e)
-            }
+            var pokename_select = document.getElementById("poke_name")
+            var pokename_options = ""
+            Object.keys(POKENAME2DATA).forEach(function(e,i){
+              pokename_options += `<option value="${e}">${i+1}.${e}</option>`;
+            })
+            pokename_select.innerHTML = pokename_options;
             function set_pokemon_options(MYPOKE){
               var pokename = MYPOKE.poke.value
               var data = POKENAME2DATA[pokename];
@@ -402,7 +402,7 @@
               // Add optional moves
               move_options = ""
               POKENAME2MOVE[pokename].forEach(function(e,i){
-                move_options += "<option value='" + e.split(".")[1] + "'>" + e + "</option>"
+                move_options += `<option value="${e.split(".")[1]}">${e}</option>`
               })
               MYPOKE.move.innerHTML = move_options;
               output_move_info(MYPOKE);
@@ -427,11 +427,9 @@
               for (let i=0; i<6; i++){ivals.push(parseInt(iv_inputs[i].value))};
               for (let i=0; i<6; i++){evals.push(parseInt(ev_inputs[i].value))};
               // Calculate Statistics.
-              var stats_tds = MPtrs[MPT_statsIdx].querySelectorAll("td");
+              var stats_tds = MPtrs[MPT_statsIdx].querySelectorAll("input");
               var stats = calculate_statistics(name=poke_name, ivals=ivals, evals=evals, seikaku=seikaku, lv=lv);
-              for (let i=0; i<6; i++){
-                stats_tds[i+1].innerHTML = stats[i];
-              }
+              for (let i=0; i<6; i++){ stats_tds[i].value = stats[i]; }
               // Calculate Damage.
               calculate_damage_rates(document.DAMAGE);
             }
@@ -527,7 +525,7 @@
               var my_rank = DAMAGE.my_rank.value; // String!!
               var my_ranks = [my_rank, my_rank, my_rank, my_rank, my_rank, my_rank];
               var my_stats = [];
-              MPtable.getElementsByTagName("tr")[MPT_statsIdx].querySelectorAll("td").forEach(function(e,i){if (i>0) my_stats.push(parseInt(e.textContent))});
+              MPtable.getElementsByTagName("tr")[MPT_statsIdx].querySelectorAll("td").forEach(function(e,i){if (i>0) my_stats.push(parseInt(e.value))});
               var my_ability = document.getElementById("ability").value;
               var my_poke_data = POKENAME2DATA[document.getElementById("poke_name").value];
               var my_types = [my_poke_data[Pdata_typeIdx], my_poke_data[Pdata_typeIdx+1]];
@@ -623,10 +621,11 @@
                     output_move_info(document.MYPOKE);
                     calculate_mypoke_statistics(document.MYPOKE);
                   };
-                }else{
-                  e.onkeyup = function(){
-                    calculate_mypoke_statistics(document.MYPOKE);
-                  };
+                }else if (e.name.startsWith("rstats") ){
+                  e.onchange = function(){
+                    calculate_damage_rates(document.DAMAGE);
+                  }
+                }else {
                   e.onchange = function(){
                     calculate_mypoke_statistics(document.MYPOKE);
                   };
