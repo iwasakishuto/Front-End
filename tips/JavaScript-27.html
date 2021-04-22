@@ -372,10 +372,16 @@
 
           <script>
             const MPtable = document.getElementById("my-pokemon");
+            const MPtrs = MPtable.getElementsByTagName("tr");
+            const MPT_stats_colnameIdx = 8;
             const MPT_base_statsIdx = 9;
             const MPT_ivIdx = 10;
             const MPT_evIdx = 11;
             const MPT_statsIdx = 12;
+            var iv_inputs = MPtrs[MPT_ivIdx].querySelectorAll("input");
+            var ev_inputs = MPtrs[MPT_evIdx].querySelectorAll("input");
+            var stats_ths = MPtrs[MPT_stats_colnameIdx].querySelectorAll("th");
+            var stats_tds = MPtrs[MPT_statsIdx].querySelectorAll("input");
             // Set pokemon seletions.
             var pokename_select = document.getElementById("poke_name")
             var pokename_options = ""
@@ -383,6 +389,15 @@
               pokename_options += `<option value="${e}">${i+1}.${e}</option>`;
             })
             pokename_select.innerHTML = pokename_options;
+            // Make it easily to maximize or minimize the evs.
+            for (let i=0; i<6; i++){
+              stats_ths[i+1].onclick = function(){
+                let curt_val = ev_inputs[i].value;
+                sev_inputs[i].value = curt_val==0 ? 252 : curt_val==252 ? 6 : 0
+                calculate_mypoke_statistics(document.MYPOKE)
+              }
+              stats_ths[i+1].style.cursor = "pointer";
+            }
             function set_pokemon_options(MYPOKE){
               var pokename = MYPOKE.poke.value
               var data = POKENAME2DATA[pokename];
@@ -420,14 +435,10 @@
               var seikaku = parseInt(MYPOKE.seikaku.value);
               var ivals = [];
               var evals = [];
-              var MPtrs = MPtable.getElementsByTagName("tr");
               // Get Individual values & Effort Values.
-              var iv_inputs = MPtrs[MPT_ivIdx].querySelectorAll("input");
-              var ev_inputs = MPtrs[MPT_evIdx].querySelectorAll("input");
               for (let i=0; i<6; i++){ivals.push(parseInt(iv_inputs[i].value))};
               for (let i=0; i<6; i++){evals.push(parseInt(ev_inputs[i].value))};
               // Calculate Statistics.
-              var stats_tds = MPtrs[MPT_statsIdx].querySelectorAll("input");
               var stats = calculate_statistics(name=poke_name, ivals=ivals, evals=evals, seikaku=seikaku, lv=lv);
               for (let i=0; i<6; i++){ stats_tds[i].value = stats[i]; }
               // Calculate Damage.

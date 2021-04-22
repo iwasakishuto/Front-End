@@ -122,7 +122,7 @@
 
             <h3>能力値</h3>
 
-            <table class="fixed" id="ability">
+            <table class="fixed" id="lvivev">
               <thead>
                 <tr>
                   <th class="g2">Lv: <input id="lv" type="number" min="1" max="100" value="50" size="3" name="L"></th>
@@ -772,6 +772,19 @@
               hidden_power = calculate_hidden_power([ih, ia, ib, is, ic, id])
               document.getElementById("meza_type").innerHTML = hidden_power[0];
               document.getElementById("meza_power").innerHTML = hidden_power[1];
+            }
+            // Make it easily to maximize or minimize the evs.
+            var lvivev_table = document.getElementById("lvivev");
+            var lvivev_trs = lvivev_table.getElementsByTagName("tr");
+            var stats_ths = lvivev_trs[0].querySelectorAll("th");
+            var ev_inputs = lvivev_trs[2].querySelectorAll("input");
+            for (let i=0; i<6; i++){
+              stats_ths[i+1].onclick = function(){
+                let curt_val = ev_inputs[i].value;
+                ev_inputs[i].value = curt_val==0 ? 252 : curt_val==252 ? 6 : 0
+                poke_calculate(document.POKE);
+              }
+              stats_ths[i+1].style.cursor = "pointer";
             }
           </script>
 
