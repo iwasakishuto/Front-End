@@ -175,7 +175,7 @@ function calculate_damage(move_name, move_type=NaN, move_class=NaN, move_range=N
     A=Astats[3]; D=Dstats[4]; Ar=Aranks[3]; Dr=Dranks[4]
   }else{
     console.log(`技 "${move_name}" は "${move_class}" の技です。"攻撃" もしくは "特殊" の技でないと計算できません。`)
-    A=0;D=100;Ar=1;Dr=1;
+    A=0;D=10000;Ar=1;Dr=1;
   }
   Ar=RANK2MAGNIFICATION[Ar]; Dr=RANK2MAGNIFICATION[Dr];
   if (hit_critical){
