@@ -818,15 +818,15 @@
       PyramidItems.forEach(function(e){
         let idx = item_list.indexOf(e)
         let prob = idx==-1 ? 0 : PyramidPickupAbilityProb[idx]
-        tbody += `<tr${prob>0? ' class="g2"' : ""}><td>${e}</td><td colspan="7">${prob}</td></tr>`
+        tbody += `<tr${prob>0? ' class="g2"' : ""}><td style="text-align:left">${Pitem_create(e)}</td><td colspan="7">${prob}</td></tr>`
       })
     }else{
       PyramidItems.forEach(function(e){
         let idx = item_list.indexOf(e)
         if(idx==-1){
-          tbody += `<tr><td>${e}</td>${"<td>0</td>".repeat(7)}</tr>`
+          tbody += `<tr><td style="text-align:left">${Pitem_create(e)}</td>${"<td>0</td>".repeat(7)}</tr>`
         }else{
-          let tmp = `<tr><td class="g2">${e}</td>`
+          let tmp = `<tr><td class="g2" style="text-align:left">${Pitem_create(e)}</td></td>`
           PyramidPickupItemProb.forEach(function(probs){
             prob = probs[idx]
             tmp += `<td${prob>0? ' class="g2"' : ""}>${prob}</td>`
