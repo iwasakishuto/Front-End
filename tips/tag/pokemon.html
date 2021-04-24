@@ -902,13 +902,17 @@ const PikeWild_moveIdx = 2;
 function generate_pike_wild_mons(PIKE){
   var pike_wild_pokemon_tbody = ""
   PikeWildMons[PIKE.LvlMode.value][parseInt(PIKE.winStreak.value)].forEach(function(e){
+    let move_1 = e[PikeWild_moveIdx]
+    let move_2 = e[PikeWild_moveIdx+1]
+    let move_3 = e[PikeWild_moveIdx+2]
+    let move_4 = e[PikeWild_moveIdx+3]
     pike_wild_pokemon_tbody += `<tr>
       <td>${Picon_img_create(e[PyramidWild_nameIdx])}</td>
       <td>${50*(PIKE.LvlMode.value=="lv50" ? 1 : 2) - e[PikeWild_lvIdx]}</td>
-      <td>${e[PikeWild_moveIdx]}</td>
-      <td>${e[PikeWild_moveIdx+1]}</td>
-      <td>${e[PikeWild_moveIdx+2]}</td>
-      <td>${e[PikeWild_moveIdx+3]}</td>
+      <td style="backgroound-color:${TYPE2COLOR[MOVENAME2DATA[move_1][Mdata_typeIdx]]}">${move_1}</td>
+      <td style="backgroound-color:${TYPE2COLOR[MOVENAME2DATA[move_2][Mdata_typeIdx]]}">${move_2}</td>
+      <td style="backgroound-color:${TYPE2COLOR[MOVENAME2DATA[move_3][Mdata_typeIdx]]}">${move_3}</td>
+      <td style="backgroound-color:${TYPE2COLOR[MOVENAME2DATA[move_4][Mdata_typeIdx]]}">${move_4}</td>
     </tr>`
   })
   document.getElementById("pike-wild-pokemon").innerHTML = pike_wild_pokemon_tbody;
