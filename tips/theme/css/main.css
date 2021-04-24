@@ -96,11 +96,12 @@ code.hljs {
 h2, details summary.h2 {
   position: relative;
   padding: 0.5em 0.5em 0.5em 1.5em;
-  line-height: 1.4;
+  line-height: 1.4em;
   border-top: dotted 1px gray;
   border-bottom: dotted 1px gray;
   color: black;
-  background: #fffff4;
+	background: #fffff4;
+	list-style: none;
 }
 
 h3, details summary.h3 {
