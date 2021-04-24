@@ -35,7 +35,7 @@ const Pname2typeColor = function(pname){
   let main_t = pdata[Pdata_typeIdx];
   let sub_t  = pdata[Pdata_typeIdx+1];
   let type_colors = (sub_t == "") ? [TYPE2COLOR[main_t],TYPE2COLOR[main_t]] : [TYPE2COLOR[main_t], TYPE2COLOR[sub_t]]
-  return `linear-gradient(to right, ${type_colors[0]}88 20%, ${type_colors[1]}88 80%);`
+  return `linear-gradient(to right, ${type_colors[0]}88 20%, ${type_colors[1]}88 80%)`
 }
 
 /**

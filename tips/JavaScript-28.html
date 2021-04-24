@@ -598,7 +598,7 @@
                 base_states[i].innerHTML = data[Pdata_statusIdx+i-1];
               }
               MPtable.querySelector("img").setAttribute("src", Pdata_img_baseurl + data[Pdata_imgIdx]);
-              MPtable.querySelector("img").parentElement.parentElement.style.backgroundImage  = Pname2typeColor(pokename);
+              MPtable.querySelector("img").parentElement.parentElement.style.backgroundImage = Pname2typeColor(pokename);
               calculate_mypoke_statistics(MYPOKE);
               generate_move_table(MYPOKE, document.PALACE);
             }
@@ -934,7 +934,7 @@
               let move_3 = e[PikeWild_moveIdx+2]
               let move_4 = e[PikeWild_moveIdx+3]
               pike_wild_pokemon_tbody += `<tr>
-                <td style="background-image: ${Pname2typeColor(pname)}">${Picon_img_create(pname)}</td>
+                <td style="background-image: ${Pname2typeColor(pname)};">${Picon_img_create(pname)}</td>
                 <td>${50*(PIKE.LvlMode.value=="lv50" ? 1 : 2) - e[PikeWild_lvIdx]}</td>
                 <td style="background-color:${TYPE2COLOR[MOVENAME2DATA[move_1][Mdata_typeIdx]]}">${move_1}</td>
                 <td style="background-color:${TYPE2COLOR[MOVENAME2DATA[move_2][Mdata_typeIdx]]}">${move_2}</td>
@@ -963,7 +963,7 @@
                 let move_3 = e[PyramidWild_moveIdx+2]
                 let move_4 = e[PyramidWild_moveIdx+3]
                 pyramid_wild_pokemon_tbody += `<tr>
-                  <td style="background-image: ${Pname2typeColor(pname)}">${Picon_img_create(pname)}</td>
+                  <td style="background-image: ${Pname2typeColor(pname)};">${Picon_img_create(pname)}</td>
                   <td>${e[PyramidWild_lvIdx]}</td>
                   <td style="background-color:${TYPE2COLOR[MOVENAME2DATA[move_1][Mdata_typeIdx]]}">${move_1}</td>
                   <td style="background-color:${TYPE2COLOR[MOVENAME2DATA[move_2][Mdata_typeIdx]]}">${move_2}</td>

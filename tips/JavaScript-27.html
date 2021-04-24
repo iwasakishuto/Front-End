@@ -483,7 +483,7 @@
                 if(pokedata[Pdata_abilityIdx+1] != "") ability_options += '<option>' + pokedata[Pdata_abilityIdx+1] + '</option>';
                 tbody += `<tr>
                   <td>${id}</td>
-                  <td style="background-image: ${Pname2typeColor(pokename)}"><div class="overflow-ms"><img alt="${pokename}" src="${Pdata_img_baseurl+pokedata[Pdata_imgIdx]}"></div></td>
+                  <td style="background-image: ${Pname2typeColor(pokename)};"><div class="overflow-ms"><img alt="${pokename}" src="${Pdata_img_baseurl+pokedata[Pdata_imgIdx]}"></div></td>
                   <td>${speed}</td>
                   <td>${item}</td>
                   <td><select name="move">${move_options}</select></td>
