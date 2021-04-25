@@ -69,7 +69,7 @@
 <p style="color:red">※ 今回の記事も完全に自己満ツール群です🙇‍♂️多分これで終わりです。</p>
 
 <form id="mypoke_form" name="MYPOKE">
-  <h2>自分のポケモン</h2>
+  <h2>自分のポケモン <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Brendan.png"></div><div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/May.png"></div></h2>
   <p>以下の表で自分のポケモンを設定してください。なお、レベルはバトルフロンティアのポケモンと共通しています。</p>
   <table class="fixed" id="my-pokemon">
     <thead><tr><th colspan="7"><label>自分のポケモン（Lv: <input id="lv" type="number" min="1" max="100" value="50" size="3" name="LV">）</label></th></tr></thead>
@@ -134,7 +134,7 @@
 <!-- Battle Tower -->
 
 <details>
-  <summary class="h2">バトルタワー</summary>
+  <summary class="h2">バトルタワー <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Anabel.png"></div></summary>
   <details>
     <summary class="h3">ルール</summary>
     出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルタワー_(第三世代)">ポケモンWiki</a>
@@ -149,7 +149,7 @@
 <!-- Battle Dome -->
 
 <details>
-  <summary class="h2">バトルドーム</summary>
+  <summary class="h2">バトルドーム <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Tucker.png"></div></summary>
   <details>
     <summary class="h3">ルール</summary>
     出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルドーム">ポケモンWiki</a>
@@ -191,7 +191,7 @@
 <!-- Battle Factory -->
 
 <details>
-  <summary class="h2">バトルファクトリー</summary>
+  <summary class="h2">バトルファクトリー <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Noland.png"></div></summary>
   <details>
     <summary class="h3">ルール</summary>
     出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルファクトリー_(第三世代)">ポケモンWiki</a>
@@ -233,13 +233,13 @@
           <tr><td colspan="3">[ボックス8]</td><td colspan="3">[アｌコ　う]</td></tr>
           <tr class="g2"><td colspan="3">[ボックス9]</td><td id="factory_box9" colspan="3">[①②③④❶❷❸❹]</td></tr>
           <tr><td rowspan="2">seed</td><td class="g1"><input type="number" min="0" max="4294967296" value="0" size="3" name="lb"></td><td>~</td><td class="g1"><input type="number" min="0" max="4294967296" value="1000000" size="3" name="ub"></td><td colspan="2"><a class="btn--click btn--shadow btn--red" onclick="find_desired_rental_seed(document.FACTORY)">Find a desired SEED</a></td></tr>
-          <tr><td class="g1" colspan="3"><input type="number" min="0" max="4294967296" value="0" size="3" name="frontierSeed"></td><td colspan="2"><a class="btn--click btn--shadow btn--blue" onclick="generate_rental_pokemon(document.FACTORY)">Generate rental Poke</a></td></tr>
+          <tr><td class="g1" colspan="3"><input type="number" min="0" max="4294967296" value="0" size="3" name="frontierSeed"></td><td colspan="2"><a class="btn--click btn--shadow btn--blue" onclick="generate_rental_pokemon(document.FACTORY, is_noland=false)">Generate Rental Poke</a></td></tr>
           <tr id="generated_rental_party"><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td></tr>
         </tbody>
         <thead><tr><th colspan="6">ダツラのポケモン生成</th></tr></thead>
         <tbody>
-          <tr><td rowspan="2">seed</td><td class="g1"><input type="number" min="0" max="4294967296" value="0" size="3" name="lb_noland"></td><td>~</td><td class="g1"><input type="number" min="0" max="4294967296" value="1000000" size="3" name="ub_noland"></td><td colspan="2"><a class="btn--click btn--shadow btn--red" onclick="find_desired_rental_seed_noland(document.FACTORY)">Find a desired SEED</a></td></tr>
-          <tr><td class="g1" colspan="3"><input type="number" min="0" max="4294967296" value="0" size="3" name="frontierSeed_noland"></td><td colspan="2"><a class="btn--click btn--shadow btn--blue" onclick="generate_rental_pokemon_noland(document.FACTORY)">Generate rental Poke</a></td></tr>
+          <tr><td rowspan="2">seed</td><td class="g1"><input type="number" min="0" max="4294967296" value="0" size="3" name="lb_noland"></td><td>~</td><td class="g1"><input type="number" min="0" max="4294967296" value="1000000" size="3" name="ub_noland"></td><td colspan="2"><a class="btn--click btn--shadow btn--red" onclick="find_desired_rental_seed(document.FACTORY)">Find a desired SEED</a></td></tr>
+          <tr><td class="g1" colspan="3"><input type="number" min="0" max="4294967296" value="0" size="3" name="frontierSeed_noland"></td><td colspan="2"><a class="btn--click btn--shadow btn--goldenrod" onclick="generate_rental_pokemon(document.FACTORY, is_noland=True)">Generate Noland Poke</a></td></tr>
           <tr class="g2"><td colspan="3">[ボックス9]</td><td id="factory_box9_noland" colspan="3">[①②③④❶❷❸❹]</td></tr>
           <tr id="generated_rental_party_noland"><td colspan="2"><div class="overflow-ms"><img src=""></div></td><td colspan="2"><div class="overflow-ms"><img src=""></div></td><td colspan="2"><div class="overflow-ms"><img src=""></div></td></tr>
         </tbody>
@@ -269,7 +269,7 @@
 <!-- Battle Palace -->
 
 <details>
-  <summary class="h2">バトルパレス</summary>
+  <summary class="h2">バトルパレス <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Spenser.png"></div></summary>
   <details>
     <summary class="h3">ルール</summary>
     出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルパレス">ポケモンWiki</a>
@@ -342,7 +342,7 @@
 <!-- Battle Pike -->
 
 <details>
-  <summary class="h2">バトルチューブ</summary>
+  <summary class="h2">バトルチューブ <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Lucy.png"></div></summary>
   <details>
     <summary class="h3">ルール</summary>
     出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルチューブ">ポケモンWiki</a>
@@ -402,7 +402,7 @@
 <!-- Battle Arena -->
 
 <details>
-  <summary class="h2">バトルアリーナ</summary>
+  <summary class="h2">バトルアリーナ <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Greta.png"></div></summary>
   <details>
     出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルアリーナ">ポケモンWiki</a>
     <summary class="h3">ルール</summary>
@@ -809,7 +809,7 @@
 <!-- Battle Pyramid -->
 
 <details>
-  <summary class="h2">バトルピラミッド</summary>
+  <summary class="h2">バトルピラミッド <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Brandon.png"></div></summary>
   <details>
     <summary class="h3">ルール</summary>
     出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルピラミッド">ポケモンWiki</a>
@@ -1187,7 +1187,7 @@
   function generate_rental_pokemon(FACTORY, is_noland=false){
     if (is_noland){
       var seed = parseInt(FACTORY.frontierSeed_noland.value);
-      var party_size = 6;
+      var party_size = 3;
       var target_tds = document.querySelectorAll("tr#generated_rental_party_noland td");
       var target_seed_box9 = document.getElementById("factory_box9_noland");
     }else{
@@ -1207,7 +1207,10 @@
     Random()
     var i=c=n=0;
     while (i != party_size){
-      if (c++ > 30) break
+      if (c++ > 50){
+        alert("乱数探索のwhileループが規定回数[50]を超えたため、終了しました。")
+        break
+      }
       if (i < rentalRank){
         monId = GetFactoryMonId(lvMode, challengeNum, true)
       }else{
@@ -1221,7 +1224,7 @@
         for (var j=0; j<6; j++){
           if (rental_monIds[j]==monId) break;
         }
-        if (j!=i) continue
+        if (j!=rental_monIds.length) continue
         let nature = seikaku2id[RENTAL_POKEMON_LIST[monId][Rental_Pokemon_natureIdx]]
         while (nature!=n%25){
           n = (Random() | Random() << 16);
@@ -1233,14 +1236,13 @@
       i++;
     }
     // Save Rental Pokemons.
-    if (is_noland){
+    if (!is_noland){
       for (let i=0; i<party_size; i++){
         rental_monIds[i] = monIds[i];
       }
     }
     // Generate Party Images.
     target_tds.forEach(function(e,i){
-      console.log(i, monIds[i])
       e.innerHTML = Picon_img_create(species[i]) + `<sub>${monIds[i]}</sub>`;
       (target_pokemon_Id.indexOf(monIds[i])>=0) ? e.classList.add("g3") : e.classList.remove("g3");
     })
@@ -1466,9 +1468,13 @@ function generate_pike_wild_mons(PIKE){
     }
     set_factory_condition(document.FACTORY);
     document.FACTORY.frontierSeed.addEventListener('change', function(){
-      generate_rental_pokemon(document.FACTORY);
+      generate_rental_pokemon(document.FACTORY, is_noland=false);
     });
-    generate_rental_pokemon(document.FACTORY);
+    generate_rental_pokemon(document.FACTORY, is_noland=false);
+    document.FACTORY.frontierSeed_noland.addEventListener('change', function(){
+      generate_rental_pokemon(document.FACTORY, is_noland=true);
+    });
+    generate_rental_pokemon(document.FACTORY, is_noland=true);
     // Battle Pike
     var pyramid_form = document.querySelectorAll("form#pike_form");
     for(let i=0; i<pyramid_form.length; i++){
@@ -1589,6 +1595,14 @@ function generate_pike_wild_mons(PIKE){
     background: black;
     border-bottom: 2px solid black;
   }
+  table#selected-rental-pokemon a.btn--goldenrod {
+    background-color: goldenrod;
+    border-bottom-color: darkgoldenrod;
+  }
+  table#selected-rental-pokemon a.btn--goldenrod;hover {
+    background: goldenrod;
+    border-bottom-color: darkgoldenrod;
+  }
   table#selected-rental-pokemon a.btn--blue {
     background-color: #04aee2;
     border-bottom-color: #008db8;
@@ -1632,7 +1646,12 @@ function generate_pike_wild_mons(PIKE){
     font-size: smaller;
     vertical-align: sub;
     padding-left: .5em;
+  }
+  tr#generated_rental_party{
     color: #008db8;
+  }
+  tr#generated_rental_party_noland{
+    color: goldenrod;
   }
 </style>                </article>
             </aside><!-- /#featured -->
