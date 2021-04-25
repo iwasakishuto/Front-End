@@ -358,7 +358,7 @@ details summary.h3 {
 		-webkit-border-radius: 5px;
 	}
 
-	#banner nav ul {list-style: none; margin: 0 auto; width: 800px;}
+	#banner nav ul {list-style: none; margin: 0 auto; width: 800px; padding: 0; border: 0;}
 	#banner nav li {float: left; display: inline; margin: 0;}
 
 	#banner nav a:link, #banner nav a:visited {

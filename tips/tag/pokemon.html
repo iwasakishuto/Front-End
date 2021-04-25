@@ -218,7 +218,10 @@
       <div style="width:100%; overflow:auto;" id="rental-pokemon-wrapper">
       </div>
       <table id="selected-rental-pokemon" class="fixed">
-        <thead id="selected-rental-pokemon-images"><tr><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th></tr></thead>
+        <thead id="selected-rental-pokemon-images">
+          <tr><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th></tr>
+          <tr><th colspan="6">レンタルポケモンの生成</th></tr>
+        </thead>
         <tbody>
           <tr><td colspan="3">[ボックス1]</td><td colspan="3">[にえィす　もけぬ]</td></tr>
           <tr><td colspan="3">[ボックス2]</td><td colspan="3">[い　ゆｚ　　　ビ]</td></tr>
@@ -232,6 +235,13 @@
           <tr><td rowspan="2">seed</td><td class="g1"><input type="number" min="0" max="4294967296" value="0" size="3" name="lb"></td><td>~</td><td class="g1"><input type="number" min="0" max="4294967296" value="1000000" size="3" name="ub"></td><td colspan="2"><a class="btn--click btn--shadow btn--red" onclick="find_desired_rental_seed(document.FACTORY)">Find a desired SEED</a></td></tr>
           <tr><td class="g1" colspan="3"><input type="number" min="0" max="4294967296" value="0" size="3" name="frontierSeed"></td><td colspan="2"><a class="btn--click btn--shadow btn--blue" onclick="generate_rental_pokemon(document.FACTORY)">Generate rental Poke</a></td></tr>
           <tr id="generated_rental_party"><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td></tr>
+        </tbody>
+        <thead><tr><th colspan="6">ダツラのポケモン生成</th></tr></thead>
+        <tbody>
+          <tr><td rowspan="2">seed</td><td class="g1"><input type="number" min="0" max="4294967296" value="0" size="3" name="lb_noland"></td><td>~</td><td class="g1"><input type="number" min="0" max="4294967296" value="1000000" size="3" name="ub_noland"></td><td colspan="2"><a class="btn--click btn--shadow btn--red" onclick="find_desired_rental_seed_noland(document.FACTORY)">Find a desired SEED</a></td></tr>
+          <tr><td class="g1" colspan="3"><input type="number" min="0" max="4294967296" value="0" size="3" name="frontierSeed_noland"></td><td colspan="2"><a class="btn--click btn--shadow btn--blue" onclick="generate_rental_pokemon_noland(document.FACTORY)">Generate rental Poke</a></td></tr>
+          <tr class="g2"><td colspan="3">[ボックス9]</td><td id="factory_box9_noland" colspan="3">[①②③④❶❷❸❹]</td></tr>
+          <tr id="generated_rental_party_noland"><td colspan="2"><div class="overflow-ms"><img src=""></div></td><td colspan="2"><div class="overflow-ms"><img src=""></div></td><td colspan="2"><div class="overflow-ms"><img src=""></div></td></tr>
         </tbody>
         <thead><tr><th colspan="6">連勝数の変更</th></tr></thead>
         <tbody>
@@ -1013,7 +1023,6 @@
   var rentalRank_area        = document.getElementById("rentalRank");
   var monRange_area          = document.getElementById("monRange");
   var rental_pokemon_wrapper = document.getElementById("rental-pokemon-wrapper");
-  var factory_box9_name      = document.getElementById("factory_box9");
   var factory_box3_name      = document.getElementById("factory_box3");
   var id2rowIndex;
   function set_factory_condition(FACTORY){
@@ -1119,9 +1128,9 @@
       e.addEventListener("change", generate_rental_pokemon_images)
     })
   }
-  var party_size = 6;
   var selected_rental_pokemon_images = document.getElementById("selected-rental-pokemon-images").querySelectorAll("img");
   function generate_rental_pokemon_images(){
+    var party_size = 6;
     var rental_pokemon_trows = document.getElementById("rental-pokemon").querySelectorAll("tr");
     var tds = rental_pokemon_tbody;
     var curtPartyIndex = -1;
@@ -1147,6 +1156,7 @@
     var monIds=[0,0,0,0,0,0];
     var species=["","","","","",""];
     var heldItems=["","","","","",""];
+    var party_size = 6;
     for (var seed=lb; seed<ub; seed++){
       gRngValue = seed;
       Random()
@@ -1173,18 +1183,29 @@
     generate_rental_pokemon(FACTORY);
     return false;
   }
-  function generate_rental_pokemon(FACTORY){
-    var seed = parseInt(FACTORY.frontierSeed.value);
+  var rental_monIds = [0,0,0,0,0,0];
+  function generate_rental_pokemon(FACTORY, is_noland=false){
+    if (is_noland){
+      var seed = parseInt(FACTORY.frontierSeed_noland.value);
+      var party_size = 6;
+      var target_tds = document.querySelectorAll("tr#generated_rental_party_noland td");
+      var target_seed_box9 = document.getElementById("factory_box9_noland");
+    }else{
+      var seed = parseInt(FACTORY.frontierSeed.value);
+      var party_size = 6;
+      var target_tds = document.querySelectorAll("tr#generated_rental_party td");
+      var target_seed_box9 = document.getElementById("factory_box9");
+    }
     var target_pokemon_Id = TFselectedRows.slice(-6).map( str => parseInt(str, 10) );
     var challengeNum = parseInt(challengeNum_area.textContent);
     var rentalRank = parseInt(rentalRank_area.textContent);
     var lvMode = parseInt(FACTORY.LvlMode.value);
-    var monIds=[0,0,0,0,0,0];
     var species=["","","","","",""];
     var heldItems=["","","","","",""];
+    var monIds = [0,0,0,0,0,0];
     gRngValue = seed;
     Random()
-    var i=c=0;
+    var i=c=n=0;
     while (i != party_size){
       if (c++ > 30) break
       if (i < rentalRank){
@@ -1196,20 +1217,32 @@
         if ((monIds[j]==monId) || (species[j]==RENTAL_POKEMON_LIST[monId][Rental_Pokemon_nameIdx]) || (heldItems[j]==RENTAL_POKEMON_LIST[monId][Rental_Pokemon_itemIdx])) break;
       }
       if (j!=i) continue
+      if (is_noland){
+        for (var j=0; j<6; j++){
+          if (rental_monIds[j]==monId) break;
+        }
+        if (j!=i) continue
+        let nature = seikaku2id[RENTAL_POKEMON_LIST[monId][Rental_Pokemon_natureIdx]]
+        while (nature!=n%25){
+          n = (Random() | Random() << 16);
+        }
+      }
       monIds[i] = monId;
       species[i] = RENTAL_POKEMON_LIST[monId][Rental_Pokemon_nameIdx];
       heldItems[i] = RENTAL_POKEMON_LIST[monId][Rental_Pokemon_itemIdx];
       i++;
     }
+    // Save Rental Pokemons.
+    if (is_noland){
+      for (let i=0; i<party_size; i++){
+        rental_monIds[i] = monIds[i];
+      }
+    }
     // Generate Party Images.
-    document.querySelectorAll("tr#generated_rental_party td").forEach(function(e,i){
-      e.querySelector("img").setAttribute("src", Pdata_img_baseurl + POKENAME2DATA[species[i]][Pdata_imgIdx])
-      if (target_pokemon_Id.indexOf(monIds[i])>=0){
-        e.classList.add("g3")
-      }
-      else{
-        e.classList.remove("g3")
-      }
+    target_tds.forEach(function(e,i){
+      console.log(i, monIds[i])
+      e.innerHTML = Picon_img_create(species[i]) + `<sub>${monIds[i]}</sub>`;
+      (target_pokemon_Id.indexOf(monIds[i])>=0) ? e.classList.add("g3") : e.classList.remove("g3");
     })
     // Calculate Box Name
     var box9 = ""
@@ -1219,7 +1252,7 @@
     [post_seeds[0], pre_seeds[0], post_seeds[1], pre_seeds[1]].forEach(function(e,i){
       box9 += decode2Pokestring(e);
     })
-    factory_box9_name.innerHTML = "[" + box9 + "]";
+    target_seed_box9.innerHTML = "[" + box9 + "]";
     return false;
   }
   function Random(){
@@ -1548,6 +1581,7 @@ function generate_pike_wild_mons(PIKE){
     display: inline-block;
     padding: 0.3em 1em;
     text-decoration: none;
+    cursor: pointer;
   }
   a.btn--click:hover {
     margin-top: 3px;
@@ -1593,6 +1627,12 @@ function generate_pike_wild_mons(PIKE){
   }
   ol, ul {
     list-style: decimal;
+  }
+  table#selected-rental-pokemon sub {
+    font-size: smaller;
+    vertical-align: sub;
+    padding-left: .5em;
+    color: #008db8;
   }
 </style>                </article>
             </aside><!-- /#featured -->
