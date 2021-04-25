@@ -102,6 +102,8 @@ h2, details summary.h2 {
   color: black;
 	background: #fffff4;
 	list-style: none;
+	display: flex;
+	align-items: center;
 }
 
 h3, details summary.h3 {
