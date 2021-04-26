@@ -261,10 +261,10 @@
                     <tr><td class="g1" colspan="3"><input type="number" min="0" max="4294967296" value="0" size="3" name="frontierSeed"></td><td colspan="2"><a class="btn--click btn--shadow btn--blue" onclick="generate_rental_pokemon(document.FACTORY, is_noland=false)">Generate Rental Poke</a></td></tr>
                     <tr id="generated_rental_party"><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td></tr>
                   </tbody>
-                  <thead><tr><th colspan="6">ダツラのポケモン生成</th></tr></thead>
+                  <thead><tr><th colspan="6">ダツラのポケモン生成 (Rental Monster Seed: <span id="rental_mon_seed"></span>)</th></tr></thead>
                   <tbody>
                     <tr><td rowspan="2">seed</td><td class="g1"><input type="number" min="0" max="4294967296" value="0" size="3" name="lb_noland"></td><td>~</td><td class="g1"><input type="number" min="0" max="4294967296" value="1000000" size="3" name="ub_noland"></td><td colspan="2"><a class="btn--click btn--shadow btn--red" onclick="find_desired_rental_seed(document.FACTORY, is_noland=true)">Find a desired SEED</a></td></tr>
-                    <tr><td class="g1" colspan="3"><input type="number" min="0" max="4294967296" value="0" size="3" name="frontierSeed_noland"></td><td colspan="2"><a class="btn--click btn--shadow btn--goldenrod" onclick="generate_rental_pokemon(document.FACTORY, is_noland=True)">Generate Noland Poke</a></td></tr>
+                    <tr><td class="g1" colspan="3"><input type="number" min="0" max="4294967296" value="0" size="3" name="frontierSeed_noland"></td><td colspan="2"><a class="btn--click btn--shadow btn--goldenrod" onclick="generate_rental_pokemon(document.FACTORY, is_noland=true)">Generate Noland Poke</a></td></tr>
                     <tr class="g2"><td colspan="3">[ボックス9]</td><td id="factory_box9_noland" colspan="3">[]</td></tr>
                     <tr id="generated_rental_party_noland"><td colspan="2"><div class="overflow-ms"><img src=""></div></td><td colspan="2"><div class="overflow-ms"><img src=""></div></td><td colspan="2"><div class="overflow-ms"><img src=""></div></td></tr>
                   </tbody>
@@ -1171,23 +1171,25 @@
             }
             var gRngValue;
             var rental_monIds = [0,0,0,0,0,0];
-            function generate_rental_pokemon_from_seed(seed, party_size, FACTORY){
-              var species=["","","","","",""];
-              var heldItems=["","","","","",""];
-              var monIds = [0,0,0,0,0,0];
+            function generate_rental_pokemon_from_seed(seed, party_size, is_noland, FACTORY){
+              var species   = Array(party_size).fill("");
+              var heldItems = Array(party_size).fill("");
+              var monIds    = Array(party_size).fill(0);
               var challengeNum = parseInt(challengeNum_area.textContent);
               var rentalRank = parseInt(rentalRank_area.textContent);
               var lvMode = parseInt(FACTORY.LvlMode.value);
               gRngValue = seed;
               Random()
-              var i=c=n=0;
+              var i=c=personality=0;
               while (i != party_size){
                 if (c++ > 30) break
-                if (i < rentalRank){
+                // Generate MonId from seed.
+                if (i < rentalRank && !is_noland){
                   monId = GetFactoryMonId(lvMode, challengeNum, true)
                 }else{
                   monId = GetFactoryMonId(lvMode, challengeNum, false)
                 }
+                // If "the monster", "the same species", OR "the same item" is already set, break the loop.
                 for (var j=0; j<i; j++){
                   if ((monIds[j]==monId) || (species[j]==RENTAL_POKEMON_LIST[monId][Rental_Pokemon_nameIdx]) || (heldItems[j]==RENTAL_POKEMON_LIST[monId][Rental_Pokemon_itemIdx])) break;
                 }
@@ -1197,10 +1199,10 @@
                     if (rental_monIds[j]==monId) break;
                   }
                   if (j!=rental_monIds.length) continue
-                  let nature = seikaku2id[RENTAL_POKEMON_LIST[monId][Rental_Pokemon_natureIdx]]
-                  while (nature!=n%25){
-                    n = (Random() | Random() << 16);
-                  }
+                  nature = seikaku2id[RENTAL_POKEMON_LIST[monId][Rental_Pokemon_natureIdx]]
+                  do {
+                    personality = (Random() + Random()*11) % 25
+                  } while (nature != personality%25)
                 }
                 monIds[i] = monId;
                 species[i] = RENTAL_POKEMON_LIST[monId][Rental_Pokemon_nameIdx];
@@ -1217,16 +1219,18 @@
               if (is_noland){
                 var target_seed_input = FACTORY.frontierSeed_noland;
                 var party_size = 3;
+                var lb = parseInt(FACTORY.lb_noland.value);
+                var ub = parseInt(FACTORY.ub_noland.value);
               }else{
                 var target_seed_input = FACTORY.frontierSeed;
                 var party_size = 6;
+                var lb = parseInt(FACTORY.lb.value);
+                var ub = parseInt(FACTORY.ub.value);
               }
-              var lb = parseInt(FACTORY.lb.value);
-              var ub = parseInt(FACTORY.ub.value);
               var target_pokemon_Id = TFselectedRows.slice(-party_size).map( str => parseInt(str, 10) );
               if (lb>ub) ub=lb+100;
               for (var seed=lb; seed<ub; seed++){
-                var rets = generate_rental_pokemon_from_seed(seed, party_size, FACTORY)
+                var rets = generate_rental_pokemon_from_seed(seed, party_size, is_noland, FACTORY)
                 var monIds = rets.monIds;
                 var species = rets.species;
                 var heldItems = rets.heldItems;
@@ -1248,7 +1252,7 @@
                 var target_tds = document.querySelectorAll("tr#generated_rental_party td");
                 var target_seed_box9 = document.getElementById("factory_box9");
               }
-              var rets = generate_rental_pokemon_from_seed(seed, party_size, FACTORY)
+              var rets = generate_rental_pokemon_from_seed(seed, party_size, is_noland, FACTORY)
               var monIds = rets.monIds;
               var species = rets.species;
               var heldItems = rets.heldItems;
@@ -1257,6 +1261,7 @@
                 for (let i=0; i<party_size; i++){
                   rental_monIds[i] = monIds[i];
                 }
+                document.getElementById("rental_mon_seed").innerHTML = seed.toString();
               }
               // Generate Party Images.
               var target_pokemon_Id = TFselectedRows.slice(-party_size).map( str => parseInt(str, 10) );
@@ -1277,7 +1282,7 @@
             }
             function Random(){
               gRngValue = makeR(gRngValue)
-              return gRngValue >>> 16;
+              return gRngValue >>> 16; // "Unsigned" right shift
             }
             function GetFactoryMonId(lvlMode, challengeNum, useBetterRange){
               if (challengeNum < 7){
@@ -1617,7 +1622,7 @@
               background-color: goldenrod;
               border-bottom-color: darkgoldenrod;
             }
-            table#selected-rental-pokemon a.btn--goldenrod;hover {
+            table#selected-rental-pokemon a.btn--goldenrod:hover {
               background: goldenrod;
               border-bottom-color: darkgoldenrod;
             }

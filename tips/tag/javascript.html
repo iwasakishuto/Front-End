@@ -56,434 +56,387 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-30.html">JS.30 Pose-Estimation で正解の動きとの誤差を知る。</a></h1>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-31.html">JS.31 ポケモンしりとりクイズ</a></h1>
           <footer class="post-info">
-            <span>2021-03-10(Wed)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tensorflowjs.html">TensorFlow.js</a></span>
-          </footer><!-- /.post-info --><script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+            <span>2021-04-24(Sat)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a></span>
+          </footer><!-- /.post-info --><h1>ポケモンしりとりクイズ</h1>
 
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
-
-<div class="nunkiru">
-  <h1>Pose-Estimation</h1>
-  <p>Tensorflow.js を用いて、<b>"Pose-Estimation"</b>をブラウザで実行し、正解データから誤りを検出します。</p>
-  <p>※ 正解動画との角度が最も異なる部分を青く出力しています。</p>
-  <table id="fitness-mirror">
-    <thead><tr><th>Video</th><th><select id="answer-video-select"><option value="https://iwasakishuto.github.io/Front-End/tips/theme/video/radio_calisthenics.mp4" selected>ラジオ体操</option><option value="https://iwasakishuto.github.io/Front-End/tips/theme/video/akari_doi.mp4">Akari Doi</option></select></th></tr></thead>
-    <tbody>
-      <tr><td colspan="2" id="answer-video-canvas-wrapper" class="video-and-canvas">
-        <video id="answer-video" style="z-index:10;" autoplay loop>
-          <source id="answer-video-source" src="" type="video/mp4">
-        </video>
-        <canvas id="answer-canvas" style="z-index:20;"></canvas>
-        <table id="answer-video-controls" style="z-index:30;">
-          <thead>
-            <tr>
-              <th><label>Mute <input id="video-mute" type="checkbox"></label></th>
-              <th>Curt</th>
-              <th>
-                <button id="video-back-10s" class="back">Back 10s</button>
-                <button id="video-start-stop" class="playing">Pause</button>
-                <button id="video-skip-10s" class="skip">Skip 10s</button>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Speed</td>
-              <td><span id="video-curt-speed">1.0</span></td>
-              <td>0.5 <input id="video-speed" type="range" min="0.5" max="5" step="0.1" value="1"> 5</td>
-            </tr>
-            <tr>
-              <td>Position</td>
-              <td><span id="video-curt-position">0</span></td>
-              <td>00:00 <input id="video-position" type="range" min="0" step="0.2" value="0"> <span id="video-max-position"> 03:11</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </td></tr>
-    </tbody>
-    <thead><tr><th colspan="2">You</th></tr></thead>
-    <tbody>
-      <tr><td id="your-video-canvas-wrapper" class="video-and-canvas" colspan="2">
-        <video id="your-video" style="z-index:10;" playsinline muted autoplay></video>
-        <canvas id="your-canvas" style="z-index:20;"></canvas>
-      </td></tr>
-    </tbody>
-  </table>
+<div class="contents">
+  <h3>ポケモンしりとりクイズ</h3>
+  <p>２匹のポケモンの名前が出てくるので、間の２匹のポケモンの名前を入力して、しりとりを完成させてください。</p>
+  <form id="shiritori-form" name="SHIRITORI">
+    <table class="fixed">
+      <thead><tr><th colspan="3">問題の設定</th></tr></thead>
+      <tbody><tr>
+      <td>図鑑No.</td><td><input type="number" min="0" max="719" value="0" size="3" name="wallpaper_no"></td>
+      <td><a class="btn--click btn--shadow btn--goldenrod" onclick="generate_wallpaper()">壁紙を変更</a></td>
+      </tr>
+      <tr>
+      <td>世代（ <span id="num_mons"></span> 種）</td>
+      <td colspan="2"><select name="generation"><option value="0" selected>全て</option><option value="1">1.カントー地方（赤・緑・青・ピカチュウ）</option><option value="2">2.ジョウト地方（金・銀・クリスタル）</option><option value="3">3.ホウエン地方（ルビー・サファイア・エメラルド）</option><option value="4">4.シンオウ地方（ダイヤモンド・パール）</option><option value="5">5.イッシュ地方（ブラック・ホワイト）</option><option value="6">6.カロス地方　（X・Y）</option><option value="7">7.アローラ地方（サン・ムーン）</option><option value="8">8.ガラル地方　（ソード・シールド）</option></select></td>
+      </tr>
+      <tr>
+      <td>seed <sub id="shiritori-problem-warning"></sub></td><td><input type="number" min="0" max="4294967296" value="1000000" size="3" name="problem_seed"></td>
+      <td><a class="btn--click btn--shadow btn--blue" onclick="generate_problem()">問題を生成</a></td>
+      </tr>
+      </tbody>
+    </table>
+  </form>
+  <div id="shiritori-wrapper">
+    <div class="frame" id="shiritori-content">
+      <table id="shiritori-table">
+        <thead><tr><th colspan="3">00:00</th></tr></thead>
+        <tbody>
+          <tr><td><span id="shiritori-init"></span></td><td></td><td></td></tr>
+          <tr><td><div class="arrow down"></div></td><td></td><td></td></tr>
+          <tr>
+            <td><input id="shiritori-input-init" name="pokemon1" type="text" autocomplete="off" list="pokemon"></td>
+            <td><div class="arrow right"></div></td>
+            <td><input id="shiritori-input-end" name="pokemon2" type="text" autocomplete="off" list="pokemon"></td>
+          </tr>
+          <tr><td colspan="2" rowspan="2"><a class="btn-emergency-real"><span class="btn-emergency-real-bottom"></span><span class="btn-emergency-real-top"><span>解答</span></span>
+          </a></td><td><div class="arrow down"></div></td></tr>
+          <tr><td><span id="shiritori-end"></span></td></tr>
+          <datalist id="pokemon"></datalist>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
-<script>
-  var model, result;
-  var answer_video_select = document.getElementById("answer-video-select");
-  var answer_video_source = document.getElementById("answer-video-source");
-  var answer_video_controls = document.getElementById("answer-video-controls");
-  var answer_video_canvas_wrapper = document.getElementById("answer-video-canvas-wrapper");
-  var answer_video = document.getElementById("answer-video");
-  var answer_canvas = document.getElementById("answer-canvas");
-  var answer_context = answer_canvas.getContext("2d");
-  var your_video_canvas_wrapper = document.getElementById("your-video-canvas-wrapper");
-  var your_video = document.getElementById("your-video");
-  var your_canvas = document.getElementById("your-canvas");
-  var your_context = your_canvas.getContext("2d");
-  const imageScaleFactor = 0.50;
-  const flipHorizontal = false;
-  const outputStride = 16;
-  var isFacing = true; 
-  var minPoseConfidence = 0.1;
-  var minPartConfidence = 0.1;
-  var showMethod, minPoseConfidence, minPartConfidence;
-  var lineWidth = 2;
-  var color = "red"
-  var boundingBoxColor = "green";
-  var ans_poses = your_poses = [{
-    score: 0, 
-    keypoints: [
-      {score: 0, part: "nose",          position: {x:0,y:0}},
-      {score: 0, part: "leftEye",       position: {x:0,y:0}},
-      {score: 0, part: "rightEye",      position: {x:0,y:0}},
-      {score: 0, part: "leftEar",       position: {x:0,y:0}},
-      {score: 0, part: "rightEar",      position: {x:0,y:0}},
-      {score: 0, part: "leftShoulder",  position: {x:0,y:0}},
-      {score: 0, part: "rightShoulder", position: {x:0,y:0}},
-      {score: 0, part: "leftElbow",     position: {x:0,y:0}},
-      {score: 0, part: "rightElbow",    position: {x:0,y:0}},
-      {score: 0, part: "leftWrist",     position: {x:0,y:0}},
-      {score: 0, part: "rightWrist",    position: {x:0,y:0}},
-      {score: 0, part: "leftHip",       position: {x:0,y:0}},
-      {score: 0, part: "rightHip",      position: {x:0,y:0}},
-      {score: 0, part: "leftKnee",      position: {x:0,y:0}},
-      {score: 0, part: "rightKnee",     position: {x:0,y:0}},
-      {score: 0, part: "leftAnkle",     position: {x:0,y:0}},
-      {score: 0, part: "rightAnkle",    position: {x:0,y:0}},
-    ]
-  }];
-  // load the posenet model
-  posenet.load().then(function(pretrainedModel){
-    model = pretrainedModel;
-    setupCamera(isFacing=isFacing);
-  });
-  // Setup WebCamera
-  function switchFrontBackCamera(){
-    isFacing = !isFacing;
-    setupCamera(isFacing=isFacing)
-  }
-  function setupCamera(isFacing=true){
-    navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: { facingMode: isFacing ? "environment" : "user" },
-      audio: false,
-    }).then(function(stream){
-      your_video.addEventListener("loadedmetadata", function(){
-        w = your_video.offsetWidth; h = your_video.offsetHeight;
-        your_canvas.setAttribute('width', w.toString()); 
-        your_canvas.setAttribute('height', h.toString()); 
-        your_video_canvas_wrapper.style.height = h.toString()+"px";
-      })
-      your_video.srcObject = stream;
-      your_video.addEventListener("loadeddata", prediction);
-      setupAnswerVideo()
-    })
-  }
-  function setupAnswerVideo(){
-    answer_video_source.src = answer_video_select.value;
-    answer_video.load();
-    answer_video.play();
-    answer_video.addEventListener("timeupdate", function(){
-      w = answer_video.offsetWidth; h = answer_video.offsetHeight;
-      answer_canvas.setAttribute('width', w.toString()); 
-      answer_canvas.setAttribute('height', h.toString()); 
-      answer_video_canvas_wrapper.style.height = h.toString()+"px";
-      answer_video_controls.style.marginTop = (h+15).toString()+"px";
-      answer_canvas.getContext("2d").drawImage(answer_video, 0, 0, w, h); 
-      video_curt_position.textContent = answer_video.currentTime.toFixed(1);
-    }, true);
-  }
-  answer_video_select.onchange = setupAnswerVideo;
-  // Prediction.
-  var prevAnsCompleted = prevYourCompleted = true;
-  const posesProperties = {
-    flipHorizontal: false,
-    internalResolution: 'high',
-    segmentationThreshold: 0.9
-  };
-  function prediction(){
-    if (prevAnsCompleted && prevYourCompleted) {
-      prevAnsCompleted = prevYourCompleted = false;
-      model.estimatePoses(answer_canvas, posesProperties).then(function(poses) {
-        ans_poses = poses;
-        processResults(answer_canvas, answer_video, poses, answer_context);
-        prevAnsCompleted = true;
-      });
-      model.estimatePoses(your_canvas, posesProperties).then(function(poses) {
-        your_poses = poses;
-        processResults(your_canvas, your_video, poses, your_context);
-        prevYourCompleted = true;
-        if (your_poses.length >= 1 && ans_poses.length >= 1){
-          visualizeDifference(ans_poses[0]["keypoints"], your_poses[0]["keypoints"])
-        }
-      });
-    }
-    window.requestAnimationFrame(prediction);
-  }
-  /**
-  * @license
-  * Copyright 2019 Google LLC. All Rights Reserved.
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
-  *
-  * https://www.apache.org/licenses/LICENSE-2.0
-  *
-  * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
-  * =============================================================================
-  */
-  /** 
-  * Calculate Angles of 3 points.
-  * @param {Number} x1, y1 Apex.
-  * @param {string} x2, y2, x3, y3 Other Points.
-  */
-  function getApexAngle(x1, y1, x2, y2, x3, y3) {
-    let apex = (Math.atan2 (y2-y1, x2-x1) - Math.atan2 (y3-y1, x3-x1)) / (Math.PI / 180);
-    if( -180 <= apex && apex < 180 ) return Math.abs(apex);
-    return Math.abs(360-Math.abs(apex));
-  }
-  function visualizeDifference(ans_keypoints, your_keypoints){
-    // Middle point is Apex.
-    points = [
-      [5,7,9],[7,5,11],[6,5,11],[5,11,12],[12,11,13],[11,13,15],[6,8,10],[8,6,12],[5,6,12],[6,12,11],[11,12,14],[12,14,16]
-    ]
-    var max_score = -1; 
-    var max_idx = 0;
-    points.forEach(function(point, idx){
-      if ((ans_keypoints[point[0]].score >= minPoseConfidence) 
-      && (ans_keypoints[point[1]].score >= minPoseConfidence)
-      && (ans_keypoints[point[2]].score >= minPoseConfidence)
-      && (your_keypoints[point[0]].score >= minPoseConfidence)
-      && (your_keypoints[point[1]].score >= minPoseConfidence)
-      && (your_keypoints[point[2]].score >= minPoseConfidence)){
-        let score = Math.abs(getApexAngle(
-          ans_keypoints[point[1]]["position"]["x"],
-          ans_keypoints[point[1]]["position"]["y"],
-          ans_keypoints[point[0]]["position"]["x"],
-          ans_keypoints[point[0]]["position"]["y"],
-          ans_keypoints[point[2]]["position"]["x"],
-          ans_keypoints[point[2]]["position"]["y"],
-        ) - getApexAngle(
-          your_keypoints[point[1]]["position"]["x"],
-          your_keypoints[point[1]]["position"]["y"],
-          your_keypoints[point[0]]["position"]["x"],
-          your_keypoints[point[0]]["position"]["y"],
-          your_keypoints[point[2]]["position"]["x"],
-          your_keypoints[point[2]]["position"]["y"],
-        ));
-        if (score>max_score){
-          max_score = score;
-          max_idx = idx;
-        }
-      }
-    })
-    if (max_idx >=0){
-      drawSegment(
-        toTuple(your_keypoints[points[max_idx][0]].position), 
-        toTuple(your_keypoints[points[max_idx][1]].position),
-        "blue",
-        1,
-        5,
-        your_context,
-      )
-      drawSegment(
-        toTuple(your_keypoints[points[max_idx][1]].position), 
-        toTuple(your_keypoints[points[max_idx][2]].position),
-        "blue",
-        1,
-        5,
-        your_context,
-      )
-    }
-  }
-  function processResults(canvas, video, poses, context){
-    context.drawImage(video, 0, 0, video.offsetWidth, video.offsetHeight);
-    poses.forEach(({score, keypoints}) => {
-      if (score >= minPoseConfidence) {
-        drawKeypoints(keypoints, minPartConfidence, context);
-        drawSkeleton(keypoints, minPartConfidence, context);
-      }
-    });
-  }
-  function drawPoint(ctx, y, x, r, color, text="") {
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, 2*Math.PI);
-    ctx.fillStyle = color;
-    ctx.fill();
-    ctx.fillText(text, x+5, y-5);
-  }
-  function drawPoints(ctx, points, radius, color) {
-    var data = points.buffer().values;
-    for (let i=0; i<data.length; i += 2) {
-      const pointY = data[i];
-      const pointX = data[i+1];
-      if (pointX !== 0 && pointY !== 0) {
-        ctx.beginPath();
-        ctx.arc(pointX, pointY, radius, 0, 2*Math.PI);
-        ctx.fillStyle = color;
-        ctx.fill();
-      }
-    }
-  }
-  function drawKeypoints(keypoints, minConfidence, ctx, scale=1) {
-    for (let i=0; i<keypoints.length; i++) {
-      let keypoint = keypoints[i];
-      if (keypoint.score < minConfidence) {
-        continue;
-      }
-      let {y, x} = keypoint.position;
-      // drawPoint(ctx, y*scale, x*scale, 3, color, keypoint.part);
-      drawPoint(ctx, y*scale, x*scale, 3, color, "");
-    }
-  }
-  function toTuple({y, x}) {
-    return [y, x];
-  }
-  function drawSegment([ay, ax], [by, bx], color, scale, linewidth, ctx) {
-    ctx.beginPath();
-    ctx.moveTo(ax*scale, ay*scale);
-    ctx.lineTo(bx*scale, by*scale);
-    ctx.lineWidth = linewidth;
-    ctx.strokeStyle = color;
-    ctx.stroke();
-  }
-  function drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
-    posenet.getAdjacentKeyPoints(keypoints, minConfidence).forEach(function(keypoints){
-      drawSegment(toTuple(keypoints[0].position), toTuple(keypoints[1].position), color, scale, lineWidth, ctx);
-    });
-  }
-</script>
+<div class="contents">
+  <h3>YouTube</h3>
+  <p>このクイズを作る元ネタとなった動画です。是非たくさん再生してください。</p>
+  <div class="youtube-wrapper">
+    <iframe src="https://www.youtube.com/embed/MM4KP_FvgHU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</div>
 
-<script>
-  var playtimer = null
-  const startTimer = function(){
-    playtimer = setInterval(function(){
-      video_position_control.value = answer_video.currentTime.toFixed(1);
-    }, 100);
-  };
-  const stopTimer = function(){
-    clearInterval(playtimer);
-  };
-  const video_start_stop_btn   = document.querySelector("button#video-start-stop")
-  const video_skip_10s         = document.querySelector("button#video-skip-10s");
-  const video_back_10s         = document.querySelector("button#video-back-10s");
-  const video_curt_speed       = document.querySelector("span#video-curt-speed");
-  const video_speed_control    = document.querySelector("input#video-speed");
-  const video_curt_position    = document.querySelector("span#video-curt-position");
-  const video_position_control = document.querySelector("input#video-position");
-  const video_mute_btn         = document.querySelector("input#video-mute");
-  const video_max_position     = document.querySelector("span#video-max-position");
-  video_skip_10s.addEventListener("click", function(){
-    answer_video.currentTime = Math.min(answer_video.currentTime+10, answer_video.duration)
-  })
-  video_back_10s.addEventListener("click", function(){
-    answer_video.currentTime = Math.max(answer_video.currentTime-10, 0)
-  })
-  video_start_stop_btn.addEventListener("click", function(){
-    if (video_start_stop_btn.classList.contains("playing")){
-      answer_video.pause();
-      stopTimer();
-      video_start_stop_btn.classList.add("pausing")
-      video_start_stop_btn.classList.remove("playing")
-      video_start_stop_btn.innerHTML = "Play"
-    }else{
-      answer_video.play();
-      startTimer();
-      video_start_stop_btn.classList.add("playing")
-      video_start_stop_btn.classList.remove("pausing")
-      video_start_stop_btn.innerHTML = "Pause"
-    }
-  })
-  video_speed_control.addEventListener('change', function() {
-    let curt_speed = video_speed_control.value;
-    answer_video.playbackRate = curt_speed;
-    video_curt_speed.textContent = curt_speed;
-  });
-  video_position_control.addEventListener('input', function() {
-    answer_video.currentTime = video_position_control.value
-    stopTimer()
-  });
-  video_position_control.addEventListener('change', function() {
-    answer_video.currentTime = video_position_control.value;
-    startTimer()
-  });
-  video_mute_btn.addEventListener('click', function() {
-    answer_video.muted = video_mute_btn.checked;
-  });
-  startTimer();
-</script>
-
+<p></div><!-- /.entry-content --></p>
 <style>
-  .video-and-canvas {
-    position: relative;
-    margin: 0 auto;
+  a.btn-emergency-real{position:relative;display:block;width:200px;height:130px;margin:0 auto;cursor:pointer;}a.btn-emergency-real:hover .btn-emergency-real-top{top:10px;height:50px}a.btn-emergency-real:active .btn-emergency-real-top{top:20px;height:40px}.btn-emergency-real-top{position:absolute;top:0;left:20px;width:10pc;height:60px;margin-top:30px;-webkit-transition:all .3s;transition:all .3s;border-radius:0 0 50% 50%;background-image:-webkit-gradient(linear,right top,left top,from(#630909),to(#d62d2d));background-image:-webkit-linear-gradient(right,#630909 0,#d62d2d 100%);background-image:linear-gradient(to left,#630909 0,#d62d2d 100%);-webkit-box-shadow:inset 0 -1px 10px 0 rgba(0,0,0,.9),0 5px 5px 0 rgba(0,0,0,.2);box-shadow:inset 0 -1px 10px 0 rgba(0,0,0,.9),0 5px 5px 0 rgba(0,0,0,.2)}.btn-emergency-real-top:before{position:absolute;top:-30px;left:0;width:10pc;height:60px;content:"";border-radius:5pc/30px;background-image:-webkit-gradient(linear,left bottom,left top,from(#6c0c0b),to(#ed4c4c));background-image:-webkit-linear-gradient(bottom,#6c0c0b 0,#ed4c4c 100%);background-image:linear-gradient(to top,#6c0c0b 0,#ed4c4c 100%);-webkit-box-shadow:0 10px 28px 2px rgba(0,0,0,.2),inset 0 5px 10px 0 rgba(0,0,0,.2),inset 0 2px 1px 0 hsla(0,0%,100%,.6),inset 0 -2px 1px 0 hsla(0,0%,100%,.1),inset 0 -2px 10px 5px rgba(237,76,76,.6),inset 5px 0 1px 1px hsla(0,0%,100%,.3);box-shadow:0 10px 28px 2px rgba(0,0,0,.2),inset 0 5px 10px 0 rgba(0,0,0,.2),inset 0 2px 1px 0 hsla(0,0%,100%,.6),inset 0 -2px 1px 0 hsla(0,0%,100%,.1),inset 0 -2px 10px 5px rgba(237,76,76,.6),inset 5px 0 1px 1px hsla(0,0%,100%,.3)}.btn-emergency-real-top span{font-size:38px;font-weight:700;position:absolute;top:-1pc;left:0;width:100%;-webkit-transform:scaleY(0.75);transform:scaleY(0.75);text-align:center;color:#e48a8a;text-shadow:-1px -1px 0 rgba(0,0,0,.5),1px 1px 5px hsla(0,0%,100%,.3)}.btn-emergency-real-bottom{position:absolute;top:38px;left:0;width:200px;height:5pc;border-radius:75pt/40px;background-image:-webkit-gradient(linear,left top,right top,from(#f2f2f2),color-stop(48%,#b4b4b4),to(#767676));background-image:-webkit-linear-gradient(left,#f2f2f2 0,#b4b4b4 48%,#767676 100%);background-image:linear-gradient(to right,#f2f2f2 0,#b4b4b4 48%,#767676 100%);-webkit-box-shadow:0 8px 0 #c4cacc,inset 1px -1px 10px 0 rgba(0,0,0,.2);box-shadow:0 8px 0 #c4cacc,inset 1px -1px 10px 0 rgba(0,0,0,.2)}
+  table select, table input {
+    width: 100%;
+    border: 0;
+    background-color: transparent;
+    font-family: Monaco, monospace, sans-serif;
   }
-  .video-and-canvas video, .video-and-canvas canvas{
-    position: absolute;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
+  table.fixed {
+    table-layout: fixed;
   }
-  table#answer-video-controls{
-    position: relative;
-    /* margin-top: 360px; */
-    background-color: black;
-    color: white;
-  }
-  /* #answer-video-canvas-wrapper, #answer-video, #answer-canvas{
-    height:360px;
-  }
-  #answer-video, #answer-canvas, #answer-video-controls{
-    width:640px
-  } */
-  table#fitness-mirror thead {
-    background-color: black;
-    color: white;
-  }
-  table#fitness-mirror th {
+  table *, table th {
     vertical-align: middle;
     text-align: center;
   }
-  table#fitness-mirror select {
-    border: 0;
-    width: 100%;
-    padding: .5em .4em;
+  a.btn--shadow{
+    -webkit-box-shadow: 0 3px 5px rgb(0 0 0 / 30%);
+    box-shadow: 0 3px 5px rgb(0 0 0 / 30%);
   }
-  input[type="range"]{
-    width: 70%;
-  }
-  button{
+  a.btn--click {
+    color: #fff;
+    background-color: black;
+    border-bottom: 5px solid black;
     display: inline-block;
-    position: relative;
-    font-family: monaco;
-    color: #000;
-    padding: .75em 1.5em;
+    padding: 0.3em 1em;
+    text-decoration: none;
     cursor: pointer;
-    border-radius: 5px;
   }
-  button.pausing {
-    background-color: red;
+  a.btn--click:hover {
+    margin-top: 3px;
+    color: #fff;
+    background: black;
+    border-bottom: 2px solid black;
+  }
+  a.btn--blue {
+    background-color: #04aee2;
+    border-bottom-color: #008db8;
+  }
+  a.btn--blue:hover{
+    background: #04aee2;
+    border-bottom-color: #008db8;
+  }
+  a.btn--goldenrod {
+    background-color: goldenrod;
+    border-bottom-color: darkgoldenrod;
+  }
+  a.btn--goldenrod:hover {
+    background: goldenrod;
+    border-bottom-color: darkgoldenrod;
+  }
+  .youtube-wrapper {
+    position: relative;
+    padding-top: 56.25%;
+  }
+  .youtube-wrapper iframe{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  #shiritori-form table thead {
+    background-color: black;
     color: white;
   }
-  button.playing{
-    background-color: blue
-    color:white;
+  #shiritori-wrapper{
+    position: relative;
+    width: 100%;
+    font-family: pkmnfont monospace monaco;
   }
-</style>                </article>
+  #shiritori-wrapper:before{
+    content: "";
+    display: block;
+    padding-top: 56.25%; /* (W,H) = (16,9) */
+  }
+  #shiritori-table, #shiritori-table th, #shiritori-table td{
+    border: 0;
+  }
+  #shiritori-table {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+  }
+  #shiritori-table thead tr{
+    height: 5%;
+  }
+  #shiritori-table tbody tr:nth-child(1),
+  #shiritori-table tbody tr:nth-child(3),
+  #shiritori-table tbody tr:nth-child(5){
+    height: 25%;
+  }
+  #shiritori-table tbody tr:nth-child(2),
+  #shiritori-table tbody tr:nth-child(4){
+    height: 10%;
+  }
+  #shiritori-table td:nth-child(1), #shiritori-table td:nth-child(3){
+    width: 45%;
+  }
+  #shiritori-init, #shiritori-end,
+  #shiritori-input-init, #shiritori-input-end {
+    width: 85%;
+    height: 100%;
+    font-size: 2.5em;
+    line-height: 2em;
+    padding: 0 10px;
+    border: 2px #2b2b2b solid;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  #shiritori-input-init, #shiritori-input-end {
+    text-align: left;
+    background: none;
+    padding: 0 10px;
+  }
+  #shiritori-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: 10px;
+    border: solid black 1.5px;
+    box-shadow: 0 0 8px gray;
+    padding: 0;
+  }
+  #shiritori-wrapper {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-color:rgba(255,255,255,0.7);
+    background-blend-mode:lighten;
+    border: solid black 2px;
+  }
+  sub#shiritori-problem-warning{
+    font-size: smaller;
+    vertical-align: sub;
+    color: red;
+  }
+  .arrow {
+    background-color: black;
+    position: relative;
+    display: inline-flex;
+  }
+  .arrow:after{
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    position: absolute;
+  }
+  .right {
+    height: 20px;
+    width: 40px;
+    margin-left: -30px;
+  }
+  .right:after {
+    border-width: 20px 0 20px 30px;
+    border-color: transparent transparent transparent black;
+    top: -50%;
+    left: 100%;
+  }
+  .down {
+    height: 20px;
+    width: 15px;
+    margin-bottom: 20px;
+  }
+  .down:after{
+    border-width: 20px 20px 0px 20px;
+    border-color: black transparent transparent transparent;
+    top: 75%;
+    left: -80%;
+  }
+  div.overflow-ms{
+    width: 32px;
+    height: 32px;
+    overflow: visible;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+  div.overflow-ms img {
+    border: 0!important;
+    margin: 0!important;
+    padding: 0!important;
+    width: 200%!important;
+    vertical-align: middle;
+  }
+</style>
+
+<script>
+  const POKEMON_NAMES = ['フシギダネ', 'フシギソウ', 'フシギバナ', 'ヒトカゲ', 'リザード', 'リザードン', 'ゼニガメ', 'カメール', 'カメックス', 'キャタピー', 'トランセル', 'バタフリー', 'ビードル', 'コクーン', 'スピアー', 'ポッポ', 'ピジョン', 'ピジョット', 'コラッタ', 'ラッタ', 'オニスズメ', 'オニドリル', 'アーボ', 'アーボック', 'ピカチュウ', 'ライチュウ', 'サンド', 'サンドパン', 'ニドラン♀', 'ニドリーナ', 'ニドクイン', 'ニドラン♂', 'ニドリーノ', 'ニドキング', 'ピッピ', 'ピクシー', 'ロコン', 'キュウコン', 'プリン', 'プクリン', 'ズバット', 'ゴルバット', 'ナゾノクサ', 'クサイハナ', 'ラフレシア', 'パラス', 'パラセクト', 'コンパン', 'モルフォン', 'ディグダ', 'ダグトリオ', 'ニャース', 'ペルシアン', 'コダック', 'ゴルダック', 'マンキー', 'オコリザル', 'ガーディ', 'ウインディ', 'ニョロモ', 'ニョロゾ', 'ニョロボン', 'ケーシィ', 'ユンゲラー', 'フーディン', 'ワンリキー', 'ゴーリキー', 'カイリキー', 'マダツボミ', 'ウツドン', 'ウツボット', 'メノクラゲ', 'ドククラゲ', 'イシツブテ', 'ゴローン', 'ゴローニャ', 'ポニータ', 'ギャロップ', 'ヤドン', 'ヤドラン', 'コイル', 'レアコイル', 'カモネギ', 'ドードー', 'ドードリオ', 'パウワウ', 'ジュゴン', 'ベトベター', 'ベトベトン', 'シェルダー', 'パルシェン', 'ゴース', 'ゴースト', 'ゲンガー', 'イワーク', 'スリープ', 'スリーパー', 'クラブ', 'キングラー', 'ビリリダマ', 'マルマイン', 'タマタマ', 'ナッシー', 'カラカラ', 'ガラガラ', 'サワムラー', 'エビワラー', 'ベロリンガ', 'ドガース', 'マタドガス', 'サイホーン', 'サイドン', 'ラッキー', 'モンジャラ', 'ガルーラ', 'タッツー', 'シードラ', 'トサキント', 'アズマオウ', 'ヒトデマン', 'スターミー', 'バリヤード', 'ストライク', 'ルージュラ', 'エレブー', 'ブーバー', 'カイロス', 'ケンタロス', 'コイキング', 'ギャラドス', 'ラプラス', 'メタモン', 'イーブイ', 'シャワーズ', 'サンダース', 'ブースター', 'ポリゴン', 'オムナイト', 'オムスター', 'カブト', 'カブトプス', 'プテラ', 'カビゴン', 'フリーザー', 'サンダー', 'ファイヤー', 'ミニリュウ', 'ハクリュー', 'カイリュー', 'ミュウツー', 'ミュウ', 'チコリータ', 'ベイリーフ', 'メガニウム', 'ヒノアラシ', 'マグマラシ', 'バクフーン', 'ワニノコ', 'アリゲイツ', 'オーダイル', 'オタチ', 'オオタチ', 'ホーホー', 'ヨルノズク', 'レディバ', 'レディアン', 'イトマル', 'アリアドス', 'クロバット', 'チョンチー', 'ランターン', 'ピチュー', 'ピィ', 'ププリン', 'トゲピー', 'トゲチック', 'ネイティ', 'ネイティオ', 'メリープ', 'モココ', 'デンリュウ', 'キレイハナ', 'マリル', 'マリルリ', 'ウソッキー', 'ニョロトノ', 'ハネッコ', 'ポポッコ', 'ワタッコ', 'エイパム', 'ヒマナッツ', 'キマワリ', 'ヤンヤンマ', 'ウパー', 'ヌオー', 'エーフィ', 'ブラッキー', 'ヤミカラス', 'ヤドキング', 'ムウマ', 'アンノーン', 'ソーナンス', 'キリンリキ', 'クヌギダマ', 'フォレトス', 'ノコッチ', 'グライガー', 'ハガネール', 'ブルー', 'グランブル', 'ハリーセン', 'ハッサム', 'ツボツボ', 'ヘラクロス', 'ニューラ', 'ヒメグマ', 'リングマ', 'マグマッグ', 'マグカルゴ', 'ウリムー', 'イノムー', 'サニーゴ', 'テッポウオ', 'オクタン', 'デリバード', 'マンタイン', 'エアームド', 'デルビル', 'ヘルガー', 'キングドラ', 'ゴマゾウ', 'ドンファン', 'ポリゴン2', 'オドシシ', 'ドーブル', 'バルキー', 'カポエラー', 'ムチュール', 'エレキッド', 'ブビィ', 'ミルタンク', 'ハピナス', 'ライコウ', 'エンテイ', 'スイクン', 'ヨーギラス', 'サナギラス', 'バンギラス', 'ルギア', 'ホウオウ', 'セレビィ', 'キモリ', 'ジュプトル', 'ジュカイン', 'アチャモ', 'ワカシャモ', 'バシャーモ', 'ミズゴロウ', 'ヌマクロー', 'ラグラージ', 'ポチエナ', 'グラエナ', 'ジグザグマ', 'マッスグマ', 'ケムッソ', 'カラサリス', 'アゲハント', 'マユルド', 'ドクケイル', 'ハスボー', 'ハスブレロ', 'ルンパッパ', 'タネボー', 'コノハナ', 'ダーテング', 'スバメ', 'オオスバメ', 'キャモメ', 'ペリッパー', 'ラルトス', 'キルリア', 'サーナイト', 'アメタマ', 'アメモース', 'キノココ', 'キノガッサ', 'ナマケロ', 'ヤルキモノ', 'ケッキング', 'ツチニン', 'テッカニン', 'ヌケニン', 'ゴニョニョ', 'ドゴーム', 'バクオング', 'マクノシタ', 'ハリテヤマ', 'ルリリ', 'ノズパス', 'エネコ', 'エネコロロ', 'ヤミラミ', 'クチート', 'ココドラ', 'コドラ', 'ボスゴドラ', 'アサナン', 'チャーレム', 'ラクライ', 'ライボルト', 'プラスル', 'マイナン', 'バルビート', 'イルミーゼ', 'ロゼリア', 'ゴクリン', 'マルノーム', 'キバニア', 'サメハダー', 'ホエルコ', 'ホエルオー', 'ドンメル', 'バクーダ', 'コータス', 'バネブー', 'ブーピッグ', 'パッチール', 'ナックラー', 'ビブラーバ', 'フライゴン', 'サボネア', 'ノクタス', 'チルット', 'チルタリス', 'ザングース', 'ハブネーク', 'ルナトーン', 'ソルロック', 'ドジョッチ', 'ナマズン', 'ヘイガニ', 'シザリガー', 'ヤジロン', 'ネンドール', 'リリーラ', 'ユレイドル', 'アノプス', 'アーマルド', 'ヒンバス', 'ミロカロス', 'ポワルン', 'カクレオン', 'カゲボウズ', 'ジュペッタ', 'ヨマワル', 'サマヨール', 'トロピウス', 'チリーン', 'アブソル', 'ソーナノ', 'ユキワラシ', 'オニゴーリ', 'タマザラシ', 'トドグラー', 'トドゼルガ', 'パールル', 'ハンテール', 'サクラビス', 'ジーランス', 'ラブカス', 'タツベイ', 'コモルー', 'ボーマンダ', 'ダンバル', 'メタング', 'メタグロス', 'レジロック', 'レジアイス', 'レジスチル', 'ラティアス', 'ラティオス', 'カイオーガ', 'グラードン', 'レックウザ', 'ジラーチ', 'デオキシス', 'ナエトル', 'ハヤシガメ', 'ドダイトス', 'ヒコザル', 'モウカザル', 'ゴウカザル', 'ポッチャマ', 'ポッタイシ', 'エンペルト', 'ムックル', 'ムクバード', 'ムクホーク', 'ビッパ', 'ビーダル', 'コロボーシ', 'コロトック', 'コリンク', 'ルクシオ', 'レントラー', 'スボミー', 'ロズレイド', 'ズガイドス', 'ラムパルド', 'タテトプス', 'トリデプス', 'ミノムッチ', 'ミノマダム', 'ガーメイル', 'ミツハニー', 'ビークイン', 'パチリス', 'ブイゼル', 'フローゼル', 'チェリンボ', 'チェリム', 'カラナクシ', 'トリトドン', 'エテボース', 'フワンテ', 'フワライド', 'ミミロル', 'ミミロップ', 'ムウマージ', 'ドンカラス', 'ニャルマー', 'ブニャット', 'リーシャン', 'スカンプー', 'スカタンク', 'ドーミラー', 'ドータクン', 'ウソハチ', 'マネネ', 'ピンプク', 'ペラップ', 'ミカルゲ', 'フカマル', 'ガバイト', 'ガブリアス', 'ゴンベ', 'リオル', 'ルカリオ', 'ヒポポタス', 'カバルドン', 'スコルピ', 'ドラピオン', 'グレッグル', 'ドクロッグ', 'マスキッパ', 'ケイコウオ', 'ネオラント', 'タマンタ', 'ユキカブリ', 'ユキノオー', 'マニューラ', 'ジバコイル', 'ベロベルト', 'ドサイドン', 'モジャンボ', 'エレキブル', 'ブーバーン', 'トゲキッス', 'メガヤンマ', 'リーフィア', 'グレイシア', 'グライオン', 'マンムー', 'ポリゴンZ', 'エルレイド', 'ダイノーズ', 'ヨノワール', 'ユキメノコ', 'ロトム', 'ユクシー', 'エムリット', 'アグノム', 'ディアルガ', 'パルキア', 'ヒードラン', 'レジギガス', 'ギラティナ', 'クレセリア', 'フィオネ', 'マナフィ', 'ダークライ', 'シェイミ', 'アルセウス', 'ビクティニ', 'ツタージャ', 'ジャノビー', 'ジャローダ', 'ポカブ', 'チャオブー', 'エンブオー', 'ミジュマル', 'フタチマル', 'ダイケンキ', 'ミネズミ', 'ミルホッグ', 'ヨーテリー', 'ハーデリア', 'ムーランド', 'チョロネコ', 'レパルダス', 'ヤナップ', 'ヤナッキー', 'バオップ', 'バオッキー', 'ヒヤップ', 'ヒヤッキー', 'ムンナ', 'ムシャーナ', 'マメパト', 'ハトーボー', 'ケンホロウ', 'シママ', 'ゼブライカ', 'ダンゴロ', 'ガントル', 'ギガイアス', 'コロモリ', 'ココロモリ', 'モグリュー', 'ドリュウズ', 'タブンネ', 'ドッコラー', 'ドテッコツ', 'ローブシン', 'オタマロ', 'ガマガル', 'ガマゲロゲ', 'ナゲキ', 'ダゲキ', 'クルミル', 'クルマユ', 'ハハコモリ', 'フシデ', 'ホイーガ', 'ペンドラー', 'モンメン', 'エルフーン', 'チュリネ', 'ドレディア', 'バスラオ', 'メグロコ', 'ワルビル', 'ワルビアル', 'ダルマッカ', 'ヒヒダルマ', 'マラカッチ', 'イシズマイ', 'イワパレス', 'ズルッグ', 'ズルズキン', 'シンボラー', 'デスマス', 'デスカーン', 'プロトーガ', 'アバゴーラ', 'アーケン', 'アーケオス', 'ヤブクロン', 'ダストダス', 'ゾロア', 'ゾロアーク', 'チラーミィ', 'チラチーノ', 'ゴチム', 'ゴチミル', 'ゴチルゼル', 'ユニラン', 'ダブラン', 'ランクルス', 'コアルヒー', 'スワンナ', 'バニプッチ', 'バニリッチ', 'バイバニラ', 'シキジカ', 'メブキジカ', 'エモンガ', 'カブルモ', 'シュバルゴ', 'タマゲタケ', 'モロバレル', 'プルリル', 'ブルンゲル', 'ママンボウ', 'バチュル', 'デンチュラ', 'テッシード', 'ナットレイ', 'ギアル', 'ギギアル', 'ギギギアル', 'シビシラス', 'シビビール', 'シビルドン', 'リグレー', 'オーベム', 'ヒトモシ', 'ランプラー', 'シャンデラ', 'キバゴ', 'オノンド', 'オノノクス', 'クマシュン', 'ツンベアー', 'フリージオ', 'チョボマキ', 'アギルダー', 'マッギョ', 'コジョフー', 'コジョンド', 'クリムガン', 'ゴビット', 'ゴルーグ', 'コマタナ', 'キリキザン', 'バッフロン', 'ワシボン', 'ウォーグル', 'バルチャイ', 'バルジーナ', 'クイタラン', 'アイアント', 'モノズ', 'ジヘッド', 'サザンドラ', 'メラルバ', 'ウルガモス', 'コバルオン', 'テラキオン', 'ビリジオン', 'トルネロス', 'ボルトロス', 'レシラム', 'ゼクロム', 'ランドロス', 'キュレム', 'ケルディオ', 'メロエッタ', 'ゲノセクト', 'ハリマロン', 'ハリボーグ', 'ブリガロン', 'フォッコ', 'テールナー', 'マフォクシー', 'ケロマツ', 'ゲコガシラ', 'ゲッコウガ', 'ホルビー', 'ホルード', 'ヤヤコマ', 'ヒノヤコマ', 'ファイアロー', 'コフキムシ', 'コフーライ', 'ビビヨン', 'シシコ', 'カエンジシ', 'フラベベ', 'フラエッテ', 'フラージェス', 'メェークル', 'ゴーゴート', 'ヤンチャム', 'ゴロンダ', 'トリミアン', 'ニャスパー', 'ニャオニクス', 'ヒトツキ', 'ニダンギル', 'ギルガルド', 'シュシュプ', 'フレフワン', 'ペロッパフ', 'ペロリーム', 'マーイーカ', 'カラマネロ', 'カメテテ', 'ガメノデス', 'クズモー', 'ドラミドロ', 'ウデッポウ', 'ブロスター', 'エリキテル', 'エレザード', 'チゴラス', 'ガチゴラス', 'アマルス', 'アマルルガ', 'ニンフィア', 'ルチャブル', 'デデンネ', 'メレシー', 'ヌメラ', 'ヌメイル', 'ヌメルゴン', 'クレッフィ', 'ボクレー', 'オーロット', 'バケッチャ', 'パンプジン', 'カチコール', 'クレベース', 'オンバット', 'オンバーン', 'ゼルネアス', 'イベルタル', 'ジガルデ', 'ディアンシー', 'フーパ', 'ボルケニオン', 'モクロー', 'フクスロー', 'ジュナイパー', 'ニャビー', 'ニャヒート', 'ガオガエン', 'アシマリ', 'オシャマリ', 'アシレーヌ', 'ツツケラ', 'ケララッパ', 'ドデカバシ', 'ヤングース', 'デカグース', 'アゴジムシ', 'デンヂムシ', 'クワガノン', 'マケンカニ', 'ケケンカニ', 'オドリドリ', 'アブリー', 'アブリボン', 'イワンコ', 'ルガルガン', 'ヨワシ', 'ヒドイデ', 'ドヒドイデ', 'ドロバンコ', 'バンバドロ', 'シズクモ', 'オニシズクモ', 'カリキリ', 'ラランテス', 'ネマシュ', 'マシェード', 'ヤトウモリ', 'エンニュート', 'ヌイコグマ', 'キテルグマ', 'アマカジ', 'アママイコ', 'アマージョ', 'キュワワー', 'ヤレユータン', 'ナゲツケサル', 'コソクムシ', 'グソクムシャ', 'スナバァ', 'シロデスナ', 'ナマコブシ', 'タイプ：ヌル', 'シルヴァディ', 'メテノ', 'ネッコアラ', 'バクガメス', 'トゲデマル', 'ミミッキュ', 'ハギギシリ', 'ジジーロン', 'ダダリン', 'ジャラコ', 'ジャランゴ', 'ジャラランガ', 'カプ・コケコ', 'カプ・テテフ', 'カプ・ブルル', 'カプ・レヒレ', 'コスモッグ', 'コスモウム', 'ソルガレオ', 'ルナアーラ', 'ウツロイド', 'マッシブーン', 'フェローチェ', 'デンジュモク', 'テッカグヤ', 'カミツルギ', 'アクジキング', 'ネクロズマ', 'マギアナ', 'マーシャドー', 'ベベノム', 'アーゴヨン', 'ツンデツンデ', 'ズガドーン', 'ゼラオラ', 'メルタン', 'メルメタル', 'サルノリ', 'バチンキー', 'ゴリランダー', 'ヒバニー', 'ラビフット', 'エースバーン', 'メッソン', 'ジメレオン', 'インテレオン', 'ホシガリス', 'ヨクバリス', 'ココガラ', 'アオガラス', 'アーマーガア', 'サッチムシ', 'レドームシ', 'イオルブ', 'クスネ', 'フォクスライ', 'ヒメンカ', 'ワタシラガ', 'ウールー', 'バイウールー', 'パルスワン', 'カジリガメ', 'ワンパチ', 'タンドン', 'トロッゴン', 'セキタンザン', 'カジッチュ', 'アップリュー', 'タルップル', 'スナヘビ', 'サダイジャ', 'ウッウ', 'サシカマス', 'カマスジョー', 'エレズン', 'ストリンダー', 'ヤクデ', 'マルヤクデ', 'タタッコ', 'オトスパス', 'ヤバチャ', 'ポットデス', 'ミブリム', 'テブリム', 'ブリムオン', 'ベロバー', 'ギモー', 'オーロンゲ', 'タチフサグマ', 'ニャイキング', 'サニゴーン', 'ネギガナイト', 'バリコオル', 'デスバーン', 'マホミル', 'マホイップ', 'タイレーツ', 'バチンウニ', 'ユキハミ', 'モスノウ', 'イシヘンジン', 'コオリッポ', 'イエッサン', 'モルペコ', 'ゾウドウ', 'ダイオウドウ', 'パッチラゴン', 'パッチルドン', 'ウオノラゴン', 'ウオチルドン', 'ジュラルドン', 'ドラメシヤ', 'ドロンチ', 'ドラパルト', 'ザシアン', 'ザマゼンタ', 'ムゲンダイナ', 'ダクマ', 'ウーラオス', 'ザルード', 'レジエレキ', 'レジドラゴ', 'ブリザポス', 'レイスポス', 'バドレックス']
+  const NUM_POKEMONS = POKEMON_NAMES.length;
+  const POKEDEX_FLAGS = [[true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, true], [true, true, true, false, false, false, true, false, true], [true, true, true, false, false, false, true, false, true], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, true, true], [true, true, true, false, false, false, true, true, true], [true, true, true, false, false, false, true, true, true], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, false, true, false], [true, true, true, false, false, false, false, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, true, true, false, true, true, true], [true, true, true, true, true, false, true, true, true], [true, true, true, true, false, false, true, true, false], [true, true, true, true, false, false, true, true, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, true, false, false, true, true], [true, true, true, false, true, false, false, true, true], [true, true, true, true, false, false, false, true, true], [true, true, true, true, false, false, false, true, true], [true, true, true, true, false, false, true, true, false], [true, true, true, true, false, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, false, false, true, false, true], [true, true, true, true, false, false, true, false, true], [true, true, true, true, false, false, true, false, true], [true, true, true, false, false, false, false, true, false], [true, true, true, false, false, false, false, true, false], [true, true, true, false, false, false, false, false, false], [true, true, true, false, false, false, false, false, false], [true, true, true, false, false, false, true, true, true], [true, true, true, false, false, false, true, true, true], [true, true, true, false, false, false, false, true, true], [true, true, true, false, false, false, false, true, true], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, false, false, false, false, true, false], [true, true, true, false, false, false, false, true, false], [true, true, true, false, false, false, false, true, true], [true, true, true, false, false, false, false, true, true], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, true], [true, true, true, true, true, false, true, true, true], [true, true, true, true, true, false, true, true, true], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, false, true, false, false, false, true], [true, true, true, false, true, false, false, false, true], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, false, false, false, true, false, true], [true, true, true, true, false, false, true, false, false], [true, true, true, true, false, false, true, false, false], [true, true, true, false, false, false, false, false, false], [true, true, true, false, false, false, false, false, false], [true, true, true, true, false, false, false, true, false], [true, true, true, true, false, false, false, true, false], [true, true, true, false, false, false, true, true, true], [true, true, true, false, false, false, true, true, true], [true, true, true, false, true, false, true, true, true], [true, true, true, false, true, false, true, true, true], [true, true, true, false, true, false, true, true, true], [true, true, true, false, true, false, true, false, true], [true, true, true, false, false, false, false, true, false], [true, true, true, false, false, false, false, true, false], [true, true, true, false, false, false, false, false, true], [true, true, true, false, false, false, false, false, true], [true, true, true, true, false, false, true, false, false], [true, true, true, true, false, false, true, false, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, false, false, true], [true, true, true, false, false, false, false, false, true], [true, true, true, false, true, false, true, false, false], [true, true, true, true, false, false, false, false, true], [true, true, true, true, false, false, false, false, true], [true, true, true, true, true, false, true, false, true], [true, true, true, true, true, false, true, false, true], [true, true, true, false, true, false, false, true, false], [true, true, true, false, true, false, false, false, false], [true, true, true, false, false, false, true, true, false], [true, true, true, true, false, false, true, false, false], [true, true, true, true, false, false, true, false, false], [true, true, true, true, true, false, true, true, true], [true, true, true, true, true, false, true, true, true], [true, true, true, true, false, false, true, true, false], [true, true, true, true, false, false, true, true, false], [true, true, true, false, true, false, true, false, true], [true, true, true, false, true, false, true, true, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, true, false, false, true, false], [true, true, true, false, true, false, false, true, false], [true, true, true, true, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, true, true, false, true, true, true], [true, true, true, true, true, false, true, true, true], [true, true, true, false, false, false, true, true, true], [true, true, true, false, false, false, true, true, true], [true, true, true, false, true, false, true, true, true], [true, true, true, false, true, false, true, true, true], [true, true, true, false, true, false, true, true, true], [true, true, true, false, true, false, true, true, true], [true, true, true, false, true, false, false, true, false], [true, true, true, false, false, false, false, false, false], [true, true, true, false, false, false, false, false, false], [true, true, true, false, false, false, false, false, false], [true, true, true, false, false, false, false, false, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, true, false, true, true, true], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, true, false, false], [true, false, true, false, false, false, true, false, false], [true, false, true, false, true, false, true, false, true], [true, false, true, false, true, false, true, false, true], [true, false, true, false, false, false, true, true, false], [true, false, true, false, false, false, true, true, false], [true, false, true, false, false, false, true, true, false], [true, false, true, false, false, false, true, true, false], [true, false, true, true, true, false, true, true, false], [true, false, true, true, false, false, true, true, true], [true, false, true, true, false, false, true, true, true], [true, false, true, true, true, false, true, true, true], [true, false, true, false, true, false, false, true, true], [true, false, true, true, false, false, true, true, false], [true, false, true, false, true, false, false, false, true], [true, false, true, false, true, false, false, false, true], [true, false, true, true, false, false, false, false, true], [true, false, true, true, false, false, false, false, true], [true, false, true, false, false, false, true, false, false], [true, false, true, false, false, false, true, false, false], [true, false, true, false, false, false, true, false, false], [true, false, true, true, false, false, true, false, true], [true, false, true, true, true, false, true, false, false], [true, false, true, true, true, false, true, false, false], [true, false, true, false, true, false, true, true, true], [true, false, true, false, false, false, true, true, false], [true, false, true, false, false, false, true, false, false], [true, false, true, false, false, false, true, false, false], [true, false, true, false, false, false, true, false, false], [true, false, true, false, true, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, true, false, true, false, false], [true, false, true, false, true, false, true, false, true], [true, false, true, false, true, false, true, false, true], [true, false, true, false, true, false, true, true, true], [true, false, true, false, true, false, true, true, true], [true, false, true, false, true, false, true, true, false], [true, false, true, false, false, false, true, true, false], [true, false, true, false, true, false, false, true, false], [true, false, true, false, true, false, false, false, false], [true, false, true, true, false, false, true, false, true], [true, false, true, true, true, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, true, false, false], [true, false, true, false, true, false, true, false, false], [true, false, true, false, true, false, true, false, true], [true, false, true, false, false, false, true, true, false], [true, false, true, false, false, false, true, true, false], [true, false, true, false, false, false, true, false, true], [true, false, true, false, true, false, true, true, false], [true, false, true, false, false, false, true, false, true], [true, false, true, true, true, false, true, false, false], [true, false, true, false, true, false, true, true, true], [true, false, true, false, false, false, true, false, false], [true, false, true, false, false, false, true, false, false], [true, false, true, true, false, false, true, false, false], [true, false, true, true, false, false, true, false, false], [true, false, true, false, true, false, true, false, true], [true, false, true, false, true, false, true, false, true], [true, false, true, true, false, false, true, true, true], [true, false, true, false, true, false, true, false, true], [true, false, true, false, true, false, true, false, true], [true, false, true, false, false, false, true, true, true], [true, false, true, false, true, false, true, false, true], [true, false, true, true, false, false, true, true, false], [true, false, true, false, true, false, true, false, false], [true, false, true, false, true, false, true, false, false], [true, false, true, true, false, false, true, false, false], [true, false, true, true, false, false, false, false, false], [true, false, true, true, false, false, false, false, false], [true, false, true, false, true, false, false, true, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, true, true, false], [true, false, true, false, false, false, false, false, true], [true, false, true, false, false, false, false, false, true], [true, false, true, false, false, false, true, false, false], [true, false, true, false, true, false, false, true, false], [true, false, true, false, true, false, false, true, false], [true, false, true, false, false, false, true, true, false], [true, false, true, false, true, false, false, true, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, true, false, true], [true, false, true, false, false, false, true, false, true], [true, false, true, false, false, false, true, false, true], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, true, false, false, false, false], [true, false, false, true, true, false, false, false, false], [true, false, false, true, true, false, false, false, false], [true, false, false, true, true, false, false, false, false], [true, false, false, true, true, false, false, false, false], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, false, false, true], [true, false, false, true, false, false, false, false, true], [true, false, false, true, false, false, false, false, true], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, true, false, true, true, true], [true, false, false, true, true, false, true, true, true], [true, false, false, true, true, false, true, false, true], [true, false, false, true, true, false, true, false, true], [true, false, false, true, true, false, true, false, true], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, true, false, true, false, false], [true, false, false, true, true, false, true, true, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, true, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, true, false, true, false, false], [true, false, false, true, true, false, true, false, false], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, true, false, true, false, true], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, true], [true, false, false, true, false, false, true, true, true], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, true, true, true], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, true], [true, false, false, true, false, false, true, true, true], [true, false, false, true, false, false, true, true, true], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, true, false, true, false, false], [true, false, false, true, true, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, true, false, true, true, true], [true, false, false, true, true, false, true, true, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, false, false, true], [true, false, false, true, false, false, false, false, true], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, true, false, false, true, true], [true, false, false, true, true, false, false, true, true], [true, false, false, true, false, false, false, true, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, true, false, false, false, true], [true, false, false, true, true, false, false, false, true], [true, false, false, true, true, false, false, false, false], [true, false, false, true, true, false, true, false, false], [true, false, false, true, true, false, true, true, false], [true, false, false, true, false, false, true, false, true], [true, false, false, true, true, false, false, true, true], [true, false, false, true, true, false, false, true, true], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, false, true, false], [true, false, false, true, false, false, false, true, false], [true, false, false, true, false, false, false, true, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, false, false, true], [true, false, false, false, true, false, false, false, true], [true, false, false, false, true, false, false, true, true], [true, false, false, false, true, false, false, true, true], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, true, true, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, false, false, true], [true, false, false, false, true, false, false, false, true], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, true, true, false], [true, false, false, false, true, false, true, true, false], [true, false, false, false, true, false, true, true, false], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, true, true, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, false, false, true], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, true, false], [true, false, false, false, true, false, false, false, true], [true, false, false, false, true, false, false, true, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, true, true, true], [true, false, false, false, false, true, true, true, true], [true, false, false, false, false, true, true, true, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, false, true, true], [true, false, false, false, false, true, false, true, true], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, true, false], [true, false, false, false, false, true, true, true, false], [true, false, false, false, false, true, true, true, false], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, true, true, true], [true, false, false, false, false, true, true, true, true], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, true, true], [true, false, false, false, false, true, true, true, true], [true, false, false, false, false, true, true, true, true], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, true, true, false], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, true, true, false], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, true, true], [true, false, false, false, false, true, false, true, true], [true, false, false, false, false, true, false, true, true], [true, false, false, false, false, true, false, true, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, true, false], [true, false, false, false, false, false, true, true, false], [true, false, false, false, false, false, true, true, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, true, true], [true, false, false, false, false, false, true, true, true], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, true, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, true, false], [true, false, false, false, false, false, true, true, true], [true, false, false, false, false, false, true, true, true], [true, false, false, false, false, false, true, true, true], [true, false, false, false, false, false, true, true, false], [true, false, false, false, false, false, true, true, true], [true, false, false, false, false, false, true, true, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, true, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false]];
+  const NUM_SHIRITORI = 4;
+  const pokemon_datalist = document.querySelector("datalist#pokemon");
+  const shiritori_form = document.querySelector("form#shiritori-form");
+  const shiritori_init = document.getElementById("shiritori-init");
+  const shiritori_end  = document.getElementById("shiritori-end");
+  const shiritori_input_init = document.getElementById("shiritori-input-init");
+  const shiritori_input_end = document.getElementById("shiritori-input-end");
+  const shiritori_problem_warning = document.getElementById("shiritori-problem-warning");
+  const wallpaper_base_url = "https://github.com/LazoCoder/Pokemon-Terminal/blob/master/pokemonterminal/Images";
+  const generation_ubs = [151,251,386,493,649,719];
+  const generation_paths = ["Generation I - Kanto", "Generation II - Johto", "Generation III - Hoenn", "Generation IV - Sinnoh", "Generation V - Unova", "Generation VI - Kalos"];
+  const wallpaper_max_no = Math.max(...generation_ubs)
+  const shiritori_wrapper = document.getElementById("shiritori-wrapper")
+  const s1_ = 0x41C64E6D;
+  const s2_ = 0x6073;
+  var gRngValue = 0;
+  const makeR = function(seed){
+    return ((((seed & 0x0000ffff) * (s1_ & 0x0000ffff)) & 0x0000ffff) | (((((((seed & 0x0000ffff) * (s1_ & 0x0000ffff)) & 0xffff0000) >>> 16) + ((((seed & 0xffff0000) >>> 16) * (s1_ & 0x0000ffff)) & 0x0000ffff) + (((seed & 0x0000ffff) * ((s1_ & 0xffff0000) >>> 16)) & 0x0000ffff)) & 0x0000ffff) << 16)) + s2_;
+  }
+  const Random = function(){
+    gRngValue = makeR(gRngValue)
+    return gRngValue >>> 16; // "Unsigned" right shift
+  }
+  const Pdata_img_baseurl = "https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon";
+  function pokemon_image_create(name){
+    return `<div class='overflow-ms'><img src="${Pdata_img_baseurl}/${("00" + (POKEMON_NAMES.indexOf(name)+1)).slice(-3)}.png" alt="${name}"></div>`
+  }
+  var selected_pokemons = POKEMON_NAMES
+  function generate_wallpaper(){
+    var no = parseInt(shiritori_form.wallpaper_no.value);
+    if (no<=0 || no>=wallpaper_max_no) no = Math.floor(Math.random()*wallpaper_max_no)+1
+    generation_ubs.some(function(e,i){
+      if (no<=e){
+        shiritori_wrapper.style.backgroundImage = `url('${wallpaper_base_url}/${generation_paths[i]}/${("00" + no).slice(-3)}.jpg?raw=true')`;
+        return true;
+      }
+    })
+  }
+  function narrow_down_the_generation_options(){
+    var gen = parseInt(shiritori_form.generation.value);
+    selected_pokemons = POKEMON_NAMES.filter(function(e,i){return POKEDEX_FLAGS[i][gen]});
+    var datalist = ""
+    selected_pokemons.forEach(function(e){
+      datalist += `<option value="${e}"></option>`
+    })
+    pokemon_datalist.innerHTML = datalist;
+    document.getElementById("num_mons").innerHTML = selected_pokemons.length;
+  }
+  function generate_problem(){
+    var r=i=c=0;
+    var pokemons = Array(NUM_SHIRITORI).fill("");
+    var num_pokemons = selected_pokemons.length;
+    gRngValue = parseInt(shiritori_form.problem_seed.value);
+    while (i != NUM_SHIRITORI){
+      c++;
+      r = Random() % num_pokemons;
+      name = selected_pokemons[r];
+      if ((i==0 || is_satisfied_the_rule(pokemons[i-1], name)) && (i==(NUM_SHIRITORI-1) || get_last_charactor(name)!="ン")){
+        pokemons[i++] = name;
+      }
+      if (c>num_pokemons*NUM_SHIRITORI){
+        break
+      }
+    }
+    if (i!= NUM_SHIRITORI){
+      shiritori_problem_warning.innerHTML = "Couldn't create problem";
+      shiritori_problem_warning.parentElement.nextElementSibling.style.backgrouondColor = "#fba9a9";
+    }else{
+      shiritori_init.innerHTML = pokemon_image_create(pokemons[0]) + pokemons[0];
+      shiritori_end.innerHTML = pokemon_image_create(pokemons[NUM_SHIRITORI-1]) + pokemons[NUM_SHIRITORI-1];
+      shiritori_problem_warning.innerHTML = "";
+      shiritori_problem_warning.parentElement.nextElementSibling.style.backgrouondColor = "white";
+    }
+  }
+  function replace_for_shiritori(w){
+    [
+      ['ァ', 'ア'], ['ィ', 'イ'], ['ゥ', 'ウ'], ['ェ', 'エ'], ['ォ', 'オ'], ['ヵ', 'カ'], ['ヶ', 'ケ'], ['ッ', 'ツ'], ['ャ', 'ヤ'], ['ュ', 'ユ'], ['ョ', 'ヨ'], ['ヮ', 'ワ'], ['♂', 'ス'], ['♀', 'ス'],
+    ].forEach(function(e){
+      w = w.replace(e[0], e[1])
+    })
+    return w;
+  }
+  function get_last_charactor(w){
+    return replace_for_shiritori((w.slice(-1) == "ー") ? w.slice(-2,-1) : w.slice(-1))
+  }
+  function is_satisfied_the_rule(w1, w2){
+    return get_last_charactor(w1) == w2.slice(0,1)
+  }
+  // Window On load
+  window.onload = function(){
+    for(let i=0; i<shiritori_form.length; i++){
+      let e = shiritori_form.elements[i];
+      if (e.name == "wallpaper_no"){
+        e.onchange = function(){
+          generate_wallpaper();
+        };
+      }else if (e.name == "generation"){
+        e.onchange = function(){
+          narrow_down_the_generation_options();
+        };
+      }else if (e.name == "problem_seed"){
+        e.onchange = function(){
+          generate_problem();
+        };
+      }
+    }
+    generate_wallpaper();
+    narrow_down_the_generation_options();
+    generate_problem();
+  }
+  </script>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
                     <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-30.html" rel="bookmark"
+                           title="Permalink to JS.30 Pose-Estimation で正解の動きとの誤差を知る。">JS.30 Pose-Estimation で正解の動きとの誤差を知る。</a></h1>
+                </header>
+
+                <div class="entry-content">
+          <footer class="post-info">
+            <span>2021-03-10(Wed)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tensorflowjs.html">TensorFlow.js</a></span>
+          </footer><!-- /.post-info -->                <p>Pose-Estimation で正解の動きとの誤差を知る。</p>
+                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-30.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -604,26 +557,11 @@
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-22.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-21.html" rel="bookmark"
-                           title="Permalink to JS.21 画像認識用アノテーションツール。">JS.21 画像認識用アノテーションツール。</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2020-11-08(Sun)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a></span>
-          </footer><!-- /.post-info -->                <p>キー入力に対応するラベルを付けることができ、アノテーション作業の効率を高める。ラベルデータはjson形式でダウンロード可能。</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-21.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
             </ol><!-- /#posts-list -->
 <p class="paginator">
-    Page 1 / 3
+    Page 1 / 4
         <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript2.html">&raquo;</a>
-        <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript3.html">&#8649;</a>
+        <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript4.html">&#8649;</a>
 </p>
             </section><!-- /#content -->
     <section id="extras" class="body">
