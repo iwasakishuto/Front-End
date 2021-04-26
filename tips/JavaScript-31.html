@@ -417,7 +417,6 @@
             const shiritori_problem_warning = document.getElementById("shiritori-problem-warning");
             const answer_btn = document.getElementById("answer-btn");
             const problem_seed_input = document.querySelector(`input[name="problem_seed"]`)
-            const wallpaper_max_no = Math.max(...generation_ubs)
             const shiritori_wrapper = document.getElementById("shiritori-wrapper");
             const winstreak_counter = document.getElementById("winstreak-counter");
             const curt_time_counter = document.getElementById("curt-time-counter");
@@ -438,7 +437,8 @@
             const Pdata_img_baseurl = "https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon";
             const Pdata_wallimg_baseurl = "https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon-wallpaper";
             const generation_ubs = [151,251,386,493,649,719];
-            const generation_paths = ['Generation%20I%20-%20Kanto', 'Generation%20II%20-%20Johto', 'Generation%20III%20-%20Hoenn', 'Generation%20IV%20-%20Sinnoh', 'Generation%20V%20-%20Unova', 'Generation%20VI%20-%20Kalos'];
+            const wallpaper_max_no = Math.max(...generation_ubs)
+            const generation_paths = ['GenerationI-Kanto', 'GenerationII-Johto', 'GenerationIII-Hoenn', 'GenerationIV-Sinnoh', 'GenerationV-Unova', 'GenerationVI-Kalos'];
             function pokemon_image_create(name){
               return `<div class='overflow-ms'><img src="${Pdata_img_baseurl}/${("00" + (POKEMON_NAMES.indexOf(name)+1)).slice(-3)}.png" alt="${name}"></div>`
             }
@@ -448,7 +448,7 @@
               if (no<=0 || no>=wallpaper_max_no) no = Math.floor(Math.random()*wallpaper_max_no)+1
               generation_ubs.some(function(e,i){
                 if (no<=e){
-                  shiritori_wrapper.style.backgroundImage = `url('${Pdata_wallimg_baseurl}/${generation_paths[i]}/${("00" + no).slice(-3)}.jpg?raw=true')`;
+                  shiritori_wrapper.style.backgroundImage = `url('${Pdata_wallimg_baseurl}/${generation_paths[i]}/${("00" + no).slice(-3)}.jpg')`;
                   return true;
                 }
               })
