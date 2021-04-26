@@ -87,6 +87,7 @@
           </footer><!-- /.post-info -->
           <h1>ポケモンしりとりクイズ</h1>
 
+          <p><img id="target">
           <div class="contents">
             <h3>ポケモンしりとりクイズ</h3>
             <ul>
@@ -123,7 +124,7 @@
                   <col style="width: 10%;">
                   <col style="width: 40%;">
                   <col style="width: 5%;">
-                  <thead><tr><th class="twitter_username" colspan="2"><a href="https://twitter.com/cabernet_rock">@cabernet_rock</a></th><th><a class="btn--click btn--shadow btn--red" onclick="show_answer()">答え</a></th><th colspan="2"><span id="winstreak-counter">0</span> / <span id="num_problems">0</span> 問（<span id="curt-time-counter">00:00:00</span>）</th></tr></thead>
+                  <thead class="shiritori-thead"><tr><th class="twitter_username" colspan="2"><a href="https://twitter.com/cabernet_rock">@cabernet_rock</a></th><th><a class="btn--click btn--shadow btn--red" onclick="show_answer()">答え</a></th><th colspan="2"><span id="winstreak-counter">0</span> / <span id="num_problems">0</span> 問（<span id="curt-time-counter">00:00:00</span>）</th></tr></thead>
                   <tbody>
                     <tr><td></td><td><span id="shiritori-init"></span></td><td></td><td></td><td></td></tr>
                     <tr><td colspan="2"><div class="arrow down"></div></td><td></td><td></td><td></td></tr>
@@ -150,7 +151,6 @@
               </div>
             </div>
           </div>
-
           <div class="contents">
             <h3>YouTube</h3>
             <p>このクイズを作る元ネタとなった動画です。是非たくさん再生してください。</p>
@@ -158,8 +158,7 @@
               <iframe src="https://www.youtube.com/embed/MM4KP_FvgHU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
           </div>
-
-          <p></div><!-- /.entry-content --></p>
+          </div><!-- /.entry-content --></p>
           <style>
             a.btn-emergency-real{position:relative;display:block;width:200px;height:130px;margin:0 auto;cursor:pointer;}a.btn-emergency-real:hover .btn-emergency-real-top, a.btn-emergency-real:focus .btn-emergency-real-top{top:10px;height:50px}a.btn-emergency-real:active .btn-emergency-real-top{top:20px;height:40px}.btn-emergency-real-top{position:absolute;top:0;left:20px;width:10pc;height:60px;margin-top:30px;-webkit-transition:all .3s;transition:all .3s;border-radius:0 0 50% 50%;background-image:-webkit-gradient(linear,right top,left top,from(#630909),to(#d62d2d));background-image:-webkit-linear-gradient(right,#630909 0,#d62d2d 100%);background-image:linear-gradient(to left,#630909 0,#d62d2d 100%);-webkit-box-shadow:inset 0 -1px 10px 0 rgba(0,0,0,.9),0 5px 5px 0 rgba(0,0,0,.2);box-shadow:inset 0 -1px 10px 0 rgba(0,0,0,.9),0 5px 5px 0 rgba(0,0,0,.2)}.btn-emergency-real-top:before{position:absolute;top:-30px;left:0;width:10pc;height:60px;content:"";border-radius:5pc/30px;background-image:-webkit-gradient(linear,left bottom,left top,from(#6c0c0b),to(#ed4c4c));background-image:-webkit-linear-gradient(bottom,#6c0c0b 0,#ed4c4c 100%);background-image:linear-gradient(to top,#6c0c0b 0,#ed4c4c 100%);-webkit-box-shadow:0 10px 28px 2px rgba(0,0,0,.2),inset 0 5px 10px 0 rgba(0,0,0,.2),inset 0 2px 1px 0 hsla(0,0%,100%,.6),inset 0 -2px 1px 0 hsla(0,0%,100%,.1),inset 0 -2px 10px 5px rgba(237,76,76,.6),inset 5px 0 1px 1px hsla(0,0%,100%,.3);box-shadow:0 10px 28px 2px rgba(0,0,0,.2),inset 0 5px 10px 0 rgba(0,0,0,.2),inset 0 2px 1px 0 hsla(0,0%,100%,.6),inset 0 -2px 1px 0 hsla(0,0%,100%,.1),inset 0 -2px 10px 5px rgba(237,76,76,.6),inset 5px 0 1px 1px hsla(0,0%,100%,.3)}.btn-emergency-real-top span{font-size:38px;font-weight:700;position:absolute;top:-1pc;left:0;width:100%;-webkit-transform:scaleY(0.75);transform:scaleY(0.75);text-align:center;color:#e48a8a;text-shadow:-1px -1px 0 rgba(0,0,0,.5),1px 1px 5px hsla(0,0%,100%,.3)}.btn-emergency-real-bottom{position:absolute;top:38px;left:0;width:200px;height:5pc;border-radius:75pt/40px;background-image:-webkit-gradient(linear,left top,right top,from(#f2f2f2),color-stop(48%,#b4b4b4),to(#767676));background-image:-webkit-linear-gradient(left,#f2f2f2 0,#b4b4b4 48%,#767676 100%);background-image:linear-gradient(to right,#f2f2f2 0,#b4b4b4 48%,#767676 100%);-webkit-box-shadow:0 8px 0 #c4cacc,inset 1px -1px 10px 0 rgba(0,0,0,.2);box-shadow:0 8px 0 #c4cacc,inset 1px -1px 10px 0 rgba(0,0,0,.2)}
             table select, table input {
@@ -175,6 +174,9 @@
               vertical-align: middle;
               text-align: center;
             }
+            thead.shiritori-thead{
+              font-family: Monaco, monospace, sans-serif;
+            }
             th.twitter_username {
               text-align: left;
               padding-left: 1em;
@@ -182,7 +184,6 @@
             }
             th.twitter_username a {
               color: #1b95e0;
-              font-family: Monaco, monospace, sans-serif;
             }
             a.btn--shadow{
               -webkit-box-shadow: 0 3px 5px rgb(0 0 0 / 30%);
@@ -532,16 +533,14 @@
                 sound_correct_answer()
                 winstreak_counter.innerHTML = ++winstreak;
                 if (winstreak==num_problems_input.value){
-                  finish_and_suggest_tweet()
+                  clearInterval(timer_id);
+                  download_element(element=shiritori_wrapper, width=800, height=450, filename="result.png");
                 }else{
                   generate_problem_certainly();
                 }
               }else{
                 sound_wrong_buzzer()
               }
-            }
-            function finish_and_suggest_tweet(){
-              clearInterval(timer_id);
             }
             // StopWatch
             var start_time
@@ -626,36 +625,35 @@
             })
           </script>
 
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js" type="text/javascript"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
 
           <script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
 
           <script>
-          function dataUriToBlob(dataUri) {
-            const b64 = atob(dataUri.split(',')[1]);
-            const u8 = Uint8Array.from(b64.split(''), e => e.charCodeAt());
-            return new Blob([u8], {type: 'image/png'});
-          }
-          async function download_element(element, filename="image.png", width=400, height=250, img=undefined){
-            return html2canvas(element,{
-              scrollX: 0,
-              scrollY: -window.scrollY,
-            }).then(function(canvas){
-              if (img == undefined){
-                var img = document.createElement("img");
-                img.width = width+"px";
-                img.height = height+"px";
-              }
-              data = canvas.toDataURL();
-              img.src = data;
-              var url = URL.createObjectURL(dataUriToBlob(img.src));
-              var link = document.createElement("a");
-              link.href = url;
-              link.download = filename;
-              link.click();
-              return data;
-            });
-          }
+            function dataUriToBlob(dataUri) {
+              const b64 = atob(dataUri.split(',')[1]);
+              const u8 = Uint8Array.from(b64.split(''), e => e.charCodeAt());
+              return new Blob([u8], {type: 'image/png'});
+            }
+            function download_element(element, width=800, height=450, filename="result.png"){
+              html2canvas(element,{
+                letterRendering: 1, 
+                allowTaint : true, 
+                onrendered: function(canvas) {
+                  var dataURI = canvas.toDataURL('image/png');
+                  var img = document.createElement("img");
+                  img.width = `${width}px`;
+                  img.height = `${height}px`;
+                  data = canvas.toDataURL();
+                  img.src = data;
+                  var url = URL.createObjectURL(dataUriToBlob(img.src));
+                  var link = document.createElement("a");
+                  link.href = url;
+                  link.download = filename;
+                  link.click();
+                }
+              });
+            }
           </script>
         
         </div><!-- /.entry-content -->
