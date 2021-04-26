@@ -91,6 +91,7 @@
     </table>
   </form>
   <div id="shiritori-wrapper">
+    <img src id="wallpaper">
     <div class="frame" id="shiritori-content">
       <table id="shiritori-table">
         <col style="width: 5%;">
@@ -99,7 +100,7 @@
         <col style="width: 40%;">
         <col style="width: 5%;">
         <thead class="shiritori-thead"><tr>
-          <th class="twitter_username" colspan="2"><a href="https://twitter.com/cabernet_rock">@cabernet_rock</a></th>
+          <th class="twitter_username" colspan="2"><a href="https://twitter.com/cabernet_rock"><img id="twitter-icon" src="https://iwasakishuto.github.io/Front-End/tips/theme/images/icons/twitter_banner.png"></a></th>
           <th><a class="btn--click btn--shadow btn--red" onclick="show_answer()">答え</a></th>
           <th colspan="2"><span id="winstreak-counter">0</span>/<span id="num_problems">0</span>問・<span id="curt-time-counter">00:00:00</span>・<span id="quiz-generation"></span></th>
         </tr></thead>
@@ -157,10 +158,18 @@
   thead.shiritori-thead{
     font-family: Monaco, monospace, sans-serif;
   }
+  thead.shiritori-thead tr th:nth-child(3) {
+     font-size: 1.2em;
+  }
   th.twitter_username {
     text-align: left;
     padding-left: 1em;
     vertical-align: top;
+  }
+  th.twitter_username img#twitter-icon {
+    width: 60%;
+    border: 0;
+    padding: 0;
   }
   th.twitter_username a {
     color: #1b95e0;
@@ -219,6 +228,11 @@
     background: goldenrod;
     border-bottom-color: darkgoldenrod;
   }
+  img#wallpaper{
+    opacity: .3;
+    border: 0;
+    padding: 0;
+  }
   .youtube-wrapper {
     position: relative;
     padding-top: 56.25%;
@@ -243,7 +257,6 @@
   #shiritori-wrapper:before{
     content: "";
     display: block;
-    padding-top: 56.25%; /* (W,H) = (16,9) */
   }
   #shiritori-table, #shiritori-table th, #shiritori-table td{
     border: 0;
@@ -308,7 +321,7 @@
     background-size: contain;
     background-color:rgba(255,255,255,0.7);
     background-blend-mode:lighten;
-    border: solid black 2px;
+    /* border: solid black 2px; */
   }
   sub#shiritori-problem-warning{
     font-size: smaller;
@@ -390,13 +403,13 @@
   const shiritori_input_init = document.getElementById("shiritori-input-init");
   const shiritori_input_end = document.getElementById("shiritori-input-end");
   const shiritori_problem_warning = document.getElementById("shiritori-problem-warning");
-  const answer_btn = document.getElementById("answer-btn");
   const problem_seed_input = document.querySelector(`input[name="problem_seed"]`)
   const shiritori_wrapper = document.getElementById("shiritori-wrapper");
   const winstreak_counter = document.getElementById("winstreak-counter");
   const curt_time_counter = document.getElementById("curt-time-counter");
   const quiz_generation   = document.getElementById("quiz-generation");
   const answer_btn_pos    = document.getElementById("answer-btn-pos");
+  const wallpaper_img = document.getElementById("wallpaper")
   const s1_ = 0x41C64E6D;
   const s2_ = 0x6073;
   var gRngValue = 0;
@@ -423,7 +436,7 @@
     if (no<=0 || no>=wallpaper_max_no) no = Math.floor(Math.random()*wallpaper_max_no)+1
     generation_ubs.some(function(e,i){
       if (no<=e){
-        shiritori_wrapper.style.backgroundImage = `url('${Pdata_wallimg_baseurl}/${generation_paths[i]}/${("00" + no).slice(-3)}.jpg')`;
+        wallpaper_img.setAttribute("src", `${Pdata_wallimg_baseurl}/${generation_paths[i]}/${("00" + no).slice(-3)}.jpg`);
         return true;
       }
     })
@@ -526,6 +539,7 @@
   function generate_inputted_pokemon_end(){
     shiritori_input_end.parentElement.nextElementSibling.innerHTML = pokemon_image_create(shiritori_input_end.value);
   }
+  var answer_btn = document.getElementById("answer-btn");
   function answer_problem(){
     if (right2answer && check_answer()){
       sound_correct_answer()
@@ -534,8 +548,11 @@
         clearInterval(timer_id);
         var tmp = answer_btn_pos.innerHTML;
         answer_btn_pos.innerHTML = '<span class="title">ポケモン<br>しりとりクイズ</span>';
-        download_element(element=shiritori_wrapper, width=800, height=450, filename="result.png");
-        setTimeout(function(){ answer_btn_pos.innerHTML = tmp; }, 500);
+        download_element(element=shiritori_wrapper, width=480, height=270, filename="result.png");
+        setTimeout(function(){ 
+          answer_btn_pos.innerHTML = tmp; 
+          var answer_btn = document.getElementById("answer-btn");
+        }, 500);
       }else{
         generate_problem_certainly();
       }
