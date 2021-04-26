@@ -60,29 +60,28 @@
           <footer class="post-info">
             <span>2021-04-24(Sat)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a></span>
-          </footer><!-- /.post-info --><h1>ポケモンしりとりクイズ</h1>
-
-<p><img id="target">
-<div class="contents">
+          </footer><!-- /.post-info --><div class="contents">
   <h3>ポケモンしりとりクイズ</h3>
   <ul>
     <li>２匹のポケモンの名前が出てくるので、間の２匹のポケモンの名前を入力して、しりとりを完成させてください。</li>
     <li>[Tab] Keyを押すと２つの入力欄と解答ボタンを循環するので、使いやすくなると思います。</li>
     <li>背景のポケモンと問題には関係がありません。</li>
-    <li>図鑑No.が 0 の場合、ランダムなポケモンが選択されます。</li>
+    <li>図鑑No.が 0 の場合、背景画像にはランダムなポケモンが選択されます。</li>
+    <li>背景画像は、<a href="https://github.com/LazoCoder/Pokemon-Terminal">Pokemon-Terminal</a>の画像を利用しています。</li>
     <li>末尾が「ー」の場合、その１つ前の文字でつなげています。また、小文字と大文字の区別はしていません。</li>
     <li>答えを見ると、３秒間解答できなくなります。</li>
+    <li style="color:red;">設定した問題数を解答すると、結果の画像がダウンロードできます。是非SNS等でシェアしてください！！</li>
   </ul>
   <form id="shiritori-form" name="SHIRITORI">
     <table class="fixed">
-      <thead><tr><th colspan="3">問題の設定（問題数： <input type="number" min="0" max="100" value="10" size="3" name="num_problems"> 問）</th></tr></thead>
+      <thead><tr><th colspan="3">問題の設定（問題数： <input type="number" min="1" max="100" value="10" size="3" name="num_problems"> 問）</th></tr></thead>
       <tbody><tr>
       <td>図鑑No.</td><td><input type="number" min="0" max="719" value="0" size="3" name="wallpaper_no"></td>
       <td><a class="btn--click btn--shadow btn--goldenrod" onclick="generate_wallpaper()">背景を変更</a></td>
       </tr>
       <tr>
       <td>世代（ <span id="num_mons"></span> 種）</td>
-      <td colspan="2"><select name="generation"><option value="0" selected>全て</option><option value="1">1.カントー地方（赤・緑・青・ピカチュウ）</option><option value="2">2.ジョウト地方（金・銀・クリスタル）</option><option value="3">3.ホウエン地方（ルビー・サファイア・エメラルド）</option><option value="4">4.シンオウ地方（ダイヤモンド・パール）</option><option value="5">5.イッシュ地方（ブラック・ホワイト）</option><option value="6">6.カロス地方　（X・Y）</option><option value="7">7.アローラ地方（サン・ムーン）</option><option value="8">8.ガラル地方　（ソード・シールド）</option></select></td>
+      <td colspan="2"><select name="generation"><option value="0" selected>0.全て</option><option value="1">1.カントー地方（赤・緑・青・ピカチュウ）</option><option value="2">2.ジョウト地方（金・銀・クリスタル）</option><option value="3">3.ホウエン地方（ルビー・サファイア・エメラルド）</option><option value="4">4.シンオウ地方（ダイヤモンド・パール）</option><option value="5">5.イッシュ地方（ブラック・ホワイト）</option><option value="6">6.カロス地方　（X・Y）</option><option value="7">7.アローラ地方（サン・ムーン）</option><option value="8">8.ガラル地方　（ソード・シールド）</option></select></td>
       </tr>
       <tr>
       <td>seed <sub id="shiritori-problem-warning"></sub></td><td><input type="number" min="0" max="4294967295" value="1000000" size="3" name="problem_seed"></td>
@@ -99,7 +98,11 @@
         <col style="width: 10%;">
         <col style="width: 40%;">
         <col style="width: 5%;">
-        <thead class="shiritori-thead"><tr><th class="twitter_username" colspan="2"><a href="https://twitter.com/cabernet_rock">@cabernet_rock</a></th><th><a class="btn--click btn--shadow btn--red" onclick="show_answer()">答え</a></th><th colspan="2"><span id="winstreak-counter">0</span> / <span id="num_problems">0</span> 問（<span id="curt-time-counter">00:00:00</span>）</th></tr></thead>
+        <thead class="shiritori-thead"><tr>
+          <th class="twitter_username" colspan="2"><a href="https://twitter.com/cabernet_rock">@cabernet_rock</a></th>
+          <th><a class="btn--click btn--shadow btn--red" onclick="show_answer()">答え</a></th>
+          <th colspan="2"><span id="winstreak-counter">0</span>/<span id="num_problems">0</span>問・<span id="curt-time-counter">00:00:00</span>・<span id="quiz-generation"></span></th>
+        </tr></thead>
         <tbody>
           <tr><td></td><td><span id="shiritori-init"></span></td><td></td><td></td><td></td></tr>
           <tr><td colspan="2"><div class="arrow down"></div></td><td></td><td></td><td></td></tr>
@@ -111,7 +114,7 @@
             <td></td>
           </tr>
           <tr>
-            <td colspan="3" rowspan="2">
+            <td id="answer-btn-pos" colspan="3" rowspan="2">
               <a tabindex="0" id="answer-btn" class="btn-emergency-real" onclick="answer_problem()">
                 <span class="btn-emergency-real-bottom"></span>
                 <span class="btn-emergency-real-top"><span>解答</span></span>
@@ -126,6 +129,7 @@
     </div>
   </div>
 </div>
+
 <div class="contents">
   <h3>YouTube</h3>
   <p>このクイズを作る元ネタとなった動画です。是非たくさん再生してください。</p>
@@ -133,7 +137,8 @@
     <iframe src="https://www.youtube.com/embed/MM4KP_FvgHU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
   </div>
 </div>
-</div><!-- /.entry-content --></p>
+
+<p></div><!-- /.entry-content --></p>
 <style>
   a.btn-emergency-real{position:relative;display:block;width:200px;height:130px;margin:0 auto;cursor:pointer;}a.btn-emergency-real:hover .btn-emergency-real-top, a.btn-emergency-real:focus .btn-emergency-real-top{top:10px;height:50px}a.btn-emergency-real:active .btn-emergency-real-top{top:20px;height:40px}.btn-emergency-real-top{position:absolute;top:0;left:20px;width:10pc;height:60px;margin-top:30px;-webkit-transition:all .3s;transition:all .3s;border-radius:0 0 50% 50%;background-image:-webkit-gradient(linear,right top,left top,from(#630909),to(#d62d2d));background-image:-webkit-linear-gradient(right,#630909 0,#d62d2d 100%);background-image:linear-gradient(to left,#630909 0,#d62d2d 100%);-webkit-box-shadow:inset 0 -1px 10px 0 rgba(0,0,0,.9),0 5px 5px 0 rgba(0,0,0,.2);box-shadow:inset 0 -1px 10px 0 rgba(0,0,0,.9),0 5px 5px 0 rgba(0,0,0,.2)}.btn-emergency-real-top:before{position:absolute;top:-30px;left:0;width:10pc;height:60px;content:"";border-radius:5pc/30px;background-image:-webkit-gradient(linear,left bottom,left top,from(#6c0c0b),to(#ed4c4c));background-image:-webkit-linear-gradient(bottom,#6c0c0b 0,#ed4c4c 100%);background-image:linear-gradient(to top,#6c0c0b 0,#ed4c4c 100%);-webkit-box-shadow:0 10px 28px 2px rgba(0,0,0,.2),inset 0 5px 10px 0 rgba(0,0,0,.2),inset 0 2px 1px 0 hsla(0,0%,100%,.6),inset 0 -2px 1px 0 hsla(0,0%,100%,.1),inset 0 -2px 10px 5px rgba(237,76,76,.6),inset 5px 0 1px 1px hsla(0,0%,100%,.3);box-shadow:0 10px 28px 2px rgba(0,0,0,.2),inset 0 5px 10px 0 rgba(0,0,0,.2),inset 0 2px 1px 0 hsla(0,0%,100%,.6),inset 0 -2px 1px 0 hsla(0,0%,100%,.1),inset 0 -2px 10px 5px rgba(237,76,76,.6),inset 5px 0 1px 1px hsla(0,0%,100%,.3)}.btn-emergency-real-top span{font-size:38px;font-weight:700;position:absolute;top:-1pc;left:0;width:100%;-webkit-transform:scaleY(0.75);transform:scaleY(0.75);text-align:center;color:#e48a8a;text-shadow:-1px -1px 0 rgba(0,0,0,.5),1px 1px 5px hsla(0,0%,100%,.3)}.btn-emergency-real-bottom{position:absolute;top:38px;left:0;width:200px;height:5pc;border-radius:75pt/40px;background-image:-webkit-gradient(linear,left top,right top,from(#f2f2f2),color-stop(48%,#b4b4b4),to(#767676));background-image:-webkit-linear-gradient(left,#f2f2f2 0,#b4b4b4 48%,#767676 100%);background-image:linear-gradient(to right,#f2f2f2 0,#b4b4b4 48%,#767676 100%);-webkit-box-shadow:0 8px 0 #c4cacc,inset 1px -1px 10px 0 rgba(0,0,0,.2);box-shadow:0 8px 0 #c4cacc,inset 1px -1px 10px 0 rgba(0,0,0,.2)}
   table select, table input {
@@ -159,6 +164,17 @@
   }
   th.twitter_username a {
     color: #1b95e0;
+  }
+  td#answer-btn-pos span.title{
+    padding: 0 55px;
+    font-size: 2em;
+    font-family: 'pkmnfont';
+    line-height: 2em;
+    border: solid #c94663 2px;
+    display: inline-block;
+    border-radius: 50%;
+    background-color: #8a1010;
+    color: white;
   }
   a.btn--shadow{
     -webkit-box-shadow: 0 3px 5px rgb(0 0 0 / 30%);
@@ -210,9 +226,10 @@
   .youtube-wrapper iframe{
     position: absolute;
     top: 0;
-    left: 0;
-    width: 100%;
+    left: 10%;
+    width: 80%;
     height: 100%;
+    border: 4px solid #008db8;
   }
   #shiritori-form table thead {
     background-color: black;
@@ -375,13 +392,12 @@
   const shiritori_problem_warning = document.getElementById("shiritori-problem-warning");
   const answer_btn = document.getElementById("answer-btn");
   const problem_seed_input = document.querySelector(`input[name="problem_seed"]`)
-  const wallpaper_base_url = "https://github.com/LazoCoder/Pokemon-Terminal/blob/master/pokemonterminal/Images";
-  const generation_ubs = [151,251,386,493,649,719];
-  const generation_paths = ["Generation I - Kanto", "Generation II - Johto", "Generation III - Hoenn", "Generation IV - Sinnoh", "Generation V - Unova", "Generation VI - Kalos"];
   const wallpaper_max_no = Math.max(...generation_ubs)
   const shiritori_wrapper = document.getElementById("shiritori-wrapper");
   const winstreak_counter = document.getElementById("winstreak-counter");
   const curt_time_counter = document.getElementById("curt-time-counter");
+  const quiz_generation   = document.getElementById("quiz-generation");
+  const answer_btn_pos    = document.getElementById("answer-btn-pos");
   const s1_ = 0x41C64E6D;
   const s2_ = 0x6073;
   var gRngValue = 0;
@@ -395,6 +411,9 @@
     return gRngValue >>> 16; // "Unsigned" right shift
   }
   const Pdata_img_baseurl = "https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon";
+  const Pdata_wallimg_baseurl = "https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon-wallpaper";
+  const generation_ubs = [151,251,386,493,649,719];
+  const generation_paths = ['Generation%20I%20-%20Kanto', 'Generation%20II%20-%20Johto', 'Generation%20III%20-%20Hoenn', 'Generation%20IV%20-%20Sinnoh', 'Generation%20V%20-%20Unova', 'Generation%20VI%20-%20Kalos'];
   function pokemon_image_create(name){
     return `<div class='overflow-ms'><img src="${Pdata_img_baseurl}/${("00" + (POKEMON_NAMES.indexOf(name)+1)).slice(-3)}.png" alt="${name}"></div>`
   }
@@ -404,7 +423,7 @@
     if (no<=0 || no>=wallpaper_max_no) no = Math.floor(Math.random()*wallpaper_max_no)+1
     generation_ubs.some(function(e,i){
       if (no<=e){
-        shiritori_wrapper.style.backgroundImage = `url('${wallpaper_base_url}/${generation_paths[i]}/${("00" + no).slice(-3)}.jpg?raw=true')`;
+        shiritori_wrapper.style.backgroundImage = `url('${Pdata_wallimg_baseurl}/${generation_paths[i]}/${("00" + no).slice(-3)}.jpg?raw=true')`;
         return true;
       }
     })
@@ -418,6 +437,7 @@
     })
     pokemon_datalist.innerHTML = datalist;
     document.getElementById("num_mons").innerHTML = selected_pokemons.length;
+    quiz_generation.innerHTML = shiritori_form.generation.options[shiritori_form.generation.selectedIndex].textContent.split("（")[0].split(".")[1];
   }
   var answer_pokemons = []
   function generate_problem(){
@@ -468,7 +488,10 @@
   }
   function show_answer(){
     right2answer = false;
-    setTimeout('right2answer=true; generate_problem_certainly();', 3000);
+    setTimeout(function(){
+      right2answer=true; 
+      generate_problem_certainly();
+    }, 3000);
     shiritori_input_init.value = answer_pokemons[1];
     shiritori_input_end.value = answer_pokemons[2];
     generate_inputted_pokemon_init();
@@ -509,7 +532,10 @@
       winstreak_counter.innerHTML = ++winstreak;
       if (winstreak==num_problems_input.value){
         clearInterval(timer_id);
+        var tmp = answer_btn_pos.innerHTML;
+        answer_btn_pos.innerHTML = '<span class="title">ポケモン<br>しりとりクイズ</span>';
         download_element(element=shiritori_wrapper, width=800, height=450, filename="result.png");
+        setTimeout(function(){ answer_btn_pos.innerHTML = tmp; }, 500);
       }else{
         generate_problem_certainly();
       }
@@ -614,6 +640,7 @@
     html2canvas(element,{
       letterRendering: 1, 
       allowTaint : true, 
+      useCORS: true,
       onrendered: function(canvas) {
         var dataURI = canvas.toDataURL('image/png');
         var img = document.createElement("img");
