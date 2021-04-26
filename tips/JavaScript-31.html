@@ -10,7 +10,7 @@
     <meta property="og:type" content="article" />
     <meta name="twitter:card" content="summary">
     <meta name="keywords" content="JavaScript, pokemon, JavaScript, " />
-    <meta property="og:image" content="https://github.com/tensorflow/tfjs-models/raw/master/posenet/demos/camera.gif"/>
+    <meta property="og:image" content="https://iwasakishuto.github.io/Front-End/tips/images/shiritori_demo.png"/>
     <meta property="og:title" content="JS.31 ポケモンしりとりクイズ "/>
     <meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-31.html" />
     <meta property="og:description" content="ポケモンしりとりクイズで遊ぼう。" />
@@ -108,7 +108,7 @@
                 </tr>
                 <tr>
                 <td>seed <sub id="shiritori-problem-warning"></sub></td><td><input type="number" min="0" max="4294967295" value="1000000" size="3" name="problem_seed"></td>
-                <td><a class="btn--click btn--shadow btn--blue" onclick="generate_problem()">問題を生成</a></td>
+                <td><a class="btn--click btn--shadow btn--blue" onclick="reset_situ()">問題に挑戦</a></td>
                 </tr>
                 </tbody>
               </table>
@@ -121,7 +121,7 @@
                   <col style="width: 10%;">
                   <col style="width: 40%;">
                   <col style="width: 5%;">
-                  <thead><tr><th colspan="2"></th><th id="curt-time">00:00</th><th><a class="btn--click btn--shadow btn--red" onclick="show_answer()">答えを見る</a></th><th id="winstreak-counter">0</th></tr></thead>
+                  <thead><tr><th colspan="2"></th><th><a class="btn--click btn--shadow btn--red" onclick="show_answer()">答え</a></th><th colspan="2"><span id="winstreak-counter">0</span> 問連続正解中（<span id="curt-time-counter">00:00:00</span>）</th></tr></thead>
                   <tbody>
                     <tr><td></td><td><span id="shiritori-init"></span></td><td></td><td></td><td></td></tr>
                     <tr><td colspan="2"><div class="arrow down"></div></td><td></td><td></td><td></td></tr>
@@ -381,12 +381,14 @@
             const shiritori_input_end = document.getElementById("shiritori-input-end");
             const shiritori_problem_warning = document.getElementById("shiritori-problem-warning");
             const answer_btn = document.getElementById("answer-btn");
+            const problem_seed_input = document.querySelector(`input[name="problem_seed"]`)
             const wallpaper_base_url = "https://github.com/LazoCoder/Pokemon-Terminal/blob/master/pokemonterminal/Images";
             const generation_ubs = [151,251,386,493,649,719];
             const generation_paths = ["Generation I - Kanto", "Generation II - Johto", "Generation III - Hoenn", "Generation IV - Sinnoh", "Generation V - Unova", "Generation VI - Kalos"];
             const wallpaper_max_no = Math.max(...generation_ubs)
             const shiritori_wrapper = document.getElementById("shiritori-wrapper");
             const winstreak_counter = document.getElementById("winstreak-counter");
+            const curt_time_counter = document.getElementById("curt-time-counter");
             const s1_ = 0x41C64E6D;
             const s2_ = 0x6073;
             var gRngValue = 0;
@@ -456,6 +458,15 @@
               generate_inputted_pokemon_end()
               return is_ok;
             }
+            function generate_problem_certainly(){
+              var curt, is_ok
+              do {
+                curt = parseInt(shiritori_form.problem_seed.value);
+                shiritori_form.problem_seed.value = (curt==MAX_SEED_VALUE) ? 0 : curt+1
+                is_ok = generate_problem()
+              }while (!is_ok)
+              return is_ok;
+            }
             function replace_for_shiritori(w){
               [
                 ['ァ', 'ア'], ['ィ', 'イ'], ['ゥ', 'ウ'], ['ェ', 'エ'], ['ォ', 'オ'], ['ヵ', 'カ'], ['ヶ', 'ケ'], ['ッ', 'ツ'], ['ャ', 'ヤ'], ['ュ', 'ユ'], ['ョ', 'ヨ'], ['ヮ', 'ワ'], ['♂', 'ス'], ['♀', 'ス'],
@@ -478,13 +489,33 @@
             }
             function answer_problem(){
               winstreak_counter.innerHTML = ++winstreak;
-              var curt, is_ok
-              do {
-                curt = parseInt(shiritori_form.problem_seed.value);
-                shiritori_form.problem_seed.value = (curt==MAX_SEED_VALUE) ? 0 : curt+1
-                is_ok = generate_problem()
-              }while (!is_ok)
+              generate_problem_certainly();
             }
+            var start_time
+            var timer_id = false
+            function reset_situ(){
+              problem_seed_input.value = Math.floor(Math.random()*1e6)+1
+              if (timer_id) clearInterval(timer_id)
+              start_time = new Date();
+              winstreak_counter.innerHTML = winstreak = 0;
+              timer_id = setInterval(goTimer, 10);
+              generate_problem_certainly()
+            }
+            function zeroPad(val){
+              return ("00" + val).slice(-2);
+            }
+            function goTimer(){
+              var now = new Date();
+              var milli = now.getTime() - start_time.getTime();
+              var seconds = Math.floor(milli / 1000);
+              var minutes = Math.floor(seconds / 60);
+              // var hours = Math.floor(minutes / 60);
+              milli   = Math.floor((milli - seconds * 1000)/10);
+              seconds = seconds - minutes * 60;
+              // minutes = minutes - hours * 60;
+              curt_time_counter.innerHTML = `${zeroPad(minutes)}:${zeroPad(seconds)}:${zeroPad(milli)}`
+            }
+            // StopWatch
             // Window On load
             window.onload = function(){
               shiritori_input_init.onchange = generate_inputted_pokemon_init
@@ -501,7 +532,6 @@
                     generate_problem();
                   };
                 }else if (e.name == "problem_seed"){
-                  e.value = Math.floor(Math.random()*1e6)+1
                   e.onchange = function(){
                     generate_problem();
                   };
