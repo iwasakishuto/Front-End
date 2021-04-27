@@ -542,7 +542,7 @@
                 if (!(is_satisfied_shiritori_rule(tmp_list[i], tmp_list[i+1]) && selected_pokemons.indexOf(tmp_list[i])!=-1)) break
               }
               var tmp_set = new Set(tmp_list);
-              return (i==NUM_SHIRITORI-1)&&(selected_pokemons.indexOf(tmp_list[i])!=-1)&&(tmp_set.size!=tmp_list.length)
+              return (i==NUM_SHIRITORI-1)&&(selected_pokemons.indexOf(tmp_list[i])!=-1)&&(tmp_set.size==tmp_list.length)
             }
             function show_answer(){
               right2answer = false;
