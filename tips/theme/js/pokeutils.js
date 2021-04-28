@@ -113,7 +113,7 @@ function coloring_by_nature(nature, values, hp_idx, tag="td"){
     return `<${tag}>${values[hp_idx]}</${tag}>` + natureid2corr[nature].map(function(corr, i){
       let bgcolor = corr>1.0 ? "hotpink" : corr<1.0 ? "cornflowerblue" : "white";
       return `<${tag} style='background-color:${bgcolor}'>${values[hp_idx+i+1]}</${tag}>`
-    }).join()
+    }).join("")
   }else{
     // Coloring tds.
     natureid2corr[nature].forEach(function(corr, i){

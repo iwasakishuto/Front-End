@@ -185,64 +185,41 @@
             var challengeNum_area      = document.getElementById("challengeNum");
             var rentalRank_area        = document.getElementById("rentalRank");
             var monRange_area          = document.getElementById("monRange");
-            var rental_pokemon_wrapper = document.getElementById("rental-pokemon-wrapper");
-            function set_factory_condition(FACTORY){
-              var lv = parseInt(document.getElementById("lv").value);
-              var challengeNum = Math.min(parseInt(FACTORY.winStreak.value), 7);
-              var rentalRank = parseInt(FACTORY.rentalCount.value);
-              var LvlMode = parseInt(FACTORY.LvlMode.value);
-              var monRanges = sInitialRentalMonRanges[LvlMode+challengeNum];
-              var ivs = [sFixedIVTable[challengeNum][0]]
-              var monRanges_str = `${monRanges.join("~")}(${ivs[0]})`;
-              var monRanges_cond = `(${monRanges[0]} <= i && i <= ${monRanges[1]}) ? 1 : 0`
-              if ((challengeNum < 7) && (rentalRank>0)){
-                var monRanges = sInitialRentalMonRanges[LvlMode+challengeNum+1];
-                ivs.push(sFixedIVTable[challengeNum+1][0])
-                monRanges_str +=  `, ${monRanges.join("~")}(${ivs[1]})`
-                monRanges_cond = monRanges_cond.slice(0,-1) + `(${monRanges[0]} <= i && i <= ${monRanges[1]}) ? 2 : 0`;
-              }
-              challengeNum_area.innerHTML = challengeNum
-              rentalRank_area.innerHTML = rentalRank
-              monRange_area.innerHTML = monRanges_str;
-              // Generate Rental Pokemon Table.
+            function load_rental_pokemons(){
+              var rental_pokemon_tbody_trs = "";
               RENTAL_POKEMON_LIST.forEach(function(e,i){
-                let flag = eval(monRanges_cond)
-                if (flag>0){
-                  let iv = ivs[flag-1];
-                  let rstats = calculate_statistics(e[2], [iv,iv,iv,iv,iv,iv], e.slice(10,16), e[9], lv=lv)
-                  let moves = e.slice(Rental_Pokemon_moveIdx, Rental_Pokemon_moveIdx+4);
-                  let move_colors = []
-                  moves.forEach(function(e,i){
-                    if (!BattleStyleMoves.some(function(lst,j){
-                      if (lst.indexOf(e)!=-1){
-                        move_colors[i] = BattleStyleColors[j];
-                        return true;
-                      }
-                    })) move_colors[i] = "#FFFFFF";
-                  })
-                  let pname = e[Rental_Pokemon_nameIdx];
-                  let iname = e[Rental_Pokemon_itemIdx];
-                  let nature = e[Rental_Pokemon_natureIdx];
-                  let type_ret = Pname2typeColor(pname);
-                  rental_pokemon_list += `<tr>
-                    <td>${e[Rental_Pokemon_rentalidIdx]}</td>
-                    <td>${e[Rental_Pokemon_pokedexIdx]}</td>
-                    <td><label><input type="checkbox"/>${pname}</label></td>
-                    <td style="background-image: ${type_ret.color}";>${type_ret.string}</td>
-                    <td>${iname}</td>
-                    <td style="padding:0">
-                      <span class="rental-move" style="background-color:${move_colors[0]}">${moves[0]}</span>
-                      <span class="rental-move" style="background-color:${move_colors[1]}">${moves[1]}</span>
-                      <span class="rental-move" style="background-color:${move_colors[2]}">${moves[2]}</span>
-                      <span class="rental-move" style="background-color:${move_colors[3]}">${moves[3]}</span>
-                    </td>
-                    ${coloring_by_nature(nature, [0,0,0,0,0,0], 0, tag="td")}
-                    <td>${e[Rental_Pokemon_natureIdx]}</td>
-                    ${coloring_by_nature(nature, e, Rental_Pokemon_evsIdx, tag="td")}
-                  </tr>`
-                }
+                let moves = e.slice(Rental_Pokemon_moveIdx, Rental_Pokemon_moveIdx+4);
+                let move_colors = []
+                moves.forEach(function(e,i){
+                  if (!BattleStyleMoves.some(function(lst,j){
+                    if (lst.indexOf(e)!=-1){
+                      move_colors[i] = BattleStyleColors[j];
+                      return true;
+                    }
+                  })) move_colors[i] = "#FFFFFF";
+                })
+                let pname  = e[Rental_Pokemon_nameIdx];
+                let iname  = e[Rental_Pokemon_itemIdx];
+                let nature = e[Rental_Pokemon_natureIdx];
+                let poketypes = Pname2typeColor(pname);
+                rental_pokemon_tbody_trs += `<tr>
+                  <td>${e[Rental_Pokemon_rentalidIdx]}</td>
+                  <td>${e[Rental_Pokemon_pokedexIdx]}</td>
+                  <td><label><input type="checkbox"/>${pname}</label></td>
+                  <td style="background-image: ${poketypes.color}";>${poketypes.string}</td>
+                  <td>${iname}</td>
+                  <td style="padding:0">
+                    <span class="rental-move" style="background-color:${move_colors[0]}">${moves[0]}</span>
+                    <span class="rental-move" style="background-color:${move_colors[1]}">${moves[1]}</span>
+                    <span class="rental-move" style="background-color:${move_colors[2]}">${moves[2]}</span>
+                    <span class="rental-move" style="background-color:${move_colors[3]}">${moves[3]}</span>
+                  </td>      
+                  ${coloring_by_nature(nature, [0,0,0,0,0,0], 0, tag="td")}
+                  <td>${e[Rental_Pokemon_natureIdx]}</td>
+                  ${coloring_by_nature(nature, e, Rental_Pokemon_evsIdx, tag="td")}
+                </tr>`
               })
-              rental_pokemon_wrapper.innerHTML = rental_pokemon_list + "</tbody></table>";
+              rental_pokemon_tbody.innerHTML = rental_pokemon_tbody_trs;
             }
             function rental_filterTable(){
               var filtersConfig = {
@@ -273,17 +250,12 @@
               tf.init();
               initSelectionListeners(tf, c=2, d=0);
               // Improves the appearance when scrolling horizontally.
-              document.querySelectorAll("#rental-pokemon-table tr").forEach(function(e,i){
-                var tds = e.querySelectorAll("td")
-                tds[0].classList.add("fixed-tcol");
-                tds[1].classList.add("fixed-tcol");
-                tds[2].classList.add("fixed-tcol");
-              })
-              document.querySelectorAll(".grd_headTblCont tr").forEach(function(e,i){
-                var ths = e.querySelectorAll("th, td")
-                ths[0].classList.add("fixed-tcol");
-                ths[1].classList.add("fixed-tcol");
-                ths[2].classList.add("fixed-tcol");
+              rental_pokemon_table
+              document.querySelectorAll("#rental-pokemon-table tr, .grd_headTblCont tr").forEach(function(e,i){
+                var thds = e.querySelectorAll("th, td")
+                thds[0].classList.add("fixed-tcol");
+                thds[1].classList.add("fixed-tcol");
+                thds[2].classList.add("fixed-tcol");
               })
               document.querySelector("div.grd_Cont").querySelectorAll("input[type='checkbox']").forEach(function(e,i){
                 e.addEventListener("change", function(){
@@ -299,14 +271,15 @@
           <script>
             window.onload = function(){
               // Battle Factory
-              var rental_pokemon_form = document.querySelectorAll("form#factory_form table#rental-pokemon-form select");
-              for(let i=0; i<rental_pokemon_form.length; i++){
-                let e = rental_pokemon_form[i];
-                e.addEventListener('change', function(){
-                  set_factory_condition(document.FACTORY);
-                });
-              }
-              set_factory_condition(document.FACTORY);
+              // var rental_pokemon_form = document.querySelectorAll("form#factory_form table#rental-pokemon-form select");
+              // for(let i=0; i<rental_pokemon_form.length; i++){
+              //   let e = rental_pokemon_form[i];
+              //   e.addEventListener('change', function(){
+              //     set_factory_condition(document.FACTORY);
+              //   });
+              // }
+              load_rental_pokemons();
+              rental_filterTable();
             }
           </script>
 
