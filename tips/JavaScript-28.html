@@ -118,7 +118,7 @@
               </tbody>
               <thead>
                 <tr>
-                  <th><div class='overflow-ms'><img></div></th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th>
+                  <th id="mypoke-icon"></th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th>
                 </tr>
               </thead>
               <tbody>
@@ -979,8 +979,8 @@
               for (let i=1; i<7; i++){
                 base_states[i].innerHTML = data[Pdata_statusIdx+i-1];
               }
-              MPtable.querySelector("img").setAttribute("src", Pdata_img_baseurl + data[Pdata_imgIdx]);
-              MPtable.querySelector("img").parentElement.parentElement.style.backgroundImage = Pname2typeColor(pokename).color;
+              MPtable.querySelector("th#mypoke-icon").innerHTML = Picon_img_create(pokename);
+              MPtable.querySelector("th#mypoke-icon").style.backgroundImage = Pname2typeColor(pokename).color;
               calculate_mypoke_statistics(MYPOKE);
               generate_move_table(MYPOKE, document.PALACE);
             }
@@ -1068,9 +1068,17 @@
             const sMoves_Endurance = ['しろいきり', 'じこさいせい', 'ひかりのかべ', 'くろいきり', 'リフレクター', 'タマゴうみ', 'ねむる', 'まもる', 'みきり', 'こらえる', 'ミルクのみ', 'いやしのすず', 'しんぴのまもり', 'バトンタッチ', 'あさのひざし', 'こうごうせい', 'つきのひかり', 'のみこむ', 'ねがいごと', 'ねをはる', 'マジックコート', 'リサイクル', 'リフレッシュ', 'どろあそび', 'なまける', 'アロマセラピー', 'みずあそび']
             const sMoves_SlowAndSteady = ['うたう', 'ちょうおんぱ', 'かなしばり', 'やどりぎのタネ', 'どくのこな', 'しびれごな', 'ねむりごな', 'でんじは', 'どくどく', 'さいみんじゅつ', 'あやしいひかり', 'へびにらみ', 'どくガス', 'あくまのキッス', 'キノコのほうし', 'クモのす', 'てんしのキッス', 'まきびし', 'いばる', 'くろいまなざし', 'メロメロ', 'アンコール', 'いちゃもん', 'おだてる', 'おにび', 'ちょうはつ', 'あくび', 'ふういん', 'よこどり', 'フラフラダンス', 'くさぶえ', 'とおせんぼ']
             const sMoves_DependsOnTheBattlesFlow = ['すなあらし', 'あまごい', 'にほんばれ', 'あられ', 'ウェザーボール']
-            const BattleStyles = ["じゅんびばんたん", "よそくふかのう", "まずはよわめて", "けんこんいってき", "まだまだこれから", "じっくりじわじわ", "くもゆきしだい", "りんきおうへん", "じゆうほんぽう"]
+            const BattleStyles = ["じゅんびばんたん(3)", "よそくふかのう(2)", "まずはよわめて(2)", "けんこんいってき(2)", "まだまだこれから(3)", "じっくりじわじわ(3)", "くもゆきしだい(2)", "りんきおうへん(&&)", "じゆうほんぽう(-)"];
             const BattleStyleMoves = [sMoves_TotalPreparation, sMoves_ImpossibleToPredict, sMoves_WeakeningTheFoe, sMoves_HighRiskHighReturn, sMoves_Endurance, sMoves_SlowAndSteady, sMoves_DependsOnTheBattlesFlow]
-            const BattleStyleColors = ["#FFEEB8", "#92CEEE", "#DFC6DE", "#F8D4CE", "#C3E8B5", "#9EABD6",  "#BBBCC2"]
+            var BattleStyleMovesFilters = Array(BattleStyles.length).fill("rgx:.*")
+            BattleStyleMoves.forEach(function(e,i){
+              BattleStyleMovesFilters[i] = "rgx:" + e.join("|")
+            })
+            const BattleStyleColors = ["#FFEEB8", "#92CEEE", "#DFC6DE", "#F8D4CE", "#C3E8B5", "#9EABD6",  "#BBBCC2"];
+            // Index for Generated Tables
+            const RentalPokemonTable_AivIdx    = 7;
+            const RentalPokemonTable_natureIdx = 12;
+            const RentalPokemonTable_AevIdx    = 14;
             var challengeNum_area      = document.getElementById("challengeNum");
             var rentalRank_area        = document.getElementById("rentalRank");
             var monRange_area          = document.getElementById("monRange");
@@ -1096,8 +1104,11 @@
               rentalRank_area.innerHTML = rentalRank
               monRange_area.innerHTML = monRanges_str;
               // Generate Rental Pokemon Table.
-              rental_pokemon_list = `<table id="rental-pokemon-list">
-                <thead><tr><th>ID</th><th>No</th><th><input type="checkbox"/>ポケモン</th><th>タイプ</th><th>もちもの</th><th>技1</th><th>技2</th><th>技3</th><th>技4</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th><th>せいかく</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th></tr></thead>
+              rental_pokemon_list = `
+              <table id="rental-pokemon-list">
+                <thead>
+                  <tr><th>ID</th><th>No</th><th><input type="checkbox"/>ポケモン</th><th>タイプ</th><th>もちもの</th><th>技</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th><th>せいかく</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th></tr>
+                </thead>
                 <tbody id="rental-pokemon">
               `
               id2rowIndex = {}
@@ -1126,10 +1137,12 @@
                     <td><label><input type="checkbox"/>${pname}</label></td>
                     <td style="background-image: ${type_ret.color}";>${type_ret.string}</td>
                     <td>${iname}</td>
-                    <td style="background-color:${move_colors[0]}">${moves[0]}</td>
-                    <td style="background-color:${move_colors[1]}">${moves[1]}</td>
-                    <td style="background-color:${move_colors[2]}">${moves[2]}</td>
-                    <td style="background-color:${move_colors[3]}">${moves[3]}</td>
+                    <td style="padding:0">
+                      <span class="rental-move" style="background-color:${move_colors[0]}">${moves[0]}</span>
+                      <span class="rental-move" style="background-color:${move_colors[1]}">${moves[1]}</span>
+                      <span class="rental-move" style="background-color:${move_colors[2]}">${moves[2]}</span>
+                      <span class="rental-move" style="background-color:${move_colors[3]}">${moves[3]}</span>
+                    </td>
                     <td>${rstats[0]}</td>
                     <td>${rstats[1]}</td>
                     <td>${rstats[2]}</td>
@@ -1153,14 +1166,14 @@
               rental_pokemon_tbody = document.getElementById("rental-pokemon");
               rental_pokemon_tbody.querySelectorAll("tr").forEach(function(e){
                 tds = e.querySelectorAll("td");
-                seikaku_corr = seikakuid2corr[seikaku2id[tds[15].textContent]];
+                seikaku_corr = seikakuid2corr[seikaku2id[tds[RentalPokemonTable_natureIdx].textContent]];
                 for (let i=0; i<5; i++){
                   if (seikaku_corr[i]>1.0){
-                    tds[10+i].style.backgroundColor = "hotpink";
-                    tds[17+i].style.backgroundColor = "hotpink";
+                    tds[RentalPokemonTable_AivIdx+i].style.backgroundColor = "hotpink";
+                    tds[RentalPokemonTable_AevIdx+i].style.backgroundColor = "hotpink";
                   }else if(seikaku_corr[i]<1.0){
-                    tds[10+i].style.backgroundColor = "cornflowerblue";
-                    tds[17+i].style.backgroundColor = "cornflowerblue";
+                    tds[RentalPokemonTable_AivIdx+i].style.backgroundColor = "cornflowerblue";
+                    tds[RentalPokemonTable_AevIdx+i].style.backgroundColor = "cornflowerblue";
                   }
                 }
               })
@@ -1180,15 +1193,19 @@
                 grid_layout: {
                   width: '100%',
                 },
+                col_3  : 'select',
                 col_4  : 'select',
-                col_5  : 'none',
-                col_6  : 'none',
-                col_7  : 'none',
-                col_8  : 'none',
-                col_15 : 'select',
-                col_22 : 'select',
-                col_types: ['number', 'number', 'string', 'string', 'string', 'string', 'string', 'string', 'string', 'number', 'number', 'number', 'number', 'number', 'number', 'string', 'number', 'number', 'number', 'number', 'number', 'number', 'number'],
-                col_widths: ['50px', '50px', '120px', '150px', '135px', '120px', '120px', '120px', '120px', '50px', '50px', '50px', '50px', '50px', '50px', '95px', '50px', '50px', '50px', '50px', '50px', '50px', '90px'],
+                col_5  : 'select',
+                col_12 : 'select',
+                col_19 : 'select',
+                custom_options: {
+                  cols: [3,5],
+                  texts: [POKETYPES, BattleStyles],
+                  values: [POKETYPES.map(function(e){return "rgx:"+e}), BattleStyleMovesFilters],
+                  sorts: [false],
+                },
+                col_types: ['number', 'number', 'string', 'string', 'string', 'string', 'number', 'number', 'number', 'number', 'number', 'number', 'string', 'number', 'number', 'number', 'number', 'number', 'number', 'number'],
+                col_widths: ['50px', '50px', '120px', '150px', '135px', '480px', '50px', '50px', '50px', '50px', '50px', '50px', '95px', '50px', '50px', '50px', '50px', '50px', '50px', '90px'],
                 extensions:[{name: 'sort'}]
               };
               var tf = new TableFilter('rental-pokemon-list', filtersConfig);
@@ -1708,6 +1725,12 @@
               -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
               box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
             }
+            .fixed-tcol {
+              position: sticky;
+              left: 0;
+              color: #fff;
+              background: #333;
+            }
             thead {
               background-color: black;
               color: white;
@@ -1737,6 +1760,11 @@
             }
             tr#generated_rental_party_noland{
               color: goldenrod;
+            }
+            span.rental-move {
+              width: 120px;
+              display: table-cell;
+              padding: 7px 9.8px 8.8px 9.8px;
             }
           </style>
         
