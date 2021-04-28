@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Shuto" />
+    <meta name="twitter:creator" content="@cabernet_rock">
+    <meta name="twitter:site" content="@cabernet_rock">
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary">
+    <meta name="keywords" content="JavaScript, pokemon, JavaScript, " />
+    <meta property="og:image" content="https://www.pokemon.co.jp/img/game/emerald/pho_main.jpg"/>
+    <meta property="og:title" content="JS.32 ポケモンエメラルドでフロンティア マスターを目指す（その４） "/>
+    <meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-32.html" />
+    <meta property="og:description" content="ポケモンエメラルドでバトルフロンティアを攻略する" />
+    <meta property="og:site_name" content="Shuto&#39;s Front-End" />
+    <meta property="og:article:author" content="Shuto" />
+    <meta property="og:article:published_time" content="2021-04-28T00:00:00+09:00" />
+    <meta property="og:article:modified_time" content="2020-04-28T00:00:00+09:00" />
+    <meta name="twitter:title" content="JS.32 ポケモンエメラルドでフロンティア マスターを目指す（その４） ">
+    <meta name="twitter:description" content="ポケモンエメラルドでバトルフロンティアを攻略する">
+    <title>JS.32 ポケモンエメラルドでフロンティア マスターを目指す（その４）</title>
+    <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
+    <!-- Added by Shuto Iwasaki. -->
+    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script type="text/javascript" async src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML"></script>
+    <script type="text/x-mathjax-config">
+    	MathJax.Hub.Config({
+    		tex2jax: {
+    			inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    			displayMath: [ ['$$','$$'], ["\\[","\\]"] ]
+    		}
+    	});
+    </script>
+    <!-- Mermaid -->
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
+    <script>
+      mermaid.initialize({
+        startOnLoad:true
+      });
+    </script>
+    <!--[if IE]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body id="index" class="home">
+    <header id="banner" class="body">
+      <h1><a href="https://iwasakishuto.github.io/Front-End/tips/">Shuto's Front-End </a></h1>
+      <nav>
+        <ul>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html">CSS</a></li>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html">HTML</a></li>
+          <li class="active"><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
+        </ul>
+        <form id="search" action"#" onsubmit="javascript:window.open('https://duckduckgo.com/?q='+document.getElementById('keywords').value+'+site:https://iwasakishuto.github.io/Front-End/tips');">
+          <input id="keywords" type="text" />
+        </form>
+      </nav>
+    </header><!-- /#banner -->
+    <div id="loading" style="display: none;">
+      <div class="loading_wrapper">
+        <img class="loading_img" src="https://iwasakishuto.github.io/Front-End/tips/images/Bean Eater-1s-400px.gif">
+        <p class="loading_info">Loading...</p>
+      </div>
+    </div>
+    <section id="content" class="body" style="display: block;">
+      <article>
+        <header>
+          <h1 class="entry-title">
+            <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-32.html" rel="bookmark" title="Permalink to JS.32 ポケモンエメラルドでフロンティア マスターを目指す（その４）">JS.32 ポケモンエメラルドでフロンティア マスターを目指す（その４）</a>
+          </h1>
+          <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
+          <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
+        </header>
+    
+        <div class="entry-content">
+          <footer class="post-info">
+            <span>2021-04-28(Wed)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a></span>
+          </footer><!-- /.post-info -->
+          <h2>バトルファクトリー <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Noland.png"></div></h2>
+
+          <div class="rule"><h3>ルール</h3>（出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルファクトリー_(第三世代)">ポケモンWiki</a>）<ul>
+            <li>ファクトリーでは自分の手持ちは使わず、レンタルポケモンを使ってバトルする。はじめに、表示される6匹のレンタルポケモンのうち3匹を選択し、手持ちとする。以後、そのポケモンで敵トレーナーと戦って勝てば、任意で敵トレーナーとポケモンを1匹交換することができる。</li>
+            <li>ポケモンバトルの前にヒントを教えてもらえる。内容は相手のポケモンの中で重複しているタイプと、相手の大まかな戦型である。</li>
+            <li>バトルの合間にポケモンの並び替えはできない。</li>
+            <li>7人抜きで1周。3周目と6周目の最後にはダツラとのバトルになる。</li>
+            <li>1周ごとにレンタルポケモンはリセットされる。次の周回では1からレンタルしなおすことになる。</li>
+          </ul></div>
+
+          <h3>相手のバトルスタイル</h3>
+
+          <table id="factory-battle-style">
+            <thead><tr><th>スタイル</th><th>説明</th><th>必要な数</th></tr></thead>
+            <tbody>
+              <tr><td style="background-color:#F8D4CE">けんこんいってき</td><td>はかいこうせんなどリスクのある技</td><td>2</td></tr>
+              <tr><td style="background-color:#FFEEB8">じゅんびばんたん</td><td>つるぎのまいなど能力アップ系の技</td><td>3</td></tr>
+              <tr><td style="background-color:#C3E8B5">まだまだこれから</td><td>じこさいせいなど体力回復系の技</td><td>3</td></tr>
+              <tr><td style="background-color:#92CEEE">よそくふかのう</td><td>めざめるパワーなどタイプや威力が変わる技</td><td>2</td></tr>
+              <tr><td style="background-color:#9EABD6">じっくりじわじわ</td><td>どくどくなど状態異常にする技</td><td>3</td></tr>
+              <tr><td style="background-color:#DFC6DE">まずはよわめて</td><td>きんぞくおんなど能力ダウン系の技</td><td>2</td></tr>
+              <tr><td style="background-color:#BBBCC2">くもゆきしだい</td><td>にほんばれなど天気を変える技</td><td>2</td></tr>
+              <tr><td style="background-color:#FFFFFF">りんきおうへん</td><td>以上の条件に2つ以上当てはまっている</td><td>-</td></tr>
+              <tr><td style="background-color:#FFFFFF">じゆうほんぽう</td><td>どの条件にも当てはまらない</td><td>-</td></tr>
+            </tbody>
+          </table>
+
+          <form id="factory_form" name="FACTORY">
+            <h3>レンタルポケモン</h3>
+            <table id="rental-pokemon-form" class="fixed">
+              <thead><tr><th colspan="4">ファクトリーの設定</th></tr></thead>
+              <tbody>
+                <tr><td>連勝数</td><td class="g1"><select name="winStreak"><option value="0">0 ~ 7</option><option value="1">7 ~ 14</option><option value="2">14 ~ 21</option><option value="3">21 ~ 28</option><option value="4">28 ~ 35</option><option value="5">35 ~ 42</option><option value="6">42 ~ 49</option><option value="7">49 ~ 56</option><option value="8" selected>56 ~</option></select></td><td>challengeNum</td><td id="challengeNum"></td></tr>
+                <tr><td>交換数</td><td class="g1"><select name="rentalCount"><option value="0">0 ~ 14</option><option value="1">15 ~ 21</option><option value="2">22 ~ 28</option><option value="3">29 ~ 35</option><option value="4">36 ~ 42</option><option value="5">43 ~</option></select></td><td>rentalRank</td><td id="rentalRank"></td></tr>
+                <tr><td>Lv モード</td><td class="g1"><select name="LvlMode"><option value="0">Lv.50</option><option value="8">LV.OPEN</option></select></td><td>出現ポケモン</td><td id="monRange"></td></tr>
+              </tbody>
+            </table>
+            <div style="width:100%; overflow:auto;" id="rental-pokemon-wrapper">
+              <table id="rental-pokemon-table">
+                <thead>
+                  <tr><th>ID</th><th>No</th><th><input type="checkbox"/>ポケモン</th><th>タイプ</th><th>もちもの</th><th>技</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th><th>せいかく</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th></tr>
+                </thead>
+                <tbody id="rental-pokemon-tbody">
+                </tbody>
+              </table>
+            </div>
+          </form>
+
+          <!-- Load Scripts. -->
+
+          <script type="text/javascript" src="https://iwasakishuto.github.io/js/jquery.js"></script>
+
+          <script type="text/javascript" src="https://iwasakishuto.github.io/js/tablefilter.js"></script>
+
+          <script type="text/javascript" src="https://iwasakishuto.github.io/Front-End/tips/theme/js/pokeutils.js"></script>
+
+          <script type="text/javascript" src="https://iwasakishuto.github.io/js/custom.js"></script>
+
+          <!-- Factory Rental Pokemon -->
+
+          <script>
+            const sFixedIVTable = [
+                [3,  6], // Fixed Ivs of MyPokemon & OpTrainer(~6th), That of OpTrainer(7th)
+                [6,  9],
+                [9,  12],
+                [12, 15],
+                [15, 18],
+                [21, 31],
+                [31, 31],
+                [31, 31],
+            ]
+            const sInitialRentalMonRanges = [
+                // Level 50.
+                [110,199],[162,266],[267,371],[372,467],[468,563],[564,659],[660,755],[372,849],
+                // Open Level.
+                [372,467],[468,563],[564,659],[660,755],[372,881],[372,881],[372,881],[372,881],
+            ]
+            const sMoves_TotalPreparation = ['つるぎのまい', 'せいちょう', 'ヨガのポーズ', 'こうそくいどう', 'かげぶんしん', 'かたくなる', 'ちいさくなる', 'からにこもる', 'まるくなる', 'バリアー', 'きあいだめ', 'ドわすれ', 'とける', 'かくばる', 'テクスチャー', 'テクスチャー2', 'はらだいこ', 'じこあんじ', 'じゅうでん', 'よこどり', 'ほたるび', 'コスモパワー', 'てっぺき', 'とおぼえ', 'ビルドアップ', 'めいそう', 'りゅうのまい']
+            const sMoves_ImpossibleToPredict = ['ものまね', 'ゆびをふる', 'オウムがえし', 'へんしん', 'みがわり', 'スケッチ', 'のろい', 'プレゼント', 'このゆびとまれ', 'トリック', 'なりきり', 'ねこのて', 'スキルスワップ', 'ほごしょく']
+            const sMoves_WeakeningTheFoe = ['すなかけ', 'しっぽをふる', 'にらみつける', 'なきごえ', 'いとをはく', 'いやなおと', 'えんまく', 'スプーンまげ', 'フラッシュ', 'わたほうし', 'うらみ', 'こわいかお', 'あまえる', 'はたきおとす', 'あまいかおり', 'フェザーダンス', 'うそなき', 'きんぞくおん', 'くすぐる']
+            const sMoves_HighRiskHighReturn = ['ハサミギロチン', 'つのドリル', 'すてみタックル', 'はかいこうせん', 'カウンター', 'じわれ', 'がまん', 'じばく', 'ゴッドバード', 'だいばくはつ', 'じたばた', 'きしかいせい', 'みちづれ', 'ほろびのうた', 'いたみわけ', 'ミラーコート', 'おきみやげ', 'おんねん', 'からげんき', 'きあいパンチ', 'ブラストバーン', 'ハイドロカノン', 'オーバーヒート', 'ハードプラント', 'サイコブースト', 'ボルテッカー']
+            const sMoves_Endurance = ['しろいきり', 'じこさいせい', 'ひかりのかべ', 'くろいきり', 'リフレクター', 'タマゴうみ', 'ねむる', 'まもる', 'みきり', 'こらえる', 'ミルクのみ', 'いやしのすず', 'しんぴのまもり', 'バトンタッチ', 'あさのひざし', 'こうごうせい', 'つきのひかり', 'のみこむ', 'ねがいごと', 'ねをはる', 'マジックコート', 'リサイクル', 'リフレッシュ', 'どろあそび', 'なまける', 'アロマセラピー', 'みずあそび']
+            const sMoves_SlowAndSteady = ['うたう', 'ちょうおんぱ', 'かなしばり', 'やどりぎのタネ', 'どくのこな', 'しびれごな', 'ねむりごな', 'でんじは', 'どくどく', 'さいみんじゅつ', 'あやしいひかり', 'へびにらみ', 'どくガス', 'あくまのキッス', 'キノコのほうし', 'クモのす', 'てんしのキッス', 'まきびし', 'いばる', 'くろいまなざし', 'メロメロ', 'アンコール', 'いちゃもん', 'おだてる', 'おにび', 'ちょうはつ', 'あくび', 'ふういん', 'よこどり', 'フラフラダンス', 'くさぶえ', 'とおせんぼ']
+            const sMoves_DependsOnTheBattlesFlow = ['すなあらし', 'あまごい', 'にほんばれ', 'あられ', 'ウェザーボール']
+            const BattleStyles = ["じゅんびばんたん(3)", "よそくふかのう(2)", "まずはよわめて(2)", "けんこんいってき(2)", "まだまだこれから(3)", "じっくりじわじわ(3)", "くもゆきしだい(2)", "りんきおうへん(&&)", "じゆうほんぽう(-)"];
+            const BattleStyleMoves = [sMoves_TotalPreparation, sMoves_ImpossibleToPredict, sMoves_WeakeningTheFoe, sMoves_HighRiskHighReturn, sMoves_Endurance, sMoves_SlowAndSteady, sMoves_DependsOnTheBattlesFlow]
+            var BattleStyleMovesFilters = Array(BattleStyles.length).fill("rgx:.*")
+            BattleStyleMoves.forEach(function(e,i){
+              BattleStyleMovesFilters[i] = "rgx:" + e.join("|")
+            })
+            const BattleStyleColors = ["#FFEEB8", "#92CEEE", "#DFC6DE", "#F8D4CE", "#C3E8B5", "#9EABD6",  "#BBBCC2"];
+            // Index for Generated Tables
+            const rental_pokemon_table = document.getElementById("rental-pokemon-table");
+            const rental_pokemon_tbody = document.getElementById("rental-pokemon-tbody");
+            const RentalPokemonTable_AivIdx    = 7;
+            const RentalPokemonTable_natureIdx = 12;
+            const RentalPokemonTable_AevIdx    = 14;
+            var challengeNum_area      = document.getElementById("challengeNum");
+            var rentalRank_area        = document.getElementById("rentalRank");
+            var monRange_area          = document.getElementById("monRange");
+            var rental_pokemon_wrapper = document.getElementById("rental-pokemon-wrapper");
+            function set_factory_condition(FACTORY){
+              var lv = parseInt(document.getElementById("lv").value);
+              var challengeNum = Math.min(parseInt(FACTORY.winStreak.value), 7);
+              var rentalRank = parseInt(FACTORY.rentalCount.value);
+              var LvlMode = parseInt(FACTORY.LvlMode.value);
+              var monRanges = sInitialRentalMonRanges[LvlMode+challengeNum];
+              var ivs = [sFixedIVTable[challengeNum][0]]
+              var monRanges_str = `${monRanges.join("~")}(${ivs[0]})`;
+              var monRanges_cond = `(${monRanges[0]} <= i && i <= ${monRanges[1]}) ? 1 : 0`
+              if ((challengeNum < 7) && (rentalRank>0)){
+                var monRanges = sInitialRentalMonRanges[LvlMode+challengeNum+1];
+                ivs.push(sFixedIVTable[challengeNum+1][0])
+                monRanges_str +=  `, ${monRanges.join("~")}(${ivs[1]})`
+                monRanges_cond = monRanges_cond.slice(0,-1) + `(${monRanges[0]} <= i && i <= ${monRanges[1]}) ? 2 : 0`;
+              }
+              challengeNum_area.innerHTML = challengeNum
+              rentalRank_area.innerHTML = rentalRank
+              monRange_area.innerHTML = monRanges_str;
+              // Generate Rental Pokemon Table.
+              RENTAL_POKEMON_LIST.forEach(function(e,i){
+                let flag = eval(monRanges_cond)
+                if (flag>0){
+                  let iv = ivs[flag-1];
+                  let rstats = calculate_statistics(e[2], [iv,iv,iv,iv,iv,iv], e.slice(10,16), e[9], lv=lv)
+                  let moves = e.slice(Rental_Pokemon_moveIdx, Rental_Pokemon_moveIdx+4);
+                  let move_colors = []
+                  moves.forEach(function(e,i){
+                    if (!BattleStyleMoves.some(function(lst,j){
+                      if (lst.indexOf(e)!=-1){
+                        move_colors[i] = BattleStyleColors[j];
+                        return true;
+                      }
+                    })) move_colors[i] = "#FFFFFF";
+                  })
+                  let pname = e[Rental_Pokemon_nameIdx];
+                  let iname = e[Rental_Pokemon_itemIdx];
+                  let nature = e[Rental_Pokemon_natureIdx];
+                  let type_ret = Pname2typeColor(pname);
+                  rental_pokemon_list += `<tr>
+                    <td>${e[Rental_Pokemon_rentalidIdx]}</td>
+                    <td>${e[Rental_Pokemon_pokedexIdx]}</td>
+                    <td><label><input type="checkbox"/>${pname}</label></td>
+                    <td style="background-image: ${type_ret.color}";>${type_ret.string}</td>
+                    <td>${iname}</td>
+                    <td style="padding:0">
+                      <span class="rental-move" style="background-color:${move_colors[0]}">${moves[0]}</span>
+                      <span class="rental-move" style="background-color:${move_colors[1]}">${moves[1]}</span>
+                      <span class="rental-move" style="background-color:${move_colors[2]}">${moves[2]}</span>
+                      <span class="rental-move" style="background-color:${move_colors[3]}">${moves[3]}</span>
+                    </td>
+                    ${coloring_by_nature(nature, [0,0,0,0,0,0], 0, tag="td")}
+                    <td>${e[Rental_Pokemon_natureIdx]}</td>
+                    ${coloring_by_nature(nature, e, Rental_Pokemon_evsIdx, tag="td")}
+                  </tr>`
+                }
+              })
+              rental_pokemon_wrapper.innerHTML = rental_pokemon_list + "</tbody></table>";
+            }
+            function rental_filterTable(){
+              var filtersConfig = {
+                btn_reset: true,
+                rows_counter: true,
+                loader: true,
+                status_bar: true,
+                responsive: true,
+                grid_layout: {
+                  width: '100%',
+                },
+                col_3  : 'select',
+                col_4  : 'select',
+                col_5  : 'select',
+                col_12 : 'select',
+                col_19 : 'select',
+                custom_options: {
+                  cols: [3,5],
+                  texts: [POKETYPES, BattleStyles],
+                  values: [POKETYPES.map(function(e){return "rgx:"+e}), BattleStyleMovesFilters],
+                  sorts: [false],
+                },
+                col_types: ['number', 'number', 'string', 'string', 'string', 'string', 'number', 'number', 'number', 'number', 'number', 'number', 'string', 'number', 'number', 'number', 'number', 'number', 'number', 'number'],
+                col_widths: ['50px', '50px', '120px', '150px', '135px', '480px', '50px', '50px', '50px', '50px', '50px', '50px', '95px', '50px', '50px', '50px', '50px', '50px', '50px', '90px'],
+                extensions:[{name: 'sort'}]
+              };
+              var tf = new TableFilter('rental-pokemon-table', filtersConfig);
+              tf.init();
+              initSelectionListeners(tf, c=2, d=0);
+              // Improves the appearance when scrolling horizontally.
+              document.querySelectorAll("#rental-pokemon-table tr").forEach(function(e,i){
+                var tds = e.querySelectorAll("td")
+                tds[0].classList.add("fixed-tcol");
+                tds[1].classList.add("fixed-tcol");
+                tds[2].classList.add("fixed-tcol");
+              })
+              document.querySelectorAll(".grd_headTblCont tr").forEach(function(e,i){
+                var ths = e.querySelectorAll("th, td")
+                ths[0].classList.add("fixed-tcol");
+                ths[1].classList.add("fixed-tcol");
+                ths[2].classList.add("fixed-tcol");
+              })
+              document.querySelector("div.grd_Cont").querySelectorAll("input[type='checkbox']").forEach(function(e,i){
+                e.addEventListener("change", function(){
+                  console.log("Hello.")
+                })
+              })
+              TFselectedRows = [];
+            }
+          </script>
+
+          <!-- On load -->
+
+          <script>
+            window.onload = function(){
+              // Battle Factory
+              var rental_pokemon_form = document.querySelectorAll("form#factory_form table#rental-pokemon-form select");
+              for(let i=0; i<rental_pokemon_form.length; i++){
+                let e = rental_pokemon_form[i];
+                e.addEventListener('change', function(){
+                  set_factory_condition(document.FACTORY);
+                });
+              }
+              set_factory_condition(document.FACTORY);
+            }
+          </script>
+
+          <!-- Stylesheet -->
+
+          <style>
+            table#factory-battle-style *,
+            table#rental-pokemon-form *{
+              vertical-align: middle;
+              text-align: center;
+            }
+            table#rental-pokemon-form select{
+              width: 100%;
+              border: 0;
+              background-color: transparent;
+              font-family: Monaco, monospace, sans-serif;
+            }
+            table#my-pokemon select, table#my-pokemon input,
+            table#pike-wild-mons-table select, table#pike-wild-mons-table input,
+            table#pyramid-wild-mons-table select, table#pyramid-wild-mons-table input,
+            table#pyramid-pickup-table select, table#pyramid-pickup-table input{
+              border: 0;
+              padding: .5em .4em;
+              background-color: transparent;
+              font-family: Monaco, monospace, sans-serif;
+            }
+            div.overflow-ms{
+              width: 32px;
+              height: 32px;
+              overflow: visible;
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              pointer-events: none;
+            }
+            div.overflow-ms img {
+              border: 0!important;
+              margin: 0!important;
+              padding: 0 !important;
+              width: 200%!important;
+              vertical-align: middle;
+            }
+            div.overflow-ms img.pokemon-icon {
+              padding-bottom: 18px!important;
+            }
+            table.fixed{
+              table-layout: fixed;
+            }
+            .fixed-tcol {
+              position: sticky;
+              left: 0;
+              color: #fff;
+              background: #333;
+            }
+            thead {
+              background-color: black;
+              color: white;
+            }
+            thead input {
+              color: white;
+            }
+            table.TF th, summary.h2 {
+              background-color: black!important;
+              color: white!important;
+            }
+            ul {
+              margin: 1em;
+              border: black 1px solid;
+              padding: .5em .5em .5em 2.5em;
+            }
+            ol, ul {
+              list-style: decimal;
+            }
+            span.rental-move {
+              width: 120px;
+              display: table-cell;
+              padding: 7px 9.8px 8.8px 9.8px;
+            }
+          </style>
+        
+        </div><!-- /.entry-content -->
+    
+      </article>
+    </section>
+    <section id="extras" class="body">
+      <div class="blogroll">
+        <h5>other contents</h5>
+        <ul>
+          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Home.png">Home</a></li>
+          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">Blog</a></li>
+          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">University</a></li>
+          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">Kerasy</a></li>
+          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">Python-Charmers</a></li>
+          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">Translation-Gummy</a></li>
+        </ul>
+      </div><!-- /.blogroll -->
+      <div class="social">
+        <h5>social</h5>
+        <ul>
+          <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
+          <li><a href="https://github.com/iwasakishuto">github</a></li>
+        </ul>
+      </div><!-- /.social -->
+    </section><!-- /#extras -->
+
+    <footer id="contentinfo" class="body">
+      <p>Powered by <a href="https://getpelican.com/">Pelican</a>. Theme <a href="https://github.com/blueicefield/pelican-blueidea/">blueidea</a>, inspired by the default theme.</p>
+    </footer><!-- /#contentinfo -->
+    <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-164333757-3']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+    </script>
+  </body>
+</html>

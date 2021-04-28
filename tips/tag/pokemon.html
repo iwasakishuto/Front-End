@@ -56,326 +56,257 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-31.html">JS.31 ポケモンしりとりクイズ</a></h1>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-32.html">JS.32 ポケモンエメラルドでフロンティア マスターを目指す（その４）</a></h1>
           <footer class="post-info">
-            <span>2021-04-24(Sat)</span>
+            <span>2021-04-28(Wed)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a></span>
-          </footer><!-- /.post-info --><div class="contents">
-  <h3>ポケモンしりとりクイズ</h3>
-  <ul>
-    <li>画面サイズの大きな<span style="color:red;">(横幅750px以上)</span>PC等でご利用ください！！</li>
-    <li><b>[ルール]</b>
-      <ul>
-        <li>２匹のポケモンの名前が出てくるので、間の２匹のポケモンの名前を入力して、しりとりを完成させてください。</li>
-        <li>末尾が「ー」の場合、その１つ前の文字でつなげています。また、小文字と大文字の区別はしていません。（例：ピチュー → ユンゲラー）</li>
-        <li>答えを見ると、３秒間解答できなくなります。</li>
-        <li>１回のしりとり中に同じポケモンを２度以上使用することは禁止されています。</li>
-        <li>指定した世代の図鑑（全国ずかんになる前）に登録されているポケモンしか使用できません。</li>
-      </ul>
-    </li>
-    <li><b>[入力方法のオススメ]</b>
-      <ul>
-        <li><code>[Tab]</code>を押すと２つの入力欄と解答ボタンを循環します。なお、解答ボタンはフォーカス時に<code>[Enter]</code>で押すことができます。</li>
-        <li>入力が"ひらがな"であっても、フォーカスが外れると"カタカナ"に自動で変換されます。そのため、Mac Userの方は<span style="color:red;">自動変換(Live Conversion)機能</span>を止めると楽です。</li>
-      </ul>
-    </li>
-    <li><b>[背景画像]</b>
-      <ul>
-        <li>背景のポケモンと問題には関係がありません。</li>
-        <li>図鑑No.が <code>0</code> の場合、背景画像にはランダムなポケモンが選択されます。</li>
-        <li>背景画像は、<a href="https://github.com/LazoCoder/Pokemon-Terminal">Pokemon-Terminal</a>の画像を利用しています。</li>
-      </ul>
-    </li>
-    <li>設定した問題数を解答すると、<span style="color:red;">結果の画像がダウンロードできます。</span>是非SNS等でシェアしてください！！また、bug等を見つけましたら、ご報告していただけると幸いです🙏</li>
-  </ul>
-  <form id="shiritori-form" name="SHIRITORI">
-    <table class="fixed">
-      <thead><tr><th colspan="3">問題の設定（問題数： <input type="number" min="1" max="100" value="10" size="3" name="num_problems"> 問）</th></tr></thead>
-      <tbody><tr>
-      <td>図鑑No.</td><td><input type="number" min="0" max="719" value="0" size="3" name="wallpaper_no"></td>
-      <td><a class="btn--click btn--shadow btn--goldenrod" onclick="generate_wallpaper()">背景を変更</a></td>
-      </tr>
-      <tr>
-      <td>世代（ <span id="num_mons"></span> 種）</td>
-      <td colspan="2"><select name="generation"><option value="0" selected>0.全て</option><option value="1">1.カントー地方（赤・緑・青・ピカチュウ）</option><option value="2">2.ジョウト地方（金・銀・クリスタル）</option><option value="3">3.ホウエン地方（ルビー・サファイア・エメラルド）</option><option value="4">4.シンオウ地方（ダイヤモンド・パール）</option><option value="5">5.イッシュ地方（ブラック・ホワイト）</option><option value="6">6.カロス地方　（X・Y）</option><option value="7">7.アローラ地方（サン・ムーン）</option><option value="8">8.ガラル地方　（ソード・シールド）</option></select></td>
-      </tr>
-      <tr>
-      <td>seed <sub id="shiritori-problem-warning"></sub></td><td><input type="number" min="0" max="4294967295" value="1000000" size="3" name="problem_seed"></td>
-      <td><a class="btn--click btn--shadow btn--blue" onclick="reset_situ()">リセット</a></td>
-      </tr>
+          </footer><!-- /.post-info --><h2>バトルファクトリー <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Noland.png"></div></h2>
+
+<div class="rule"><h3>ルール</h3>（出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルファクトリー_(第三世代)">ポケモンWiki</a>）<ul>
+  <li>ファクトリーでは自分の手持ちは使わず、レンタルポケモンを使ってバトルする。はじめに、表示される6匹のレンタルポケモンのうち3匹を選択し、手持ちとする。以後、そのポケモンで敵トレーナーと戦って勝てば、任意で敵トレーナーとポケモンを1匹交換することができる。</li>
+  <li>ポケモンバトルの前にヒントを教えてもらえる。内容は相手のポケモンの中で重複しているタイプと、相手の大まかな戦型である。</li>
+  <li>バトルの合間にポケモンの並び替えはできない。</li>
+  <li>7人抜きで1周。3周目と6周目の最後にはダツラとのバトルになる。</li>
+  <li>1周ごとにレンタルポケモンはリセットされる。次の周回では1からレンタルしなおすことになる。</li>
+</ul></div>
+
+<h3>相手のバトルスタイル</h3>
+
+<table id="factory-battle-style">
+  <thead><tr><th>スタイル</th><th>説明</th><th>必要な数</th></tr></thead>
+  <tbody>
+    <tr><td style="background-color:#F8D4CE">けんこんいってき</td><td>はかいこうせんなどリスクのある技</td><td>2</td></tr>
+    <tr><td style="background-color:#FFEEB8">じゅんびばんたん</td><td>つるぎのまいなど能力アップ系の技</td><td>3</td></tr>
+    <tr><td style="background-color:#C3E8B5">まだまだこれから</td><td>じこさいせいなど体力回復系の技</td><td>3</td></tr>
+    <tr><td style="background-color:#92CEEE">よそくふかのう</td><td>めざめるパワーなどタイプや威力が変わる技</td><td>2</td></tr>
+    <tr><td style="background-color:#9EABD6">じっくりじわじわ</td><td>どくどくなど状態異常にする技</td><td>3</td></tr>
+    <tr><td style="background-color:#DFC6DE">まずはよわめて</td><td>きんぞくおんなど能力ダウン系の技</td><td>2</td></tr>
+    <tr><td style="background-color:#BBBCC2">くもゆきしだい</td><td>にほんばれなど天気を変える技</td><td>2</td></tr>
+    <tr><td style="background-color:#FFFFFF">りんきおうへん</td><td>以上の条件に2つ以上当てはまっている</td><td>-</td></tr>
+    <tr><td style="background-color:#FFFFFF">じゆうほんぽう</td><td>どの条件にも当てはまらない</td><td>-</td></tr>
+  </tbody>
+</table>
+
+<form id="factory_form" name="FACTORY">
+  <h3>レンタルポケモン</h3>
+  <table id="rental-pokemon-form" class="fixed">
+    <thead><tr><th colspan="4">ファクトリーの設定</th></tr></thead>
+    <tbody>
+      <tr><td>連勝数</td><td class="g1"><select name="winStreak"><option value="0">0 ~ 7</option><option value="1">7 ~ 14</option><option value="2">14 ~ 21</option><option value="3">21 ~ 28</option><option value="4">28 ~ 35</option><option value="5">35 ~ 42</option><option value="6">42 ~ 49</option><option value="7">49 ~ 56</option><option value="8" selected>56 ~</option></select></td><td>challengeNum</td><td id="challengeNum"></td></tr>
+      <tr><td>交換数</td><td class="g1"><select name="rentalCount"><option value="0">0 ~ 14</option><option value="1">15 ~ 21</option><option value="2">22 ~ 28</option><option value="3">29 ~ 35</option><option value="4">36 ~ 42</option><option value="5">43 ~</option></select></td><td>rentalRank</td><td id="rentalRank"></td></tr>
+      <tr><td>Lv モード</td><td class="g1"><select name="LvlMode"><option value="0">Lv.50</option><option value="8">LV.OPEN</option></select></td><td>出現ポケモン</td><td id="monRange"></td></tr>
+    </tbody>
+  </table>
+  <div style="width:100%; overflow:auto;" id="rental-pokemon-wrapper">
+    <table id="rental-pokemon-table">
+      <thead>
+        <tr><th>ID</th><th>No</th><th><input type="checkbox"/>ポケモン</th><th>タイプ</th><th>もちもの</th><th>技</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th><th>せいかく</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th></tr>
+      </thead>
+      <tbody id="rental-pokemon-tbody">
       </tbody>
     </table>
-  </form>
-  <div id="shiritori-wrapper">
-    <img src id="wallpaper">
-    <div class="frame" id="shiritori-content">
-      <table id="shiritori-table">
-        <col style="width: 5%;">
-        <col style="width: 40%;">
-        <col style="width: 10%;">
-        <col style="width: 40%;">
-        <col style="width: 5%;">
-        <thead class="shiritori-thead"><tr>
-          <th class="twitter_username" colspan="2"><a href="https://twitter.com/cabernet_rock"><img id="twitter-icon" src="https://iwasakishuto.github.io/Front-End/tips/theme/images/icons/twitter_banner.png"></a></th>
-          <th><a class="btn--click btn--shadow btn--red" onclick="show_answer()">答え</a></th>
-          <th colspan="2"><span id="winstreak-counter">0</span>/<span id="num_problems">0</span>問・<span id="curt-time-counter">00:00:00</span>・<span id="quiz-generation"></span></th>
-        </tr></thead>
-        <tbody>
-          <tr><td></td><td><span id="shiritori-init"></span></td><td></td><td></td><td></td></tr>
-          <tr><td colspan="2"><div class="arrow down"></div></td><td></td><td></td><td></td></tr>
-          <tr>
-            <td></td>
-            <td><input id="shiritori-input-init" name="pokemon1" type="text" pattern="[\u30A1-\u30F6]*" autocomplete="off" list="pokemon"></td>
-            <td><div class="arrow right"></div></td>
-            <td><input id="shiritori-input-end" name="pokemon2" type="text" pattern="[\u30A1-\u30F6]*" autocomplete="off" list="pokemon"></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td id="answer-btn-pos" colspan="3" rowspan="2">
-              <a tabindex="0" id="answer-btn" class="btn-emergency-real" onclick="answer_problem()">
-                <span class="btn-emergency-real-bottom"></span>
-                <span class="btn-emergency-real-top"><span>解答</span></span>
-              </a>
-            </td>
-            <td colspan="2"><div class="arrow down"></div></td>
-          </tr>
-          <tr><td><span id="shiritori-end"></span></td><td></td></tr>
-          <datalist id="pokemon"></datalist>
-        </tbody>
-      </table>
-    </div>
   </div>
-</div>
+</form>
 
-<div class="contents">
-  <h3>YouTube</h3>
-  <p>このクイズを作る元ネタとなった大学の先輩でもあるスナガワさんの動画です。たくさん再生してください。</p>
-  <div class="youtube-wrapper">
-    <iframe src="https://www.youtube.com/embed/MM4KP_FvgHU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  </div>
-</div>
+<!-- Load Scripts. -->
 
-<p></div><!-- /.entry-content --></p>
+<script type="text/javascript" src="https://iwasakishuto.github.io/js/jquery.js"></script>
+
+<script type="text/javascript" src="https://iwasakishuto.github.io/js/tablefilter.js"></script>
+
+<script type="text/javascript" src="https://iwasakishuto.github.io/Front-End/tips/theme/js/pokeutils.js"></script>
+
+<script type="text/javascript" src="https://iwasakishuto.github.io/js/custom.js"></script>
+
+<!-- Factory Rental Pokemon -->
+
+<script>
+  const sFixedIVTable = [
+      [3,  6], // Fixed Ivs of MyPokemon & OpTrainer(~6th), That of OpTrainer(7th)
+      [6,  9],
+      [9,  12],
+      [12, 15],
+      [15, 18],
+      [21, 31],
+      [31, 31],
+      [31, 31],
+  ]
+  const sInitialRentalMonRanges = [
+      // Level 50.
+      [110,199],[162,266],[267,371],[372,467],[468,563],[564,659],[660,755],[372,849],
+      // Open Level.
+      [372,467],[468,563],[564,659],[660,755],[372,881],[372,881],[372,881],[372,881],
+  ]
+  const sMoves_TotalPreparation = ['つるぎのまい', 'せいちょう', 'ヨガのポーズ', 'こうそくいどう', 'かげぶんしん', 'かたくなる', 'ちいさくなる', 'からにこもる', 'まるくなる', 'バリアー', 'きあいだめ', 'ドわすれ', 'とける', 'かくばる', 'テクスチャー', 'テクスチャー2', 'はらだいこ', 'じこあんじ', 'じゅうでん', 'よこどり', 'ほたるび', 'コスモパワー', 'てっぺき', 'とおぼえ', 'ビルドアップ', 'めいそう', 'りゅうのまい']
+  const sMoves_ImpossibleToPredict = ['ものまね', 'ゆびをふる', 'オウムがえし', 'へんしん', 'みがわり', 'スケッチ', 'のろい', 'プレゼント', 'このゆびとまれ', 'トリック', 'なりきり', 'ねこのて', 'スキルスワップ', 'ほごしょく']
+  const sMoves_WeakeningTheFoe = ['すなかけ', 'しっぽをふる', 'にらみつける', 'なきごえ', 'いとをはく', 'いやなおと', 'えんまく', 'スプーンまげ', 'フラッシュ', 'わたほうし', 'うらみ', 'こわいかお', 'あまえる', 'はたきおとす', 'あまいかおり', 'フェザーダンス', 'うそなき', 'きんぞくおん', 'くすぐる']
+  const sMoves_HighRiskHighReturn = ['ハサミギロチン', 'つのドリル', 'すてみタックル', 'はかいこうせん', 'カウンター', 'じわれ', 'がまん', 'じばく', 'ゴッドバード', 'だいばくはつ', 'じたばた', 'きしかいせい', 'みちづれ', 'ほろびのうた', 'いたみわけ', 'ミラーコート', 'おきみやげ', 'おんねん', 'からげんき', 'きあいパンチ', 'ブラストバーン', 'ハイドロカノン', 'オーバーヒート', 'ハードプラント', 'サイコブースト', 'ボルテッカー']
+  const sMoves_Endurance = ['しろいきり', 'じこさいせい', 'ひかりのかべ', 'くろいきり', 'リフレクター', 'タマゴうみ', 'ねむる', 'まもる', 'みきり', 'こらえる', 'ミルクのみ', 'いやしのすず', 'しんぴのまもり', 'バトンタッチ', 'あさのひざし', 'こうごうせい', 'つきのひかり', 'のみこむ', 'ねがいごと', 'ねをはる', 'マジックコート', 'リサイクル', 'リフレッシュ', 'どろあそび', 'なまける', 'アロマセラピー', 'みずあそび']
+  const sMoves_SlowAndSteady = ['うたう', 'ちょうおんぱ', 'かなしばり', 'やどりぎのタネ', 'どくのこな', 'しびれごな', 'ねむりごな', 'でんじは', 'どくどく', 'さいみんじゅつ', 'あやしいひかり', 'へびにらみ', 'どくガス', 'あくまのキッス', 'キノコのほうし', 'クモのす', 'てんしのキッス', 'まきびし', 'いばる', 'くろいまなざし', 'メロメロ', 'アンコール', 'いちゃもん', 'おだてる', 'おにび', 'ちょうはつ', 'あくび', 'ふういん', 'よこどり', 'フラフラダンス', 'くさぶえ', 'とおせんぼ']
+  const sMoves_DependsOnTheBattlesFlow = ['すなあらし', 'あまごい', 'にほんばれ', 'あられ', 'ウェザーボール']
+  const BattleStyles = ["じゅんびばんたん(3)", "よそくふかのう(2)", "まずはよわめて(2)", "けんこんいってき(2)", "まだまだこれから(3)", "じっくりじわじわ(3)", "くもゆきしだい(2)", "りんきおうへん(&&)", "じゆうほんぽう(-)"];
+  const BattleStyleMoves = [sMoves_TotalPreparation, sMoves_ImpossibleToPredict, sMoves_WeakeningTheFoe, sMoves_HighRiskHighReturn, sMoves_Endurance, sMoves_SlowAndSteady, sMoves_DependsOnTheBattlesFlow]
+  var BattleStyleMovesFilters = Array(BattleStyles.length).fill("rgx:.*")
+  BattleStyleMoves.forEach(function(e,i){
+    BattleStyleMovesFilters[i] = "rgx:" + e.join("|")
+  })
+  const BattleStyleColors = ["#FFEEB8", "#92CEEE", "#DFC6DE", "#F8D4CE", "#C3E8B5", "#9EABD6",  "#BBBCC2"];
+  // Index for Generated Tables
+  const rental_pokemon_table = document.getElementById("rental-pokemon-table");
+  const rental_pokemon_tbody = document.getElementById("rental-pokemon-tbody");
+  const RentalPokemonTable_AivIdx    = 7;
+  const RentalPokemonTable_natureIdx = 12;
+  const RentalPokemonTable_AevIdx    = 14;
+  var challengeNum_area      = document.getElementById("challengeNum");
+  var rentalRank_area        = document.getElementById("rentalRank");
+  var monRange_area          = document.getElementById("monRange");
+  var rental_pokemon_wrapper = document.getElementById("rental-pokemon-wrapper");
+  function set_factory_condition(FACTORY){
+    var lv = parseInt(document.getElementById("lv").value);
+    var challengeNum = Math.min(parseInt(FACTORY.winStreak.value), 7);
+    var rentalRank = parseInt(FACTORY.rentalCount.value);
+    var LvlMode = parseInt(FACTORY.LvlMode.value);
+    var monRanges = sInitialRentalMonRanges[LvlMode+challengeNum];
+    var ivs = [sFixedIVTable[challengeNum][0]]
+    var monRanges_str = `${monRanges.join("~")}(${ivs[0]})`;
+    var monRanges_cond = `(${monRanges[0]} <= i && i <= ${monRanges[1]}) ? 1 : 0`
+    if ((challengeNum < 7) && (rentalRank>0)){
+      var monRanges = sInitialRentalMonRanges[LvlMode+challengeNum+1];
+      ivs.push(sFixedIVTable[challengeNum+1][0])
+      monRanges_str +=  `, ${monRanges.join("~")}(${ivs[1]})`
+      monRanges_cond = monRanges_cond.slice(0,-1) + `(${monRanges[0]} <= i && i <= ${monRanges[1]}) ? 2 : 0`;
+    }
+    challengeNum_area.innerHTML = challengeNum
+    rentalRank_area.innerHTML = rentalRank
+    monRange_area.innerHTML = monRanges_str;
+    // Generate Rental Pokemon Table.
+    RENTAL_POKEMON_LIST.forEach(function(e,i){
+      let flag = eval(monRanges_cond)
+      if (flag>0){
+        let iv = ivs[flag-1];
+        let rstats = calculate_statistics(e[2], [iv,iv,iv,iv,iv,iv], e.slice(10,16), e[9], lv=lv)
+        let moves = e.slice(Rental_Pokemon_moveIdx, Rental_Pokemon_moveIdx+4);
+        let move_colors = []
+        moves.forEach(function(e,i){
+          if (!BattleStyleMoves.some(function(lst,j){
+            if (lst.indexOf(e)!=-1){
+              move_colors[i] = BattleStyleColors[j];
+              return true;
+            }
+          })) move_colors[i] = "#FFFFFF";
+        })
+        let pname = e[Rental_Pokemon_nameIdx];
+        let iname = e[Rental_Pokemon_itemIdx];
+        let nature = e[Rental_Pokemon_natureIdx];
+        let type_ret = Pname2typeColor(pname);
+        rental_pokemon_list += `<tr>
+          <td>${e[Rental_Pokemon_rentalidIdx]}</td>
+          <td>${e[Rental_Pokemon_pokedexIdx]}</td>
+          <td><label><input type="checkbox"/>${pname}</label></td>
+          <td style="background-image: ${type_ret.color}";>${type_ret.string}</td>
+          <td>${iname}</td>
+          <td style="padding:0">
+            <span class="rental-move" style="background-color:${move_colors[0]}">${moves[0]}</span>
+            <span class="rental-move" style="background-color:${move_colors[1]}">${moves[1]}</span>
+            <span class="rental-move" style="background-color:${move_colors[2]}">${moves[2]}</span>
+            <span class="rental-move" style="background-color:${move_colors[3]}">${moves[3]}</span>
+          </td>
+          ${coloring_by_nature(nature, [0,0,0,0,0,0], 0, tag="td")}
+          <td>${e[Rental_Pokemon_natureIdx]}</td>
+          ${coloring_by_nature(nature, e, Rental_Pokemon_evsIdx, tag="td")}
+        </tr>`
+      }
+    })
+    rental_pokemon_wrapper.innerHTML = rental_pokemon_list + "</tbody></table>";
+  }
+  function rental_filterTable(){
+    var filtersConfig = {
+      btn_reset: true,
+      rows_counter: true,
+      loader: true,
+      status_bar: true,
+      responsive: true,
+      grid_layout: {
+        width: '100%',
+      },
+      col_3  : 'select',
+      col_4  : 'select',
+      col_5  : 'select',
+      col_12 : 'select',
+      col_19 : 'select',
+      custom_options: {
+        cols: [3,5],
+        texts: [POKETYPES, BattleStyles],
+        values: [POKETYPES.map(function(e){return "rgx:"+e}), BattleStyleMovesFilters],
+        sorts: [false],
+      },
+      col_types: ['number', 'number', 'string', 'string', 'string', 'string', 'number', 'number', 'number', 'number', 'number', 'number', 'string', 'number', 'number', 'number', 'number', 'number', 'number', 'number'],
+      col_widths: ['50px', '50px', '120px', '150px', '135px', '480px', '50px', '50px', '50px', '50px', '50px', '50px', '95px', '50px', '50px', '50px', '50px', '50px', '50px', '90px'],
+      extensions:[{name: 'sort'}]
+    };
+    var tf = new TableFilter('rental-pokemon-table', filtersConfig);
+    tf.init();
+    initSelectionListeners(tf, c=2, d=0);
+    // Improves the appearance when scrolling horizontally.
+    document.querySelectorAll("#rental-pokemon-table tr").forEach(function(e,i){
+      var tds = e.querySelectorAll("td")
+      tds[0].classList.add("fixed-tcol");
+      tds[1].classList.add("fixed-tcol");
+      tds[2].classList.add("fixed-tcol");
+    })
+    document.querySelectorAll(".grd_headTblCont tr").forEach(function(e,i){
+      var ths = e.querySelectorAll("th, td")
+      ths[0].classList.add("fixed-tcol");
+      ths[1].classList.add("fixed-tcol");
+      ths[2].classList.add("fixed-tcol");
+    })
+    document.querySelector("div.grd_Cont").querySelectorAll("input[type='checkbox']").forEach(function(e,i){
+      e.addEventListener("change", function(){
+        console.log("Hello.")
+      })
+    })
+    TFselectedRows = [];
+  }
+</script>
+
+<!-- On load -->
+
+<script>
+  window.onload = function(){
+    // Battle Factory
+    var rental_pokemon_form = document.querySelectorAll("form#factory_form table#rental-pokemon-form select");
+    for(let i=0; i<rental_pokemon_form.length; i++){
+      let e = rental_pokemon_form[i];
+      e.addEventListener('change', function(){
+        set_factory_condition(document.FACTORY);
+      });
+    }
+    set_factory_condition(document.FACTORY);
+  }
+</script>
+
+<!-- Stylesheet -->
+
 <style>
-  a.btn-emergency-real{position:relative;display:block;width:200px;height:130px;margin:0 auto;cursor:pointer;}a.btn-emergency-real:hover .btn-emergency-real-top, a.btn-emergency-real:focus .btn-emergency-real-top{top:10px;height:50px}a.btn-emergency-real:active .btn-emergency-real-top{top:20px;height:40px}.btn-emergency-real-top{position:absolute;top:0;left:20px;width:10pc;height:60px;margin-top:30px;-webkit-transition:all .3s;transition:all .3s;border-radius:0 0 50% 50%;background-image:-webkit-gradient(linear,right top,left top,from(#630909),to(#d62d2d));background-image:-webkit-linear-gradient(right,#630909 0,#d62d2d 100%);background-image:linear-gradient(to left,#630909 0,#d62d2d 100%);-webkit-box-shadow:inset 0 -1px 10px 0 rgba(0,0,0,.9),0 5px 5px 0 rgba(0,0,0,.2);box-shadow:inset 0 -1px 10px 0 rgba(0,0,0,.9),0 5px 5px 0 rgba(0,0,0,.2)}.btn-emergency-real-top:before{position:absolute;top:-30px;left:0;width:10pc;height:60px;content:"";border-radius:5pc/30px;background-image:-webkit-gradient(linear,left bottom,left top,from(#6c0c0b),to(#ed4c4c));background-image:-webkit-linear-gradient(bottom,#6c0c0b 0,#ed4c4c 100%);background-image:linear-gradient(to top,#6c0c0b 0,#ed4c4c 100%);-webkit-box-shadow:0 10px 28px 2px rgba(0,0,0,.2),inset 0 5px 10px 0 rgba(0,0,0,.2),inset 0 2px 1px 0 hsla(0,0%,100%,.6),inset 0 -2px 1px 0 hsla(0,0%,100%,.1),inset 0 -2px 10px 5px rgba(237,76,76,.6),inset 5px 0 1px 1px hsla(0,0%,100%,.3);box-shadow:0 10px 28px 2px rgba(0,0,0,.2),inset 0 5px 10px 0 rgba(0,0,0,.2),inset 0 2px 1px 0 hsla(0,0%,100%,.6),inset 0 -2px 1px 0 hsla(0,0%,100%,.1),inset 0 -2px 10px 5px rgba(237,76,76,.6),inset 5px 0 1px 1px hsla(0,0%,100%,.3)}.btn-emergency-real-top span{font-size:38px;font-weight:700;position:absolute;top:-1pc;left:0;width:100%;-webkit-transform:scaleY(0.75);transform:scaleY(0.75);text-align:center;color:#e48a8a;text-shadow:-1px -1px 0 rgba(0,0,0,.5),1px 1px 5px hsla(0,0%,100%,.3)}.btn-emergency-real-bottom{position:absolute;top:38px;left:0;width:200px;height:5pc;border-radius:75pt/40px;background-image:-webkit-gradient(linear,left top,right top,from(#f2f2f2),color-stop(48%,#b4b4b4),to(#767676));background-image:-webkit-linear-gradient(left,#f2f2f2 0,#b4b4b4 48%,#767676 100%);background-image:linear-gradient(to right,#f2f2f2 0,#b4b4b4 48%,#767676 100%);-webkit-box-shadow:0 8px 0 #c4cacc,inset 1px -1px 10px 0 rgba(0,0,0,.2);box-shadow:0 8px 0 #c4cacc,inset 1px -1px 10px 0 rgba(0,0,0,.2)}
-  table select, table input {
+  table#factory-battle-style *,
+  table#rental-pokemon-form *{
+    vertical-align: middle;
+    text-align: center;
+  }
+  table#rental-pokemon-form select{
     width: 100%;
     border: 0;
     background-color: transparent;
     font-family: Monaco, monospace, sans-serif;
   }
-  table.fixed {
-    table-layout: fixed;
-  }
-  table *, table th {
-    vertical-align: middle;
-    text-align: center;
-  }
-  thead.shiritori-thead{
+  table#my-pokemon select, table#my-pokemon input,
+  table#pike-wild-mons-table select, table#pike-wild-mons-table input,
+  table#pyramid-wild-mons-table select, table#pyramid-wild-mons-table input,
+  table#pyramid-pickup-table select, table#pyramid-pickup-table input{
+    border: 0;
+    padding: .5em .4em;
+    background-color: transparent;
     font-family: Monaco, monospace, sans-serif;
-  }
-  thead.shiritori-thead tr th:nth-child(3) {
-     font-size: 1.2em;
-  }
-  th.twitter_username {
-    text-align: left;
-    padding-left: 1em;
-    vertical-align: top;
-  }
-  th.twitter_username img#twitter-icon {
-    width: 60%;
-    border: 0;
-    padding: 0;
-  }
-  th.twitter_username a {
-    color: #1b95e0;
-  }
-  td#answer-btn-pos span.title{
-    padding: 0 55px;
-    font-size: 2em;
-    font-family: 'pkmnfont';
-    line-height: 2em;
-    border: solid #c94663 2px;
-    display: inline-block;
-    border-radius: 50%;
-    background-color: #8a1010;
-    color: white;
-  }
-  a.btn--shadow{
-    -webkit-box-shadow: 0 3px 5px rgb(0 0 0 / 30%);
-    box-shadow: 0 3px 5px rgb(0 0 0 / 30%);
-  }
-  a.btn--click {
-    color: #fff;
-    background-color: black;
-    border-bottom: 5px solid black;
-    display: inline-block;
-    padding: 0.3em 1em;
-    text-decoration: none;
-    cursor: pointer;
-  }
-  a.btn--click:hover {
-    margin-top: 3px;
-    color: #fff;
-    background: black;
-    border-bottom: 2px solid black;
-  }
-  a.btn--red {
-    background-color: #c94663;
-    border-bottom-color: #8a1010;
-  }
-  a.btn--red:hover{
-    background: #c94663;
-    border-bottom-color: #8a1010;
-  }
-  a.btn--blue {
-    background-color: #04aee2;
-    border-bottom-color: #008db8;
-  }
-  a.btn--blue:hover{
-    background: #04aee2;
-    border-bottom-color: #008db8;
-  }
-  a.btn--goldenrod {
-    background-color: goldenrod;
-    border-bottom-color: darkgoldenrod;
-  }
-  a.btn--goldenrod:hover {
-    background: goldenrod;
-    border-bottom-color: darkgoldenrod;
-  }
-  img#wallpaper{
-    opacity: .3;
-    border: 0;
-    padding: 0;
-  }
-  .youtube-wrapper {
-    position: relative;
-    padding-top: 56.25%;
-  }
-  .youtube-wrapper iframe{
-    position: absolute;
-    top: 0;
-    left: 10%;
-    width: 80%;
-    height: 100%;
-    border: 4px solid #008db8;
-  }
-  #shiritori-form table thead {
-    background-color: black;
-    color: white;
-  }
-  #shiritori-wrapper{
-    position: relative;
-    width: 100%;
-    font-family: pkmnfont monospace monaco;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-color:rgba(255,255,255,0.7);
-    background-blend-mode:lighten;
-    border: solid black 2px;
-    display: grid;
-  }
-  #shiritori-wrapper:before{
-    content: "";
-    display: block;
-  }
-  #shiritori-table, #shiritori-table th, #shiritori-table td{
-    border: 0;
-  }
-  #shiritori-table {
-    width: 100%;
-    height: 100%;
-    margin: 0 auto;
-  }
-  #shiritori-table thead tr{
-    height: 5%;
-  }
-  #shiritori-table tbody tr:nth-child(1),
-  #shiritori-table tbody tr:nth-child(3),
-  #shiritori-table tbody tr:nth-child(5){
-    height: 25%;
-  }
-  #shiritori-table tbody tr:nth-child(2),
-  #shiritori-table tbody tr:nth-child(4){
-    height: 10%;
-  }
-  #shiritori-init, #shiritori-end,
-  #shiritori-input-init, #shiritori-input-end {
-    font-family: 'pkmnfont';
-    width: 85%;
-    height: 100%;
-    font-size: 35px;
-    line-height: 2em;
-    padding: 0 10px;
-    display: inline-block;
-    vertical-align: middle;
-  }
-  #shiritori-init {
-    text-align: left;
-  }
-  #shiritori-end {
-    text-align: right;
-  }
-  #shiritori-input-init, #shiritori-input-end {
-    border: 2px #2b2b2b solid;
-    background: transparent;
-    padding: 5px 10px;
-    text-align: left;
-    height: 60px;
-  }
-  #shiritori-input-init:focus, #shiritori-input-end:focus {
-    border-color: red;
-  }
-  #shiritori-content {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    margin: 10px;
-    border: solid black 1.5px;
-    box-shadow: 0 0 8px gray;
-    padding: 0;
-  }
-  sub#shiritori-problem-warning{
-    font-size: smaller;
-    vertical-align: sub;
-    color: red;
-  }
-  .arrow {
-    background-color: black;
-    position: relative;
-    display: inline-flex;
-  }
-  .arrow:after{
-    content: '';
-    width: 0;
-    height: 0;
-    border-style: solid;
-    position: absolute;
-  }
-  .right {
-    height: 20px;
-    width: 40px;
-    margin-left: -30px;
-  }
-  .right:after {
-    border-width: 20px 0 20px 30px;
-    border-color: transparent transparent transparent black;
-    top: -50%;
-    left: 100%;
-  }
-  .down {
-    height: 20px;
-    width: 15px;
-    margin-bottom: 20px;
-  }
-  .down:after{
-    border-width: 20px 20px 0px 20px;
-    border-color: black transparent transparent transparent;
-    top: 75%;
-    left: -80%;
   }
   div.overflow-ms{
     width: 32px;
@@ -396,336 +327,59 @@
   div.overflow-ms img.pokemon-icon {
     padding-bottom: 18px!important;
   }
-  ul {
-    list-style: inherit;
-    padding-left: 2.5em;
+  table.fixed{
+    table-layout: fixed;
   }
-  input[name="num_problems"] {
-    width: auto;
+  .fixed-tcol {
+    position: sticky;
+    left: 0;
+    color: #fff;
+    background: #333;
+  }
+  thead {
+    background-color: black;
     color: white;
   }
-</style>
-
-<script>
-  const POKEMON_NAMES = ['フシギダネ', 'フシギソウ', 'フシギバナ', 'ヒトカゲ', 'リザード', 'リザードン', 'ゼニガメ', 'カメール', 'カメックス', 'キャタピー', 'トランセル', 'バタフリー', 'ビードル', 'コクーン', 'スピアー', 'ポッポ', 'ピジョン', 'ピジョット', 'コラッタ', 'ラッタ', 'オニスズメ', 'オニドリル', 'アーボ', 'アーボック', 'ピカチュウ', 'ライチュウ', 'サンド', 'サンドパン', 'ニドラン♀', 'ニドリーナ', 'ニドクイン', 'ニドラン♂', 'ニドリーノ', 'ニドキング', 'ピッピ', 'ピクシー', 'ロコン', 'キュウコン', 'プリン', 'プクリン', 'ズバット', 'ゴルバット', 'ナゾノクサ', 'クサイハナ', 'ラフレシア', 'パラス', 'パラセクト', 'コンパン', 'モルフォン', 'ディグダ', 'ダグトリオ', 'ニャース', 'ペルシアン', 'コダック', 'ゴルダック', 'マンキー', 'オコリザル', 'ガーディ', 'ウインディ', 'ニョロモ', 'ニョロゾ', 'ニョロボン', 'ケーシィ', 'ユンゲラー', 'フーディン', 'ワンリキー', 'ゴーリキー', 'カイリキー', 'マダツボミ', 'ウツドン', 'ウツボット', 'メノクラゲ', 'ドククラゲ', 'イシツブテ', 'ゴローン', 'ゴローニャ', 'ポニータ', 'ギャロップ', 'ヤドン', 'ヤドラン', 'コイル', 'レアコイル', 'カモネギ', 'ドードー', 'ドードリオ', 'パウワウ', 'ジュゴン', 'ベトベター', 'ベトベトン', 'シェルダー', 'パルシェン', 'ゴース', 'ゴースト', 'ゲンガー', 'イワーク', 'スリープ', 'スリーパー', 'クラブ', 'キングラー', 'ビリリダマ', 'マルマイン', 'タマタマ', 'ナッシー', 'カラカラ', 'ガラガラ', 'サワムラー', 'エビワラー', 'ベロリンガ', 'ドガース', 'マタドガス', 'サイホーン', 'サイドン', 'ラッキー', 'モンジャラ', 'ガルーラ', 'タッツー', 'シードラ', 'トサキント', 'アズマオウ', 'ヒトデマン', 'スターミー', 'バリヤード', 'ストライク', 'ルージュラ', 'エレブー', 'ブーバー', 'カイロス', 'ケンタロス', 'コイキング', 'ギャラドス', 'ラプラス', 'メタモン', 'イーブイ', 'シャワーズ', 'サンダース', 'ブースター', 'ポリゴン', 'オムナイト', 'オムスター', 'カブト', 'カブトプス', 'プテラ', 'カビゴン', 'フリーザー', 'サンダー', 'ファイヤー', 'ミニリュウ', 'ハクリュー', 'カイリュー', 'ミュウツー', 'ミュウ', 'チコリータ', 'ベイリーフ', 'メガニウム', 'ヒノアラシ', 'マグマラシ', 'バクフーン', 'ワニノコ', 'アリゲイツ', 'オーダイル', 'オタチ', 'オオタチ', 'ホーホー', 'ヨルノズク', 'レディバ', 'レディアン', 'イトマル', 'アリアドス', 'クロバット', 'チョンチー', 'ランターン', 'ピチュー', 'ピィ', 'ププリン', 'トゲピー', 'トゲチック', 'ネイティ', 'ネイティオ', 'メリープ', 'モココ', 'デンリュウ', 'キレイハナ', 'マリル', 'マリルリ', 'ウソッキー', 'ニョロトノ', 'ハネッコ', 'ポポッコ', 'ワタッコ', 'エイパム', 'ヒマナッツ', 'キマワリ', 'ヤンヤンマ', 'ウパー', 'ヌオー', 'エーフィ', 'ブラッキー', 'ヤミカラス', 'ヤドキング', 'ムウマ', 'アンノーン', 'ソーナンス', 'キリンリキ', 'クヌギダマ', 'フォレトス', 'ノコッチ', 'グライガー', 'ハガネール', 'ブルー', 'グランブル', 'ハリーセン', 'ハッサム', 'ツボツボ', 'ヘラクロス', 'ニューラ', 'ヒメグマ', 'リングマ', 'マグマッグ', 'マグカルゴ', 'ウリムー', 'イノムー', 'サニーゴ', 'テッポウオ', 'オクタン', 'デリバード', 'マンタイン', 'エアームド', 'デルビル', 'ヘルガー', 'キングドラ', 'ゴマゾウ', 'ドンファン', 'ポリゴン2', 'オドシシ', 'ドーブル', 'バルキー', 'カポエラー', 'ムチュール', 'エレキッド', 'ブビィ', 'ミルタンク', 'ハピナス', 'ライコウ', 'エンテイ', 'スイクン', 'ヨーギラス', 'サナギラス', 'バンギラス', 'ルギア', 'ホウオウ', 'セレビィ', 'キモリ', 'ジュプトル', 'ジュカイン', 'アチャモ', 'ワカシャモ', 'バシャーモ', 'ミズゴロウ', 'ヌマクロー', 'ラグラージ', 'ポチエナ', 'グラエナ', 'ジグザグマ', 'マッスグマ', 'ケムッソ', 'カラサリス', 'アゲハント', 'マユルド', 'ドクケイル', 'ハスボー', 'ハスブレロ', 'ルンパッパ', 'タネボー', 'コノハナ', 'ダーテング', 'スバメ', 'オオスバメ', 'キャモメ', 'ペリッパー', 'ラルトス', 'キルリア', 'サーナイト', 'アメタマ', 'アメモース', 'キノココ', 'キノガッサ', 'ナマケロ', 'ヤルキモノ', 'ケッキング', 'ツチニン', 'テッカニン', 'ヌケニン', 'ゴニョニョ', 'ドゴーム', 'バクオング', 'マクノシタ', 'ハリテヤマ', 'ルリリ', 'ノズパス', 'エネコ', 'エネコロロ', 'ヤミラミ', 'クチート', 'ココドラ', 'コドラ', 'ボスゴドラ', 'アサナン', 'チャーレム', 'ラクライ', 'ライボルト', 'プラスル', 'マイナン', 'バルビート', 'イルミーゼ', 'ロゼリア', 'ゴクリン', 'マルノーム', 'キバニア', 'サメハダー', 'ホエルコ', 'ホエルオー', 'ドンメル', 'バクーダ', 'コータス', 'バネブー', 'ブーピッグ', 'パッチール', 'ナックラー', 'ビブラーバ', 'フライゴン', 'サボネア', 'ノクタス', 'チルット', 'チルタリス', 'ザングース', 'ハブネーク', 'ルナトーン', 'ソルロック', 'ドジョッチ', 'ナマズン', 'ヘイガニ', 'シザリガー', 'ヤジロン', 'ネンドール', 'リリーラ', 'ユレイドル', 'アノプス', 'アーマルド', 'ヒンバス', 'ミロカロス', 'ポワルン', 'カクレオン', 'カゲボウズ', 'ジュペッタ', 'ヨマワル', 'サマヨール', 'トロピウス', 'チリーン', 'アブソル', 'ソーナノ', 'ユキワラシ', 'オニゴーリ', 'タマザラシ', 'トドグラー', 'トドゼルガ', 'パールル', 'ハンテール', 'サクラビス', 'ジーランス', 'ラブカス', 'タツベイ', 'コモルー', 'ボーマンダ', 'ダンバル', 'メタング', 'メタグロス', 'レジロック', 'レジアイス', 'レジスチル', 'ラティアス', 'ラティオス', 'カイオーガ', 'グラードン', 'レックウザ', 'ジラーチ', 'デオキシス', 'ナエトル', 'ハヤシガメ', 'ドダイトス', 'ヒコザル', 'モウカザル', 'ゴウカザル', 'ポッチャマ', 'ポッタイシ', 'エンペルト', 'ムックル', 'ムクバード', 'ムクホーク', 'ビッパ', 'ビーダル', 'コロボーシ', 'コロトック', 'コリンク', 'ルクシオ', 'レントラー', 'スボミー', 'ロズレイド', 'ズガイドス', 'ラムパルド', 'タテトプス', 'トリデプス', 'ミノムッチ', 'ミノマダム', 'ガーメイル', 'ミツハニー', 'ビークイン', 'パチリス', 'ブイゼル', 'フローゼル', 'チェリンボ', 'チェリム', 'カラナクシ', 'トリトドン', 'エテボース', 'フワンテ', 'フワライド', 'ミミロル', 'ミミロップ', 'ムウマージ', 'ドンカラス', 'ニャルマー', 'ブニャット', 'リーシャン', 'スカンプー', 'スカタンク', 'ドーミラー', 'ドータクン', 'ウソハチ', 'マネネ', 'ピンプク', 'ペラップ', 'ミカルゲ', 'フカマル', 'ガバイト', 'ガブリアス', 'ゴンベ', 'リオル', 'ルカリオ', 'ヒポポタス', 'カバルドン', 'スコルピ', 'ドラピオン', 'グレッグル', 'ドクロッグ', 'マスキッパ', 'ケイコウオ', 'ネオラント', 'タマンタ', 'ユキカブリ', 'ユキノオー', 'マニューラ', 'ジバコイル', 'ベロベルト', 'ドサイドン', 'モジャンボ', 'エレキブル', 'ブーバーン', 'トゲキッス', 'メガヤンマ', 'リーフィア', 'グレイシア', 'グライオン', 'マンムー', 'ポリゴンZ', 'エルレイド', 'ダイノーズ', 'ヨノワール', 'ユキメノコ', 'ロトム', 'ユクシー', 'エムリット', 'アグノム', 'ディアルガ', 'パルキア', 'ヒードラン', 'レジギガス', 'ギラティナ', 'クレセリア', 'フィオネ', 'マナフィ', 'ダークライ', 'シェイミ', 'アルセウス', 'ビクティニ', 'ツタージャ', 'ジャノビー', 'ジャローダ', 'ポカブ', 'チャオブー', 'エンブオー', 'ミジュマル', 'フタチマル', 'ダイケンキ', 'ミネズミ', 'ミルホッグ', 'ヨーテリー', 'ハーデリア', 'ムーランド', 'チョロネコ', 'レパルダス', 'ヤナップ', 'ヤナッキー', 'バオップ', 'バオッキー', 'ヒヤップ', 'ヒヤッキー', 'ムンナ', 'ムシャーナ', 'マメパト', 'ハトーボー', 'ケンホロウ', 'シママ', 'ゼブライカ', 'ダンゴロ', 'ガントル', 'ギガイアス', 'コロモリ', 'ココロモリ', 'モグリュー', 'ドリュウズ', 'タブンネ', 'ドッコラー', 'ドテッコツ', 'ローブシン', 'オタマロ', 'ガマガル', 'ガマゲロゲ', 'ナゲキ', 'ダゲキ', 'クルミル', 'クルマユ', 'ハハコモリ', 'フシデ', 'ホイーガ', 'ペンドラー', 'モンメン', 'エルフーン', 'チュリネ', 'ドレディア', 'バスラオ', 'メグロコ', 'ワルビル', 'ワルビアル', 'ダルマッカ', 'ヒヒダルマ', 'マラカッチ', 'イシズマイ', 'イワパレス', 'ズルッグ', 'ズルズキン', 'シンボラー', 'デスマス', 'デスカーン', 'プロトーガ', 'アバゴーラ', 'アーケン', 'アーケオス', 'ヤブクロン', 'ダストダス', 'ゾロア', 'ゾロアーク', 'チラーミィ', 'チラチーノ', 'ゴチム', 'ゴチミル', 'ゴチルゼル', 'ユニラン', 'ダブラン', 'ランクルス', 'コアルヒー', 'スワンナ', 'バニプッチ', 'バニリッチ', 'バイバニラ', 'シキジカ', 'メブキジカ', 'エモンガ', 'カブルモ', 'シュバルゴ', 'タマゲタケ', 'モロバレル', 'プルリル', 'ブルンゲル', 'ママンボウ', 'バチュル', 'デンチュラ', 'テッシード', 'ナットレイ', 'ギアル', 'ギギアル', 'ギギギアル', 'シビシラス', 'シビビール', 'シビルドン', 'リグレー', 'オーベム', 'ヒトモシ', 'ランプラー', 'シャンデラ', 'キバゴ', 'オノンド', 'オノノクス', 'クマシュン', 'ツンベアー', 'フリージオ', 'チョボマキ', 'アギルダー', 'マッギョ', 'コジョフー', 'コジョンド', 'クリムガン', 'ゴビット', 'ゴルーグ', 'コマタナ', 'キリキザン', 'バッフロン', 'ワシボン', 'ウォーグル', 'バルチャイ', 'バルジーナ', 'クイタラン', 'アイアント', 'モノズ', 'ジヘッド', 'サザンドラ', 'メラルバ', 'ウルガモス', 'コバルオン', 'テラキオン', 'ビリジオン', 'トルネロス', 'ボルトロス', 'レシラム', 'ゼクロム', 'ランドロス', 'キュレム', 'ケルディオ', 'メロエッタ', 'ゲノセクト', 'ハリマロン', 'ハリボーグ', 'ブリガロン', 'フォッコ', 'テールナー', 'マフォクシー', 'ケロマツ', 'ゲコガシラ', 'ゲッコウガ', 'ホルビー', 'ホルード', 'ヤヤコマ', 'ヒノヤコマ', 'ファイアロー', 'コフキムシ', 'コフーライ', 'ビビヨン', 'シシコ', 'カエンジシ', 'フラベベ', 'フラエッテ', 'フラージェス', 'メェークル', 'ゴーゴート', 'ヤンチャム', 'ゴロンダ', 'トリミアン', 'ニャスパー', 'ニャオニクス', 'ヒトツキ', 'ニダンギル', 'ギルガルド', 'シュシュプ', 'フレフワン', 'ペロッパフ', 'ペロリーム', 'マーイーカ', 'カラマネロ', 'カメテテ', 'ガメノデス', 'クズモー', 'ドラミドロ', 'ウデッポウ', 'ブロスター', 'エリキテル', 'エレザード', 'チゴラス', 'ガチゴラス', 'アマルス', 'アマルルガ', 'ニンフィア', 'ルチャブル', 'デデンネ', 'メレシー', 'ヌメラ', 'ヌメイル', 'ヌメルゴン', 'クレッフィ', 'ボクレー', 'オーロット', 'バケッチャ', 'パンプジン', 'カチコール', 'クレベース', 'オンバット', 'オンバーン', 'ゼルネアス', 'イベルタル', 'ジガルデ', 'ディアンシー', 'フーパ', 'ボルケニオン', 'モクロー', 'フクスロー', 'ジュナイパー', 'ニャビー', 'ニャヒート', 'ガオガエン', 'アシマリ', 'オシャマリ', 'アシレーヌ', 'ツツケラ', 'ケララッパ', 'ドデカバシ', 'ヤングース', 'デカグース', 'アゴジムシ', 'デンヂムシ', 'クワガノン', 'マケンカニ', 'ケケンカニ', 'オドリドリ', 'アブリー', 'アブリボン', 'イワンコ', 'ルガルガン', 'ヨワシ', 'ヒドイデ', 'ドヒドイデ', 'ドロバンコ', 'バンバドロ', 'シズクモ', 'オニシズクモ', 'カリキリ', 'ラランテス', 'ネマシュ', 'マシェード', 'ヤトウモリ', 'エンニュート', 'ヌイコグマ', 'キテルグマ', 'アマカジ', 'アママイコ', 'アマージョ', 'キュワワー', 'ヤレユータン', 'ナゲツケサル', 'コソクムシ', 'グソクムシャ', 'スナバァ', 'シロデスナ', 'ナマコブシ', 'タイプ：ヌル', 'シルヴァディ', 'メテノ', 'ネッコアラ', 'バクガメス', 'トゲデマル', 'ミミッキュ', 'ハギギシリ', 'ジジーロン', 'ダダリン', 'ジャラコ', 'ジャランゴ', 'ジャラランガ', 'カプ・コケコ', 'カプ・テテフ', 'カプ・ブルル', 'カプ・レヒレ', 'コスモッグ', 'コスモウム', 'ソルガレオ', 'ルナアーラ', 'ウツロイド', 'マッシブーン', 'フェローチェ', 'デンジュモク', 'テッカグヤ', 'カミツルギ', 'アクジキング', 'ネクロズマ', 'マギアナ', 'マーシャドー', 'ベベノム', 'アーゴヨン', 'ツンデツンデ', 'ズガドーン', 'ゼラオラ', 'メルタン', 'メルメタル', 'サルノリ', 'バチンキー', 'ゴリランダー', 'ヒバニー', 'ラビフット', 'エースバーン', 'メッソン', 'ジメレオン', 'インテレオン', 'ホシガリス', 'ヨクバリス', 'ココガラ', 'アオガラス', 'アーマーガア', 'サッチムシ', 'レドームシ', 'イオルブ', 'クスネ', 'フォクスライ', 'ヒメンカ', 'ワタシラガ', 'ウールー', 'バイウールー', 'カムカメ', 'カジリガメ', 'ワンパチ', 'パルスワン', 'タンドン', 'トロッゴン', 'セキタンザン', 'カジッチュ', 'アップリュー', 'タルップル', 'スナヘビ', 'サダイジャ', 'ウッウ', 'サシカマス', 'カマスジョー', 'エレズン', 'ストリンダー', 'ヤクデ', 'マルヤクデ', 'タタッコ', 'オトスパス', 'ヤバチャ', 'ポットデス', 'ミブリム', 'テブリム', 'ブリムオン', 'ベロバー', 'ギモー', 'オーロンゲ', 'タチフサグマ', 'ニャイキング', 'サニゴーン', 'ネギガナイト', 'バリコオル', 'デスバーン', 'マホミル', 'マホイップ', 'タイレーツ', 'バチンウニ', 'ユキハミ', 'モスノウ', 'イシヘンジン', 'コオリッポ', 'イエッサン', 'モルペコ', 'ゾウドウ', 'ダイオウドウ', 'パッチラゴン', 'パッチルドン', 'ウオノラゴン', 'ウオチルドン', 'ジュラルドン', 'ドラメシヤ', 'ドロンチ', 'ドラパルト', 'ザシアン', 'ザマゼンタ', 'ムゲンダイナ', 'ダクマ', 'ウーラオス', 'ザルード', 'レジエレキ', 'レジドラゴ', 'ブリザポス', 'レイスポス', 'バドレックス']
-  const NUM_POKEMONS = POKEMON_NAMES.length;
-  const POKEDEX_FLAGS = [[true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, true], [true, true, true, false, false, false, true, false, true], [true, true, true, false, false, false, true, false, true], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, true, true], [true, true, true, false, false, false, true, true, true], [true, true, true, false, false, false, true, true, true], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, false, true, false], [true, true, true, false, false, false, false, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, true, true, false, true, true, true], [true, true, true, true, true, false, true, true, true], [true, true, true, true, false, false, true, true, false], [true, true, true, true, false, false, true, true, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, true, false, false, true, true], [true, true, true, false, true, false, false, true, true], [true, true, true, true, false, false, false, true, true], [true, true, true, true, false, false, false, true, true], [true, true, true, true, false, false, true, true, false], [true, true, true, true, false, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, false, false, true, false, true], [true, true, true, true, false, false, true, false, true], [true, true, true, true, false, false, true, false, true], [true, true, true, false, false, false, false, true, false], [true, true, true, false, false, false, false, true, false], [true, true, true, false, false, false, false, false, false], [true, true, true, false, false, false, false, false, false], [true, true, true, false, false, false, true, true, true], [true, true, true, false, false, false, true, true, true], [true, true, true, false, false, false, false, true, true], [true, true, true, false, false, false, false, true, true], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, false, false, false, false, true, false], [true, true, true, false, false, false, false, true, false], [true, true, true, false, false, false, false, true, true], [true, true, true, false, false, false, false, true, true], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, true], [true, true, true, true, true, false, true, true, true], [true, true, true, true, true, false, true, true, true], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, false, true, false, false, false, true], [true, true, true, false, true, false, false, false, true], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, true, true, false, true, true, false], [true, true, true, false, false, false, true, false, true], [true, true, true, true, false, false, true, false, false], [true, true, true, true, false, false, true, false, false], [true, true, true, false, false, false, false, false, false], [true, true, true, false, false, false, false, false, false], [true, true, true, true, false, false, false, true, false], [true, true, true, true, false, false, false, true, false], [true, true, true, false, false, false, true, true, true], [true, true, true, false, false, false, true, true, true], [true, true, true, false, true, false, true, true, true], [true, true, true, false, true, false, true, true, true], [true, true, true, false, true, false, true, true, true], [true, true, true, false, true, false, true, false, true], [true, true, true, false, false, false, false, true, false], [true, true, true, false, false, false, false, true, false], [true, true, true, false, false, false, false, false, true], [true, true, true, false, false, false, false, false, true], [true, true, true, true, false, false, true, false, false], [true, true, true, true, false, false, true, false, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, false, false, true], [true, true, true, false, false, false, false, false, true], [true, true, true, false, true, false, true, false, false], [true, true, true, true, false, false, false, false, true], [true, true, true, true, false, false, false, false, true], [true, true, true, true, true, false, true, false, true], [true, true, true, true, true, false, true, false, true], [true, true, true, false, true, false, false, true, false], [true, true, true, false, true, false, false, false, false], [true, true, true, false, false, false, true, true, false], [true, true, true, true, false, false, true, false, false], [true, true, true, true, false, false, true, false, false], [true, true, true, true, true, false, true, true, true], [true, true, true, true, true, false, true, true, true], [true, true, true, true, false, false, true, true, false], [true, true, true, true, false, false, true, true, false], [true, true, true, false, true, false, true, false, true], [true, true, true, false, true, false, true, true, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, true, false, false, true, false], [true, true, true, false, true, false, false, true, false], [true, true, true, true, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, true, true, false, true, true, true], [true, true, true, true, true, false, true, true, true], [true, true, true, false, false, false, true, true, true], [true, true, true, false, false, false, true, true, true], [true, true, true, false, true, false, true, true, true], [true, true, true, false, true, false, true, true, true], [true, true, true, false, true, false, true, true, true], [true, true, true, false, true, false, true, true, true], [true, true, true, false, true, false, false, true, false], [true, true, true, false, false, false, false, false, false], [true, true, true, false, false, false, false, false, false], [true, true, true, false, false, false, false, false, false], [true, true, true, false, false, false, false, false, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, true, false, true, true, true], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, true, false], [true, true, true, false, false, false, true, false, false], [true, true, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, true, false, false], [true, false, true, false, false, false, true, false, false], [true, false, true, false, true, false, true, false, true], [true, false, true, false, true, false, true, false, true], [true, false, true, false, false, false, true, true, false], [true, false, true, false, false, false, true, true, false], [true, false, true, false, false, false, true, true, false], [true, false, true, false, false, false, true, true, false], [true, false, true, true, true, false, true, true, false], [true, false, true, true, false, false, true, true, true], [true, false, true, true, false, false, true, true, true], [true, false, true, true, true, false, true, true, true], [true, false, true, false, true, false, false, true, true], [true, false, true, true, false, false, true, true, false], [true, false, true, false, true, false, false, false, true], [true, false, true, false, true, false, false, false, true], [true, false, true, true, false, false, false, false, true], [true, false, true, true, false, false, false, false, true], [true, false, true, false, false, false, true, false, false], [true, false, true, false, false, false, true, false, false], [true, false, true, false, false, false, true, false, false], [true, false, true, true, false, false, true, false, true], [true, false, true, true, true, false, true, false, false], [true, false, true, true, true, false, true, false, false], [true, false, true, false, true, false, true, true, true], [true, false, true, false, false, false, true, true, false], [true, false, true, false, false, false, true, false, false], [true, false, true, false, false, false, true, false, false], [true, false, true, false, false, false, true, false, false], [true, false, true, false, true, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, true, false, true, false, false], [true, false, true, false, true, false, true, false, true], [true, false, true, false, true, false, true, false, true], [true, false, true, false, true, false, true, true, true], [true, false, true, false, true, false, true, true, true], [true, false, true, false, true, false, true, true, false], [true, false, true, false, false, false, true, true, false], [true, false, true, false, true, false, false, true, false], [true, false, true, false, true, false, false, false, false], [true, false, true, true, false, false, true, false, true], [true, false, true, true, true, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, true, false, false], [true, false, true, false, true, false, true, false, false], [true, false, true, false, true, false, true, false, true], [true, false, true, false, false, false, true, true, false], [true, false, true, false, false, false, true, true, false], [true, false, true, false, false, false, true, false, true], [true, false, true, false, true, false, true, true, false], [true, false, true, false, false, false, true, false, true], [true, false, true, true, true, false, true, false, false], [true, false, true, false, true, false, true, true, true], [true, false, true, false, false, false, true, false, false], [true, false, true, false, false, false, true, false, false], [true, false, true, true, false, false, true, false, false], [true, false, true, true, false, false, true, false, false], [true, false, true, false, true, false, true, false, true], [true, false, true, false, true, false, true, false, true], [true, false, true, true, false, false, true, true, true], [true, false, true, false, true, false, true, false, true], [true, false, true, false, true, false, true, false, true], [true, false, true, false, false, false, true, true, true], [true, false, true, false, true, false, true, false, true], [true, false, true, true, false, false, true, true, false], [true, false, true, false, true, false, true, false, false], [true, false, true, false, true, false, true, false, false], [true, false, true, true, false, false, true, false, false], [true, false, true, true, false, false, false, false, false], [true, false, true, true, false, false, false, false, false], [true, false, true, false, true, false, false, true, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, true, true, false], [true, false, true, false, false, false, false, false, true], [true, false, true, false, false, false, false, false, true], [true, false, true, false, false, false, true, false, false], [true, false, true, false, true, false, false, true, false], [true, false, true, false, true, false, false, true, false], [true, false, true, false, false, false, true, true, false], [true, false, true, false, true, false, false, true, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, true, false, true], [true, false, true, false, false, false, true, false, true], [true, false, true, false, false, false, true, false, true], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, true, false, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, true, false, false, false, false], [true, false, false, true, true, false, false, false, false], [true, false, false, true, true, false, false, false, false], [true, false, false, true, true, false, false, false, false], [true, false, false, true, true, false, false, false, false], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, false, false, true], [true, false, false, true, false, false, false, false, true], [true, false, false, true, false, false, false, false, true], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, true, false, true, true, true], [true, false, false, true, true, false, true, true, true], [true, false, false, true, true, false, true, false, true], [true, false, false, true, true, false, true, false, true], [true, false, false, true, true, false, true, false, true], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, true, false, true, false, false], [true, false, false, true, true, false, true, true, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, true, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, true, false, true, false, false], [true, false, false, true, true, false, true, false, false], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, true, false, true, false, true], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, true], [true, false, false, true, false, false, true, true, true], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, true, true, true], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, true], [true, false, false, true, false, false, true, true, true], [true, false, false, true, false, false, true, true, true], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, true, false, true, false, false], [true, false, false, true, true, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, true, false, true, true, true], [true, false, false, true, true, false, true, true, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, true, false, true], [true, false, false, true, false, false, false, false, true], [true, false, false, true, false, false, false, false, true], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, true, false, false, true, true], [true, false, false, true, true, false, false, true, true], [true, false, false, true, false, false, false, true, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, true, false, false, false, true], [true, false, false, true, true, false, false, false, true], [true, false, false, true, true, false, false, false, false], [true, false, false, true, true, false, true, false, false], [true, false, false, true, true, false, true, true, false], [true, false, false, true, false, false, true, false, true], [true, false, false, true, true, false, false, true, true], [true, false, false, true, true, false, false, true, true], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, false, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, true, true, false], [true, false, false, true, false, false, false, true, false], [true, false, false, true, false, false, false, true, false], [true, false, false, true, false, false, false, true, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, true, false, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, false, false, true], [true, false, false, false, true, false, false, false, true], [true, false, false, false, true, false, false, true, true], [true, false, false, false, true, false, false, true, true], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, true, true, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, false, false, true], [true, false, false, false, true, false, false, false, true], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, true, true, false], [true, false, false, false, true, false, true, true, false], [true, false, false, false, true, false, true, true, false], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, true, true, false], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, false, false, true], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, true, true, true], [true, false, false, false, true, false, true, false, false], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, false, true, false], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, true, true, false], [true, false, false, false, true, false, false, false, true], [true, false, false, false, true, false, false, true, true], [true, false, false, false, true, false, true, false, true], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, true, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, true, true, true], [true, false, false, false, false, true, true, true, true], [true, false, false, false, false, true, true, true, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, false, true, true], [true, false, false, false, false, true, false, true, true], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, true, false], [true, false, false, false, false, true, true, true, false], [true, false, false, false, false, true, true, true, false], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, false, true, false], [true, false, false, false, false, true, true, true, true], [true, false, false, false, false, true, true, true, true], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, true, true], [true, false, false, false, false, true, true, true, true], [true, false, false, false, false, true, true, true, true], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, true, true, false], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, true, true, false], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, false, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, false], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, true, true], [true, false, false, false, false, true, false, true, true], [true, false, false, false, false, true, false, true, true], [true, false, false, false, false, true, false, true, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, true, false, true], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, true, false, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, true, false], [true, false, false, false, false, false, true, true, false], [true, false, false, false, false, false, true, true, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, true, true], [true, false, false, false, false, false, true, true, true], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, true, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, true, false], [true, false, false, false, false, false, true, true, true], [true, false, false, false, false, false, true, true, true], [true, false, false, false, false, false, true, true, true], [true, false, false, false, false, false, true, true, false], [true, false, false, false, false, false, true, true, true], [true, false, false, false, false, false, true, true, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, true], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, true, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, true, false, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, true], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, true, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, true], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false], [true, false, false, false, false, false, false, false, false]];
-  const NUM_SHIRITORI = 4;
-  const MAX_SEED_VALUE = 0xFFFFFFFF;
-  const num_problems_input = document.querySelector(`input[name="num_problems"]`)
-  const num_problems = document.getElementById("num_problems")
-  const pokemon_datalist = document.querySelector("datalist#pokemon");
-  const shiritori_form = document.querySelector("form#shiritori-form");
-  const shiritori_init = document.getElementById("shiritori-init");
-  const shiritori_end  = document.getElementById("shiritori-end");
-  const shiritori_input_init = document.getElementById("shiritori-input-init");
-  const shiritori_input_end = document.getElementById("shiritori-input-end");
-  const shiritori_problem_warning = document.getElementById("shiritori-problem-warning");
-  const problem_seed_input = document.querySelector(`input[name="problem_seed"]`)
-  const shiritori_wrapper = document.getElementById("shiritori-wrapper");
-  const winstreak_counter = document.getElementById("winstreak-counter");
-  const curt_time_counter = document.getElementById("curt-time-counter");
-  const quiz_generation   = document.getElementById("quiz-generation");
-  const answer_btn_pos    = document.getElementById("answer-btn-pos");
-  const wallpaper_img = document.getElementById("wallpaper")
-  const s1_ = 0x41C64E6D;
-  const s2_ = 0x6073;
-  var gRngValue = 0;
-  var winstreak = 0;
-  var right2answer = true;
-  const makeR = function(seed){
-    return ((((seed & 0x0000ffff) * (s1_ & 0x0000ffff)) & 0x0000ffff) | (((((((seed & 0x0000ffff) * (s1_ & 0x0000ffff)) & 0xffff0000) >>> 16) + ((((seed & 0xffff0000) >>> 16) * (s1_ & 0x0000ffff)) & 0x0000ffff) + (((seed & 0x0000ffff) * ((s1_ & 0xffff0000) >>> 16)) & 0x0000ffff)) & 0x0000ffff) << 16)) + s2_;
+  thead input {
+    color: white;
   }
-  const Random = function(){
-    gRngValue = makeR(gRngValue)
-    return gRngValue >>> 16; // "Unsigned" right shift
+  table.TF th, summary.h2 {
+    background-color: black!important;
+    color: white!important;
   }
-  const Pdata_img_baseurl = "https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon";
-  const Pdata_wallimg_baseurl = "https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon-wallpaper";
-  const generation_ubs = [151,251,386,493,649,719];
-  const wallpaper_max_no = Math.max(...generation_ubs)
-  const generation_paths = ['GenerationI-Kanto', 'GenerationII-Johto', 'GenerationIII-Hoenn', 'GenerationIV-Sinnoh', 'GenerationV-Unova', 'GenerationVI-Kalos'];
-  function pokemon_image_create(name){
-    return `<div class='overflow-ms'><img src="${Pdata_img_baseurl}/${("00" + (POKEMON_NAMES.indexOf(name)+1)).slice(-3)}.png" alt="${name}"></div>`
+  ul {
+    margin: 1em;
+    border: black 1px solid;
+    padding: .5em .5em .5em 2.5em;
   }
-  var selected_pokemons = POKEMON_NAMES
-  function generate_wallpaper(){
-    var no = parseInt(shiritori_form.wallpaper_no.value);
-    if (no<=0 || no>=wallpaper_max_no) no = Math.floor(Math.random()*wallpaper_max_no)+1
-    generation_ubs.some(function(e,i){
-      if (no<=e){
-        wallpaper_img.setAttribute("src", `${Pdata_wallimg_baseurl}/${generation_paths[i]}/${("00" + no).slice(-3)}.jpg`);
-        return true;
-      }
-    })
+  ol, ul {
+    list-style: decimal;
   }
-  function narrow_down_the_generation_options(){
-    var gen = parseInt(shiritori_form.generation.value);
-    selected_pokemons = POKEMON_NAMES.filter(function(e,i){return POKEDEX_FLAGS[i][gen]});
-    var datalist = ""
-    selected_pokemons.forEach(function(e){
-      datalist += `<option value="${e}"></option>`
-    })
-    pokemon_datalist.innerHTML = datalist;
-    document.getElementById("num_mons").innerHTML = selected_pokemons.length;
-    quiz_generation.innerHTML = shiritori_form.generation.options[shiritori_form.generation.selectedIndex].textContent.split("（")[0].split(".")[1];
+  span.rental-move {
+    width: 120px;
+    display: table-cell;
+    padding: 7px 9.8px 8.8px 9.8px;
   }
-  var answer_pokemons = []
-  function generate_problem(){
-    answer_pokemons = Array(NUM_SHIRITORI).fill("");
-    var r=i=c=0;
-    var num_pokemons = selected_pokemons.length;
-    var is_ok = true;
-    gRngValue = parseInt(shiritori_form.problem_seed.value);
-    while (i != NUM_SHIRITORI){
-      c++;
-      r = Random() % num_pokemons;
-      name = selected_pokemons[r];
-      if ((i==0 || is_satisfied_shiritori_rule(answer_pokemons[i-1], name)) && (i==(NUM_SHIRITORI-1) || get_last_charactor(name)!="ン") && answer_pokemons.indexOf(name)==-1){
-        answer_pokemons[i++] = name;
-      }
-      if (c>num_pokemons*NUM_SHIRITORI){
-        break
-      }
-    }
-    if (i!= NUM_SHIRITORI){
-      shiritori_problem_warning.innerHTML = "Couldn't create problem";
-      shiritori_problem_warning.parentElement.nextElementSibling.style.backgroundColor ="#fba9a9";
-      is_ok = false; 
-    }else{
-      shiritori_init.innerHTML = answer_pokemons[0];
-      shiritori_init.parentElement.previousElementSibling.innerHTML = pokemon_image_create(answer_pokemons[0]);
-      shiritori_end.innerHTML = answer_pokemons[NUM_SHIRITORI-1];
-      shiritori_end.parentElement.nextElementSibling.innerHTML = pokemon_image_create(answer_pokemons[NUM_SHIRITORI-1]);
-      shiritori_problem_warning.innerHTML = "";
-      shiritori_problem_warning.parentElement.nextElementSibling.style.backgroundColor = "white";
-      shiritori_input_init.value = "";
-      shiritori_input_end.value = "";
-    }
-    generate_inputted_pokemon_init();
-    generate_inputted_pokemon_end();
-    return is_ok;
-  }
-  function sleep(waitMsec) {
-    var startMsec = new Date();
-    while (new Date() - startMsec < waitMsec);
-  }
-  function check_answer(){
-    var tmp_list = [
-      shiritori_init.textContent, 
-      shiritori_input_init.value, 
-      shiritori_input_end.value, 
-      shiritori_end.textContent
-    ];
-    for (var i=0; i<NUM_SHIRITORI-1; i++){
-      if (!(is_satisfied_shiritori_rule(tmp_list[i], tmp_list[i+1]) && selected_pokemons.indexOf(tmp_list[i])!=-1)) break
-    }
-    var tmp_set = new Set(tmp_list);
-    return (i==NUM_SHIRITORI-1)&&(selected_pokemons.indexOf(tmp_list[i])!=-1)&&(tmp_set.size==tmp_list.length)
-  }
-  function show_answer(){
-    right2answer = false;
-    setTimeout(function(){
-      right2answer=true; 
-      generate_problem_certainly();
-    }, 3000);
-    shiritori_input_init.value = answer_pokemons[1];
-    shiritori_input_end.value = answer_pokemons[2];
-    generate_inputted_pokemon_init();
-    generate_inputted_pokemon_end();
-  }
-  function generate_problem_certainly(){
-    var curt, is_ok
-    do {
-      curt = parseInt(shiritori_form.problem_seed.value);
-      shiritori_form.problem_seed.value = (curt==MAX_SEED_VALUE) ? 0 : curt+1
-      is_ok = generate_problem()
-    }while (!is_ok)
-    return is_ok;
-  }
-  function replace_for_shiritori(w){
-    [
-      ['ァ', 'ア'], ['ィ', 'イ'], ['ゥ', 'ウ'], ['ェ', 'エ'], ['ォ', 'オ'], ['ヵ', 'カ'], ['ヶ', 'ケ'], ['ッ', 'ツ'], ['ャ', 'ヤ'], ['ュ', 'ユ'], ['ョ', 'ヨ'], ['ヮ', 'ワ'], ['♂', 'ス'], ['♀', 'ス'],
-    ].forEach(function(e){
-      w = w.replace(e[0], e[1])
-    })
-    return w;
-  }
-  function get_last_charactor(w){
-    return replace_for_shiritori((w.slice(-1) == "ー") ? w.slice(-2,-1) : w.slice(-1))
-  }
-  function is_satisfied_shiritori_rule(w1, w2){
-    return get_last_charactor(w1) == w2.slice(0,1)
-  }
-  function generate_inputted_pokemon_init(){
-    shiritori_input_init.parentElement.previousElementSibling.innerHTML = pokemon_image_create(shiritori_input_init.value);
-  }
-  function generate_inputted_pokemon_end(){
-    shiritori_input_end.parentElement.nextElementSibling.innerHTML = pokemon_image_create(shiritori_input_end.value);
-  }
-  var answer_btn = document.getElementById("answer-btn");
-  function answer_problem(){
-    if (right2answer && check_answer()){
-      sound_correct_answer()
-      winstreak_counter.innerHTML = ++winstreak;
-      if (winstreak==num_problems_input.value){
-        clearInterval(timer_id);
-        var tmp = answer_btn_pos.innerHTML;
-        answer_btn_pos.innerHTML = '<span class="title">ポケモン<br>しりとりクイズ</span>';
-        download_element(element=shiritori_wrapper, width=480, height=270, filename="result.png");
-        setTimeout(function(){ 
-          answer_btn_pos.innerHTML = tmp; 
-          var answer_btn = document.getElementById("answer-btn");
-        }, 1000);
-      }else{
-        generate_problem_certainly();
-      }
-    }else{
-      sound_wrong_buzzer()
-    }
-  }
-  // StopWatch
-  var start_time
-  var timer_id = false
-  function reset_situ(){
-    problem_seed_input.value = Math.floor(Math.random()*1e6)+1
-    if (timer_id) clearInterval(timer_id)
-    start_time = new Date();
-    winstreak_counter.innerHTML = winstreak = 0;
-    timer_id = setInterval(goTimer, 33);
-    generate_problem_certainly()
-  }
-  function zeroPad(val){
-    return ("00" + val).slice(-2);
-  }
-  function goTimer(){
-    var now = new Date();
-    var milli = now.getTime() - start_time.getTime();
-    var seconds = Math.floor(milli / 1000);
-    var minutes = Math.floor(seconds / 60);
-    // var hours = Math.floor(minutes / 60);
-    milli   = Math.floor((milli - seconds * 1000)/10);
-    seconds = seconds - minutes * 60;
-    // minutes = minutes - hours * 60;
-    curt_time_counter.innerHTML = `${zeroPad(minutes)}:${zeroPad(seconds)}:${zeroPad(milli)}`
-  }
-  // Sound Play
-  function sound_play(base64, fmt="mp3"){
-    var sound = new Audio(`data:audio/${fmt};base64,${base64}`)
-    sound.play();
-  }
-  function sound_correct_answer(){
-    sound_play(base64="SUQzAwCAAAAQAFRQRTEAAAAKAAAAT3RvTG9naWMAVElUMgAAABkAAABRdWl6LUNvcnJlY3RfQW5zd2VyMDItMQBUQUxCAAAADQAAAE90b0xvZ2ljLVNFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+5AESgPwLgPGqAAQGANgCNAAAAEArBEcoABAQAyAJAAAAARVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV1cOf/+sO3//////////6lUxBTUUzLjk5LjVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+5AESQ/wBwDIAAAACAGACNAAAAEAVAEcAAAAACkCIwAACAhVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX//1cN6kxBTUUzLjk5LjVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+5AEQ4/wFQBGgAAAAAGACOAAAAEAAAH+AAAAIAOAZAAAAARVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVXUTX+j7WfG6kxBTUUzLjk5LjVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+5AERQ/QAAB/gAAACADgGNAAAAEAAAH+AAAAIByAY4QAAARVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUxBTUUzLjk5LjVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+xAE3Y/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIAAAP8AAAARVVVVVVVVVVVVVVVVVVVVVVVVVVVVV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", fmt="mp3")
-  }
-  function sound_wrong_buzzer(){
-    sound_play(base64="SUQzAwCAAAAQAFRQRTEAAAAKAAAAT3RvTG9naWMAVElUMgAAABcAAABRdWl6LVdyb25nX0J1enplcjAyLTEAVEFMQgAAAA0AAABPdG9Mb2dpYy1TRQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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IckTSOnsGyBCZikdPMKGBoRTI6ewxwDsCWQRh6Sg/6IcjlZLIFT+hpOIOouQAAAWRInoUbcRA0zZAKLgpBxcO4lADk08EAGrrqKOfZmvJwEv4XNEmhmFhan//0OFsJJG5CBw6Qy8kcVSeS7NR2X8kh+oElSKYnALKk7glqurZ57GSZgOAiIzweOINf/+rq//////////XRI04okoAAABG6YXKu1Kt0kbRGYqUMK8midxIYsCGQAywaaWIxcEwyY/////////////193cieUKAJDIjUoKIMts0QU5hlFIwLh/HtIbRlZoUGF1gz4C////////+z////nFs2BwUSpocbUaSqCGKNJEhDexCyEmkkgnIqJ5AVC4uba1ZYJnTVwiEqA8LU/////////////6d6BEi2ymwH3hlLLXbHjKWlrw5iEHSCtASdWjz45GYYUdvIwkP////////////1/6NipMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uQBIIBEacKyGg4eBAywVjYLewIBkQjH4DhgGC9h6OxhgygqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqhxIQACY75htggmKQuvMvLwPbux8c9P//+7/7f//q////Lja7Gi2MY1lKCKkIDZBjQBeAZAjiB1aTSpPIqsaDpDf///////////////9tBoRAeyBH1dKA7d0qLoxiQLM/RlWC//////////u//1/+M5YQCMlwgC44gShxiivbViMIrDv///////////////V6e9MQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uQBImFMWYKRkAvYBAhYRj0AewBBHgfGyeNhEB8g+QRBqRQqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqikpAACgDTkLIr+0RNBc////////////X///92nqLQkAAKGQWEROmxCEwl////////////////0aFsQAYwt1kM////////////////bmls1lADAPthPH1Hv//////////9f//0q6eiKV3C9MQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//uQBHYDcOgIR0ApGEAb4Hj4BSEDAtANHKAMYABqAaNgBKQAVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVSAEAAAMO/jf///////////////f+SQFiAAAxjiv//////////////9/TNxJTWKOSq12sz////////////6f/+93Lai4BWP0f////////////////rVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUxBTUUzLjk5LjVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//uQBGuHcLoCx0ACAAAZAGjVACIAAsADGgAAAAA5ACPAAAAEVVVVVVVVTEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUxBTUUzLjk5LjVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUxBTUUzLjk5LjVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//sQBN2P8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+xAE3Y/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIAAAP8AAAARVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7EATdj/AAAH+AAAAIAAAP8AAAAQAAAf4AAAAgAAA/wAAABFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//sQBN2P8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+xAE3Y/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIAAAP8AAAARVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7EATdj/AAAH+AAAAIAAAP8AAAAQAAAf4AAAAgAAA/wAAABFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//sQBN2P8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAEVVVVVVVVVVVVVVVVVVVVJJTR8hnU024EIONPLKpHu0u031Pb7fZW9PWiiTuZC7UAKXUwvFHU+RLmyLVgQQCJ4Xi6D6j/+xAE3Y/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIAAAP8AAAATh1oYLtSpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7EATdj/AAAH+AAAAIAAAP8AAAAQAAAf4AAAAgAAA/wAAABKqqqqqqqkxBTUUzLjk5LjWqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uQBF6P8AAAf4AAAAgAAA/wAAABAAAB/gAAACDpgGIAAAAAqqqqqqqqTEFNRTMuOTkuNaqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjk5LjWqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqTEFNRTMuOTkuNaqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjk5LjWqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//sQBN2P8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqTEFNRTMuOTkuNaqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+xAE3Y/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIAAAP8AAAASqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7EATdj/AAAH+AAAAIAAAP8AAAAQAAAf4AAAAgAAA/wAAABKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjk5LjWqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//sQBN2P8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+xAE3Y/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIAAAP8AAAASqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7EATdj/AAAH+AAAAIAAAP8AAAAQAAAf4AAAAgAAA/wAAABKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//sQBN2P8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+xAE3Y/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIAAAP8AAAASqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/o7+lP8//R9X////td/2adKkdLiWloqAxTIP/7EATdj/AAAH+AAAAIAAAP8AAAAQAAAf4AAAAgAAA/wAAABIJtBoXJ1UxBTUUzLjk5LjVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//sQBN2P8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAEVVVVVVVVTEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+5AEUY/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIICAIsAAAABVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV9Hq/2Ry/3J1dXt//5JO39UcL8V2po+osR61LUqmowoX/+xAE3Y/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIAAAP8AAAARsLFAygNpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7EATdj/AAAH+AAAAIAAAP8AAAAQAAAf4AAAAgAAA/wAAABKqqqqqqqkxBTUUzLjk5LjWqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uQBFQP8AAAf4AAAAgloBigAAAAAAAB/gAAACAAAD/AAAAEqqqqqqqqTEFNRTMuOTkuNaqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//sQBN2P8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqvo93930ev0f////99mztjev//S9L8n/+xAE3Y/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIAAAP8AAAASVLgRiGBVMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqv/7EATdj/AAAH+AAAAIAAAP8AAAAQAAAf4AAAAgAAA/wAAABKqqqqqqqkxBTUUzLjk5LjWqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//uQBE8P8AAAf4AAAAgAAA/wAAABA4ADFgAAAAAAAD/AAAAEqqqqqqqqTEFNRTMuOTkuNaqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpMQU1FMy45OS41qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqkxBTUUzLjk5LjWqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq//sQBN2P8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAEqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqr/+xAE3Y/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIAAAP8AAAASqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqjH//7+/f/+7///3d1f/9FpTSimnrY7VQ//7EATdj/AAAH+AAAAIAAAP8AAAAQAAAf4AAAAgAAA/wAAABIAgEJCgtUxBTUUzLjk5LjVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//sQBN2P8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAEVVVVVVVVTEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+5AEUA/wAAB/gAAACAAAD/AAAAEDtAEWAAAAAAAAP8AAAARVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUxBTUUzLjk5LjVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUxBTUUzLjk5LjVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+xAE3Y/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIAAAP8AAAARVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7EATdj/AAAH+AAAAIAAAP8AAAAQAAAf4AAAAgAAA/wAAABFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUxBTUUzLjk5LjVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//sQBN2P8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+xAE3Y/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIAAAP8AAAARVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7EATdj/AAAH+AAAAIAAAP8AAAAQAAAf4AAAAgAAA/wAAABFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//sQBN2P8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+xAE3Y/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIAAAP8AAAARVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7EATdj/AAAH+AAAAIAAAP8AAAAQAAAf4AAAAgAAA/wAAABFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQpiEf/+vP7Hez9///9X97eyuv2+q2iU1LSRuQRYJ//sQBN2P8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAE3tFixIqMTEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+xAE3Y/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIAAAP8AAAARVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7kARTD/EgAEUAAAAAAAAP8AAAAQAAAf4AAAAgAAA/wAAABFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/3vL//l/+uay//5c//+n63//+v+m9P/6f+jF5vS1Nm96PKVVW2V3dUPBL7TEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7kARXD/AAAH+AAAAILA3YoAQC8EAAAf4AAAAgAAA/wAAABFVVVVVVVUxBTUUzLjk5LjVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUxBTUUzLjk5LjVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVMQU1FMy45OS41VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7EATdj/AAAH+AAAAIAAAP8AAAAQAAAf4AAAAgAAA/wAAABFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVUxBTUUzLjk5LjVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//sQBN2P8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVTEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+xAE3Y/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIAAAP8AAAARVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7EATdj/AAAH+AAAAIAAAP8AAAAQAAAf4AAAAgAAA/wAAABFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//sQBN2P8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+xAE3Y/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIAAAP8AAAARVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVf/7EATdj/AAAH+AAAAIAAAP8AAAAQAAAf4AAAAgAAA/wAAABFVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV//sQBN2P8AAAf4AAAAgAAA/wAAABAAAB/gAAACAAAD/AAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/+xAE3Y/wAAB/gAAACAAAD/AAAAEAAAH+AAAAIAAAP8AAAARVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVQ==", fmt="mp3")
-  }
-  function gana2kana(str){
-    return str.replace(/[ぁ-ん]/g, function(s) {
-      return String.fromCharCode(s.charCodeAt(0) + 0x60);
-    });
-  }
-  // Window On load
-  window.onload = function(){
-    shiritori_input_init.onchange = generate_inputted_pokemon_init
-    shiritori_input_init.onblur   = function(){ 
-      this.value = gana2kana(this.value);
-      generate_inputted_pokemon_init()
-    }
-    shiritori_input_end.onchange  = generate_inputted_pokemon_end
-    shiritori_input_end.onblur    = function(){ 
-      this.value = gana2kana(this.value); 
-      generate_inputted_pokemon_end()
-    }
-    for(let i=0; i<shiritori_form.length; i++){
-      let e = shiritori_form.elements[i];
-      if (e.name == "wallpaper_no"){
-        e.onchange = function(){
-          generate_wallpaper();
-        };
-      }else if (e.name == "generation"){
-        e.onchange = function(){
-          narrow_down_the_generation_options();
-          generate_problem();
-        };
-      }else if (e.name == "problem_seed"){
-        e.onchange = function(){
-          generate_problem();
-        };
-      }else if (e.name == "num_problems"){
-        e.onchange = function(){
-          num_problems.innerHTML = num_problems_input.value;
-        }
-      }
-    }
-    generate_wallpaper();
-    narrow_down_the_generation_options();
-    reset_situ();
-    num_problems.innerHTML = num_problems_input.value;
-  }
-  document.addEventListener("keydown", function(evt){
-    var cur_focused = document.activeElement;
-    if (evt.key=="Tab"){
-      evt.preventDefault();
-      if (cur_focused == shiritori_input_init){
-        shiritori_input_end.focus()
-      }else if (cur_focused == shiritori_input_end ){
-        answer_btn.focus();
-      }else{
-        shiritori_input_init.focus();
-      } 
-    }else if (evt.keyCode == 13){
-      if (cur_focused == answer_btn) answer_btn.click()
-    }
-  })
-  // Define in global scope.
-  var cheating_id;
-  function cheating(interval=500){
-    cheating_id = setInterval(function(){
-      console.log(answer_pokemons)
-    }, interval)
-    return cheating_id
-  }
-  function stop_cheating(){
-    clearInterval(cheating_id);
-  }
-</script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
-
-<script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
-
-<script>
-  function dataUriToBlob(dataUri) {
-    const b64 = atob(dataUri.split(',')[1]);
-    const u8 = Uint8Array.from(b64.split(''), e => e.charCodeAt());
-    return new Blob([u8], {type: 'image/png'});
-  }
-  function download_element(element, width=800, height=450, filename="result.png"){
-    html2canvas(element,{
-      letterRendering: 1, 
-      allowTaint : true, 
-      useCORS: true,
-      onrendered: function(canvas) {
-        var dataURI = canvas.toDataURL('image/png');
-        var img = document.createElement("img");
-        img.width = `${width}px`;
-        img.height = `${height}px`;
-        data = canvas.toDataURL();
-        img.src = data;
-        var url = URL.createObjectURL(dataUriToBlob(img.src));
-        var link = document.createElement("a");
-        link.href = url;
-        link.download = filename;
-        link.click();
-      }
-    });
-  }
-</script>                </article>
+</style>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
                     <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-31.html" rel="bookmark"
+                           title="Permalink to JS.31 ポケモンしりとりクイズ">JS.31 ポケモンしりとりクイズ</a></h1>
+                </header>
+
+                <div class="entry-content">
+          <footer class="post-info">
+            <span>2021-04-24(Sat)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/javascript.html">JavaScript</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a></span>
+          </footer><!-- /.post-info -->                <p>ポケモンしりとりクイズで遊ぼう。</p>
+                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-31.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
