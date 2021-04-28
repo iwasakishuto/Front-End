@@ -87,26 +87,61 @@
   </tbody>
 </table>
 
-<form id="factory_form" name="FACTORY">
+<form id="factory-setting-form" name="FACTORY">
   <h3>レンタルポケモン</h3>
   <table id="rental-pokemon-form" class="fixed">
-    <thead><tr><th colspan="4">ファクトリーの設定</th></tr></thead>
+    <thead><tr><th colspan="6">ファクトリーの設定</th></tr></thead>
     <tbody>
-      <tr><td>連勝数</td><td class="g1"><select name="winStreak"><option value="0">0 ~ 7</option><option value="1">7 ~ 14</option><option value="2">14 ~ 21</option><option value="3">21 ~ 28</option><option value="4">28 ~ 35</option><option value="5">35 ~ 42</option><option value="6">42 ~ 49</option><option value="7">49 ~ 56</option><option value="8" selected>56 ~</option></select></td><td>challengeNum</td><td id="challengeNum"></td></tr>
-      <tr><td>交換数</td><td class="g1"><select name="rentalCount"><option value="0">0 ~ 14</option><option value="1">15 ~ 21</option><option value="2">22 ~ 28</option><option value="3">29 ~ 35</option><option value="4">36 ~ 42</option><option value="5">43 ~</option></select></td><td>rentalRank</td><td id="rentalRank"></td></tr>
-      <tr><td>Lv モード</td><td class="g1"><select name="LvlMode"><option value="0">Lv.50</option><option value="8">LV.OPEN</option></select></td><td>出現ポケモン</td><td id="monRange"></td></tr>
+      <tr>
+        <td rowspan="2">連勝数</td>
+        <td rowspan="2" class="g1"><input name="winStreak" type="number" min="0" max="9999" value="0" size="3"></td>
+        <td style="background-color:#c94663;color:white;" colspan="4">出現ポケモン</td>
+      </tr>
+      <tr class="thead">
+        <td>種類</td><td colspan="2">Rental ID</td><td>個体値</td>
+      </tr>
+      <tr>
+        <td rowspan="2">交換回数</td>
+        <td rowspan="2" class="g1"><input name="rentalCount" type="number" min="0" max="9999" value="0" size="3"></td>
+        <td rowspan="2">初期レンタル</td><td id="init-rental-former-info">N体</td><td class="g2">000~000</td><td class="g2">0</td>
+      </tr>
+      <tr><td id="init-rental-latter-info">(6-N)体</td><td>000~000</td><td>0</td></tr>
+      <tr>
+        <td>Lv モード</td>
+        <td class="g1"><select name="LvlMode"><option value="0">Lv.50</option><option value="8">LV.OPEN</option></select></td>
+        <td>一般トレーナー</td><td id="optrainer-info">k戦目</td><td>000~000</td><td>0</td>
+      </tr>
+      <tr>
+        <td>Lv</td>
+        <td class="g1"><input name="lv" type="number" min="1" max="100" value="50" size="3"></td>
+        <td>ダツラ</td><td id="frontier-brain-info">True</td><td>000~000</td><td>0</td>
+      </tr>
     </tbody>
   </table>
-  <div style="width:100%; overflow:auto;" id="rental-pokemon-wrapper">
-    <table id="rental-pokemon-table">
-      <thead>
-        <tr><th>ID</th><th>No</th><th><input type="checkbox"/>ポケモン</th><th>タイプ</th><th>もちもの</th><th>技</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th><th>せいかく</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th></tr>
-      </thead>
-      <tbody id="rental-pokemon-tbody">
-      </tbody>
-    </table>
-  </div>
 </form>
+
+<h3>出現するポケモン</h3>
+
+<div style="width:100%; overflow:auto;" id="rental-pokemon-wrapper">
+  <table id="rental-pokemon-table">
+    <thead>
+      <tr><th>ID</th><th>No</th><th><input type="checkbox"/>ポケモン</th><th>タイプ</th><th>もちもの</th><th>技</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th><th>せいかく</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th></tr>
+    </thead>
+    <tbody id="rental-pokemon-tbody">
+    </tbody>
+  </table>
+</div>
+
+<h3>選出されたポケモン</h3>
+
+<table id="selected-pokemon-table">
+  <thead>
+    <tr><th colspan="11">ダメージ計算結果</th></tr>
+    <tr><th>ID</th><th>ポケモン</th><th>もちもの</th><th>IV</th><th>H</th><th>S</th><th>技</th><th>威力</th><th>特性</th><th>威力</th><th>割合</th></tr>
+  </thead>
+  <tbody id="selected-pokemon-tbody">
+  </tbody>
+</table>
 
 <!-- Load Scripts. -->
 
@@ -118,25 +153,22 @@
 
 <script type="text/javascript" src="https://iwasakishuto.github.io/js/custom.js"></script>
 
-<!-- Factory Rental Pokemon -->
+<script>
+  const g2_color = "antiquewhite"
+</script>
+
+<!-- Battle Frontier Information expecially about Battle Factory -->
 
 <script>
-  const sFixedIVTable = [
-      [3,  6], // Fixed Ivs of MyPokemon & OpTrainer(~6th), That of OpTrainer(7th)
-      [6,  9],
-      [9,  12],
-      [12, 15],
-      [15, 18],
-      [21, 31],
-      [31, 31],
-      [31, 31],
-  ]
-  const sInitialRentalMonRanges = [
-      // Level 50.
-      [110,199],[162,266],[267,371],[372,467],[468,563],[564,659],[660,755],[372,849],
-      // Open Level.
-      [372,467],[468,563],[564,659],[660,755],[372,881],[372,881],[372,881],[372,881],
-  ]
+  const FRONTIER_PARTY_SIZE = 6;
+  sFrontierBrainStreakAppearances = {
+    factory : [21, 42, 21, 1],
+  }
+  const does_frontier_brain_appear = function(winStreak, facility="factory"){
+    var data = sFrontierBrainStreakAppearances[facility];
+    winStreak += data[3];
+    return ((winStreak == data[0]) || (winStreak == data[1]) || ((winStreak > data[1]) && ((winStreak-data[1]) % data[2] == 0)))
+  }
   const sMoves_TotalPreparation = ['つるぎのまい', 'せいちょう', 'ヨガのポーズ', 'こうそくいどう', 'かげぶんしん', 'かたくなる', 'ちいさくなる', 'からにこもる', 'まるくなる', 'バリアー', 'きあいだめ', 'ドわすれ', 'とける', 'かくばる', 'テクスチャー', 'テクスチャー2', 'はらだいこ', 'じこあんじ', 'じゅうでん', 'よこどり', 'ほたるび', 'コスモパワー', 'てっぺき', 'とおぼえ', 'ビルドアップ', 'めいそう', 'りゅうのまい']
   const sMoves_ImpossibleToPredict = ['ものまね', 'ゆびをふる', 'オウムがえし', 'へんしん', 'みがわり', 'スケッチ', 'のろい', 'プレゼント', 'このゆびとまれ', 'トリック', 'なりきり', 'ねこのて', 'スキルスワップ', 'ほごしょく']
   const sMoves_WeakeningTheFoe = ['すなかけ', 'しっぽをふる', 'にらみつける', 'なきごえ', 'いとをはく', 'いやなおと', 'えんまく', 'スプーンまげ', 'フラッシュ', 'わたほうし', 'うらみ', 'こわいかお', 'あまえる', 'はたきおとす', 'あまいかおり', 'フェザーダンス', 'うそなき', 'きんぞくおん', 'くすぐる']
@@ -151,15 +183,87 @@
     BattleStyleMovesFilters[i] = "rgx:" + e.join("|")
   })
   const BattleStyleColors = ["#FFEEB8", "#92CEEE", "#DFC6DE", "#F8D4CE", "#C3E8B5", "#9EABD6",  "#BBBCC2"];
+  // Fixed Ivs of MyPokemon & OpTrainer(~6th), That of OpTrainer(7th)
+  const sFixedIVTable = [
+      [3,  6],[6,  9],[9,  12],[12, 15],[15, 18],[21, 31],[31, 31],[31, 31],
+  ]
+  const GetFactoryMonFixedIV = function(challengeNum, is_last, useBetterRange){
+    var a2 = (is_last) ? 1 : 0;
+    var a1 = Math.min(challengeNum + (useBetterRange ? 1 : 0), 7);
+    return sFixedIVTable[a1][a2];
+  }
+  const GetMonRange = function(challengeNum, adder, useBetterRange){
+    challengeNum = Math.min(challengeNum + (useBetterRange ? 1 : 0), 7);
+    return sInitialRentalMonRanges[adder + challengeNum];
+  }
+  const sInitialRentalMonRanges = [
+      // Level 50.
+      [110, 199],[162, 266],[267, 371],[372, 467],[468, 563],[564, 659],[660, 755],[372, 849],
+      // Open Level.
+      [372, 467],[468, 563],[564, 659],[660, 755],[372, 881],[372, 881],[372, 881],[372, 881],
+  ]
+  const GetNumPastRentalsRank = function(rentalCount){
+    var ret;
+    if (rentalCount < 15)      ret = 0;
+    else if (rentalCount < 22) ret = 1;
+    else if (rentalCount < 29) ret = 2;
+    else if (rentalCount < 36) ret = 3;
+    else if (rentalCount < 43) ret = 4;
+    else                       ret = 5;
+    return ret;
+  }
+</script>
+
+<!-- Factory Settings -->
+
+<script>
+  const factory_setting_form = document.getElementById("factory-setting-form");
+  const init_rental_former_info = factory_setting_form.querySelector("td#init-rental-former-info")
+  const init_rental_latter_info = factory_setting_form.querySelector("td#init-rental-latter-info")
+  const optrainer_info          = factory_setting_form.querySelector("td#optrainer-info")
+  const frontier_brain_info     = factory_setting_form.querySelector("td#frontier-brain-info")
+  function set_factory_condition(){
+    var winStreak             = parseInt(factory_setting_form.winStreak.value);
+    var curChallengeBattleNum = winStreak%7;
+    var challengeNum          = Math.min(Math.floor(winStreak/7), 7);
+    var rentalCount           = parseInt(factory_setting_form.rentalCount.value);
+    var rentalRank            = GetNumPastRentalsRank(rentalCount);
+    var LvlMode               = parseInt(factory_setting_form.LvlMode.value);
+    var monRanges = sInitialRentalMonRanges[LvlMode+challengeNum];
+    var iv_ranges = [sFixedIVTable[challengeNum]];
+    // Set Level to 50;
+    if (LvlMode==0) factory_setting_form.lv.value = 50;
+    // Initial Rental Monsters (Former)
+    init_rental_former_info.textContent = `${rentalRank}体`;
+    init_rental_former_info.nextElementSibling.textContent = GetMonRange(challengeNum, adder=LvlMode, useBetterRange=true).join("~");
+    init_rental_former_info.nextElementSibling.nextElementSibling.textContent = GetFactoryMonFixedIV(challengeNum, is_last=false, useBetterRange=true);
+    // Initial Rental Monsters (latter)
+    init_rental_latter_info.textContent = `${FRONTIER_PARTY_SIZE - rentalRank}体`;
+    init_rental_latter_info.nextElementSibling.textContent = GetMonRange(challengeNum, adder=LvlMode, useBetterRange=false).join("~");
+    init_rental_latter_info.nextElementSibling.nextElementSibling.textContent = GetFactoryMonFixedIV(challengeNum, is_last=false, useBetterRange=false);
+    // Opponent Trainer
+    optrainer_info.textContent = `${curChallengeBattleNum+1}戦目`;
+    optrainer_info.nextElementSibling.textContent = GetMonRange(challengeNum, adder=LvlMode, useBetterRange=false).join("~");
+    optrainer_info.nextElementSibling.nextElementSibling.textContent = GetFactoryMonFixedIV(challengeNum, is_last=curChallengeBattleNum==6, useBetterRange=false);
+    optrainer_info.nextElementSibling.nextElementSibling.style.backgroundColor = (curChallengeBattleNum==6) ? g2_color : "white";
+    // Frontire Brain
+    var is_frontier_brain = does_frontier_brain_appear(winStreak, facility="factory")
+    frontier_brain_info.textContent = is_frontier_brain ? "○" : "×";
+    frontier_brain_info.style.backgroundColor = is_frontier_brain ? g2_color : "white";
+    frontier_brain_info.nextElementSibling.textContent = GetMonRange(challengeNum, adder=LvlMode, useBetterRange=false).join("~");
+    frontier_brain_info.nextElementSibling.nextElementSibling.textContent = GetFactoryMonFixedIV(challengeNum+2, is_last=false, useBetterRange=false);
+  }
+</script>
+
+<!-- Initialize Rental Pokemon Table. -->
+
+<script>
   // Index for Generated Tables
   const rental_pokemon_table = document.getElementById("rental-pokemon-table");
   const rental_pokemon_tbody = document.getElementById("rental-pokemon-tbody");
-  const RentalPokemonTable_AivIdx    = 7;
-  const RentalPokemonTable_natureIdx = 12;
-  const RentalPokemonTable_AevIdx    = 14;
-  var challengeNum_area      = document.getElementById("challengeNum");
-  var rentalRank_area        = document.getElementById("rentalRank");
-  var monRange_area          = document.getElementById("monRange");
+  const RPT_pokenameIdx = 2;
+  const RPT_itemIdx     = 4;
+  const RPT_moveIdx     = 5;
   function load_rental_pokemons(){
     var rental_pokemon_tbody_trs = "";
     RENTAL_POKEMON_LIST.forEach(function(e,i){
@@ -233,11 +337,58 @@
       thds[2].classList.add("fixed-tcol");
     })
     document.querySelector("div.grd_Cont").querySelectorAll("input[type='checkbox']").forEach(function(e,i){
-      e.addEventListener("change", function(){
-        console.log("Hello.")
-      })
+      e.addEventListener("change", generate_result_table)
     })
-    TFselectedRows = [];
+  }
+</script>
+
+<script>
+  const selected_pokemon_tbody = document.getElementById("selected-pokemon-tbody");
+  function generate_result_table(evt){
+    // Find out the correspondence between ID and RowIndex. -->
+    var id2rowIndex = {}
+    rental_pokemon_tbody.querySelectorAll("tr > td:nth-child(1)").forEach(function(e,i){
+      id2rowIndex[e.textContent] = i;
+    })
+    var tbody = "";
+    rental_pokemon_trows = rental_pokemon_tbody.querySelectorAll("tr");
+    TFselectedRows.forEach(function(e,i){
+      let tds = Array.from(rental_pokemon_trows[ id2rowIndex[e] ].querySelectorAll("td"));
+      let id = tds[0].textContent;
+      let move_options = tds[RPT_moveIdx].textContent.split("\n").slice(1,5).map(function(e,i){return `<option>${e}</option>`}).join("");
+      let item = tds[RPT_itemIdx].textContent;
+      let pokename = tds[RPT_pokenameIdx].textContent;
+      let pokedata = POKENAME2DATA[pokename];
+      let ability_options = pokedata.slice(Pdata_abilityIdx, Pdata_abilityIdx+2).map(function(e,i){return e!="" ? `<option>${e}</option>` : ""}).join("")
+      tbody += `<tr>
+        <td>${id}</td>
+        <td style="background-image: ${Pname2typeColor(pokename).color};">${Picon_img_create(pokename)}</td>
+        <td>${Pitem_img_create(item)}</td>
+        <td>IV</td>
+        <td>H</td>
+        <td>S</td>
+        <td><select name="move">${move_options}</select></td>
+        <td><input type="number" size="3"></td>
+        <td><select name="ability">${ability_options}</select></td>
+        <td></td>
+        <td></td>
+      </tr>`
+    })
+    selected_pokemon_tbody.innerHTML = tbody;
+    // Result_table.querySelectorAll("select").forEach(function(e,i){
+    //   if (e.name=="move"){
+    //     e.addEventListener("change", function(){
+    //       output_opmove_info(e);
+    //       calculate_damage_rates(document.DAMAGE);
+    //     })
+    //     output_opmove_info(e);
+    //   }else{
+    //     e.addEventListener("change", function(){
+    //       calculate_damage_rates(document.DAMAGE);
+    //     })        
+    //   }
+    // })
+    // calculate_damage_rates(document.DAMAGE);
   }
 </script>
 
@@ -245,14 +396,18 @@
 
 <script>
   window.onload = function(){
+    for (let i=0; i<factory_setting_form.length; i++){
+      factory_setting_form[i].addEventListener("change", set_factory_condition)
+    }
     // Battle Factory
-    // var rental_pokemon_form = document.querySelectorAll("form#factory_form table#rental-pokemon-form select");
+    // var rental_pokemon_form = document.querySelectorAll("form#factory_setting_form table#rental-pokemon-form select");
     // for(let i=0; i<rental_pokemon_form.length; i++){
     //   let e = rental_pokemon_form[i];
     //   e.addEventListener('change', function(){
     //     set_factory_condition(document.FACTORY);
     //   });
     // }
+    set_factory_condition();
     load_rental_pokemons();
     rental_filterTable();
   }
@@ -262,24 +417,23 @@
 
 <style>
   table#factory-battle-style *,
-  table#rental-pokemon-form *{
+  table#rental-pokemon-form *
+  table#selected-pokemon-table *{
     vertical-align: middle;
     text-align: center;
   }
-  table#rental-pokemon-form select{
-    width: 100%;
+  table#rental-pokemon-form select, 
+  table#rental-pokemon-form input
+  table#selected-pokemon-table select,
+  table#selected-pokemon-table input{
+    padding: .5em .4em;
     border: 0;
     background-color: transparent;
     font-family: Monaco, monospace, sans-serif;
   }
-  table#my-pokemon select, table#my-pokemon input,
-  table#pike-wild-mons-table select, table#pike-wild-mons-table input,
-  table#pyramid-wild-mons-table select, table#pyramid-wild-mons-table input,
-  table#pyramid-pickup-table select, table#pyramid-pickup-table input{
-    border: 0;
-    padding: .5em .4em;
-    background-color: transparent;
-    font-family: Monaco, monospace, sans-serif;
+  table#rental-pokemon-form select,
+  table#selected-pokemon-table select{
+    width: 100%;
   }
   div.overflow-ms{
     width: 32px;
@@ -297,9 +451,6 @@
     width: 200%!important;
     vertical-align: middle;
   }
-  div.overflow-ms img.pokemon-icon {
-    padding-bottom: 18px!important;
-  }
   table.fixed{
     table-layout: fixed;
   }
@@ -309,7 +460,7 @@
     color: #fff;
     background: #333;
   }
-  thead {
+  thead, tr.thead {
     background-color: black;
     color: white;
   }
@@ -332,6 +483,12 @@
     width: 120px;
     display: table-cell;
     padding: 7px 9.8px 8.8px 9.8px;
+  }
+  .g1{
+    background-color: lightgoldenrodyellow;
+  }
+  .g2 {
+    background-color: antiquewhite;
   }
 </style>                </article>
             </aside><!-- /#featured -->

@@ -153,7 +153,7 @@
           <table id="results">
             <thead>
               <tr><th colspan="7" style="color:white;background-color:red;"><label><input id="switchAD" type="checkbox"/> バトルフロンティア側：<span id="BFOD">攻撃</span></label></th><th colspan="2">結果</th></tr>
-              <tr><th>ID</th><th>ポケモン</th><th>S</th><th>もちもの</th><th>技</th><th>威力</th><th>性格</th><th>ダメージ</th><th>割合</th></tr>
+              <tr><th>ID</th><th>ポケモン</th><th>S</th><th>もちもの</th><th>技</th><th>威力</th><th>とくせい</th><th>ダメージ</th><th>割合</th></tr>
             </thead>
             <tbody></tbody>
           </table>
@@ -483,7 +483,7 @@
                 if(pokedata[Pdata_abilityIdx+1] != "") ability_options += '<option>' + pokedata[Pdata_abilityIdx+1] + '</option>';
                 tbody += `<tr>
                   <td>${id}</td>
-                  <td style="background-image: ${Pname2typeColor(pokename).color};"><div class="overflow-ms"><img alt="${pokename}" src="${Pdata_img_baseurl+pokedata[Pdata_imgIdx]}"></div></td>
+                  <td style="background-image: ${Pname2typeColor(pokename).color};">${Picon_img_create(pokename)}</td>
                   <td>${speed}</td>
                   <td>${item}</td>
                   <td><select name="move">${move_options}</select></td>
