@@ -178,7 +178,7 @@
                 </tr>
                 <tr class="g2">
                   <td colspan="3">性格</td>
-                  <td colspan="4"><select id="seikaku" name="seikaku"><option value="1">さみしがり (A↑ B↓)</option><option value="3">いじっぱり (A↑ C↓)</option><option value="4">やんちゃ　 (A↑ D↓)</option><option value="2">ゆうかん　 (A↑ S↓)</option><option value="5">ずぶとい　 (B↑ A↓)</option><option value="8">わんぱく　 (B↑ C↓)</option><option value="9">のうてんき (B↑ D↓)</option><option value="7">のんき　　 (B↑ S↓)</option><option value="15" selected>ひかえめ　 (C↑ A↓)</option><option value="16">おっとり　 (C↑ B↓)</option><option value="19">うっかりや (C↑ D↓)</option><option value="17">れいせい　 (C↑ S↓)</option><option value="20">おだやか　 (D↑ A↓)</option><option value="21">おとなしい (D↑ B↓)</option><option value="23">しんちょう (D↑ C↓)</option><option value="22">なまいき　 (D↑ S↓)</option><option value="10">おくびょう (S↑ A↓)</option><option value="11">せっかち　 (S↑ B↓)</option><option value="13">ようき　　 (S↑ C↓)</option><option value="14">むじゃき　 (S↑ D↓)</option><option value="18">てれや　　 </option><option value="0">がんばりや </option><option value="6">すなお　　 </option><option value="24">きまぐれ　 </option><option value="12">まじめ　　 </option></select></td>
+                  <td colspan="4"><select id="nature" name="nature"><option value="1">さみしがり (A↑ B↓)</option><option value="3">いじっぱり (A↑ C↓)</option><option value="4">やんちゃ　 (A↑ D↓)</option><option value="2">ゆうかん　 (A↑ S↓)</option><option value="5">ずぶとい　 (B↑ A↓)</option><option value="8">わんぱく　 (B↑ C↓)</option><option value="9">のうてんき (B↑ D↓)</option><option value="7">のんき　　 (B↑ S↓)</option><option value="15" selected>ひかえめ　 (C↑ A↓)</option><option value="16">おっとり　 (C↑ B↓)</option><option value="19">うっかりや (C↑ D↓)</option><option value="17">れいせい　 (C↑ S↓)</option><option value="20">おだやか　 (D↑ A↓)</option><option value="21">おとなしい (D↑ B↓)</option><option value="23">しんちょう (D↑ C↓)</option><option value="22">なまいき　 (D↑ S↓)</option><option value="10">おくびょう (S↑ A↓)</option><option value="11">せっかち　 (S↑ B↓)</option><option value="13">ようき　　 (S↑ C↓)</option><option value="14">むじゃき　 (S↑ D↓)</option><option value="18">てれや　　 </option><option value="0">がんばりや </option><option value="6">すなお　　 </option><option value="24">きまぐれ　 </option><option value="12">まじめ　　 </option></select></td>
                 </tr>
                 <tr class="g1">
                   <td colspan="3">もちもの</td>
@@ -241,7 +241,7 @@
 
           <script type="text/javascript" src="https://iwasakishuto.github.io/js/tablefilter.js"></script>
 
-          <script type="text/javascript" src="theme/js/pokeutils.js"></script>
+          <script type="text/javascript" src="https://iwasakishuto.github.io/Front-End/tips/theme/js/pokeutils.js"></script>
 
           <script type="text/javascript" src="https://iwasakishuto.github.io/js/custom.js"></script>
 
@@ -332,18 +332,18 @@
             const BFT_moveIdx = 4;
             const BFT_statusIdx = 8;
             const BFT_speedIdx = 13;
-            const BFT_seikakuIdx = 14;
+            const BFT_natureIdx = 14;
             const BFT_effortIdx = 15;
-            // Add seikaku color
+            // Add nature color
             var bf_trows = BFtable.querySelectorAll("tr");
             bf_trows.forEach(function(e,i){
               tds = e.querySelectorAll("td");
-              seikaku_corr = seikakuid2corr[seikaku2id[tds[BFT_seikakuIdx].textContent]];
+              nature_corr = natureid2corr[nature2id[tds[BFT_natureIdx].textContent]];
               for (let i=0; i<5; i++){
-                if (seikaku_corr[i]>1.0){
+                if (nature_corr[i]>1.0){
                   tds[BFT_statusIdx+i+1].style.backgroundColor = "hotpink";
                   tds[BFT_effortIdx+i+1].style.backgroundColor = "hotpink";
-                }else if(seikaku_corr[i]<1.0){
+                }else if(nature_corr[i]<1.0){
                   tds[BFT_statusIdx+i+1].style.backgroundColor = "cornflowerblue";
                   tds[BFT_effortIdx+i+1].style.backgroundColor = "cornflowerblue";
                 }
@@ -351,7 +351,7 @@
             })
             // Calculate statistics based on the 
             function calculate_BF_statistics(BFT){
-              var tds, name, seikaku;
+              var tds, name, nature;
               var lv = parseInt(BFT.LV.value);
               var iv = parseInt(BFT.IV.value);
               var bf_trows = BFtable.querySelectorAll("tr");
@@ -360,9 +360,9 @@
               for (let i=0; i<NUM_NPC_POKEMON; i++){
                 tds = bf_trows[i].querySelectorAll("td");
                 name = tds[BFT_pokenameIdx].textContent;
-                seikaku = tds[BFT_seikakuIdx].textContent;
+                nature = tds[BFT_natureIdx].textContent;
                 for (let j=0; j<6; j++){evals[j] = parseInt(tds[BFT_effortIdx+j].textContent)};
-                var stats = calculate_statistics(name=name, ivals=ivals, evals=evals, seikaku=seikaku, lv=lv);
+                var stats = calculate_statistics(name=name, ivals=ivals, evals=evals, nature=nature, lv=lv);
                 for (let j=0; j<6; j++){ tds[BFT_statusIdx+j].innerHTML = stats[j]; }
               }
             }
@@ -433,14 +433,14 @@
             function calculate_mypoke_statistics(MYPOKE){
               var poke_name = MYPOKE.poke.value;
               var lv = parseInt(document.getElementById("lv").value);
-              var seikaku = parseInt(MYPOKE.seikaku.value);
+              var nature = parseInt(MYPOKE.nature.value);
               var ivals = [];
               var evals = [];
               // Get Individual values & Effort Values.
               for (let i=0; i<6; i++){ivals.push(parseInt(iv_inputs[i].value))};
               for (let i=0; i<6; i++){evals.push(parseInt(ev_inputs[i].value))};
               // Calculate Statistics.
-              var stats = calculate_statistics(name=poke_name, ivals=ivals, evals=evals, seikaku=seikaku, lv=lv);
+              var stats = calculate_statistics(name=poke_name, ivals=ivals, evals=evals, nature=nature, lv=lv);
               for (let i=0; i<6; i++){ stats_tds[i].value = stats[i]; }
               // Calculate Damage.
               calculate_damage_rates(document.DAMAGE);

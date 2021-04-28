@@ -113,7 +113,7 @@
                 </tr>
                 <tr class="g2">
                   <td colspan="3">性格</td>
-                  <td colspan="4"><select id="seikaku" name="seikaku"><option value="1">さみしがり (A↑ B↓)</option><option value="3">いじっぱり (A↑ C↓)</option><option value="4">やんちゃ　 (A↑ D↓)</option><option value="2">ゆうかん　 (A↑ S↓)</option><option value="5">ずぶとい　 (B↑ A↓)</option><option value="8">わんぱく　 (B↑ C↓)</option><option value="9">のうてんき (B↑ D↓)</option><option value="7">のんき　　 (B↑ S↓)</option><option value="15" selected>ひかえめ　 (C↑ A↓)</option><option value="16">おっとり　 (C↑ B↓)</option><option value="19">うっかりや (C↑ D↓)</option><option value="17">れいせい　 (C↑ S↓)</option><option value="20">おだやか　 (D↑ A↓)</option><option value="21">おとなしい (D↑ B↓)</option><option value="23">しんちょう (D↑ C↓)</option><option value="22">なまいき　 (D↑ S↓)</option><option value="10">おくびょう (S↑ A↓)</option><option value="11">せっかち　 (S↑ B↓)</option><option value="13">ようき　　 (S↑ C↓)</option><option value="14">むじゃき　 (S↑ D↓)</option><option value="18">てれや　　 </option><option value="0">がんばりや </option><option value="6">すなお　　 </option><option value="24">きまぐれ　 </option><option value="12">まじめ　　 </option></select></td>
+                  <td colspan="4"><select id="nature" name="nature"><option value="1">さみしがり (A↑ B↓)</option><option value="3">いじっぱり (A↑ C↓)</option><option value="4">やんちゃ　 (A↑ D↓)</option><option value="2">ゆうかん　 (A↑ S↓)</option><option value="5">ずぶとい　 (B↑ A↓)</option><option value="8">わんぱく　 (B↑ C↓)</option><option value="9">のうてんき (B↑ D↓)</option><option value="7">のんき　　 (B↑ S↓)</option><option value="15" selected>ひかえめ　 (C↑ A↓)</option><option value="16">おっとり　 (C↑ B↓)</option><option value="19">うっかりや (C↑ D↓)</option><option value="17">れいせい　 (C↑ S↓)</option><option value="20">おだやか　 (D↑ A↓)</option><option value="21">おとなしい (D↑ B↓)</option><option value="23">しんちょう (D↑ C↓)</option><option value="22">なまいき　 (D↑ S↓)</option><option value="10">おくびょう (S↑ A↓)</option><option value="11">せっかち　 (S↑ B↓)</option><option value="13">ようき　　 (S↑ C↓)</option><option value="14">むじゃき　 (S↑ D↓)</option><option value="18">てれや　　 </option><option value="0">がんばりや </option><option value="6">すなお　　 </option><option value="24">きまぐれ　 </option><option value="12">まじめ　　 </option></select></td>
                 </tr>
               </tbody>
               <thead>
@@ -343,7 +343,7 @@
               <details>
                 <summary class="h3">性格別の傾向</summary>
                 <div style="width:100%;height:480px;overflow:auto;">
-                  <table id="seikaku_trend">
+                  <table id="nature_trend">
                     <thead>
                       <tr><th></th><th colspan="3">通常時</th><th colspan="3">HP減少時</th></tr>
                       <tr><th>せいかく</th><th>攻撃</th><th>防御</th><th>補助</th><th>攻撃</th><th>防御</th><th>補助</th></tr>
@@ -939,7 +939,7 @@
 
           <script type="text/javascript" src="https://iwasakishuto.github.io/js/tablefilter.js"></script>
 
-          <script type="text/javascript" src="theme/js/pokeutils.js"></script>
+          <script type="text/javascript" src="https://iwasakishuto.github.io/Front-End/tips/theme/js/pokeutils.js"></script>
 
           <script type="text/javascript" src="https://iwasakishuto.github.io/js/custom.js"></script>
 
@@ -987,7 +987,7 @@
             function calculate_mypoke_statistics(MYPOKE){
               var poke_name = MYPOKE.poke.value;
               var lv = parseInt(MYPOKE.LV.value);
-              var seikaku = parseInt(MYPOKE.seikaku.value);
+              var nature = parseInt(MYPOKE.nature.value);
               var ivals = [];
               var evals = [];
               var MPtrs = MPtable.getElementsByTagName("tr");
@@ -998,7 +998,7 @@
               for (let i=0; i<6; i++){evals.push(parseInt(ev_inputs[i].value))};
               // Calculate Statistics.
               var stats_tds = MPtrs[MPT_statsIdx].querySelectorAll("td");
-              var stats = calculate_statistics(name=poke_name, ivals=ivals, evals=evals, seikaku=seikaku, lv=lv);
+              var stats = calculate_statistics(name=poke_name, ivals=ivals, evals=evals, nature=nature, lv=lv);
               for (let i=0; i<6; i++){
                 stats_tds[i+1].innerHTML = stats[i];
               }
@@ -1068,13 +1068,13 @@
             const sMoves_Endurance = ['しろいきり', 'じこさいせい', 'ひかりのかべ', 'くろいきり', 'リフレクター', 'タマゴうみ', 'ねむる', 'まもる', 'みきり', 'こらえる', 'ミルクのみ', 'いやしのすず', 'しんぴのまもり', 'バトンタッチ', 'あさのひざし', 'こうごうせい', 'つきのひかり', 'のみこむ', 'ねがいごと', 'ねをはる', 'マジックコート', 'リサイクル', 'リフレッシュ', 'どろあそび', 'なまける', 'アロマセラピー', 'みずあそび']
             const sMoves_SlowAndSteady = ['うたう', 'ちょうおんぱ', 'かなしばり', 'やどりぎのタネ', 'どくのこな', 'しびれごな', 'ねむりごな', 'でんじは', 'どくどく', 'さいみんじゅつ', 'あやしいひかり', 'へびにらみ', 'どくガス', 'あくまのキッス', 'キノコのほうし', 'クモのす', 'てんしのキッス', 'まきびし', 'いばる', 'くろいまなざし', 'メロメロ', 'アンコール', 'いちゃもん', 'おだてる', 'おにび', 'ちょうはつ', 'あくび', 'ふういん', 'よこどり', 'フラフラダンス', 'くさぶえ', 'とおせんぼ']
             const sMoves_DependsOnTheBattlesFlow = ['すなあらし', 'あまごい', 'にほんばれ', 'あられ', 'ウェザーボール']
-            const BattleStyles = ["じゅんびばんたん(3)", "よそくふかのう(2)", "まずはよわめて(2)", "けんこんいってき(2)", "まだまだこれから(3)", "じっくりじわじわ(3)", "くもゆきしだい(2)", "りんきおうへん(&&)", "じゆうほんぽう(-)"];
-            const BattleStyleMoves = [sMoves_TotalPreparation, sMoves_ImpossibleToPredict, sMoves_WeakeningTheFoe, sMoves_HighRiskHighReturn, sMoves_Endurance, sMoves_SlowAndSteady, sMoves_DependsOnTheBattlesFlow]
+            const BattleStyleMoves = [sMoves_HighRiskHighReturn, sMoves_TotalPreparation, sMoves_Endurance, sMoves_ImpossibleToPredict, sMoves_SlowAndSteady, sMoves_WeakeningTheFoe, sMoves_DependsOnTheBattlesFlow]
+            const BattleStyles = ['けんこんいってき(2)', 'じゅんびばんたん(3)', 'まだまだこれから(3)', 'よそくふかのう(2)', 'じっくりじわじわ(3)', 'まずはよわめて(2)', 'くもゆきしだい(2)', 'りんきおうへん(&&)', 'じゆうほんぽう(-)'];
             var BattleStyleMovesFilters = Array(BattleStyles.length).fill("rgx:.*")
             BattleStyleMoves.forEach(function(e,i){
-              BattleStyleMovesFilters[i] = "rgx:" + e.join("|")
+              BattleStyleMovesFilters[i] = "rgx:" + e.join("|");
             })
-            const BattleStyleColors = ["#FFEEB8", "#92CEEE", "#DFC6DE", "#F8D4CE", "#C3E8B5", "#9EABD6",  "#BBBCC2"];
+            const BattleStyleColors = ['#F8D4CE', '#FFEEB8', '#C3E8B5', '#92CEEE', '#9EABD6', '#DFC6DE', '#BBBCC2'];
             // Index for Generated Tables
             const RentalPokemonTable_AivIdx    = 7;
             const RentalPokemonTable_natureIdx = 12;
@@ -1166,12 +1166,12 @@
               rental_pokemon_tbody = document.getElementById("rental-pokemon");
               rental_pokemon_tbody.querySelectorAll("tr").forEach(function(e){
                 tds = e.querySelectorAll("td");
-                seikaku_corr = seikakuid2corr[seikaku2id[tds[RentalPokemonTable_natureIdx].textContent]];
+                nature_corr = natureid2corr[nature2id[tds[RentalPokemonTable_natureIdx].textContent]];
                 for (let i=0; i<5; i++){
-                  if (seikaku_corr[i]>1.0){
+                  if (nature_corr[i]>1.0){
                     tds[RentalPokemonTable_AivIdx+i].style.backgroundColor = "hotpink";
                     tds[RentalPokemonTable_AevIdx+i].style.backgroundColor = "hotpink";
-                  }else if(seikaku_corr[i]<1.0){
+                  }else if(nature_corr[i]<1.0){
                     tds[RentalPokemonTable_AivIdx+i].style.backgroundColor = "cornflowerblue";
                     tds[RentalPokemonTable_AevIdx+i].style.backgroundColor = "cornflowerblue";
                   }
@@ -1274,7 +1274,7 @@
                     if (rental_monIds[j]==monId) break;
                   }
                   if (j!=rental_monIds.length) continue
-                  nature = seikaku2id[RENTAL_POKEMON_LIST[monId][Rental_Pokemon_natureIdx]]
+                  nature = nature2id[RENTAL_POKEMON_LIST[monId][Rental_Pokemon_natureIdx]]
                   do {
                     personality = (Random() + Random()*11) % 25
                   } while (nature != personality%25)
@@ -1403,7 +1403,7 @@
               col_widths: ['180px'],
               extensions:[{name: 'sort'}]
             };
-            var tf_palace = new TableFilter('seikaku_trend', filtersConfig_palace, 2);
+            var tf_palace = new TableFilter('nature_trend', filtersConfig_palace, 2);
             tf_palace.init();
           </script>
 

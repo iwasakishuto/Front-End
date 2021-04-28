@@ -115,7 +115,7 @@
                 </tr>
                 <tr class="g1">
                   <td style="text-align: center">性格</td>
-                  <td style="text-align: center"><select id="seikaku" name="seikaku"><option value="1">さみしがり (A↑ B↓)</option><option value="3">いじっぱり (A↑ C↓)</option><option value="4">やんちゃ　 (A↑ D↓)</option><option value="2">ゆうかん　 (A↑ S↓)</option><option value="5">ずぶとい　 (B↑ A↓)</option><option value="8">わんぱく　 (B↑ C↓)</option><option value="9">のうてんき (B↑ D↓)</option><option value="7">のんき　　 (B↑ S↓)</option><option value="15" selected>ひかえめ　 (C↑ A↓)</option><option value="16">おっとり　 (C↑ B↓)</option><option value="19">うっかりや (C↑ D↓)</option><option value="17">れいせい　 (C↑ S↓)</option><option value="20">おだやか　 (D↑ A↓)</option><option value="21">おとなしい (D↑ B↓)</option><option value="23">しんちょう (D↑ C↓)</option><option value="22">なまいき　 (D↑ S↓)</option><option value="10">おくびょう (S↑ A↓)</option><option value="11">せっかち　 (S↑ B↓)</option><option value="13">ようき　　 (S↑ C↓)</option><option value="14">むじゃき　 (S↑ D↓)</option><option value="18">てれや　　 </option><option value="0">がんばりや </option><option value="6">すなお　　 </option><option value="24">きまぐれ　 </option><option value="12">まじめ　　 </option></select></td>
+                  <td style="text-align: center"><select id="nature" name="nature"><option value="1">さみしがり (A↑ B↓)</option><option value="3">いじっぱり (A↑ C↓)</option><option value="4">やんちゃ　 (A↑ D↓)</option><option value="2">ゆうかん　 (A↑ S↓)</option><option value="5">ずぶとい　 (B↑ A↓)</option><option value="8">わんぱく　 (B↑ C↓)</option><option value="9">のうてんき (B↑ D↓)</option><option value="7">のんき　　 (B↑ S↓)</option><option value="15" selected>ひかえめ　 (C↑ A↓)</option><option value="16">おっとり　 (C↑ B↓)</option><option value="19">うっかりや (C↑ D↓)</option><option value="17">れいせい　 (C↑ S↓)</option><option value="20">おだやか　 (D↑ A↓)</option><option value="21">おとなしい (D↑ B↓)</option><option value="23">しんちょう (D↑ C↓)</option><option value="22">なまいき　 (D↑ S↓)</option><option value="10">おくびょう (S↑ A↓)</option><option value="11">せっかち　 (S↑ B↓)</option><option value="13">ようき　　 (S↑ C↓)</option><option value="14">むじゃき　 (S↑ D↓)</option><option value="18">てれや　　 </option><option value="0">がんばりや </option><option value="6">すなお　　 </option><option value="24">きまぐれ　 </option><option value="12">まじめ　　 </option></select></td>
                 </tr>
               </tbody>
             </table>
@@ -607,9 +607,9 @@
             <p>※ 場所コードは<a href="https://m.bulbapedia.bulbagarden.net/wiki/List_of_locations_by_index_number_(Generation_III)">https://m.bulbapedia.bulbagarden.net/wiki/List_of_locations_by_index_number_(Generation_III)</a>を参照した。</p>
           </form>
 
-          <script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
+          <script type="text/javascript" src="https://iwasakishuto.github.io/js/jquery.js"></script>
 
-          <script src="theme/js/pokeutils.js" type="text/javascript"></script>
+          <script type="text/javascript" src="https://iwasakishuto.github.io/Front-End/tips/theme/js/pokeutils.js"></script>
 
           <!-- Pokemon Statistics & Encount, Event -->
 
@@ -695,9 +695,9 @@
               var ec = parseInt(POKE.eC.value, 10);
               var ed = parseInt(POKE.eD.value, 10);
               var es = parseInt(POKE.eS.value, 10);
-              var ability, seikaku, poke_name, sex_desc, sex;
+              var ability, nature, poke_name, sex_desc, sex;
               ability     = POKE.ability.length == 2 ? POKE.ability.selectedIndex : -1;
-              seikaku     = parseInt(POKE.seikaku.value, 10);
+              nature     = parseInt(POKE.nature.value, 10);
               poke_name   = POKE.poke.options[POKE.poke.selectedIndex].text.split(".")[1];
               sex_desc    = POKENAME2DATA[poke_name][Pdata_sexIdx];
               sex         = ((POKE.sex.length == 0 && sex_desc != "ふめい") ? -4 : (sex_desc == "ふめい" ? -3 : (sex_desc == "♂のみ" || sex_desc == "♀のみ" ? -2 : POKE.sex.selectedIndex)))
@@ -723,7 +723,7 @@
                 R2 = R[i];
                 R1 = clip_hex(invR(R2), digit=8);
                 PID = clip_hex(((R2 & 0xffff0000) | (R1 >>> 16)), digit=8);
-                if ((PID%25 != seikaku) || (ability>=0) && (PID%2 != ability) || (sex==1) && (PID%256 > female_rate) || (sex==0) && (PID%256 <= female_rate)) {
+                if ((PID%25 != nature) || (ability>=0) && (PID%2 != ability) || (sex==1) && (PID%256 > female_rate) || (sex==0) && (PID%256 <= female_rate)) {
                   R.splice(i, 1);
                   len--;
                   i--;
@@ -764,7 +764,7 @@
               }
               // Calculate (Real) Statistics
               var statistics = document.getElementById("statistics").querySelectorAll("td");
-              var stats = calculate_statistics(name=poke_name, ivals=[ih, ia, ib, ic, id, is], evals=[eh, ea, eb, ec, ed, es], seikaku=seikaku, lv=lv);
+              var stats = calculate_statistics(name=poke_name, ivals=[ih, ia, ib, ic, id, is], evals=[eh, ea, eb, ec, ed, es], nature=nature, lv=lv);
               for (let i=0; i<6; i++){
                 statistics[i+1].innerHTML = stats[i];
               }

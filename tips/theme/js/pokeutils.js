@@ -93,27 +93,52 @@ function type_compatibility(Atype="",Dtype=""){
   }
 }
 
-// seikaku → seikaku ID
-const seikaku2id = {'さみしがり': 1, 'いじっぱり': 3, 'やんちゃ': 4, 'ゆうかん': 2, 'ずぶとい': 5, 'わんぱく': 8, 'のうてんき': 9, 'のんき': 7, 'ひかえめ': 15, 'おっとり': 16, 'うっかりや': 19, 'れいせい': 17, 'おだやか': 20, 'おとなしい': 21, 'しんちょう': 23, 'なまいき': 22, 'おくびょう': 10, 'せっかち': 11, 'ようき': 13, 'むじゃき': 14, 'てれや': 18, 'がんばりや': 0, 'すなお': 6, 'きまぐれ': 24, 'まじめ': 12}
-// seikaku ID → Personality correction [h,a,b,c,d,s]
-const seikakuid2corr = {1  : [1.1, 0.9, 1.0, 1.0, 1.0], 3  : [1.1, 1.0, 0.9, 1.0, 1.0], 4  : [1.1, 1.0, 1.0, 0.9, 1.0], 2  : [1.1, 1.0, 1.0, 1.0, 0.9], 5  : [0.9, 1.1, 1.0, 1.0, 1.0], 8  : [1.0, 1.1, 0.9, 1.0, 1.0], 9  : [1.0, 1.1, 1.0, 0.9, 1.0], 7  : [1.0, 1.1, 1.0, 1.0, 0.9], 15 : [0.9, 1.0, 1.1, 1.0, 1.0], 16 : [1.0, 0.9, 1.1, 1.0, 1.0], 19 : [1.0, 1.0, 1.1, 0.9, 1.0], 17 : [1.0, 1.0, 1.1, 1.0, 0.9], 20 : [0.9, 1.0, 1.0, 1.1, 1.0], 21 : [1.0, 0.9, 1.0, 1.1, 1.0], 23 : [1.0, 1.0, 0.9, 1.1, 1.0], 22 : [1.0, 1.0, 1.0, 1.1, 0.9], 10 : [0.9, 1.0, 1.0, 1.0, 1.1], 11 : [1.0, 0.9, 1.0, 1.0, 1.1], 13 : [1.0, 1.0, 0.9, 1.0, 1.1], 14 : [1.0, 1.0, 1.0, 0.9, 1.1], 18 : [1.0, 1.0, 1.0, 1.0, 1.0], 0  : [1.0, 1.0, 1.0, 1.0, 1.0], 6  : [1.0, 1.0, 1.0, 1.0, 1.0], 24 : [1.0, 1.0, 1.0, 1.0, 1.0], 12 : [1.0, 1.0, 1.0, 1.0, 1.0]}
+// nature → nature ID
+const nature2id = {'さみしがり': 1, 'いじっぱり': 3, 'やんちゃ': 4, 'ゆうかん': 2, 'ずぶとい': 5, 'わんぱく': 8, 'のうてんき': 9, 'のんき': 7, 'ひかえめ': 15, 'おっとり': 16, 'うっかりや': 19, 'れいせい': 17, 'おだやか': 20, 'おとなしい': 21, 'しんちょう': 23, 'なまいき': 22, 'おくびょう': 10, 'せっかち': 11, 'ようき': 13, 'むじゃき': 14, 'てれや': 18, 'がんばりや': 0, 'すなお': 6, 'きまぐれ': 24, 'まじめ': 12}
+// nature ID → Personality correction [h,a,b,c,d,s]
+const natureid2corr = {1  : [1.1, 0.9, 1.0, 1.0, 1.0], 3  : [1.1, 1.0, 0.9, 1.0, 1.0], 4  : [1.1, 1.0, 1.0, 0.9, 1.0], 2  : [1.1, 1.0, 1.0, 1.0, 0.9], 5  : [0.9, 1.1, 1.0, 1.0, 1.0], 8  : [1.0, 1.1, 0.9, 1.0, 1.0], 9  : [1.0, 1.1, 1.0, 0.9, 1.0], 7  : [1.0, 1.1, 1.0, 1.0, 0.9], 15 : [0.9, 1.0, 1.1, 1.0, 1.0], 16 : [1.0, 0.9, 1.1, 1.0, 1.0], 19 : [1.0, 1.0, 1.1, 0.9, 1.0], 17 : [1.0, 1.0, 1.1, 1.0, 0.9], 20 : [0.9, 1.0, 1.0, 1.1, 1.0], 21 : [1.0, 0.9, 1.0, 1.1, 1.0], 23 : [1.0, 1.0, 0.9, 1.1, 1.0], 22 : [1.0, 1.0, 1.0, 1.1, 0.9], 10 : [0.9, 1.0, 1.0, 1.0, 1.1], 11 : [1.0, 0.9, 1.0, 1.0, 1.1], 13 : [1.0, 1.0, 0.9, 1.0, 1.1], 14 : [1.0, 1.0, 1.0, 0.9, 1.1], 18 : [1.0, 1.0, 1.0, 1.0, 1.0], 0  : [1.0, 1.0, 1.0, 1.0, 1.0], 6  : [1.0, 1.0, 1.0, 1.0, 1.0], 24 : [1.0, 1.0, 1.0, 1.0, 1.0], 12 : [1.0, 1.0, 1.0, 1.0, 1.0]}
+
+/** 
+ * Generate ${tag}s which are colored by nature, or coloring ${tag}s.
+ * @param {string|number} nature nature identifier.
+ * @param {list} values Effort/Rstats [H,A,B,C,D,S] Values, or NodeList
+ * @param {number} hp_idx Level.
+ * @param {string} tag generated tag name.
+ * @return {string} colored tds.
+*/
+function coloring_by_nature(nature, values, hp_idx, tag="td"){
+  if (typeof(nature)=="string") nature = nature2id[nature];
+  if (typeof(values[0])=="number"){
+    // Generate colored tds.
+    return `<${tag}>${values[hp_idx]}</${tag}>` + natureid2corr[nature].map(function(corr, i){
+      let bgcolor = corr>1.0 ? "hotpink" : corr<1.0 ? "cornflowerblue" : "white";
+      return `<${tag} style='background-color:${bgcolor}'>${values[hp_idx+i+1]}</${tag}>`
+    }).join()
+  }else{
+    // Coloring tds.
+    natureid2corr[nature].forEach(function(corr, i){
+      let bgcolor = corr>1.0 ? "hotpink" : corr<1.0 ? "cornflowerblue" : "white";
+      values[hp_idx+i+1].style.backgroundColor = bgcolor
+    })
+  }
+}
 
 /** 
  * Calculate the real status.
  * @param {string} name Pokemon name.
  * @param {list} ivals Individual Values [H,A,B,C,D,S]
  * @param {list} evals Effort Values [H,A,B,C,D,S]
- * @param {string|number} seikaku seikaku identifier.
+ * @param {string|number} nature nature identifier.
  * @param {number} lv Level.
  * @return {list} Real status. [H,A,B,C,D,S]
 */
-function calculate_statistics(name, ivals, evals, seikaku, lv=50){
+function calculate_statistics(name, ivals, evals, nature, lv=50){
   var statistics = [0,0,0,0,0,0];
   if (name in POKENAME2DATA){
-    if (typeof(seikaku)=="string"){
-      seikaku = seikaku2id[seikaku];
+    if (typeof(nature)=="string"){
+      nature = nature2id[nature];
     }
-    var corr = seikakuid2corr[seikaku];
+    var corr = natureid2corr[nature];
     poke_data = POKENAME2DATA[name]
 
     // Calculate Statistics.
