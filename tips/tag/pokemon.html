@@ -66,8 +66,8 @@
   <li>ファクトリーでは自分の手持ちは使わず、レンタルポケモンを使ってバトルする。はじめに、表示される6匹のレンタルポケモンのうち3匹を選択し、手持ちとする。以後、そのポケモンで敵トレーナーと戦って勝てば、任意で敵トレーナーとポケモンを1匹交換することができる。</li>
   <li>ポケモンバトルの前にヒントを教えてもらえる。内容は相手のポケモンの中で重複しているタイプと、相手の大まかな戦型である。</li>
   <li>バトルの合間にポケモンの並び替えはできない。</li>
-  <li>7人抜きで1周。3周目と6周目の最後にはダツラとのバトルになる。</li>
-  <li>1周ごとにレンタルポケモンはリセットされる。次の周回では1からレンタルしなおすことになる。</li>
+  <li>7人抜きで1周。3周目と6周目の最後にはダツラとのバトルになる。（以降、3周ごとにダツラとのバトル）</li>
+  <li>1周ごとにレンタルポケモンはリセットされる。（次の周回では1からレンタルしなおすことになる。）</li>
 </ul></div>
 
 <h3>相手のバトルスタイル</h3>
@@ -103,7 +103,7 @@
       <tr>
         <td rowspan="2">交換回数</td>
         <td rowspan="2" class="g1"><input name="rentalCount" type="number" min="0" max="9999" value="0" size="3"></td>
-        <td rowspan="2">初期レンタル</td><td id="init-rental-former-info">N体</td><td class="g2">000~000</td><td class="g2">0</td>
+        <td rowspan="2">初期レンタル</td><td id="init-rental-former-info">N体</td><td>000~000</td><td>0</td>
       </tr>
       <tr><td id="init-rental-latter-info">(6-N)体</td><td>000~000</td><td>0</td></tr>
       <tr>
@@ -202,6 +202,25 @@
       // Open Level.
       [372, 467],[468, 563],[564, 659],[660, 755],[372, 881],[372, 881],[372, 881],[372, 881],
   ]
+  const RentalMonsGroupTexts =  [
+    'lv50-g1', 'lv50-g2', 'lv50-g3', 'lv50-g4', 'lv50-g5', 'lv50-g6', 'lv50-g7', 'lv50-g8', 
+    'open-g1', 'open-g2', 'open-g3', 'open-g4', 'open-g5', 'open-g6', 'open-g7', 'open-g8', 
+    'lv50-g1g2', 'lv50-g2g3', 'lv50-g3g4', 'lv50-g4g5', 'lv50-g5g6', 'lv50-g6g7', 'lv50-g7g8', 'lv50-g8g8', 'open-g1g2', 'open-g2g3', 'open-g3g4', 'open-g4g5', 'open-g5g6', 'open-g6g7', 'open-g7g8', 'open-g8g8'
+  ]
+  const RentalMonsGroupValues = [
+    // [lv50] g1 ~ g8
+    '>=110 && <=199', '>=162 && <=266', '>=267 && <=371', '>=372 && <=467', 
+    '>=468 && <=563', '>=564 && <=659', '>=660 && <=755', '>=372 && <=849', 
+    // [open] g1 ~ g8
+    '>=372 && <=467', '>=468 && <=563', '>=564 && <=659', '>=660 && <=755', 
+    '>=372 && <=881', '>=372 && <=881', '>=372 && <=881', '>=372 && <=881', 
+    // [lv50] g1g2 ~ g8g8
+    '>=110 && <=266', '>=162 && <=371', '>=267 && <=467', '>=372 && <=563', 
+    '>=468 && <=659', '>=564 && <=755', '>=372 && <=849', '>=372 && <=849', 
+    // [open] g1g2 ~ g8g8
+    '>=372 && <=563', '>=468 && <=659', '>=564 && <=755', '>=372 && <=881', 
+    '>=372 && <=881', '>=372 && <=881', '>=372 && <=881', '>=372 && <=881',
+  ]
   const GetNumPastRentalsRank = function(rentalCount){
     var ret;
     if (rentalCount < 15)      ret = 0;
@@ -230,13 +249,13 @@
     var rentalRank            = GetNumPastRentalsRank(rentalCount);
     var LvlMode               = parseInt(factory_setting_form.LvlMode.value);
     var monRanges = sInitialRentalMonRanges[LvlMode+challengeNum];
-    var iv_ranges = [sFixedIVTable[challengeNum]];
     // Set Level to 50;
     if (LvlMode==0) factory_setting_form.lv.value = 50;
     // Initial Rental Monsters (Former)
     init_rental_former_info.textContent = `${rentalRank}体`;
     init_rental_former_info.nextElementSibling.textContent = GetMonRange(challengeNum, adder=LvlMode, useBetterRange=true).join("~");
     init_rental_former_info.nextElementSibling.nextElementSibling.textContent = GetFactoryMonFixedIV(challengeNum, is_last=false, useBetterRange=true);
+    init_rental_former_info.nextElementSibling.style.backgroundColor = init_rental_former_info.nextElementSibling.nextElementSibling.style.backgroundColor = (curChallengeBattleNum==0) ? g2_color : "white";
     // Initial Rental Monsters (latter)
     init_rental_latter_info.textContent = `${FRONTIER_PARTY_SIZE - rentalRank}体`;
     init_rental_latter_info.nextElementSibling.textContent = GetMonRange(challengeNum, adder=LvlMode, useBetterRange=false).join("~");
@@ -252,6 +271,43 @@
     frontier_brain_info.style.backgroundColor = is_frontier_brain ? g2_color : "white";
     frontier_brain_info.nextElementSibling.textContent = GetMonRange(challengeNum, adder=LvlMode, useBetterRange=false).join("~");
     frontier_brain_info.nextElementSibling.nextElementSibling.textContent = GetFactoryMonFixedIV(challengeNum+2, is_last=false, useBetterRange=false);
+    // Filter Table
+    flt0_rental_pokemon_table_id_select.value = RentalMonsGroupValues[challengeNum + LvlMode + ((rentalRank>0 && curChallengeBattleNum==0) ? 16 : 0)];
+    tf_rental.filter();
+  }
+  function get_current_fixedIV(){
+    var winStreak             = parseInt(factory_setting_form.winStreak.value);
+    var curChallengeBattleNum = winStreak%7;
+    var challengeNum          = Math.min(Math.floor(winStreak/7), 7);
+    var rentalCount           = parseInt(factory_setting_form.rentalCount.value);
+    var rentalRank            = GetNumPastRentalsRank(rentalCount);
+    var is_frontier_brain = does_frontier_brain_appear(winStreak, facility="factory")
+    var fixedIv;
+    if (curChallengeBattleNum==0){
+      fixedIv = GetFactoryMonFixedIV(challengeNum, is_last=false, useBetterRange=rentalRank>0)
+    }else if (curChallengeBattleNum!=6){
+      fixedIv = GetFactoryMonFixedIV(challengeNum, is_last=false, useBetterRange=false)
+    }else if (!is_frontier_brain){
+      fixedIv = GetFactoryMonFixedIV(challengeNum, is_last=true, useBetterRange=false)
+    }else{
+      fixedIv = GetFactoryMonFixedIV(challengeNum+2, is_last=false, useBetterRange=false);
+    }
+    return fixedIv;
+  }
+  var prev_TFselectedRows = []
+  var id2fixedIv = {}
+  function store_factory_condition(){
+    var fixedIv = get_current_fixedIV();
+    if (prev_TFselectedRows.length > TFselectedRows.length){
+      prev_TFselectedRows.forEach(function(e){
+        if (TFselectedRows.indexOf(e)==-1) delete id2fixedIv[e];
+      })
+    }else{
+      TFselectedRows.forEach(function(e){
+        if (prev_TFselectedRows.indexOf(e)==-1) id2fixedIv[e] = fixedIv
+      })
+    }
+    prev_TFselectedRows = [...TFselectedRows];
   }
 </script>
 
@@ -264,6 +320,8 @@
   const RPT_pokenameIdx = 2;
   const RPT_itemIdx     = 4;
   const RPT_moveIdx     = 5;
+  const RPT_natureIdx   = 12;
+  const RPT_evsIdx      = 13;   
   function load_rental_pokemons(){
     var rental_pokemon_tbody_trs = "";
     RENTAL_POKEMON_LIST.forEach(function(e,i){
@@ -300,7 +358,7 @@
     })
     rental_pokemon_tbody.innerHTML = rental_pokemon_tbody_trs;
   }
-  function rental_filterTable(){
+  function filter_rental_pokemon_table(){
     var filtersConfig = {
       btn_reset: true,
       rows_counter: true,
@@ -310,26 +368,26 @@
       grid_layout: {
         width: '100%',
       },
+      col_0  : 'select', 
       col_3  : 'select',
       col_4  : 'select',
       col_5  : 'select',
       col_12 : 'select',
       col_19 : 'select',
       custom_options: {
-        cols: [3,5],
-        texts: [POKETYPES, BattleStyles],
-        values: [POKETYPES.map(function(e){return "rgx:"+e}), BattleStyleMovesFilters],
+        cols: [0,3,5],
+        texts: [RentalMonsGroupTexts, POKETYPES, BattleStyles],
+        values: [RentalMonsGroupValues, POKETYPES.map(function(e){return "rgx:"+e}), BattleStyleMovesFilters],
         sorts: [false],
       },
       col_types: ['number', 'number', 'string', 'string', 'string', 'string', 'number', 'number', 'number', 'number', 'number', 'number', 'string', 'number', 'number', 'number', 'number', 'number', 'number', 'number'],
-      col_widths: ['50px', '50px', '120px', '150px', '135px', '480px', '50px', '50px', '50px', '50px', '50px', '50px', '95px', '50px', '50px', '50px', '50px', '50px', '50px', '90px'],
+      col_widths: ['120px', '50px', '120px', '150px', '135px', '480px', '50px', '50px', '50px', '50px', '50px', '50px', '95px', '50px', '50px', '50px', '50px', '50px', '50px', '90px'],
       extensions:[{name: 'sort'}]
     };
-    var tf = new TableFilter('rental-pokemon-table', filtersConfig);
-    tf.init();
-    initSelectionListeners(tf, c=2, d=0);
+    var tf_rental = new TableFilter('rental-pokemon-table', filtersConfig);
+    tf_rental.init();
+    initSelectionListeners(tf_rental, c=2, d=0);
     // Improves the appearance when scrolling horizontally.
-    rental_pokemon_table
     document.querySelectorAll("#rental-pokemon-table tr, .grd_headTblCont tr").forEach(function(e,i){
       var thds = e.querySelectorAll("th, td")
       thds[0].classList.add("fixed-tcol");
@@ -337,14 +395,19 @@
       thds[2].classList.add("fixed-tcol");
     })
     document.querySelector("div.grd_Cont").querySelectorAll("input[type='checkbox']").forEach(function(e,i){
-      e.addEventListener("change", generate_result_table)
+      e.addEventListener("change", function(){
+        store_factory_condition();
+        generate_result_table();
+      })
     })
+    return tf_rental
   }
 </script>
 
 <script>
   const selected_pokemon_tbody = document.getElementById("selected-pokemon-tbody");
   function generate_result_table(evt){
+    var lv = parseInt(factory_setting_form.lv.value);
     // Find out the correspondence between ID and RowIndex. -->
     var id2rowIndex = {}
     rental_pokemon_tbody.querySelectorAll("tr > td:nth-child(1)").forEach(function(e,i){
@@ -355,18 +418,22 @@
     TFselectedRows.forEach(function(e,i){
       let tds = Array.from(rental_pokemon_trows[ id2rowIndex[e] ].querySelectorAll("td"));
       let id = tds[0].textContent;
-      let move_options = tds[RPT_moveIdx].textContent.split("\n").slice(1,5).map(function(e,i){return `<option>${e}</option>`}).join("");
-      let item = tds[RPT_itemIdx].textContent;
+      let fixedIv = id2fixedIv[id];
       let pokename = tds[RPT_pokenameIdx].textContent;
       let pokedata = POKENAME2DATA[pokename];
-      let ability_options = pokedata.slice(Pdata_abilityIdx, Pdata_abilityIdx+2).map(function(e,i){return e!="" ? `<option>${e}</option>` : ""}).join("")
+      let item = tds[RPT_itemIdx].textContent;
+      let nature = tds[RPT_natureIdx].textContent;
+      let evals = tds.slice(RPT_evsIdx, RPT_evsIdx+6).map(function(e){return parseInt(e.textContent)});
+      let move_options = tds[RPT_moveIdx].textContent.split("\n").slice(1,5).map(function(e,i){return `<option>${e}</option>`}).join("");
+      let ability_options = pokedata.slice(Pdata_abilityIdx, Pdata_abilityIdx+2).map(function(e,i){return e!="" ? `<option>${e}</option>` : ""}).join("");
+      let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIv), evals=evals, nature=nature, lv=lv);
       tbody += `<tr>
         <td>${id}</td>
         <td style="background-image: ${Pname2typeColor(pokename).color};">${Picon_img_create(pokename)}</td>
         <td>${Pitem_img_create(item)}</td>
-        <td>IV</td>
-        <td>H</td>
-        <td>S</td>
+        <td>${fixedIv}</td>
+        <td>${rstats[0]}</td>
+        <td>${rstats[5]}</td>
         <td><select name="move">${move_options}</select></td>
         <td><input type="number" size="3"></td>
         <td><select name="ability">${ability_options}</select></td>
@@ -395,6 +462,7 @@
 <!-- On load -->
 
 <script>
+  var tf_rental, flt0_rental_pokemon_table_id_select;
   window.onload = function(){
     for (let i=0; i<factory_setting_form.length; i++){
       factory_setting_form[i].addEventListener("change", set_factory_condition)
@@ -407,23 +475,23 @@
     //     set_factory_condition(document.FACTORY);
     //   });
     // }
-    set_factory_condition();
     load_rental_pokemons();
-    rental_filterTable();
+    tf_rental = filter_rental_pokemon_table();
+    flt0_rental_pokemon_table_id_select = document.getElementById("flt0_rental-pokemon-table");
+    set_factory_condition();
   }
 </script>
 
 <!-- Stylesheet -->
 
 <style>
-  table#factory-battle-style *,
-  table#rental-pokemon-form *
+  table#rental-pokemon-form *,
   table#selected-pokemon-table *{
     vertical-align: middle;
     text-align: center;
   }
   table#rental-pokemon-form select, 
-  table#rental-pokemon-form input
+  table#rental-pokemon-form input,
   table#selected-pokemon-table select,
   table#selected-pokemon-table input{
     padding: .5em .4em;
@@ -431,7 +499,7 @@
     background-color: transparent;
     font-family: Monaco, monospace, sans-serif;
   }
-  table#rental-pokemon-form select,
+  table#rental-pokemon-table select,
   table#selected-pokemon-table select{
     width: 100%;
   }
@@ -439,7 +507,7 @@
     width: 32px;
     height: 32px;
     overflow: visible;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     pointer-events: none;
