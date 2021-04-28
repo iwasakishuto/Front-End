@@ -230,6 +230,23 @@
             </details>  
             <form id="factory_form" name="FACTORY">
               <details>
+                <summary class="h3">相手のバトルスタイル</summary>
+                <table id="factory-battle-style">
+                  <thead><tr><th>スタイル</th><th>説明</th><th>必要な数</th></tr></thead>
+                  <tbody>
+                    <tr><td style="background-color:#F8D4CE">けんこんいってき</td><td>はかいこうせんなどリスクのある技</td><td>2</td></tr>
+                    <tr><td style="background-color:#FFEEB8">じゅんびばんたん</td><td>つるぎのまいなど能力アップ系の技</td><td>3</td></tr>
+                    <tr><td style="background-color:#C3E8B5">まだまだこれから</td><td>じこさいせいなど体力回復系の技</td><td>3</td></tr>
+                    <tr><td style="background-color:#92CEEE">よそくふかのう</td><td>めざめるパワーなどタイプや威力が変わる技</td><td>2</td></tr>
+                    <tr><td style="background-color:#9EABD6">じっくりじわじわ</td><td>どくどくなど状態異常にする技</td><td>3</td></tr>
+                    <tr><td style="background-color:#DFC6DE">まずはよわめて</td><td>きんぞくおんなど能力ダウン系の技</td><td>2</td></tr>
+                    <tr><td style="background-color:#BBBCC2">くもゆきしだい</td><td>にほんばれなど天気を変える技</td><td>2</td></tr>
+                    <tr><td style="background-color:#FFFFFF">りんきおうへん</td><td>以上の条件に2つ以上当てはまっている</td><td>-</td></tr>
+                    <tr><td style="background-color:#FFFFFF">じゆうほんぽう</td><td>どの条件にも当てはまらない</td><td>-</td></tr>
+                  </tbody>
+                </table>
+              </details>
+              <details>
                 <summary class="h3">レンタルポケモン</summary>
                 <p>一覧は、<a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-27.html">JS.27 ポケモンエメラルドでフロンティア マスターを目指す（その２）</a>を参照。</p>
                 <table id="rental-pokemon-form" class="fixed">
@@ -1044,6 +1061,16 @@
                 [372,881],
                 [372,881],
             ]
+            const sMoves_TotalPreparation = ['つるぎのまい', 'せいちょう', 'ヨガのポーズ', 'こうそくいどう', 'かげぶんしん', 'かたくなる', 'ちいさくなる', 'からにこもる', 'まるくなる', 'バリアー', 'きあいだめ', 'ドわすれ', 'とける', 'かくばる', 'テクスチャー', 'テクスチャー2', 'はらだいこ', 'じこあんじ', 'じゅうでん', 'よこどり', 'ほたるび', 'コスモパワー', 'てっぺき', 'とおぼえ', 'ビルドアップ', 'めいそう', 'りゅうのまい']
+            const sMoves_ImpossibleToPredict = ['ものまね', 'ゆびをふる', 'オウムがえし', 'へんしん', 'みがわり', 'スケッチ', 'のろい', 'プレゼント', 'このゆびとまれ', 'トリック', 'なりきり', 'ねこのて', 'スキルスワップ', 'ほごしょく']
+            const sMoves_WeakeningTheFoe = ['すなかけ', 'しっぽをふる', 'にらみつける', 'なきごえ', 'いとをはく', 'いやなおと', 'えんまく', 'スプーンまげ', 'フラッシュ', 'わたほうし', 'うらみ', 'こわいかお', 'あまえる', 'はたきおとす', 'あまいかおり', 'フェザーダンス', 'うそなき', 'きんぞくおん', 'くすぐる']
+            const sMoves_HighRiskHighReturn = ['ハサミギロチン', 'つのドリル', 'すてみタックル', 'はかいこうせん', 'カウンター', 'じわれ', 'がまん', 'じばく', 'ゴッドバード', 'だいばくはつ', 'じたばた', 'きしかいせい', 'みちづれ', 'ほろびのうた', 'いたみわけ', 'ミラーコート', 'おきみやげ', 'おんねん', 'からげんき', 'きあいパンチ', 'ブラストバーン', 'ハイドロカノン', 'オーバーヒート', 'ハードプラント', 'サイコブースト', 'ボルテッカー']
+            const sMoves_Endurance = ['しろいきり', 'じこさいせい', 'ひかりのかべ', 'くろいきり', 'リフレクター', 'タマゴうみ', 'ねむる', 'まもる', 'みきり', 'こらえる', 'ミルクのみ', 'いやしのすず', 'しんぴのまもり', 'バトンタッチ', 'あさのひざし', 'こうごうせい', 'つきのひかり', 'のみこむ', 'ねがいごと', 'ねをはる', 'マジックコート', 'リサイクル', 'リフレッシュ', 'どろあそび', 'なまける', 'アロマセラピー', 'みずあそび']
+            const sMoves_SlowAndSteady = ['うたう', 'ちょうおんぱ', 'かなしばり', 'やどりぎのタネ', 'どくのこな', 'しびれごな', 'ねむりごな', 'でんじは', 'どくどく', 'さいみんじゅつ', 'あやしいひかり', 'へびにらみ', 'どくガス', 'あくまのキッス', 'キノコのほうし', 'クモのす', 'てんしのキッス', 'まきびし', 'いばる', 'くろいまなざし', 'メロメロ', 'アンコール', 'いちゃもん', 'おだてる', 'おにび', 'ちょうはつ', 'あくび', 'ふういん', 'よこどり', 'フラフラダンス', 'くさぶえ', 'とおせんぼ']
+            const sMoves_DependsOnTheBattlesFlow = ['すなあらし', 'あまごい', 'にほんばれ', 'あられ', 'ウェザーボール']
+            const BattleStyles = ["じゅんびばんたん", "よそくふかのう", "まずはよわめて", "けんこんいってき", "まだまだこれから", "じっくりじわじわ", "くもゆきしだい", "りんきおうへん", "じゆうほんぽう"]
+            const BattleStyleMoves = [sMoves_TotalPreparation, sMoves_ImpossibleToPredict, sMoves_WeakeningTheFoe, sMoves_HighRiskHighReturn, sMoves_Endurance, sMoves_SlowAndSteady, sMoves_DependsOnTheBattlesFlow]
+            const BattleStyleColors = ["#FFEEB8", "#92CEEE", "#DFC6DE", "#F8D4CE", "#C3E8B5", "#9EABD6",  "#BBBCC2"]
             var challengeNum_area      = document.getElementById("challengeNum");
             var rentalRank_area        = document.getElementById("rentalRank");
             var monRange_area          = document.getElementById("monRange");
@@ -1076,17 +1103,44 @@
               id2rowIndex = {}
               var rowIndex = 0
               RENTAL_POKEMON_LIST.forEach(function(e,i){
-                var flag = eval(monRanges_cond)
+                let flag = eval(monRanges_cond)
                 if (flag>0){
-                  var iv = ivs[flag-1];
-                  var rstats = calculate_statistics(e[2], [iv,iv,iv,iv,iv,iv], e.slice(10,16), e[9], lv=lv)
-                  var tmp = e.slice(0,2);
-                  tmp.push(`<label><input type="checkbox"/>${e[2]}</label>`)
-                  tmp = tmp.concat(e.slice(4,9))
-                  tmp = tmp.concat(rstats)
-                  tmp = tmp.concat(e.slice(9))
-                  rental_pokemon_list += "<tr><td>" + tmp.join("</td><td>") + "</td></tr>";
-                  id2rowIndex[e[0]] = rowIndex++;
+                  let iv = ivs[flag-1];
+                  let rstats = calculate_statistics(e[2], [iv,iv,iv,iv,iv,iv], e.slice(10,16), e[9], lv=lv)
+                  let moves = e.slice(Rental_Pokemon_moveIdx, Rental_Pokemon_moveIdx+4);
+                  let move_colors = []
+                  moves.forEach(function(e,i){
+                    BattleStyleMoves.forEach(function(lst,j){
+                      if (lst.indexOf(e)!=-1){
+                        move_colors[i] = BattleStyleColors[j];
+                        break
+                      }
+                    })
+                  })
+                  rental_pokemon_list += `<tr>
+                    <td>${e[Rental_Pokemon_rentalidIdx]}</td>
+                    <td>${e[Rental_Pokemon_pokedexIdx]}</td>
+                    <td><label><input type="checkbox"/>${e[Rental_Pokemon_nameIdx]}</label></td>
+                    <td>${e[Rental_Pokemon_itemIdx]}</td>
+                    <td style="background-color:${move_colors[0]}">${moves[0]}</td>
+                    <td style="background-color:${move_colors[1]}">${moves[1]}</td>
+                    <td style="background-color:${move_colors[2]}">${moves[2]}</td>
+                    <td style="background-color:${move_colors[3]}">${moves[3]}</td>
+                    <td>${rstats[0]}</td>
+                    <td>${rstats[1]}</td>
+                    <td>${rstats[2]}</td>
+                    <td>${rstats[3]}</td>
+                    <td>${rstats[4]}</td>
+                    <td>${rstats[5]}</td>
+                    <td>${e[Rental_Pokemon_natureIdx]}</td>
+                    <td>${e[Rental_Pokemon_evsIdx]}</td>
+                    <td>${e[Rental_Pokemon_evsIdx+1]}</td>
+                    <td>${e[Rental_Pokemon_evsIdx+2]}</td>
+                    <td>${e[Rental_Pokemon_evsIdx+3]}</td>
+                    <td>${e[Rental_Pokemon_evsIdx+4]}</td>
+                    <td>${e[Rental_Pokemon_evsIdx+5]}</td>
+                  </tr>`
+                  id2rowIndex[e[Rental_Pokemon_rentalidIdx]] = rowIndex++;
                 }
               })
               rental_pokemon_wrapper.innerHTML = rental_pokemon_list + "</tbody></table>";
@@ -1532,6 +1586,7 @@
           <style>
             table#my-pokemon *, 
             table#dome-trainer-ranking *,
+            table#factory-battle-style *,
             table#pike-wild-mons-table *,
             table#pike-random-status-room *,
             table#mind_points *,
@@ -1586,7 +1641,7 @@
             div.overflow-ms img {
               border: 0!important;
               margin: 0!important;
-              padding: 0!important;
+              padding: 0 0 18px 0 !important;
               width: 200%!important;
               vertical-align: middle;
             }
