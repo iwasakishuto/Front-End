@@ -147,12 +147,38 @@
 
 <table id="selected-rental-pokemon-table">
   <thead>
-    <tr><th colspan="11">ダメージ計算結果</th></tr>
-    <tr><th>ID</th><th>ポケモン</th><th>もちもの</th><th>IV</th><th>H</th><th>S</th><th>技</th><th>技威力</th><th>特性</th><th>威力</th><th>割合</th></tr>
+    <tr><th colspan="13">ダメージ計算結果</th></tr>
+    <tr><th>攻</th><th>ID</th><th>ポケモン</th><th>もちもの</th><th>IV</th><th>H</th><th>S</th><th>技</th><th>技威力</th><th>技タイプ</th><th>特性</th><th>威力</th><th>割合</th></tr>
   </thead>
   <tbody id="selected-rental-pokemon-tbody">
   </tbody>
 </table>
+
+<form id="battle-situation-setting-form" name="SITUATION">
+  <h3>戦況の設定</h3>
+  <table class="fixed" id="battle-situation-table">
+    <thead><tr><th colspan="6" style="text-align: center">戦況</th></tr></thead>
+    <tbody class="g1">
+      <tr>
+        <td colspan="3"><label>攻撃側 能力上昇<input type="number" min="-6" max="6" value="0" size="3" name="attacking_rank"></label></td>
+        <td colspan="3"><label>防御側 能力上昇<input type="number" min="-6" max="6" value="0" size="3" name="defencing_rank"></label></td>
+      </tr>
+      <tr class="only-text">
+        <td><label><input name="helping_hand" type="checkbox"/> てだすけ</label></td>
+        <td><label><input name="charged" type="checkbox"/> じゅうでん</label></td>
+        <td><label><input name="mudsport" type="checkbox"/> どろあそび</label></td>
+        <td><label><input name="watersport" type="checkbox"/> みずあそび</label></td>
+        <td><label><input name="shield" type="checkbox"/> 壁</label></td>
+        <td><label><input name="critical" type="checkbox"/> 急所</label></td>
+      </tr>
+      <tr>
+        <td colspan="2"><select name="weather"><option>天候</option><option>にほんばれ</option><option>あめ</option><option>すなあらし</option><option>あられ</option></select></td>
+        <td colspan="2"><select name="ailment"><option>状態異常</option><option>まひ</option><option>こおり</option><option>やけど</option><option>どく</option><option>ねむり</option></select></td>
+        <td colspan="2"><select name="battle_style"><option>シングルバトル</option><option>ダブルバトル</option></select></td>
+      </tr>
+    </tbody>
+  </table>
+</form>
 
 <!-- Load Scripts. -->
 
@@ -388,7 +414,7 @@
   }
 </script>
 
-<!-- Initialize Rental Pokemon Table. -->
+<!-- Initialize Rental Pokemon Table -->
 
 <script>
   // Index for Generated Tables
@@ -508,16 +534,19 @@
     document.querySelector("div.grd_Cont").querySelectorAll("input[type='checkbox']").forEach(function(e,i){
       e.addEventListener("change", function(){
         store_factory_condition();
-        generate_selected_pokemon_table();
+        generate_selected_rental_pokemon_table();
       })
     })
     return tf_rental
   }
 </script>
 
+<!-- Selected Rental Pokemon Table -->
+
 <script>
+  var curtAid = clicked_id = ""; // Current Attacking ID.
   const selected_rental_pokemon_tbody = document.getElementById("selected-rental-pokemon-tbody");
-  function generate_selected_pokemon_table(evt){
+  function generate_selected_rental_pokemon_table(evt){
     var lv = parseInt(factory_setting_form.lv.value);
     var id2rowIndex = get_current_id2rowIndex();
     var selected_rental_pokemon_tbody_trs = "";
@@ -525,16 +554,24 @@
     TFselectedRows.forEach(function(e,i){
       let tds = Array.from(rental_pokemon_trows[ id2rowIndex[e] ].querySelectorAll("td"));
       let id = tds[0].textContent;
+      if (i==0) curtAid = id;
       let fixedIV = id2fixedIV[id];
       let pokename = tds[RPT_pokenameIdx].textContent;
       let pokedata = POKENAME2DATA[pokename];
       let item = tds[RPT_itemIdx].textContent;
       let nature = tds[RPT_natureIdx].textContent;
       let evals = tds.slice(RPT_evsIdx, RPT_evsIdx+6).map(function(e){return parseInt(e.textContent)});
-      let move_options = tds[RPT_moveIdx].textContent.split("\n").slice(1,5).map(function(e,i){return `<option>${e}</option>`}).join("");
+      let moves = tds[RPT_moveIdx].textContent.split("\n").slice(1,5);
+      let move_options = moves.map(function(e){return `<option>${e}</option>`}).join("");
+      let curt_move = moves[0].trim();
+      let move_data = MOVENAME2DATA[curt_move]
+      let move_type = move_data[Mdata_typeIdx];
+      let move_type_options = POKETYPES.map(function(e){return `<option${e==move_type ? " selected" : ""}>${e}</option>`})
+      let power = move_data[Mdata_powerIdx];
       let ability_options = pokedata.slice(Pdata_abilityIdx, Pdata_abilityIdx+2).map(function(e,i){return e!="" ? `<option>${e}</option>` : ""}).join("");
       let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIV), evals=evals, nature=nature, lv=lv);
-      selected_rental_pokemon_tbody_trs += `<tr>
+      selected_rental_pokemon_tbody_trs += `<tr${i==0 ? ' class="attacking"' : ""}>
+        <td><input type="radio" name="attacking" value="${id}"${i==0 ? " checked" : ""}></td>
         <td>${id}</td>
         <td style="background-image: ${Pname2typeColor(pokename).color};">${Picon_img_create(pokename)}</td>
         <td>${Pitem_img_create(item)}</td>
@@ -542,18 +579,39 @@
         <td>${rstats[0]}</td>
         <td>${rstats[5]}</td>
         <td><select name="move">${move_options}</select></td>
-        <td><input type="number" size="3"></td>
+        <td><input name="power" type="number" size="1" min="0" max="999" value="${power}"></td>
+        <td><select name="move-type">${move_type_options}</select></td>
         <td><select name="ability">${ability_options}</select></td>
         <td></td>
         <td></td>
       </tr>`
     })
     selected_rental_pokemon_tbody.innerHTML = selected_rental_pokemon_tbody_trs;
+    selected_rental_pokemon_tbody.querySelectorAll(`select, input`).forEach(function(e){
+      if (e.name=="attacking"){
+        e.addEventListener("click", function(){
+          clicked_id = e.value;
+          if (clicked_id != curtAid){
+            recalculate_damages();
+          }
+        })
+        e.style.cursor = "pointer";
+      }else if (e.name=="move"){
+        e.addEventListener("change", function(){
+          e.parentElement.nextElementSibling.textContent = MOVENAME2DATA[e.value][Mdata_powerIdx];
+          recalculate_damages();
+        })
+      }else{ // if (e.name=="power" || e.name=="ability" || e.name=="move-type")
+        e.addEventListener("change", function(){
+          recalculate_damages();
+        })
+      }
+    })
   }
-  const SRPT_idIdx = 0;
-  const SRPT_ivIdx = 3;
-  const SRPT_HrstatsIdx = 4;
-  const SRPT_SrstatsIdx = 5;
+  const SRPT_idIdx = 1;
+  const SRPT_ivIdx = 4;
+  const SRPT_HrstatsIdx = 5;
+  const SRPT_SrstatsIdx = 6;
   function recalculate_selected_rental_pokemon_rstats(){
     var lv = parseInt(factory_setting_form.lv.value);
     selected_rental_pokemon_tbody.querySelectorAll("tr").forEach(function(e){
@@ -569,6 +627,36 @@
       tds[SRPT_HrstatsIdx].textContent = rstats[0];
       tds[SRPT_SrstatsIdx].textContent = rstats[5];
     })
+  }
+</script>
+
+<!-- Calculating Damage -->
+
+<script>
+  const battle_situation_setting_form = document.getElementById("battle-situation-setting-form");
+  function recalculate_damages(){
+    selected_rental_pokemon_tbody.querySelectorAll("tr").forEach(function(e){
+      let lv = parseInt(factory_setting_form.lv.value);
+      let tds = e.querySelectorAll("td");
+      let id = tds[SRPT_idIdx].textContent;
+      if (id==clicked_id){
+        e.classList.add("attacking");
+        let tds = e.querySelectorAll("td");
+        let fixedIV = tds[SRPT_ivIdx].textContent;
+        let rental_data = RENTAL_POKEMON_LIST[parseInt(id)];
+        let pokename = rental_data[Rental_Pokemon_nameIdx];
+        let nature   = rental_data[Rental_Pokemon_natureIdx];
+        let evals    = rental_data.slice(Rental_Pokemon_evsIdx, Rental_Pokemon_evsIdx+6);
+        let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIV), evals=evals, nature=nature, lv=lv);
+      }else if (id==curtAid){
+        e.classList.remove("attacking")
+      }
+    })
+    // move_name = tds[RT_oppokemoveIdx].querySelector("select").value;
+    // move_type = NaN; move_class = NaN; move_range = NaN; move_base_power = NaN;
+    // Astats=op_stats, Atypes=op_types, Aability=op_ability, Aitem=op_item, Aranks=op_ranks
+    // Dstats=my_stats, Dtypes=my_types, Dability=my_ability, Ditem=my_item, Dranks=my_ranks;
+    curtAid = clicked_id;
   }
 </script>
 
@@ -599,9 +687,9 @@
       var t = document.getElementById(id);      
       function togglePopUp(e) {
         if (e){
-          e.addEventListener('click', function() {
+          e.addEventListener("click", function() {
             generate_registered_pokemons();
-            t.classList.toggle('is-show');
+            t.classList.toggle("is-show");
           });
         }
       }
@@ -632,24 +720,30 @@
 <style>
   table#rental-pokemon-form *,
   table#selected-rental-pokemon-table *,
-  table#registered-rental-pokemon-table *{
+  table#registered-rental-pokemon-table *,
+  table#battle-situation-table *{
     vertical-align: middle;
     text-align: center;
   }
-  table#rental-pokemon-form select, 
-  table#rental-pokemon-form input,
-  table#selected-rental-pokemon-table select,
-  table#selected-rental-pokemon-table input,
-  table#registered-rental-pokemon-table select{
+  table#rental-pokemon-form select, table#rental-pokemon-form input,
+  table#selected-rental-pokemon-table select, table#selected-rental-pokemon-table input,
+  table#registered-rental-pokemon-table select, table#registered-rental-pokemon-table input,
+  table#battle-situation-table select, table#battle-situation-table input{
     padding: .5em .4em;
     border: 0;
     background-color: transparent;
     font-family: Monaco, monospace, sans-serif;
+    color: inherit;
   }
   table#rental-pokemon-table select,
   table#selected-rental-pokemon-table select,
-  table#registered-rental-pokemon-table select{
+  table#registered-rental-pokemon-table select
+  table#battle-situation-table select{
     width: 100%;
+  }
+  table#selected-rental-pokemon-table tr.attacking{
+    background-color: crimson;
+    color: white;
   }
   div.overflow-ms{
     width: 32px;
