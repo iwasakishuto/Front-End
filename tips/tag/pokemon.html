@@ -125,7 +125,7 @@
 <div style="width:100%; overflow:auto;" id="rental-pokemon-wrapper">
   <table id="rental-pokemon-table">
     <thead>
-      <tr><th>ID</th><th>No</th><th><input type="checkbox"/>ポケモン</th><th>タイプ</th><th>もちもの</th><th>技</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th><th>性格</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th></tr>
+      <tr><th>ID</th><th>No</th><th><input type="checkbox"/>ポケモン</th><th>タイプ</th><th>もちもの</th><th>技</th><th>IV</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th><th>性格</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th></tr>
     </thead>
     <tbody id="rental-pokemon-tbody">
     </tbody>
@@ -266,7 +266,6 @@
     init_rental_former_info.textContent = `${rentalRank}体`;
     init_rental_former_info.nextElementSibling.textContent = GetMonRange(challengeNum, adder=LvlMode, useBetterRange=true).join("~");
     init_rental_former_info.nextElementSibling.nextElementSibling.textContent = GetFactoryMonFixedIV(challengeNum, is_last=false, useBetterRange=true);
-    init_rental_former_info.nextElementSibling.style.backgroundColor = init_rental_former_info.nextElementSibling.nextElementSibling.style.backgroundColor = (curChallengeBattleNum==0) ? g2_color : "white";
     // Initial Rental Monsters (latter)
     init_rental_latter_info.textContent = `${FRONTIER_PARTY_SIZE - rentalRank}体`;
     init_rental_latter_info.nextElementSibling.textContent = GetMonRange(challengeNum, adder=LvlMode, useBetterRange=false).join("~");
@@ -275,16 +274,15 @@
     optrainer_info.textContent = `${curChallengeBattleNum+1}戦目`;
     optrainer_info.nextElementSibling.textContent = GetMonRange(challengeNum, adder=LvlMode, useBetterRange=false).join("~");
     optrainer_info.nextElementSibling.nextElementSibling.textContent = GetFactoryMonFixedIV(challengeNum, is_last=curChallengeBattleNum==6, useBetterRange=false);
-    optrainer_info.nextElementSibling.nextElementSibling.style.backgroundColor = (curChallengeBattleNum==6) ? g2_color : "white";
     // Frontire Brain
     var is_frontier_brain = does_frontier_brain_appear(winStreak, facility="factory")
     frontier_brain_info.textContent = is_frontier_brain ? "○" : "×";
-    frontier_brain_info.style.backgroundColor = is_frontier_brain ? g2_color : "white";
     frontier_brain_info.nextElementSibling.textContent = GetMonRange(challengeNum, adder=LvlMode, useBetterRange=false).join("~");
     frontier_brain_info.nextElementSibling.nextElementSibling.textContent = GetFactoryMonFixedIV(challengeNum+2, is_last=false, useBetterRange=false);
     // Filter Table
     flt0_rental_pokemon_table_id_select.value = RentalMonsGroupValues[challengeNum + LvlMode + ((rentalRank>0 && curChallengeBattleNum==0) ? 16 : 0)];
     tf_rental.filter();
+    recalculate_rental_pokemon_rstats();
   }
   function get_current_fixedIV(){
     var winStreak             = parseInt(factory_setting_form.winStreak.value);
@@ -293,29 +291,42 @@
     var rentalCount           = parseInt(factory_setting_form.rentalCount.value);
     var rentalRank            = GetNumPastRentalsRank(rentalCount);
     var is_frontier_brain = does_frontier_brain_appear(winStreak, facility="factory")
-    var fixedIv;
+    var fixedIV, target_td;
     if (curChallengeBattleNum==0){
-      fixedIv = GetFactoryMonFixedIV(challengeNum, is_last=false, useBetterRange=rentalRank>0)
+      if (rentalRank>0){
+        fixedIV = GetFactoryMonFixedIV(challengeNum, is_last=false, useBetterRange=true);
+        target_td = init_rental_former_info;
+      }else{
+        fixedIV = GetFactoryMonFixedIV(challengeNum, is_last=false, useBetterRange=false);
+        target_td = init_rental_latter_info;
+      }
     }else if (curChallengeBattleNum!=6){
-      fixedIv = GetFactoryMonFixedIV(challengeNum, is_last=false, useBetterRange=false)
+      fixedIV = GetFactoryMonFixedIV(challengeNum, is_last=false, useBetterRange=false);
+      target_td = optrainer_info;
     }else if (!is_frontier_brain){
-      fixedIv = GetFactoryMonFixedIV(challengeNum, is_last=true, useBetterRange=false)
+      fixedIV = GetFactoryMonFixedIV(challengeNum, is_last=true, useBetterRange=false);
+      target_td = optrainer_info;
     }else{
-      fixedIv = GetFactoryMonFixedIV(challengeNum+2, is_last=false, useBetterRange=false);
+      fixedIV = GetFactoryMonFixedIV(challengeNum+2, is_last=false, useBetterRange=false);
+      target_td = frontier_brain_info;
     }
-    return fixedIv;
+    // Color to clarify which IVs are referenced.
+    [init_rental_former_info, init_rental_latter_info, optrainer_info, frontier_brain_info].forEach(function(e){
+      e.nextElementSibling.nextElementSibling.style.backgroundColor = e==target_td ? g2_color : "white";
+    })
+    return fixedIV;
   }
   var prev_TFselectedRows = []
   var id2fixedIV = {}
   function store_factory_condition(){
-    var fixedIv = get_current_fixedIV();
+    var fixedIV = get_current_fixedIV();
     if (prev_TFselectedRows.length > TFselectedRows.length){
       prev_TFselectedRows.forEach(function(e){
         if (TFselectedRows.indexOf(e)==-1) delete id2fixedIV[e];
       })
     }else{
       TFselectedRows.forEach(function(e){
-        if (prev_TFselectedRows.indexOf(e)==-1) id2fixedIV[e] = fixedIv
+        if (prev_TFselectedRows.indexOf(e)==-1) id2fixedIV[e] = fixedIV
       })
     }
     prev_TFselectedRows = [...TFselectedRows];
@@ -328,14 +339,14 @@
     TFselectedRows.forEach(function(e,i){
       let tds = Array.from(rental_pokemon_trows[ id2rowIndex[e] ].querySelectorAll("td"));
       let id = tds[0].textContent;
-      let fixedIv = id2fixedIV[id];
+      let fixedIV = id2fixedIV[id];
       let pokename = tds[RPT_pokenameIdx].textContent;
       let pokedata = POKENAME2DATA[pokename];
       let item = tds[RPT_itemIdx].textContent;
       let nature = tds[RPT_natureIdx].textContent;
       let evals = tds.slice(RPT_evsIdx, RPT_evsIdx+6).map(function(e){return parseInt(e.textContent)});
-      let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIv), evals=evals, nature=nature, lv=lv);
-      let iv_options = [3,6,9,12,15,18,21,31].map(function(e){return `<option${e==fixedIv ? " selected" : ""}>${e}</option>`}).join("")
+      let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIV), evals=evals, nature=nature, lv=lv);
+      let iv_options = [3,6,9,12,15,18,21,31].map(function(e){return `<option${e==fixedIV ? " selected" : ""}>${e}</option>`}).join("")
       registered_pokemon_tbody_trs += `<tr>
         <td>${id}</td>
         <td style="background-image: ${Pname2typeColor(pokename).color};">${Picon_img_create(pokename)}</td>
@@ -352,24 +363,24 @@
         let id = tr.querySelector("td").textContent;
         id2fixedIV[tr.querySelector("td").textContent] = parseInt(e.value);
         // Recalculate the each rstats.
-        recalculate_registered_pokemon_rstats();
-        recalculate_selected_pokemon_rstats();
+        recalculate_registered_rental_pokemon_rstats();
+        recalculate_selected_rental_pokemon_rstats();
       });
     })
   }
   const RRPT_idIdx     = 0;
   const RRPT_rstatsIdx = 4;
-  function recalculate_registered_pokemon_rstats(){
+  function recalculate_registered_rental_pokemon_rstats(){
     var lv = parseInt(factory_setting_form.lv.value);
     registered_rental_pokemon_tbody.querySelectorAll("tr").forEach(function(e){
       let tds = e.querySelectorAll("td");
       let id = tds[RRPT_idIdx].textContent;
-      let fixedIv = id2fixedIV[id];
+      let fixedIV = id2fixedIV[id];
       let rental_data = RENTAL_POKEMON_LIST[parseInt(id)]
       let pokename = rental_data[Rental_Pokemon_nameIdx];
       let nature   = rental_data[Rental_Pokemon_natureIdx];
       let evals    = rental_data.slice(Rental_Pokemon_evsIdx, Rental_Pokemon_evsIdx+6);
-      let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIv), evals=evals, nature=nature, lv=lv);
+      let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIV), evals=evals, nature=nature, lv=lv);
       for (let i=0; i<6; i++){
         tds[RRPT_rstatsIdx+i].textContent = rstats[i];
       }
@@ -383,11 +394,14 @@
   // Index for Generated Tables
   const rental_pokemon_table = document.getElementById("rental-pokemon-table");
   const rental_pokemon_tbody = document.getElementById("rental-pokemon-tbody");
+  const RPT_idIdx       = 0;
   const RPT_pokenameIdx = 2;
   const RPT_itemIdx     = 4;
   const RPT_moveIdx     = 5;
-  const RPT_natureIdx   = 12;
-  const RPT_evsIdx      = 13;
+  const RPT_ivIdx       = 6;
+  const RPT_rstatsIdx   = 7;
+  const RPT_natureIdx   = 13;
+  const RPT_evsIdx      = 14;
   // Find out the correspondence between ID and RowIndex. -->
   const get_current_id2rowIndex = function(){
     var id2rowIndex = {}
@@ -424,13 +438,35 @@
           <span class="rental-move" style="background-color:${move_colors[1]}">${moves[1]}</span>
           <span class="rental-move" style="background-color:${move_colors[2]}">${moves[2]}</span>
           <span class="rental-move" style="background-color:${move_colors[3]}">${moves[3]}</span>
-        </td>      
+        </td>
+        <td>0</td>  
         ${coloring_by_nature(nature, [0,0,0,0,0,0], 0, tag="td")}
         <td>${e[Rental_Pokemon_natureIdx]}</td>
         ${coloring_by_nature(nature, e, Rental_Pokemon_evsIdx, tag="td")}
       </tr>`
     })
     rental_pokemon_tbody.innerHTML = rental_pokemon_tbody_trs;
+  }
+  var prev_fixedIV = 0;
+  function recalculate_rental_pokemon_rstats(){
+    var lv = parseInt(factory_setting_form.lv.value);
+    var fixedIV = get_current_fixedIV();
+    if (prev_fixedIV!=fixedIV){
+      rental_pokemon_tbody.querySelectorAll("tr").forEach(function(e){
+        let tds = e.querySelectorAll("td");
+        let id = tds[RPT_idIdx].textContent;
+        let rental_data = RENTAL_POKEMON_LIST[parseInt(id)];
+        let pokename = rental_data[Rental_Pokemon_nameIdx];
+        let nature   = rental_data[Rental_Pokemon_natureIdx];
+        let evals    = rental_data.slice(Rental_Pokemon_evsIdx, Rental_Pokemon_evsIdx+6);
+        let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIV), evals=evals, nature=nature, lv=lv);
+        tds[RPT_ivIdx].textContent = fixedIV;
+        for (let i=0; i<6; i++){
+          tds[RPT_rstatsIdx+i].textContent = rstats[i];
+        }
+      })
+      prev_fixedIV = fixedIV;
+    }
   }
   function filter_rental_pokemon_table(){
     var filtersConfig = {
@@ -446,16 +482,17 @@
       col_3  : 'select',
       col_4  : 'select',
       col_5  : 'select',
-      col_12 : 'select',
-      col_19 : 'select',
+      col_6  : 'none',
+      col_13 : 'select',
+      col_20 : 'select',
       custom_options: {
         cols: [0,3,5],
         texts: [RentalMonsGroupTexts, POKETYPES, BattleStyles],
         values: [RentalMonsGroupValues, POKETYPES.map(function(e){return "rgx:"+e}), BattleStyleMovesFilters],
         sorts: [false],
       },
-      col_types: ['number', 'number', 'string', 'string', 'string', 'string', 'number', 'number', 'number', 'number', 'number', 'number', 'string', 'number', 'number', 'number', 'number', 'number', 'number', 'number'],
-      col_widths: ['120px', '50px', '120px', '150px', '135px', '480px', '50px', '50px', '50px', '50px', '50px', '50px', '95px', '50px', '50px', '50px', '50px', '50px', '50px', '90px'],
+      col_types: ['number', 'number', 'string', 'string', 'string', 'string', 'number', 'number', 'number', 'number', 'number', 'number', 'number', 'string', 'number', 'number', 'number', 'number', 'number', 'number', 'number'],
+      col_widths: ['120px', '50px', '120px', '150px', '135px', '480px', '50px', '50px', '50px', '50px', '50px', '50px', '50px', '95px', '50px', '50px', '50px', '50px', '50px', '50px', '90px'],
       extensions:[{name: 'sort'}]
     };
     var tf_rental = new TableFilter('rental-pokemon-table', filtersConfig);
@@ -488,7 +525,7 @@
     TFselectedRows.forEach(function(e,i){
       let tds = Array.from(rental_pokemon_trows[ id2rowIndex[e] ].querySelectorAll("td"));
       let id = tds[0].textContent;
-      let fixedIv = id2fixedIV[id];
+      let fixedIV = id2fixedIV[id];
       let pokename = tds[RPT_pokenameIdx].textContent;
       let pokedata = POKENAME2DATA[pokename];
       let item = tds[RPT_itemIdx].textContent;
@@ -496,12 +533,12 @@
       let evals = tds.slice(RPT_evsIdx, RPT_evsIdx+6).map(function(e){return parseInt(e.textContent)});
       let move_options = tds[RPT_moveIdx].textContent.split("\n").slice(1,5).map(function(e,i){return `<option>${e}</option>`}).join("");
       let ability_options = pokedata.slice(Pdata_abilityIdx, Pdata_abilityIdx+2).map(function(e,i){return e!="" ? `<option>${e}</option>` : ""}).join("");
-      let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIv), evals=evals, nature=nature, lv=lv);
+      let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIV), evals=evals, nature=nature, lv=lv);
       selected_rental_pokemon_tbody_trs += `<tr>
         <td>${id}</td>
         <td style="background-image: ${Pname2typeColor(pokename).color};">${Picon_img_create(pokename)}</td>
         <td>${Pitem_img_create(item)}</td>
-        <td>${fixedIv}</td>
+        <td>${fixedIV}</td>
         <td>${rstats[0]}</td>
         <td>${rstats[5]}</td>
         <td><select name="move">${move_options}</select></td>
@@ -517,18 +554,18 @@
   const SRPT_ivIdx = 3;
   const SRPT_HrstatsIdx = 4;
   const SRPT_SrstatsIdx = 5;
-  function recalculate_selected_pokemon_rstats(){
+  function recalculate_selected_rental_pokemon_rstats(){
     var lv = parseInt(factory_setting_form.lv.value);
     selected_rental_pokemon_tbody.querySelectorAll("tr").forEach(function(e){
       let tds = e.querySelectorAll("td");
       let id = tds[SRPT_idIdx].textContent;
-      let fixedIv = id2fixedIV[id];
+      let fixedIV = id2fixedIV[id];
       let rental_data = RENTAL_POKEMON_LIST[parseInt(id)]
       let pokename = rental_data[Rental_Pokemon_nameIdx];
       let nature   = rental_data[Rental_Pokemon_natureIdx];
       let evals    = rental_data.slice(Rental_Pokemon_evsIdx, Rental_Pokemon_evsIdx+6);
-      let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIv), evals=evals, nature=nature, lv=lv);
-      tds[SRPT_ivIdx].textContent = fixedIv;
+      let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIV), evals=evals, nature=nature, lv=lv);
+      tds[SRPT_ivIdx].textContent = fixedIV;
       tds[SRPT_HrstatsIdx].textContent = rstats[0];
       tds[SRPT_SrstatsIdx].textContent = rstats[5];
     })
@@ -587,7 +624,6 @@
     tf_rental = filter_rental_pokemon_table();
     flt0_rental_pokemon_table_id_select = document.getElementById("flt0_rental-pokemon-table");
     set_factory_condition();
-
   }
 </script>
 
