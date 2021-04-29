@@ -125,7 +125,7 @@
 <div style="width:100%; overflow:auto;" id="rental-pokemon-wrapper">
   <table id="rental-pokemon-table">
     <thead>
-      <tr><th>ID</th><th>No</th><th><input type="checkbox"/>ポケモン</th><th>タイプ</th><th>もちもの</th><th>技</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th><th>せいかく</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th></tr>
+      <tr><th>ID</th><th>No</th><th><input type="checkbox"/>ポケモン</th><th>タイプ</th><th>もちもの</th><th>技</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th><th>性格</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th></tr>
     </thead>
     <tbody id="rental-pokemon-tbody">
     </tbody>
@@ -134,12 +134,23 @@
 
 <h3>選出されたポケモン</h3>
 
-<table id="selected-pokemon-table">
+<p><a class="btn-correct-ivs" id="js-popup-show">個体値(Individual Values)の訂正</a></p>
+
+<div class="popup" id="js-popup">
+  <h3>登録されている個体値</h3>
+  <table id="registered-rental-pokemon-table">
+    <thead><tr><th>ID</th><th>ポケモン</th><th>もちもの</th><th>IV</th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th><th>性格</th></tr></thead>
+    <tbody id="registered-rental-pokemon-tbody">
+    </tbody>
+  </table>
+</div>
+
+<table id="selected-rental-pokemon-table">
   <thead>
     <tr><th colspan="11">ダメージ計算結果</th></tr>
-    <tr><th>ID</th><th>ポケモン</th><th>もちもの</th><th>IV</th><th>H</th><th>S</th><th>技</th><th>威力</th><th>特性</th><th>威力</th><th>割合</th></tr>
+    <tr><th>ID</th><th>ポケモン</th><th>もちもの</th><th>IV</th><th>H</th><th>S</th><th>技</th><th>技威力</th><th>特性</th><th>威力</th><th>割合</th></tr>
   </thead>
-  <tbody id="selected-pokemon-tbody">
+  <tbody id="selected-rental-pokemon-tbody">
   </tbody>
 </table>
 
@@ -295,19 +306,74 @@
     return fixedIv;
   }
   var prev_TFselectedRows = []
-  var id2fixedIv = {}
+  var id2fixedIV = {}
   function store_factory_condition(){
     var fixedIv = get_current_fixedIV();
     if (prev_TFselectedRows.length > TFselectedRows.length){
       prev_TFselectedRows.forEach(function(e){
-        if (TFselectedRows.indexOf(e)==-1) delete id2fixedIv[e];
+        if (TFselectedRows.indexOf(e)==-1) delete id2fixedIV[e];
       })
     }else{
       TFselectedRows.forEach(function(e){
-        if (prev_TFselectedRows.indexOf(e)==-1) id2fixedIv[e] = fixedIv
+        if (prev_TFselectedRows.indexOf(e)==-1) id2fixedIV[e] = fixedIv
       })
     }
     prev_TFselectedRows = [...TFselectedRows];
+  }
+  function generate_registered_pokemons(){
+    var lv = parseInt(factory_setting_form.lv.value);
+    var id2rowIndex = get_current_id2rowIndex()
+    var registered_pokemon_tbody_trs = "";
+    var rental_pokemon_trows = rental_pokemon_tbody.querySelectorAll("tr");
+    TFselectedRows.forEach(function(e,i){
+      let tds = Array.from(rental_pokemon_trows[ id2rowIndex[e] ].querySelectorAll("td"));
+      let id = tds[0].textContent;
+      let fixedIv = id2fixedIV[id];
+      let pokename = tds[RPT_pokenameIdx].textContent;
+      let pokedata = POKENAME2DATA[pokename];
+      let item = tds[RPT_itemIdx].textContent;
+      let nature = tds[RPT_natureIdx].textContent;
+      let evals = tds.slice(RPT_evsIdx, RPT_evsIdx+6).map(function(e){return parseInt(e.textContent)});
+      let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIv), evals=evals, nature=nature, lv=lv);
+      let iv_options = [3,6,9,12,15,18,21,31].map(function(e){return `<option${e==fixedIv ? " selected" : ""}>${e}</option>`}).join("")
+      registered_pokemon_tbody_trs += `<tr>
+        <td>${id}</td>
+        <td style="background-image: ${Pname2typeColor(pokename).color};">${Picon_img_create(pokename)}</td>
+        <td>${Pitem_img_create(item)}</td>
+        <td class="g1"><select name="correct-iv">${iv_options}</select></td>
+        ${coloring_by_nature(nature, rstats, 0, tag="td")}
+        <td>${nature}</td>
+      </tr>`
+    })
+    registered_rental_pokemon_tbody.innerHTML = registered_pokemon_tbody_trs;
+    registered_rental_pokemon_tbody.querySelectorAll(`select[name="correct-iv"]`).forEach(function(e){
+      e.addEventListener("change", function() {
+        let tr = e.parentElement.parentElement;
+        let id = tr.querySelector("td").textContent;
+        id2fixedIV[tr.querySelector("td").textContent] = parseInt(e.value);
+        // Recalculate the each rstats.
+        recalculate_registered_pokemon_rstats();
+        recalculate_selected_pokemon_rstats();
+      });
+    })
+  }
+  const RRPT_idIdx     = 0;
+  const RRPT_rstatsIdx = 4;
+  function recalculate_registered_pokemon_rstats(){
+    var lv = parseInt(factory_setting_form.lv.value);
+    registered_rental_pokemon_tbody.querySelectorAll("tr").forEach(function(e){
+      let tds = e.querySelectorAll("td");
+      let id = tds[RRPT_idIdx].textContent;
+      let fixedIv = id2fixedIV[id];
+      let rental_data = RENTAL_POKEMON_LIST[parseInt(id)]
+      let pokename = rental_data[Rental_Pokemon_nameIdx];
+      let nature   = rental_data[Rental_Pokemon_natureIdx];
+      let evals    = rental_data.slice(Rental_Pokemon_evsIdx, Rental_Pokemon_evsIdx+6);
+      let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIv), evals=evals, nature=nature, lv=lv);
+      for (let i=0; i<6; i++){
+        tds[RRPT_rstatsIdx+i].textContent = rstats[i];
+      }
+    })
   }
 </script>
 
@@ -321,7 +387,15 @@
   const RPT_itemIdx     = 4;
   const RPT_moveIdx     = 5;
   const RPT_natureIdx   = 12;
-  const RPT_evsIdx      = 13;   
+  const RPT_evsIdx      = 13;
+  // Find out the correspondence between ID and RowIndex. -->
+  const get_current_id2rowIndex = function(){
+    var id2rowIndex = {}
+    rental_pokemon_tbody.querySelectorAll("tr > td:nth-child(1)").forEach(function(e,i){
+      id2rowIndex[e.textContent] = i;
+    })
+    return id2rowIndex
+  }
   function load_rental_pokemons(){
     var rental_pokemon_tbody_trs = "";
     RENTAL_POKEMON_LIST.forEach(function(e,i){
@@ -397,7 +471,7 @@
     document.querySelector("div.grd_Cont").querySelectorAll("input[type='checkbox']").forEach(function(e,i){
       e.addEventListener("change", function(){
         store_factory_condition();
-        generate_result_table();
+        generate_selected_pokemon_table();
       })
     })
     return tf_rental
@@ -405,20 +479,16 @@
 </script>
 
 <script>
-  const selected_pokemon_tbody = document.getElementById("selected-pokemon-tbody");
-  function generate_result_table(evt){
+  const selected_rental_pokemon_tbody = document.getElementById("selected-rental-pokemon-tbody");
+  function generate_selected_pokemon_table(evt){
     var lv = parseInt(factory_setting_form.lv.value);
-    // Find out the correspondence between ID and RowIndex. -->
-    var id2rowIndex = {}
-    rental_pokemon_tbody.querySelectorAll("tr > td:nth-child(1)").forEach(function(e,i){
-      id2rowIndex[e.textContent] = i;
-    })
-    var tbody = "";
-    rental_pokemon_trows = rental_pokemon_tbody.querySelectorAll("tr");
+    var id2rowIndex = get_current_id2rowIndex();
+    var selected_rental_pokemon_tbody_trs = "";
+    var rental_pokemon_trows = rental_pokemon_tbody.querySelectorAll("tr");
     TFselectedRows.forEach(function(e,i){
       let tds = Array.from(rental_pokemon_trows[ id2rowIndex[e] ].querySelectorAll("td"));
       let id = tds[0].textContent;
-      let fixedIv = id2fixedIv[id];
+      let fixedIv = id2fixedIV[id];
       let pokename = tds[RPT_pokenameIdx].textContent;
       let pokedata = POKENAME2DATA[pokename];
       let item = tds[RPT_itemIdx].textContent;
@@ -427,7 +497,7 @@
       let move_options = tds[RPT_moveIdx].textContent.split("\n").slice(1,5).map(function(e,i){return `<option>${e}</option>`}).join("");
       let ability_options = pokedata.slice(Pdata_abilityIdx, Pdata_abilityIdx+2).map(function(e,i){return e!="" ? `<option>${e}</option>` : ""}).join("");
       let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIv), evals=evals, nature=nature, lv=lv);
-      tbody += `<tr>
+      selected_rental_pokemon_tbody_trs += `<tr>
         <td>${id}</td>
         <td style="background-image: ${Pname2typeColor(pokename).color};">${Picon_img_create(pokename)}</td>
         <td>${Pitem_img_create(item)}</td>
@@ -441,29 +511,67 @@
         <td></td>
       </tr>`
     })
-    selected_pokemon_tbody.innerHTML = tbody;
-    // Result_table.querySelectorAll("select").forEach(function(e,i){
-    //   if (e.name=="move"){
-    //     e.addEventListener("change", function(){
-    //       output_opmove_info(e);
-    //       calculate_damage_rates(document.DAMAGE);
-    //     })
-    //     output_opmove_info(e);
-    //   }else{
-    //     e.addEventListener("change", function(){
-    //       calculate_damage_rates(document.DAMAGE);
-    //     })        
-    //   }
-    // })
-    // calculate_damage_rates(document.DAMAGE);
+    selected_rental_pokemon_tbody.innerHTML = selected_rental_pokemon_tbody_trs;
+  }
+  const SRPT_idIdx = 0;
+  const SRPT_ivIdx = 3;
+  const SRPT_HrstatsIdx = 4;
+  const SRPT_SrstatsIdx = 5;
+  function recalculate_selected_pokemon_rstats(){
+    var lv = parseInt(factory_setting_form.lv.value);
+    selected_rental_pokemon_tbody.querySelectorAll("tr").forEach(function(e){
+      let tds = e.querySelectorAll("td");
+      let id = tds[SRPT_idIdx].textContent;
+      let fixedIv = id2fixedIV[id];
+      let rental_data = RENTAL_POKEMON_LIST[parseInt(id)]
+      let pokename = rental_data[Rental_Pokemon_nameIdx];
+      let nature   = rental_data[Rental_Pokemon_natureIdx];
+      let evals    = rental_data.slice(Rental_Pokemon_evsIdx, Rental_Pokemon_evsIdx+6);
+      let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIv), evals=evals, nature=nature, lv=lv);
+      tds[SRPT_ivIdx].textContent = fixedIv;
+      tds[SRPT_HrstatsIdx].textContent = rstats[0];
+      tds[SRPT_SrstatsIdx].textContent = rstats[5];
+    })
   }
 </script>
 
 <!-- On load -->
 
 <script>
-  var tf_rental, flt0_rental_pokemon_table_id_select;
+  var tf_rental, flt0_rental_pokemon_table_id_select, registered_rental_pokemon_tbody;
   window.onload = function(){
+    // Pop-Up-Event
+    var popuplists = document.getElementsByClassName("popup");
+    for(let i=0; i<popuplists.length; i++){
+      let e = popuplists[i];
+      let id = e.id;
+      let e_s = document.getElementById(id + "-show")
+      if (e_s != null){
+        e.innerHTML = `
+          <div class="popup-inner">
+            <div class="close-btn"><i class="fas fa-times"></i></div>
+            ${e.innerHTML}
+          </div>
+          <div class="black-background"></div>
+        `
+        addPopupEvent(id);
+      }
+    }
+    registered_rental_pokemon_tbody = document.getElementById("registered-rental-pokemon-tbody");
+    function addPopupEvent(id){
+      var t = document.getElementById(id);      
+      function togglePopUp(e) {
+        if (e){
+          e.addEventListener('click', function() {
+            generate_registered_pokemons();
+            t.classList.toggle('is-show');
+          });
+        }
+      }
+      togglePopUp(t.querySelector(".black-background"));
+      togglePopUp(t.querySelector(".close-btn"));
+      togglePopUp(document.getElementById(id + "-show"));
+    }
     for (let i=0; i<factory_setting_form.length; i++){
       factory_setting_form[i].addEventListener("change", set_factory_condition)
     }
@@ -479,6 +587,7 @@
     tf_rental = filter_rental_pokemon_table();
     flt0_rental_pokemon_table_id_select = document.getElementById("flt0_rental-pokemon-table");
     set_factory_condition();
+
   }
 </script>
 
@@ -486,21 +595,24 @@
 
 <style>
   table#rental-pokemon-form *,
-  table#selected-pokemon-table *{
+  table#selected-rental-pokemon-table *,
+  table#registered-rental-pokemon-table *{
     vertical-align: middle;
     text-align: center;
   }
   table#rental-pokemon-form select, 
   table#rental-pokemon-form input,
-  table#selected-pokemon-table select,
-  table#selected-pokemon-table input{
+  table#selected-rental-pokemon-table select,
+  table#selected-rental-pokemon-table input,
+  table#registered-rental-pokemon-table select{
     padding: .5em .4em;
     border: 0;
     background-color: transparent;
     font-family: Monaco, monospace, sans-serif;
   }
   table#rental-pokemon-table select,
-  table#selected-pokemon-table select{
+  table#selected-rental-pokemon-table select,
+  table#registered-rental-pokemon-table select{
     width: 100%;
   }
   div.overflow-ms{
@@ -557,6 +669,89 @@
   }
   .g2 {
     background-color: antiquewhite;
+  }
+</style>
+
+<!-- PopUp -->
+
+<style>
+  .popup {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: .6s;
+  }
+  .popup.is-show {
+    opacity: 1;
+    visibility: visible;
+  }
+  .popup-inner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    max-width: 80%;
+    min-width: 60%;
+    max-height: 80%;
+    overflow: auto;
+    padding: 50px;
+    background-color: #fff;
+    z-index: 2;
+  }
+  .popup-inner img {
+    width: 100%;
+  }
+  .close-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .close-btn i {
+    font-size: 40px;
+    color: #333;
+    border: 3px solid;
+    border-radius: 50%;
+    width: 40px;
+  }
+  .black-background {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.8);
+    z-index: 1;
+    cursor: pointer;
+  }
+  .btn-correct-ivs {
+    position: relative;
+    display: inline-block;
+    font-weight: bold;
+    text-decoration: none;
+    color: #fff!important;
+    text-shadow: 0 0 5px rgb(255 255 255 / 73%);
+    background: #da5a76;
+    border-top: solid 3px #da5a76;
+    border-bottom: solid 3px #c94663;
+    transition: .4s;
+    padding: 4px 7px!important;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .btn-correct-ivs:hover {
+    text-shadow: -6px 0px 15px rgba(255, 255, 240, 0.83),
+                  6px 0px 15px rgba(255, 255, 240, 0.83);
+    text-decoration: none;
   }
 </style>                </article>
             </aside><!-- /#featured -->
