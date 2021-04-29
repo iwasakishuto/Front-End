@@ -579,11 +579,11 @@
         <td>${rstats[0]}</td>
         <td>${rstats[5]}</td>
         <td><select name="move">${move_options}</select></td>
-        <td><input name="power" type="number" size="1" min="0" max="999" value="${power}"></td>
+        <td><input name="power" type="number" size="1" min="0" max="999" value="${power=='--' ? 0 : power}"></td>
         <td><select name="move-type">${move_type_options}</select></td>
         <td><select name="ability">${ability_options}</select></td>
-        <td></td>
-        <td></td>
+        <td>0~0</td>
+        <td>0.0%~0.0%</td>
       </tr>`
     })
     selected_rental_pokemon_tbody.innerHTML = selected_rental_pokemon_tbody_trs;
@@ -608,10 +608,16 @@
       }
     })
   }
-  const SRPT_idIdx = 1;
-  const SRPT_ivIdx = 4;
-  const SRPT_HrstatsIdx = 5;
-  const SRPT_SrstatsIdx = 6;
+  const SRPT_idIdx          = 1;
+  const SRPT_ivIdx          = 4;
+  const SRPT_HrstatsIdx     = 5;
+  const SRPT_SrstatsIdx     = 6;
+  const SRPT_move_nameIdx   = 7;
+  const SRPT_move_powerIdx  = 8;
+  const SRPT_move_typeIdx   = 9;
+  const SRPT_abilityIdx     = 10;
+  const SRPT_damageIdx      = 11;
+  const SRPT_damage_rateIdx = 12;
   function recalculate_selected_rental_pokemon_rstats(){
     var lv = parseInt(factory_setting_form.lv.value);
     selected_rental_pokemon_tbody.querySelectorAll("tr").forEach(function(e){
@@ -635,27 +641,79 @@
 <script>
   const battle_situation_setting_form = document.getElementById("battle-situation-setting-form");
   function recalculate_damages(){
+    var move_name, move_type, move_class, move_range, move_base_power, 
+        Astats, Atypes, Aability, Aitem, Aranks
+    var Aranks = Array(6).fill(battle_situation_setting_form.attacking_rank.value);
+    var Dranks = Array(6).fill(battle_situation_setting_form.defencing_rank.value)
+    var helping_hand         = battle_situation_setting_form.helping_hand.checked;
+    var is_charged           = battle_situation_setting_form.charged.checked;
+    var is_mudsport_field    = battle_situation_setting_form.mudsport.checked;
+    var is_watersport_field  = battle_situation_setting_form.watersport.checked;
+    var is_single            = battle_situation_setting_form.battle_style.value=="シングルバトル";
+    var has_shield           = battle_situation_setting_form.shield.checked;
+    var weather              = battle_situation_setting_form.weather.value;
+    var is_burned_state      = battle_situation_setting_form.ailment.value == "やけど";
+    var hit_critical         = battle_situation_setting_form.critical.checked;
+    var AHP = DHP = 1.0;
+    var lv = parseInt(factory_setting_form.lv.value);
     selected_rental_pokemon_tbody.querySelectorAll("tr").forEach(function(e){
-      let lv = parseInt(factory_setting_form.lv.value);
       let tds = e.querySelectorAll("td");
       let id = tds[SRPT_idIdx].textContent;
       if (id==clicked_id){
         e.classList.add("attacking");
         let tds = e.querySelectorAll("td");
-        let fixedIV = tds[SRPT_ivIdx].textContent;
+        move_name       = tds[SRPT_move_nameIdx].querySelector(`select[name="move"]`).value;
+        move_base_power = tds[SRPT_move_powerIdx].querySelector(`input[name="power"]`).value;
+        move_type       = tds[SRPT_move_typeIdx].querySelector(`select[name="move-type"]`).value;
+        Aability        = tds[SRPT_abilityIdx].querySelector(`select[name="ability"]`).value;
         let rental_data = RENTAL_POKEMON_LIST[parseInt(id)];
-        let pokename = rental_data[Rental_Pokemon_nameIdx];
-        let nature   = rental_data[Rental_Pokemon_natureIdx];
-        let evals    = rental_data.slice(Rental_Pokemon_evsIdx, Rental_Pokemon_evsIdx+6);
-        let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIV), evals=evals, nature=nature, lv=lv);
+        let poke_name   = rental_data[Rental_Pokemon_nameIdx];
+        Atypes = POKENAME2DATA[poke_name].slice(Pdata_typeIdx, Pdata_typeIdx+2)
+        Aitem  = rental_data[Rental_Pokemon_itemIdx];
+        Astats = calculate_statistics(
+          name=poke_name, 
+          ivals=Array(6).fill(id2fixedIV[id]), 
+          evals=rental_data.slice(Rental_Pokemon_evsIdx, Rental_Pokemon_evsIdx+6),
+          nature=rental_data[Rental_Pokemon_natureIdx], 
+          lv=lv,
+        );
       }else if (id==curtAid){
         e.classList.remove("attacking")
       }
     })
-    // move_name = tds[RT_oppokemoveIdx].querySelector("select").value;
-    // move_type = NaN; move_class = NaN; move_range = NaN; move_base_power = NaN;
-    // Astats=op_stats, Atypes=op_types, Aability=op_ability, Aitem=op_item, Aranks=op_ranks
-    // Dstats=my_stats, Dtypes=my_types, Dability=my_ability, Ditem=my_item, Dranks=my_ranks;
+    var Dability, Dtypes, Ditem, Dstats, ret
+    selected_rental_pokemon_tbody.querySelectorAll("tr").forEach(function(e){
+      let tds = e.querySelectorAll("td");
+      let id = tds[SRPT_idIdx].textContent;
+      if (id!=clicked_id){
+        let rental_data = RENTAL_POKEMON_LIST[parseInt(id)];
+        let poke_name   = rental_data[Rental_Pokemon_nameIdx];
+        Dability = tds[SRPT_abilityIdx].querySelector(`select[name="ability"]`).value;
+        Dtypes = POKENAME2DATA[poke_name].slice(Pdata_typeIdx, Pdata_typeIdx+2)
+        Ditem  = rental_data[Rental_Pokemon_itemIdx];
+        Dstats = calculate_statistics(
+          name=poke_name, 
+          ivals=Array(6).fill(id2fixedIV[id]), 
+          evals=rental_data.slice(Rental_Pokemon_evsIdx, Rental_Pokemon_evsIdx+6),
+          nature=rental_data[Rental_Pokemon_natureIdx], 
+          lv=lv,
+        );
+        ret = calculate_damage(
+          move_name=move_name, move_type=move_type, move_class=move_class, move_range=move_range, move_base_power=move_base_power,
+          lv=lv, Astats=Astats, Dstats=Dstats, Atypes=Atypes, Dtypes=Dtypes, 
+          Aability=Aability, Dability=Dability, Aitem=Aitem, Ditem=Ditem, Aranks=Aranks, 
+          Dranks=Dranks, AHP=AHP, DHP=DHP, helping_hand=helping_hand, 
+          is_charged=is_charged, is_mudsport_field=is_mudsport_field, 
+          is_watersport_field=is_watersport_field, is_single=is_single, 
+          has_shield=has_shield, is_flash_fire=false, weather=weather, 
+          is_burned_state=is_burned_state, hit_critical=hit_critical,
+        )
+      }else{
+        ret = [0, 0]
+      }
+      tds[SRPT_damageIdx].textContent = ret.join(" ~ ");
+      tds[SRPT_damage_rateIdx].textContent = ret.map(function(e){return (e/Dstats[0]*100).toFixed(1)+"%"}).join(" ~ ")
+    })
     curtAid = clicked_id;
   }
 </script>
@@ -700,14 +758,6 @@
     for (let i=0; i<factory_setting_form.length; i++){
       factory_setting_form[i].addEventListener("change", set_factory_condition)
     }
-    // Battle Factory
-    // var rental_pokemon_form = document.querySelectorAll("form#factory_setting_form table#rental-pokemon-form select");
-    // for(let i=0; i<rental_pokemon_form.length; i++){
-    //   let e = rental_pokemon_form[i];
-    //   e.addEventListener('change', function(){
-    //     set_factory_condition(document.FACTORY);
-    //   });
-    // }
     load_rental_pokemons();
     tf_rental = filter_rental_pokemon_table();
     flt0_rental_pokemon_table_id_select = document.getElementById("flt0_rental-pokemon-table");
@@ -737,7 +787,7 @@
   }
   table#rental-pokemon-table select,
   table#selected-rental-pokemon-table select,
-  table#registered-rental-pokemon-table select
+  table#registered-rental-pokemon-table select,
   table#battle-situation-table select{
     width: 100%;
   }
