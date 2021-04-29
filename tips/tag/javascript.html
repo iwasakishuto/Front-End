@@ -147,8 +147,9 @@
 
 <table id="selected-rental-pokemon-table">
   <thead>
-    <tr><th colspan="13">ダメージ計算結果</th></tr>
-    <tr><th>攻</th><th>ID</th><th>ポケモン</th><th>もちもの</th><th>IV</th><th>H</th><th>S</th><th>技</th><th>技威力</th><th>技タイプ</th><th>特性</th><th>威力</th><th>割合</th></tr>
+    <tr><th colspan="9">ダメージ計算結果</th></tr>
+    <tr><th rowspan="2">攻</th><th>ID</th><th rowspan="2">もちもの</th><th colspan="2">IV</th><th colspan="2">技</th><th rowspan="2">特性</th><th>威力</th></tr>
+    <tr><th>ポケモン</th><th>H</th><th>S</th><th>威力</th><th>タイプ</th><th>割合</th></tr>
   </thead>
   <tbody id="selected-rental-pokemon-tbody">
   </tbody>
@@ -570,19 +571,22 @@
       let power = move_data[Mdata_powerIdx];
       let ability_options = pokedata.slice(Pdata_abilityIdx, Pdata_abilityIdx+2).map(function(e,i){return e!="" ? `<option>${e}</option>` : ""}).join("");
       let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIV), evals=evals, nature=nature, lv=lv);
-      selected_rental_pokemon_tbody_trs += `<tr${i==0 ? ' class="attacking"' : ""}>
-        <td><input type="radio" name="attacking" value="${id}"${i==0 ? " checked" : ""}></td>
+      selected_rental_pokemon_tbody_trs += `
+      <tr${i==0 ? ' class="attacking"' : ""}>
+        <td rowspan="2"><input type="radio" name="attacking" value="${id}"${i==0 ? " checked" : ""}></td>
         <td>${id}</td>
+        <td rowspan="2">${Pitem_img_create(item)}</td>
+        <td colspan="2">${fixedIV}</td>
+        <td colspan="2"><select name="move">${move_options}</select></td>
+        <td rowspan="2"><select name="ability">${ability_options}</select></td>
+        <td>0~0</td>
+      </tr>
+      <tr${i==0 ? ' class="attacking"' : ""}>
         <td style="background-image: ${Pname2typeColor(pokename).color};">${Picon_img_create(pokename)}</td>
-        <td>${Pitem_img_create(item)}</td>
-        <td>${fixedIV}</td>
         <td>${rstats[0]}</td>
         <td>${rstats[5]}</td>
-        <td><select name="move">${move_options}</select></td>
-        <td><input name="power" type="number" size="1" min="0" max="999" value="${power=='--' ? 0 : power}"></td>
+        <td><input name="power" type="number" size="1" min="0" max="999" step="5" value="${power=='--' ? 0 : parseInt(power)}"></td>
         <td><select name="move-type">${move_type_options}</select></td>
-        <td><select name="ability">${ability_options}</select></td>
-        <td>0~0</td>
         <td>0.0%~0.0%</td>
       </tr>`
     })
@@ -595,10 +599,15 @@
             recalculate_damages();
           }
         })
-        e.style.cursor = "pointer";
       }else if (e.name=="move"){
         e.addEventListener("change", function(){
-          e.parentElement.nextElementSibling.textContent = MOVENAME2DATA[e.value][Mdata_powerIdx];
+          // Change Move info.
+          let move_data = MOVENAME2DATA[e.value];
+          let tr_upper = e.parentElement.parentElement;
+          let tr_lower = tr_upper.nextElementSibling;
+          let tds = Array.from(tr_upper.getElementsByTagName("td")).concat(Array.from(tr_lower.getElementsByTagName("td")));
+          tds[SRPT_move_powerIdx].getElementByTagName("input").value = parseInt(move_data[Mdata_powerIdx]) || 0;
+          tds[SRPT_move_typeIdx].getElementByTagName("select").value = move_data[Mdata_typeIdx];
           recalculate_damages();
         })
       }else{ // if (e.name=="power" || e.name=="ability" || e.name=="move-type")
@@ -610,13 +619,13 @@
   }
   const SRPT_idIdx          = 1;
   const SRPT_ivIdx          = 4;
-  const SRPT_HrstatsIdx     = 5;
-  const SRPT_SrstatsIdx     = 6;
-  const SRPT_move_nameIdx   = 7;
-  const SRPT_move_powerIdx  = 8;
-  const SRPT_move_typeIdx   = 9;
-  const SRPT_abilityIdx     = 10;
-  const SRPT_damageIdx      = 11;
+  const SRPT_HrstatsIdx     = 8;
+  const SRPT_SrstatsIdx     = 9;
+  const SRPT_move_nameIdx   = 4;
+  const SRPT_move_powerIdx  = 10;
+  const SRPT_move_typeIdx   = 11;
+  const SRPT_abilityIdx     = 5;
+  const SRPT_damageIdx      = 6;
   const SRPT_damage_rateIdx = 12;
   function recalculate_selected_rental_pokemon_rstats(){
     var lv = parseInt(factory_setting_form.lv.value);
@@ -642,7 +651,7 @@
   const battle_situation_setting_form = document.getElementById("battle-situation-setting-form");
   function recalculate_damages(){
     var move_name, move_type, move_class, move_range, move_base_power, 
-        Astats, Atypes, Aability, Aitem, Aranks
+        Astats, Atypes, Aability, Aitem, Aranks;
     var Aranks = Array(6).fill(battle_situation_setting_form.attacking_rank.value);
     var Dranks = Array(6).fill(battle_situation_setting_form.defencing_rank.value)
     var helping_hand         = battle_situation_setting_form.helping_hand.checked;
@@ -656,12 +665,15 @@
     var hit_critical         = battle_situation_setting_form.critical.checked;
     var AHP = DHP = 1.0;
     var lv = parseInt(factory_setting_form.lv.value);
-    selected_rental_pokemon_tbody.querySelectorAll("tr").forEach(function(e){
-      let tds = e.querySelectorAll("td");
+    var selected_rental_pokemon_tbody_trs = selected_rental_pokemon_tbody.querySelectorAll("tr");
+    for (var i=0; i<selected_rental_pokemon_tbody_trs.length/2; i++){
+      let tds_upper = Array.from(selected_rental_pokemon_tbody_trs[i*2].getElementsByTagName("td"));
+      let tds_lower = Array.from(selected_rental_pokemon_tbody_trs[i*2+1].getElementsByTagName("td"));
+      let tds = tds_upper.concat(tds_lower);
       let id = tds[SRPT_idIdx].textContent;
       if (id==clicked_id){
-        e.classList.add("attacking");
-        let tds = e.querySelectorAll("td");
+        selected_rental_pokemon_tbody_trs[i*2].classList.add("attacking");
+        selected_rental_pokemon_tbody_trs[i*2+1].classList.add("attacking");
         move_name       = tds[SRPT_move_nameIdx].querySelector(`select[name="move"]`).value;
         move_base_power = tds[SRPT_move_powerIdx].querySelector(`input[name="power"]`).value;
         move_type       = tds[SRPT_move_typeIdx].querySelector(`select[name="move-type"]`).value;
@@ -678,12 +690,15 @@
           lv=lv,
         );
       }else if (id==curtAid){
-        e.classList.remove("attacking")
+        selected_rental_pokemon_tbody_trs[i*2].classList.remove("attacking");
+        selected_rental_pokemon_tbody_trs[i*2+1].classList.remove("attacking");
       }
-    })
+    }
     var Dability, Dtypes, Ditem, Dstats, ret
-    selected_rental_pokemon_tbody.querySelectorAll("tr").forEach(function(e){
-      let tds = e.querySelectorAll("td");
+    for (var i=0; i<selected_rental_pokemon_tbody_trs.length/2; i++){
+      let tds_upper = Array.from(selected_rental_pokemon_tbody_trs[i*2].getElementsByTagName("td"));
+      let tds_lower = Array.from(selected_rental_pokemon_tbody_trs[i*2+1].getElementsByTagName("td"));
+      let tds = tds_upper.concat(tds_lower);
       let id = tds[SRPT_idIdx].textContent;
       if (id!=clicked_id){
         let rental_data = RENTAL_POKEMON_LIST[parseInt(id)];
@@ -709,11 +724,12 @@
           is_burned_state=is_burned_state, hit_critical=hit_critical,
         )
       }else{
-        ret = [0, 0]
+        ret = [0, 0];
+        Dstats = [1]
       }
       tds[SRPT_damageIdx].textContent = ret.join(" ~ ");
       tds[SRPT_damage_rateIdx].textContent = ret.map(function(e){return (e/Dstats[0]*100).toFixed(1)+"%"}).join(" ~ ")
-    })
+    }
     curtAid = clicked_id;
   }
 </script>
