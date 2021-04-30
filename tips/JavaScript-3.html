@@ -85,291 +85,292 @@
             <span>2019-06-08(Sat)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/udemy.html">Udemy</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/cheat-sheet.html">Cheat-sheet</a></span>
           </footer><!-- /.post-info -->
-          <ul>
-          <li>講座：<a href="https://www.udemy.com/html-css-js/">[HTML/CSS/JavaScript] フロントエンドエンジニアになりたい人の Webプログラミング入門</a></li>
-          <li>講師：<a href="https://www.udemy.com/user/taniguchi-makoto/">Taniguchi Makoto</a></li>
-          </ul>
-          <h2>色々な書き方</h2>
-          <p>今回は、以下のHTMLを</p>
-          <ul>
-          <li><a href="#anchor1">jsonから読み込む</a></li>
-          <li><a href="#anchor2">直書きでAjax通信を使う</a></li>
-          <li><a href="#anchor3"><code>jquery</code> でAjax通信を使う</a></li>
-          <li><a href="#anchor4"><code>vue.js</code> でAjax通信を使う</a></li>
-          </ul>
-          <p>という方法で作る方法を学びます。</p>
-          <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;img_unit&quot;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;photo&quot;</span><span class="p">&gt;</span>
-              <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;img/img01.jpg&quot;</span><span class="p">&gt;</span>
-              <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;inner&quot;</span><span class="p">&gt;</span>
-                <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>コメント1<span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>name01<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-              <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;photo&quot;</span><span class="p">&gt;</span>
-              <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;img/img02.jpg&quot;</span><span class="p">&gt;</span>
-              <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;inner&quot;</span><span class="p">&gt;</span>
-                <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>コメント2<span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>name02<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-              <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-          </code></pre></div>
+<!-- NOT "| indent(10, True)"  -->
+<ul>
+<li>講座：<a href="https://www.udemy.com/html-css-js/">[HTML/CSS/JavaScript] フロントエンドエンジニアになりたい人の Webプログラミング入門</a></li>
+<li>講師：<a href="https://www.udemy.com/user/taniguchi-makoto/">Taniguchi Makoto</a></li>
+</ul>
+<h2>色々な書き方</h2>
+<p>今回は、以下のHTMLを</p>
+<ul>
+<li><a href="#anchor1">jsonから読み込む</a></li>
+<li><a href="#anchor2">直書きでAjax通信を使う</a></li>
+<li><a href="#anchor3"><code>jquery</code> でAjax通信を使う</a></li>
+<li><a href="#anchor4"><code>vue.js</code> でAjax通信を使う</a></li>
+</ul>
+<p>という方法で作る方法を学びます。</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;img_unit&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;photo&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;img/img01.jpg&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;inner&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>コメント1<span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>name01<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;photo&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">img</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;img/img02.jpg&quot;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;inner&quot;</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>コメント2<span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>name02<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
 
 
-          <p>なお、それぞれのhtmlファイルを <code>index.html</code> と言う名前だと仮定し以下のようなファイルパス関係だとします。</p>
-          <div class="highlight"><pre><span></span><code>.
-          ├── index.html
-          └── img
-              ├── img01.jpg
-              ├── img02.jpg
-              └── img03.jpg
-          </code></pre></div>
+<p>なお、それぞれのhtmlファイルを <code>index.html</code> と言う名前だと仮定し以下のようなファイルパス関係だとします。</p>
+<div class="highlight"><pre><span></span><code>.
+├── index.html
+└── img
+    ├── img01.jpg
+    ├── img02.jpg
+    └── img03.jpg
+</code></pre></div>
 
 
-          <p>ちなみに、以下の <code>css</code> を読み込んでおくと綺麗に表示されます。</p>
-          <div class="highlight"><pre><span></span><code><span class="nt">body</span> <span class="p">{</span>
-            <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="k">padding</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">229</span><span class="p">,</span> <span class="mf">0.06</span><span class="p">);</span>
-          <span class="p">}</span>
-          <span class="p">.</span><span class="nc">container</span> <span class="p">{</span> <span class="c">/*&lt;div class=&quot;container&quot;&gt;で上記のhtmlを囲むとより綺麗に表示されます。*/</span>
-            <span class="k">max-width</span><span class="p">:</span> <span class="mi">600</span><span class="kt">px</span><span class="p">;</span>
-            <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span> <span class="kc">auto</span><span class="p">;</span>
-            <span class="k">box-shadow</span><span class="p">:</span> <span class="mi">0</span><span class="kt">px</span> <span class="mi">0</span><span class="kt">px</span> <span class="mi">3</span><span class="kt">px</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">.3</span><span class="p">);</span>
-          <span class="p">}</span>
-          <span class="nt">img</span> <span class="p">{</span>
-            <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
-            <span class="err">margin</span> <span class="err">0</span><span class="p">;</span>
-            <span class="k">vertical-align</span><span class="p">:</span> <span class="kc">top</span><span class="p">;</span>
-          <span class="p">}</span>
-          <span class="p">.</span><span class="nc">photo</span> <span class="p">{</span>
-            <span class="k">position</span><span class="p">:</span> <span class="kc">relative</span><span class="p">;</span> <span class="c">/*親要素に relative とすることで下で absolute が photo に対して行われる。*/</span>
-          <span class="p">}</span>
-          <span class="p">.</span><span class="nc">photo</span> <span class="p">.</span><span class="nc">inner</span> <span class="p">{</span>
-            <span class="k">position</span><span class="p">:</span> <span class="kc">absolute</span><span class="p">;</span>
-            <span class="k">bottom</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">.5</span><span class="p">);</span>
-            <span class="k">font-size</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-            <span class="k">color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
-            <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
-          <span class="p">}</span>
+<p>ちなみに、以下の <code>css</code> を読み込んでおくと綺麗に表示されます。</p>
+<div class="highlight"><pre><span></span><code><span class="nt">body</span> <span class="p">{</span>
+  <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">229</span><span class="p">,</span> <span class="mf">0.06</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">container</span> <span class="p">{</span> <span class="c">/*&lt;div class=&quot;container&quot;&gt;で上記のhtmlを囲むとより綺麗に表示されます。*/</span>
+  <span class="k">max-width</span><span class="p">:</span> <span class="mi">600</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span> <span class="kc">auto</span><span class="p">;</span>
+  <span class="k">box-shadow</span><span class="p">:</span> <span class="mi">0</span><span class="kt">px</span> <span class="mi">0</span><span class="kt">px</span> <span class="mi">3</span><span class="kt">px</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">.3</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nt">img</span> <span class="p">{</span>
+  <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+  <span class="err">margin</span> <span class="err">0</span><span class="p">;</span>
+  <span class="k">vertical-align</span><span class="p">:</span> <span class="kc">top</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">photo</span> <span class="p">{</span>
+  <span class="k">position</span><span class="p">:</span> <span class="kc">relative</span><span class="p">;</span> <span class="c">/*親要素に relative とすることで下で absolute が photo に対して行われる。*/</span>
+<span class="p">}</span>
+<span class="p">.</span><span class="nc">photo</span> <span class="p">.</span><span class="nc">inner</span> <span class="p">{</span>
+  <span class="k">position</span><span class="p">:</span> <span class="kc">absolute</span><span class="p">;</span>
+  <span class="k">bottom</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">.5</span><span class="p">);</span>
+  <span class="k">font-size</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+  <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
+<span class="p">}</span>
 
-          <span class="p">.</span><span class="nc">inner</span> <span class="nt">p</span> <span class="p">{</span>
-            <span class="k">padding</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
-          <span class="p">}</span>
+<span class="p">.</span><span class="nc">inner</span> <span class="nt">p</span> <span class="p">{</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mi">20</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
 
-          <span class="p">.</span><span class="nc">inner</span> <span class="nt">span</span> <span class="p">{</span>
-            <span class="k">margin-left</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-          <span class="p">}</span>
-          </code></pre></div>
-
-
-          <p><a id="anchor1"></a></p>
-          <h2>json から読み込む</h2>
-          <p>Json(JavaScript Object Notation)ファイルにデータを用意しておいて、それらを随時読み込んで表示する方式。</p>
-          <p>以下のどちらを利用するかは自由。</p>
-          <ul>
-          <li>htmlを直接 <code>innerHTML</code> プロパティで挿入する。</li>
-          <li><code>createElement</code> や <code>appendChild</code> を使って要素をオブジェクトとして扱う。</li>
-          </ul>
-          <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;img_unit&quot;</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-
-          <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-            <span class="kd">var</span> <span class="nx">images</span> <span class="o">=</span> <span class="p">[</span>
-              <span class="p">{</span>
-                <span class="s2">&quot;path&quot;</span><span class="o">:</span> <span class="s2">&quot;img/img01.jpg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;name01&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;caption&quot;</span><span class="o">:</span> <span class="s2">&quot;コメント1&quot;</span>
-              <span class="p">},</span>
-              <span class="p">{</span>
-                <span class="s2">&quot;path&quot;</span><span class="o">:</span> <span class="s2">&quot;img/img02.jpg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;name02&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;caption&quot;</span><span class="o">:</span> <span class="s2">&quot;コメント2&quot;</span>
-              <span class="p">},</span>
-              <span class="p">{</span>
-                <span class="s2">&quot;path&quot;</span><span class="o">:</span> <span class="s2">&quot;img/img03.jpg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;name03&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;caption&quot;</span><span class="o">:</span> <span class="s2">&quot;コメント3&quot;</span>
-              <span class="p">}</span>
-            <span class="p">];</span>
-
-            <span class="kd">var</span> <span class="nx">img</span><span class="p">;</span>
-            <span class="kd">var</span> <span class="nx">caption</span><span class="p">;</span>
-            <span class="kd">var</span> <span class="nx">div</span><span class="p">;</span>
-
-            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">images</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-              <span class="nx">img</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">);</span> <span class="c1">// &lt;img&gt;タグが作られる。</span>
-              <span class="nx">img</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">,</span> <span class="nx">images</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">path</span><span class="p">);</span> <span class="c1">// src属性を追加し、属性値を設定。</span>
-
-              <span class="nx">caption</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span> <span class="c1">// &lt;div&gt;タグが作られる。</span>
-              <span class="nx">caption</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span><span class="p">;</span> <span class="c1">// class属性を追加し、属性値を設定。</span>
-              <span class="nx">caption</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;p&gt;&#39;</span> <span class="o">+</span> <span class="nx">images</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">caption</span> <span class="o">+</span> <span class="s1">&#39;&lt;span&gt;&#39;</span> <span class="o">+</span> <span class="nx">images</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;&lt;/span&gt;&lt;/p&gt;&#39;</span><span class="p">;</span> <span class="c1">// divタグの中に&lt;p&gt;...&lt;/p&gt;という要素を追加。</span>
-
-              <span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
-              <span class="nx">div</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;photo&#39;</span><span class="p">;</span>
-              <span class="nx">div</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">img</span><span class="p">);</span> <span class="c1">// divの内部にimgを追加する。</span>
-              <span class="nx">div</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">caption</span><span class="p">);</span> <span class="c1">// divの内部にcaptionを追加する。</span>
-
-              <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;img_unit&#39;</span><span class="p">).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">div</span><span class="p">);</span> <span class="c1">//&quot;id=img_unit&quot;のタグの内部にdivを追加する。</span>
-            <span class="p">}</span>
-          <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-          </code></pre></div>
+<span class="p">.</span><span class="nc">inner</span> <span class="nt">span</span> <span class="p">{</span>
+  <span class="k">margin-left</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
 
-          <p><a id="anchor2"></a></p>
-          <h2>直書きでAjax通信を使う</h2>
-          <p>プログラムの中にjsonデータを保持しているのは賢いやり方ではない。</p>
-          <p>というか、API(Application Programing Interface)を使って外部と通信しながらデータを処理することがほとんどであり、その時に使えるのがAjax通信。</p>
-          <p>なお、ここでは、"https://h2o-space.com/htmlbook/images.php" というサーバーと通信を行なっているが、これはjsonのセキュリティの問題のため。</p>
-          <p><code>file</code> がCross origin requestsでサポートされているプロトコルに含まれていない（セキュリティ上危ないから）ので、講師の方が用意してくださっている。</p>
-          <p>また、ajax通信は以下のようにいくつかのステップに分かれており、それぞれに状態が割り当てられているので、通信が終わったことを確認してから次の処理を行うことができる。</p>
-          <table>
-          <thead>
-          <tr>
-          <th align="center">値</th>
-          <th align="center">定数</th>
-          <th align="center">状態</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-          <td align="center">0</td>
-          <td align="center">UNSENT</td>
-          <td align="center">インスタンスができた</td>
-          </tr>
-          <tr>
-          <td align="center">1</td>
-          <td align="center">OPENED</td>
-          <td align="center">openメソッドを利用した</td>
-          </tr>
-          <tr>
-          <td align="center">2</td>
-          <td align="center">HEADERS_RECEIVED</td>
-          <td align="center">ヘッダーが受信できた</td>
-          </tr>
-          <tr>
-          <td align="center">3</td>
-          <td align="center">LOADING</td>
-          <td align="center">データを受信中である</td>
-          </tr>
-          <tr>
-          <td align="center">4</td>
-          <td align="center">DONE</td>
-          <td align="center">通信が終了した</td>
-          </tr>
-          </tbody>
-          </table>
-          <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;img_unit&quot;</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<p><a id="anchor1"></a></p>
+<h2>json から読み込む</h2>
+<p>Json(JavaScript Object Notation)ファイルにデータを用意しておいて、それらを随時読み込んで表示する方式。</p>
+<p>以下のどちらを利用するかは自由。</p>
+<ul>
+<li>htmlを直接 <code>innerHTML</code> プロパティで挿入する。</li>
+<li><code>createElement</code> や <code>appendChild</code> を使って要素をオブジェクトとして扱う。</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;img_unit&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 
-          <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-            <span class="kd">var</span> <span class="nx">ajax</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span> <span class="c1">//ajax通信を行うためのオブジェクト。XMLはデータ形式の一つだが、ここではJsonでデータのやり取りを行う。</span>
-            <span class="c1">// alert(ajax.readyState); // 0</span>
-            <span class="nx">ajax</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;https://h2o-space.com/htmlbook/images.php&#39;</span><span class="p">);</span> <span class="c1">// ajax通信を行う相手先のアドレス(講師の方が用意してくださっている。)</span>
-            <span class="c1">// alert(ajax.readyState); // 1 (openを行なった後)</span>
-            <span class="nx">ajax</span><span class="p">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="s1">&#39;json&#39;</span><span class="p">;</span> <span class="c1">// データの形式を指定</span>
-            <span class="nx">ajax</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span> <span class="c1">// ファイルを呼び出す。</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="kd">var</span> <span class="nx">images</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;path&quot;</span><span class="o">:</span> <span class="s2">&quot;img/img01.jpg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;name01&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;caption&quot;</span><span class="o">:</span> <span class="s2">&quot;コメント1&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;path&quot;</span><span class="o">:</span> <span class="s2">&quot;img/img02.jpg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;name02&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;caption&quot;</span><span class="o">:</span> <span class="s2">&quot;コメント2&quot;</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;path&quot;</span><span class="o">:</span> <span class="s2">&quot;img/img03.jpg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;name03&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;caption&quot;</span><span class="o">:</span> <span class="s2">&quot;コメント3&quot;</span>
+    <span class="p">}</span>
+  <span class="p">];</span>
 
-            <span class="nx">ajax</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
-              <span class="k">if</span> <span class="p">(</span><span class="nx">ajax</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">===</span> <span class="nx">XMLHttpRequest</span><span class="p">.</span><span class="nx">DONE</span> <span class="o">&amp;&amp;</span> <span class="nx">ajax</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="mi">200</span><span class="p">){</span>
-                <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="k">this</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-                  <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">response</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+  <span class="kd">var</span> <span class="nx">img</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">caption</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">div</span><span class="p">;</span>
 
-                  <span class="nx">img</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">);</span>
-                  <span class="nx">img</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">path</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">images</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="nx">img</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">);</span> <span class="c1">// &lt;img&gt;タグが作られる。</span>
+    <span class="nx">img</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">,</span> <span class="nx">images</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">path</span><span class="p">);</span> <span class="c1">// src属性を追加し、属性値を設定。</span>
 
-                  <span class="nx">caption</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
-                  <span class="nx">caption</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span><span class="p">;</span>
-                  <span class="nx">caption</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;p&gt;&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">caption</span> <span class="o">+</span> <span class="s1">&#39;&lt;span&gt;&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;&lt;/span&gt;&lt;/p&gt;&#39;</span><span class="p">;</span>
+    <span class="nx">caption</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span> <span class="c1">// &lt;div&gt;タグが作られる。</span>
+    <span class="nx">caption</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span><span class="p">;</span> <span class="c1">// class属性を追加し、属性値を設定。</span>
+    <span class="nx">caption</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;p&gt;&#39;</span> <span class="o">+</span> <span class="nx">images</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">caption</span> <span class="o">+</span> <span class="s1">&#39;&lt;span&gt;&#39;</span> <span class="o">+</span> <span class="nx">images</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;&lt;/span&gt;&lt;/p&gt;&#39;</span><span class="p">;</span> <span class="c1">// divタグの中に&lt;p&gt;...&lt;/p&gt;という要素を追加。</span>
 
-                  <span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
-                  <span class="nx">div</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;photo&#39;</span><span class="p">;</span>
-                  <span class="nx">div</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">img</span><span class="p">);</span>
-                  <span class="nx">div</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">caption</span><span class="p">);</span>
+    <span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+    <span class="nx">div</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;photo&#39;</span><span class="p">;</span>
+    <span class="nx">div</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">img</span><span class="p">);</span> <span class="c1">// divの内部にimgを追加する。</span>
+    <span class="nx">div</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">caption</span><span class="p">);</span> <span class="c1">// divの内部にcaptionを追加する。</span>
 
-                  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;img_unit&#39;</span><span class="p">).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">div</span><span class="p">);</span>
-                <span class="p">}</span>
-              <span class="p">}</span>
-            <span class="p">};</span>
-          <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-          </code></pre></div>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;img_unit&#39;</span><span class="p">).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">div</span><span class="p">);</span> <span class="c1">//&quot;id=img_unit&quot;のタグの内部にdivを追加する。</span>
+  <span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
 
 
-          <p><a id="anchor3"></a></p>
-          <h2><code>jquery</code> でAjax通信を使う</h2>
-          <p><a href="https://jquery.com/download/">jqueryの公式サイト</a>から、jqueryをダウンロードし、<code>js/jquery.min.js</code> に保存してください。</p>
-          <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;img_unit&quot;</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<p><a id="anchor2"></a></p>
+<h2>直書きでAjax通信を使う</h2>
+<p>プログラムの中にjsonデータを保持しているのは賢いやり方ではない。</p>
+<p>というか、API(Application Programing Interface)を使って外部と通信しながらデータを処理することがほとんどであり、その時に使えるのがAjax通信。</p>
+<p>なお、ここでは、"https://h2o-space.com/htmlbook/images.php" というサーバーと通信を行なっているが、これはjsonのセキュリティの問題のため。</p>
+<p><code>file</code> がCross origin requestsでサポートされているプロトコルに含まれていない（セキュリティ上危ないから）ので、講師の方が用意してくださっている。</p>
+<p>また、ajax通信は以下のようにいくつかのステップに分かれており、それぞれに状態が割り当てられているので、通信が終わったことを確認してから次の処理を行うことができる。</p>
+<table>
+<thead>
+<tr>
+<th align="center">値</th>
+<th align="center">定数</th>
+<th align="center">状態</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">0</td>
+<td align="center">UNSENT</td>
+<td align="center">インスタンスができた</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">OPENED</td>
+<td align="center">openメソッドを利用した</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">HEADERS_RECEIVED</td>
+<td align="center">ヘッダーが受信できた</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">LOADING</td>
+<td align="center">データを受信中である</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">DONE</td>
+<td align="center">通信が終了した</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;img_unit&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 
-          <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;js/jquery.min.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-            <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s1">&#39;https://h2o-space.com/htmlbook/images.php&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// コールバック(処理が終わった時に自動的に呼び出されるファイルのこと。)</span>
-              <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-                <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;photo&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">)</span>
-                  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;img src=&quot;&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">path</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="p">)</span> <span class="c1">// 自分自身「に」追加する。</span>
-                  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;inner&quot;&lt;p&gt;&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">caption</span> <span class="o">+</span> <span class="s1">&#39;&lt;span&gt;&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;&lt;/span&gt;&lt;/p&gt;&lt;/div&gt;&#39;</span><span class="p">)</span>
-                  <span class="p">.</span><span class="nx">appendTo</span><span class="p">(</span><span class="s1">&#39;#img_unit&#39;</span><span class="p">);</span> <span class="c1">// 自分自身「を」追加する。</span>
-              <span class="p">}</span>
-            <span class="p">});</span>
-            <span class="cm">/* サンプル（htmlを生成する。）</span>
-          <span class="cm">  $(#img_unit).html(&#39;ここに、画像リストが表示されます。&#39;);</span>
-          <span class="cm">  $(#img_unit).css(&#39;margin-top&#39;, &#39;100px&#39;);</span>
-          <span class="cm">  */</span>
-          <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-          </code></pre></div>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="kd">var</span> <span class="nx">ajax</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span> <span class="c1">//ajax通信を行うためのオブジェクト。XMLはデータ形式の一つだが、ここではJsonでデータのやり取りを行う。</span>
+  <span class="c1">// alert(ajax.readyState); // 0</span>
+  <span class="nx">ajax</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;https://h2o-space.com/htmlbook/images.php&#39;</span><span class="p">);</span> <span class="c1">// ajax通信を行う相手先のアドレス(講師の方が用意してくださっている。)</span>
+  <span class="c1">// alert(ajax.readyState); // 1 (openを行なった後)</span>
+  <span class="nx">ajax</span><span class="p">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="s1">&#39;json&#39;</span><span class="p">;</span> <span class="c1">// データの形式を指定</span>
+  <span class="nx">ajax</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span> <span class="c1">// ファイルを呼び出す。</span>
+
+  <span class="nx">ajax</span><span class="p">.</span><span class="nx">onreadystatechange</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">ajax</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">===</span> <span class="nx">XMLHttpRequest</span><span class="p">.</span><span class="nx">DONE</span> <span class="o">&amp;&amp;</span> <span class="nx">ajax</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="mi">200</span><span class="p">){</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="k">this</span><span class="p">.</span><span class="nx">response</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">response</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+
+        <span class="nx">img</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">);</span>
+        <span class="nx">img</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">path</span><span class="p">);</span>
+
+        <span class="nx">caption</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+        <span class="nx">caption</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span><span class="p">;</span>
+        <span class="nx">caption</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;p&gt;&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">caption</span> <span class="o">+</span> <span class="s1">&#39;&lt;span&gt;&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;&lt;/span&gt;&lt;/p&gt;&#39;</span><span class="p">;</span>
+
+        <span class="nx">div</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">);</span>
+        <span class="nx">div</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;photo&#39;</span><span class="p">;</span>
+        <span class="nx">div</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">img</span><span class="p">);</span>
+        <span class="nx">div</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">caption</span><span class="p">);</span>
+
+        <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;img_unit&#39;</span><span class="p">).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">div</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
 
 
-          <p><a id="anchor4"></a></p>
-          <h2><code>vue.js</code> でAjax通信を使う</h2>
-          <p>jquery だとhtmlを生成する際に要素をそのままscript内に書いており、少しわかりにくかったです。そこで、vue.jsというライブラリがよく使われる。</p>
-          <p>なお、vue.jsは<a href="https://vuejs.org/v2/guide/">公式サイト</a>にてcdnで配布されています。</p>
-          <p>vue,jsは以下の形が基本で、プレースホルダーを書き換える、といった操作を行います。</p>
-          <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;vue_unit&quot;</span><span class="p">&gt;</span>
-            {{ message }}
-          <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-            <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
-              <span class="nx">el</span><span class="o">:</span> <span class="s1">&#39;#vue_unit&#39;</span><span class="p">,</span>
-              <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
-                <span class="nx">message</span><span class="o">:</span> <span class="s1">&#39;vue.jsで書き換えました。&#39;</span>
-              <span class="p">}</span>
-            <span class="p">});</span>
-          <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-          </code></pre></div>
+<p><a id="anchor3"></a></p>
+<h2><code>jquery</code> でAjax通信を使う</h2>
+<p><a href="https://jquery.com/download/">jqueryの公式サイト</a>から、jqueryをダウンロードし、<code>js/jquery.min.js</code> に保存してください。</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;img_unit&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;js/jquery.min.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s1">&#39;https://h2o-space.com/htmlbook/images.php&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// コールバック(処理が終わった時に自動的に呼び出されるファイルのこと。)</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+      <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;photo&quot;&gt;&lt;/div&gt;&#39;</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;img src=&quot;&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">path</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&#39;</span><span class="p">)</span> <span class="c1">// 自分自身「に」追加する。</span>
+        <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;inner&quot;&lt;p&gt;&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">caption</span> <span class="o">+</span> <span class="s1">&#39;&lt;span&gt;&#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;&lt;/span&gt;&lt;/p&gt;&lt;/div&gt;&#39;</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">appendTo</span><span class="p">(</span><span class="s1">&#39;#img_unit&#39;</span><span class="p">);</span> <span class="c1">// 自分自身「を」追加する。</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+  <span class="cm">/* サンプル（htmlを生成する。）</span>
+<span class="cm">  $(#img_unit).html(&#39;ここに、画像リストが表示されます。&#39;);</span>
+<span class="cm">  $(#img_unit).css(&#39;margin-top&#39;, &#39;100px&#39;);</span>
+<span class="cm">  */</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
 
 
-          <p>今までのサンプルに適用すると、以下のようになります。なお、プレースホルダーを属性値の中に書くことができないので、別の書き方をしています。</p>
-          <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;img_unit&quot;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;photo&quot;</span> <span class="na">v-for</span><span class="o">=</span><span class="s">&quot;Photo in Photos&quot;</span><span class="p">&gt;</span> <span class="c">&lt;!-- vue.js の for構文を使っている。 --&gt;</span>
-              <span class="p">&lt;</span><span class="nt">img</span> <span class="na">:src</span><span class="o">=</span><span class="s">&quot;Photo.path&quot;</span><span class="p">&gt;</span> <span class="c">&lt;!-- vue.js によって書き換えられる対象となる。 --&gt;</span>
-              <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;inner&quot;</span><span class="p">&gt;&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{ Photo.caption }}<span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>{{ Photo.name }}<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-
-          <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/vue/dist/vue.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;js/jquery.min.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-            <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
-              <span class="nx">el</span><span class="o">:</span> <span class="s1">&#39;#img_unit&#39;</span><span class="p">,</span>
-              <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
-                <span class="nx">Photos</span><span class="o">:</span> <span class="p">[]</span>
-              <span class="p">},</span>
-              <span class="nx">created</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="c1">// vueのオブジェクトが作られる時のメソッド</span>
-                <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span> <span class="c1">// ここでのスコープのthisを保存しておく。</span>
-                <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s1">&#39;https://h2o-space.com/htmlbook/images.php&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-                  <span class="nx">self</span><span class="p">.</span><span class="nx">Photos</span> <span class="o">=</span> <span class="nx">data</span>
-                <span class="p">});</span>
-              <span class="p">}</span>
-            <span class="p">});</span>
-          <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-          </code></pre></div>
+<p><a id="anchor4"></a></p>
+<h2><code>vue.js</code> でAjax通信を使う</h2>
+<p>jquery だとhtmlを生成する際に要素をそのままscript内に書いており、少しわかりにくかったです。そこで、vue.jsというライブラリがよく使われる。</p>
+<p>なお、vue.jsは<a href="https://vuejs.org/v2/guide/">公式サイト</a>にてcdnで配布されています。</p>
+<p>vue,jsは以下の形が基本で、プレースホルダーを書き換える、といった操作を行います。</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;vue_unit&quot;</span><span class="p">&gt;</span>
+  {{ message }}
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+    <span class="nx">el</span><span class="o">:</span> <span class="s1">&#39;#vue_unit&#39;</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">message</span><span class="o">:</span> <span class="s1">&#39;vue.jsで書き換えました。&#39;</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
 
 
-          <h2>最後に</h2>
-          <p>これで、講義で習った事は終了しました:)</p>
-          <p><img src="https://udemy-certificate.s3.amazonaws.com/image/UC-0NLTT6GB.jpg"></p>
-        
+<p>今までのサンプルに適用すると、以下のようになります。なお、プレースホルダーを属性値の中に書くことができないので、別の書き方をしています。</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;img_unit&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;photo&quot;</span> <span class="na">v-for</span><span class="o">=</span><span class="s">&quot;Photo in Photos&quot;</span><span class="p">&gt;</span> <span class="c">&lt;!-- vue.js の for構文を使っている。 --&gt;</span>
+    <span class="p">&lt;</span><span class="nt">img</span> <span class="na">:src</span><span class="o">=</span><span class="s">&quot;Photo.path&quot;</span><span class="p">&gt;</span> <span class="c">&lt;!-- vue.js によって書き換えられる対象となる。 --&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;inner&quot;</span><span class="p">&gt;&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{ Photo.caption }}<span class="p">&lt;</span><span class="nt">span</span><span class="p">&gt;</span>{{ Photo.name }}<span class="p">&lt;/</span><span class="nt">span</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/vue/dist/vue.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;js/jquery.min.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Vue</span><span class="p">({</span>
+    <span class="nx">el</span><span class="o">:</span> <span class="s1">&#39;#img_unit&#39;</span><span class="p">,</span>
+    <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">Photos</span><span class="o">:</span> <span class="p">[]</span>
+    <span class="p">},</span>
+    <span class="nx">created</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="c1">// vueのオブジェクトが作られる時のメソッド</span>
+      <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span> <span class="c1">// ここでのスコープのthisを保存しておく。</span>
+      <span class="nx">$</span><span class="p">.</span><span class="nx">getJSON</span><span class="p">(</span><span class="s1">&#39;https://h2o-space.com/htmlbook/images.php&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">Photos</span> <span class="o">=</span> <span class="nx">data</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
+
+
+<h2>最後に</h2>
+<p>これで、講義で習った事は終了しました:)</p>
+<p><img src="https://udemy-certificate.s3.amazonaws.com/image/UC-0NLTT6GB.jpg"></p>
+
         </div><!-- /.entry-content -->
     
       </article>

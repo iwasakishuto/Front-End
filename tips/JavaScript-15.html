@@ -85,971 +85,972 @@
             <span>2019-07-30(Tue)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a></span>
           </footer><!-- /.post-info -->
-          <style>
-          body {
-           background-image: url("https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/img/special/common/bg.png");
-           background-color: rgb(246,224,105);
-          }
-          </style>
+<!-- NOT "| indent(10, True)"  -->
+<style>
+body {
+ background-image: url("https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/img/special/common/bg.png");
+ background-color: rgb(246,224,105);
+}
+</style>
 
-          <p><img src="https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/img/special/question/title.svg"></p>
-          <p><a href="https://www.pokemon.co.jp/corporate/job/pokemoncenter/special/">ポケモン自己分析</a>(Pokémon Self-analysis)とは、16個の質問に答えることで<span class="marker-pink">どのポケモンの要素を持つ人材になるか診断してくれる</span>と言う面白いコンテンツです。（まだ遊んでない方は遊んで見てください！！ちなみに僕は<a href="https://www.pokemon.co.jp/corporate/job/pokemoncenter/special/result/eevee.html">イーブイ(eevee)</a>でした。）</p>
-          <p>自分も含め、周りの人の結果を見ていても<b>「大体」</b>当たっており、どういう分析を行なっているのか気になったので、<span class="marker-pink">ポケモン自己分析を分析</span>してみました。</p>
-          <h2>htmlの中身を見る。</h2>
-          <p>まずは<code>html</code>(https://www.pokemon.co.jp/corporate/job/pokemoncenter/special/question/)の中身を開発者ツールで覗きます。</p>
-          <p>すると、質問の度にページ遷移することなく、<code>JavaScript</code>(https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/js/common.js) で要素の書き換えを行なっていることがわかりました。</p>
-          <p>また、質問を答えるボタンには以下の <code>class</code> が割り当てられており、これは問題番号に依存していませんでした。</p>
-          <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;answers&quot;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;answer-yes&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;yes&quot;</span><span class="p">&gt;</span>はい<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;answer-no&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;no&quot;</span><span class="p">&gt;</span>いいえ<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;answer-neither-yes&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;neither-yes&quot;</span><span class="p">&gt;</span>どちらかといえばはい<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;answer-neither-no&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;neither-no&quot;</span><span class="p">&gt;</span>どちらかといえばいいえ<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-          </code></pre></div>
-
-
-          <h2>jsの中身を見る。</h2>
-          <h3>問題文</h3>
-          <p>先ほど特定した <code>JavaScript</code> の中身を見たところ、まず問題文が見つかりました。</p>
-          <div class="highlight"><pre><span></span><code><span class="p">{</span>
-            <span class="nx">A</span><span class="o">:</span> <span class="p">{</span><span class="nx">quest</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;データや　すうじを　みることが　すき。&quot;</span><span class="p">,</span> <span class="s2">&quot;じぜんの　じゅんびは　しっかりする。&quot;</span><span class="p">,</span> <span class="s2">&quot;おおざっぱな　ひとを　みると　イライラする。&quot;</span><span class="p">,</span> <span class="s2">&quot;ふかく　かんがえることが　すきだと　おもう。&quot;</span><span class="p">]},</span>
-            <span class="nx">B</span><span class="o">:</span> <span class="p">{</span><span class="nx">quest</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;かんがえる　より　さきに　こうどう　する。&quot;</span><span class="p">,</span> <span class="s2">&quot;けつろん　から　はなす　ほうが　すき。&quot;</span><span class="p">,</span> <span class="s2">&quot;つめたいと　いわれることが　よくある。&quot;</span><span class="p">,</span> <span class="s2">&quot;ムダな　ことが　きらい。&quot;</span><span class="p">]},</span>
-            <span class="nx">C</span><span class="o">:</span> <span class="p">{</span><span class="nx">quest</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;じぶんは　うけみ　スタンスだ。&quot;</span><span class="p">,</span> <span class="s2">&quot;ひとの　ためになる　ことであれば　なんでもできる。&quot;</span><span class="p">,</span> <span class="s2">&quot;ひとから　やさしいと　いわれる　ことが　よくある。&quot;</span><span class="p">,</span> <span class="s2">&quot;いつも　そのばの　くうきを　よんで　こうどうする。&quot;</span><span class="p">]},</span>
-            <span class="nx">D</span><span class="o">:</span> <span class="p">{</span><span class="nx">quest</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;しょたいめんでも　せっきょくてきに　はなしかける。&quot;</span><span class="p">,</span> <span class="s2">&quot;いつのまにか　はなしの　ちゅうしんに　なっている。&quot;</span><span class="p">,</span> <span class="s2">&quot;ひとから　あかるいね　と　いわれる。&quot;</span><span class="p">,</span> <span class="s2">&quot;おもった　ことが　かおに　よくでる。&quot;</span><span class="p">]}</span>
-          <span class="p">}</span>
-          </code></pre></div>
+<p><img src="https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/img/special/question/title.svg"></p>
+<p><a href="https://www.pokemon.co.jp/corporate/job/pokemoncenter/special/">ポケモン自己分析</a>(Pokémon Self-analysis)とは、16個の質問に答えることで<span class="marker-pink">どのポケモンの要素を持つ人材になるか診断してくれる</span>と言う面白いコンテンツです。（まだ遊んでない方は遊んで見てください！！ちなみに僕は<a href="https://www.pokemon.co.jp/corporate/job/pokemoncenter/special/result/eevee.html">イーブイ(eevee)</a>でした。）</p>
+<p>自分も含め、周りの人の結果を見ていても<b>「大体」</b>当たっており、どういう分析を行なっているのか気になったので、<span class="marker-pink">ポケモン自己分析を分析</span>してみました。</p>
+<h2>htmlの中身を見る。</h2>
+<p>まずは<code>html</code>(https://www.pokemon.co.jp/corporate/job/pokemoncenter/special/question/)の中身を開発者ツールで覗きます。</p>
+<p>すると、質問の度にページ遷移することなく、<code>JavaScript</code>(https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/js/common.js) で要素の書き換えを行なっていることがわかりました。</p>
+<p>また、質問を答えるボタンには以下の <code>class</code> が割り当てられており、これは問題番号に依存していませんでした。</p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;answers&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;answer-yes&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;yes&quot;</span><span class="p">&gt;</span>はい<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;answer-no&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;no&quot;</span><span class="p">&gt;</span>いいえ<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;answer-neither-yes&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;neither-yes&quot;</span><span class="p">&gt;</span>どちらかといえばはい<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;answer-neither-no&quot;</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;neither-no&quot;</span><span class="p">&gt;</span>どちらかといえばいいえ<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
 
 
-          <p>どうやら、<span class="marker-pink">質問にはA~Dのグループが分けられており、それぞれ4種類の問題文がある</span>ようです。</p>
-          <h3>解答ボタンに対する処理</h3>
-          <p>続いて、ボタンに対する処理を見つけました。</p>
-          <p>必要な部分だけ取り出すために少しプログラムを書き換えていますが、内容は同じです。</p>
-          <div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="p">((</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s2">&quot;answer-yes&quot;</span><span class="p">))</span> <span class="nx">s</span><span class="p">[</span><span class="nx">n</span><span class="p">[</span><span class="nx">r</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">3</span><span class="p">;</span>
-          <span class="k">else</span> <span class="k">if</span> <span class="p">((</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s2">&quot;answer-neither-yes&quot;</span><span class="p">))</span> <span class="nx">s</span><span class="p">[</span><span class="nx">n</span><span class="p">[</span><span class="nx">r</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">;</span>
-          <span class="k">else</span> <span class="k">if</span> <span class="p">((</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s2">&quot;answer-neither-no&quot;</span><span class="p">))</span> <span class="nx">s</span><span class="p">[</span><span class="nx">n</span><span class="p">[</span><span class="nx">r</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
-          <span class="k">else</span> <span class="p">((</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s2">&quot;answer-no&quot;</span><span class="p">))</span> <span class="nx">s</span><span class="p">[</span><span class="nx">n</span><span class="p">[</span><span class="nx">r</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">0</span><span class="p">;</span>
-          </code></pre></div>
+<h2>jsの中身を見る。</h2>
+<h3>問題文</h3>
+<p>先ほど特定した <code>JavaScript</code> の中身を見たところ、まず問題文が見つかりました。</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+  <span class="nx">A</span><span class="o">:</span> <span class="p">{</span><span class="nx">quest</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;データや　すうじを　みることが　すき。&quot;</span><span class="p">,</span> <span class="s2">&quot;じぜんの　じゅんびは　しっかりする。&quot;</span><span class="p">,</span> <span class="s2">&quot;おおざっぱな　ひとを　みると　イライラする。&quot;</span><span class="p">,</span> <span class="s2">&quot;ふかく　かんがえることが　すきだと　おもう。&quot;</span><span class="p">]},</span>
+  <span class="nx">B</span><span class="o">:</span> <span class="p">{</span><span class="nx">quest</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;かんがえる　より　さきに　こうどう　する。&quot;</span><span class="p">,</span> <span class="s2">&quot;けつろん　から　はなす　ほうが　すき。&quot;</span><span class="p">,</span> <span class="s2">&quot;つめたいと　いわれることが　よくある。&quot;</span><span class="p">,</span> <span class="s2">&quot;ムダな　ことが　きらい。&quot;</span><span class="p">]},</span>
+  <span class="nx">C</span><span class="o">:</span> <span class="p">{</span><span class="nx">quest</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;じぶんは　うけみ　スタンスだ。&quot;</span><span class="p">,</span> <span class="s2">&quot;ひとの　ためになる　ことであれば　なんでもできる。&quot;</span><span class="p">,</span> <span class="s2">&quot;ひとから　やさしいと　いわれる　ことが　よくある。&quot;</span><span class="p">,</span> <span class="s2">&quot;いつも　そのばの　くうきを　よんで　こうどうする。&quot;</span><span class="p">]},</span>
+  <span class="nx">D</span><span class="o">:</span> <span class="p">{</span><span class="nx">quest</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;しょたいめんでも　せっきょくてきに　はなしかける。&quot;</span><span class="p">,</span> <span class="s2">&quot;いつのまにか　はなしの　ちゅうしんに　なっている。&quot;</span><span class="p">,</span> <span class="s2">&quot;ひとから　あかるいね　と　いわれる。&quot;</span><span class="p">,</span> <span class="s2">&quot;おもった　ことが　かおに　よくでる。&quot;</span><span class="p">]}</span>
+<span class="p">}</span>
+</code></pre></div>
 
 
-          <p><span class="marker-pink">「はい」に近いほど点数が高く「いいえ」に近いほど点数が低い</span>ようです。</p>
-          <p>この点数を、先ほどのグループごとに足し合わせているようです。（<code>s[n[r]]</code>は各グループの得点を意味。）つまり、<span class="marker-pink">同じグループの問題は（広義）同じことを聞いている問題</span>であったと言うことです。</p>
-          <h3>得点に対する処理</h3>
-          <p>その後、得点を0~4に圧縮しています。以下の関数がこの役割を担います。</p>
-          <div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">u</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="nx">e</span> <span class="o">&lt;=</span> <span class="mi">3</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="nx">e</span> <span class="o">&lt;=</span> <span class="mi">7</span> <span class="o">?</span> <span class="mi">2</span> <span class="o">:</span> <span class="nx">e</span> <span class="o">&lt;=</span> <span class="mi">10</span> <span class="o">?</span> <span class="mi">3</span> <span class="o">:</span> <span class="nx">e</span> <span class="o">&lt;=</span> <span class="mi">12</span> <span class="o">?</span> <span class="mi">4</span> <span class="o">:</span> <span class="k">void</span> <span class="mi">0</span>
-          <span class="p">}</span>
-          </code></pre></div>
+<p>どうやら、<span class="marker-pink">質問にはA~Dのグループが分けられており、それぞれ4種類の問題文がある</span>ようです。</p>
+<h3>解答ボタンに対する処理</h3>
+<p>続いて、ボタンに対する処理を見つけました。</p>
+<p>必要な部分だけ取り出すために少しプログラムを書き換えていますが、内容は同じです。</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="p">((</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s2">&quot;answer-yes&quot;</span><span class="p">))</span> <span class="nx">s</span><span class="p">[</span><span class="nx">n</span><span class="p">[</span><span class="nx">r</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">3</span><span class="p">;</span>
+<span class="k">else</span> <span class="k">if</span> <span class="p">((</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s2">&quot;answer-neither-yes&quot;</span><span class="p">))</span> <span class="nx">s</span><span class="p">[</span><span class="nx">n</span><span class="p">[</span><span class="nx">r</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="k">else</span> <span class="k">if</span> <span class="p">((</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s2">&quot;answer-neither-no&quot;</span><span class="p">))</span> <span class="nx">s</span><span class="p">[</span><span class="nx">n</span><span class="p">[</span><span class="nx">r</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">else</span> <span class="p">((</span><span class="nx">e</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">).</span><span class="nx">hasClass</span><span class="p">(</span><span class="s2">&quot;answer-no&quot;</span><span class="p">))</span> <span class="nx">s</span><span class="p">[</span><span class="nx">n</span><span class="p">[</span><span class="nx">r</span><span class="p">]]</span> <span class="o">+=</span> <span class="mi">0</span><span class="p">;</span>
+</code></pre></div>
 
 
-          <p>ここまでで、グループAの圧縮された得点(1-4),..,グループDの圧縮された得点(1-4)が求められます。</p>
-          <h3>得点をポケモンと結びつける</h3>
-          <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nx">f</span><span class="p">.</span><span class="k">default</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">u</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">A</span><span class="p">),</span> <span class="s2">&quot;B&quot;</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">u</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">B</span><span class="p">),</span> <span class="s2">&quot;C&quot;</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">u</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">C</span><span class="p">),</span> <span class="s2">&quot;D&quot;</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">u</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">D</span><span class="p">))].</span><span class="nx">name</span><span class="p">;</span>
-          <span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="s2">&quot;../result/&quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="k">default</span><span class="p">[</span><span class="nx">e</span><span class="p">],</span> <span class="s2">&quot;.html&quot;</span><span class="p">);</span>
-          </code></pre></div>
+<p><span class="marker-pink">「はい」に近いほど点数が高く「いいえ」に近いほど点数が低い</span>ようです。</p>
+<p>この点数を、先ほどのグループごとに足し合わせているようです。（<code>s[n[r]]</code>は各グループの得点を意味。）つまり、<span class="marker-pink">同じグループの問題は（広義）同じことを聞いている問題</span>であったと言うことです。</p>
+<h3>得点に対する処理</h3>
+<p>その後、得点を0~4に圧縮しています。以下の関数がこの役割を担います。</p>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">u</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">e</span> <span class="o">&lt;=</span> <span class="mi">3</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="nx">e</span> <span class="o">&lt;=</span> <span class="mi">7</span> <span class="o">?</span> <span class="mi">2</span> <span class="o">:</span> <span class="nx">e</span> <span class="o">&lt;=</span> <span class="mi">10</span> <span class="o">?</span> <span class="mi">3</span> <span class="o">:</span> <span class="nx">e</span> <span class="o">&lt;=</span> <span class="mi">12</span> <span class="o">?</span> <span class="mi">4</span> <span class="o">:</span> <span class="k">void</span> <span class="mi">0</span>
+<span class="p">}</span>
+</code></pre></div>
 
 
-          <p>ここでは、各種グループ記号（<code>A</code>など）と圧縮された得点（<code>u(s.A)</code>など）を連結して、文字列を作っています。（<code>A1B1C1D1</code>などができる。）</p>
-          <p>これを、ポケモンに対応させます。これは非常に単純で、コード内に対応関係が書いてありました。</p>
-          <p><summary>非常に長いので、注意してください。
-            <details></p>
-          <p><code>js
-            t.exports = {
-                  A1B1C1D1: {
-                    name: "コイキング"
-                  },
-                  A1B1C1D2: {
-                    name: "コイキング"
-                  },
-                  A1B1C1D3: {
-                    name: "カビゴン"
-                  },
-                  A1B1C1D4: {
-                    name: "ラッキー"
-                  },
-                  A1B1C2D1: {
-                    name: "コイキング"
-                  },
-                  A1B1C2D2: {
-                    name: "コダック"
-                  },
-                  A1B1C2D3: {
-                    name: "カイリュー"
-                  },
-                  A1B1C2D4: {
-                    name: "ラッキー"
-                  },
-                  A1B1C3D1: {
-                    name: "コダック"
-                  },
-                  A1B1C3D2: {
-                    name: "コダック"
-                  },
-                  A1B1C3D3: {
-                    name: "カイリュー"
-                  },
-                  A1B1C3D4: {
-                    name: "ラッキー"
-                  },
-                  A1B1C4D1: {
-                    name: "ラッキー"
-                  },
-                  A1B1C4D2: {
-                    name: "ラプラス"
-                  },
-                  A1B1C4D3: {
-                    name: "ラプラス"
-                  },
-                  A1B1C4D4: {
-                    name: "ラッキー"
-                  },
-                  A1B2C1D1: {
-                    name: "コイキング"
-                  },
-                  A1B2C1D2: {
-                    name: "コイキング"
-                  },
-                  A1B2C1D3: {
-                    name: "カイリュー"
-                  },
-                  A1B2C1D4: {
-                    name: "カイリュー"
-                  },
-                  A1B2C2D1: {
-                    name: "フーディン"
-                  },
-                  A1B2C2D2: {
-                    name: "コイキング"
-                  },
-                  A1B2C2D3: {
-                    name: "カイリュー"
-                  },
-                  A1B2C2D4: {
-                    name: "ラッキー"
-                  },
-                  A1B2C3D1: {
-                    name: "ディグダ"
-                  },
-                  A1B2C3D2: {
-                    name: "コダック"
-                  },
-                  A1B2C3D3: {
-                    name: "ディグダ"
-                  },
-                  A1B2C3D4: {
-                    name: "ラッキー"
-                  },
-                  A1B2C4D1: {
-                    name: "ポリゴン"
-                  },
-                  A1B2C4D2: {
-                    name: "ディグダ"
-                  },
-                  A1B2C4D3: {
-                    name: "ラプラス"
-                  },
-                  A1B2C4D4: {
-                    name: "ポリゴン"
-                  },
-                  A1B3C1D1: {
-                    name: "カイリキー"
-                  },
-                  A1B3C1D2: {
-                    name: "カイリキー"
-                  },
-                  A1B3C1D3: {
-                    name: "メタモン"
-                  },
-                  A1B3C1D4: {
-                    name: "カビゴン"
-                  },
-                  A1B3C2D1: {
-                    name: "カイリキー"
-                  },
-                  A1B3C2D2: {
-                    name: "カイリキー"
-                  },
-                  A1B3C2D3: {
-                    name: "コダック"
-                  },
-                  A1B3C2D4: {
-                    name: "ラッキー"
-                  },
-                  A1B3C3D1: {
-                    name: "ディグダ"
-                  },
-                  A1B3C3D2: {
-                    name: "ディグダ"
-                  },
-                  A1B3C3D3: {
-                    name: "ディグダ"
-                  },
-                  A1B3C3D4: {
-                    name: "ラッキー"
-                  },
-                  A1B3C4D1: {
-                    name: "ポリゴン"
-                  },
-                  A1B3C4D2: {
-                    name: "ポリゴン"
-                  },
-                  A1B3C4D3: {
-                    name: "ポリゴン"
-                  },
-                  A1B3C4D4: {
-                    name: "ラプラス"
-                  },
-                  A1B4C1D1: {
-                    name: "スピアー"
-                  },
-                  A1B4C1D2: {
-                    name: "カイリキー"
-                  },
-                  A1B4C1D3: {
-                    name: "カイリキー"
-                  },
-                  A1B4C1D4: {
-                    name: "イーブイ"
-                  },
-                  A1B4C2D1: {
-                    name: "スピアー"
-                  },
-                  A1B4C2D2: {
-                    name: "スピアー"
-                  },
-                  A1B4C2D3: {
-                    name: "スピアー"
-                  },
-                  A1B4C2D4: {
-                    name: "コダック"
-                  },
-                  A1B4C3D1: {
-                    name: "スピアー"
-                  },
-                  A1B4C3D2: {
-                    name: "スピアー"
-                  },
-                  A1B4C3D3: {
-                    name: "スピアー"
-                  },
-                  A1B4C3D4: {
-                    name: "ディグダ"
-                  },
-                  A1B4C4D1: {
-                    name: "スピアー"
-                  },
-                  A1B4C4D2: {
-                    name: "ポリゴン"
-                  },
-                  A1B4C4D3: {
-                    name: "ラプラス"
-                  },
-                  A1B4C4D4: {
-                    name: "ラプラス"
-                  },
-                  A2B1C1D1: {
-                    name: "コイキング"
-                  },
-                  A2B1C1D2: {
-                    name: "ニャース"
-                  },
-                  A2B1C1D3: {
-                    name: "カビゴン"
-                  },
-                  A2B1C1D4: {
-                    name: "ピッピ"
-                  },
-                  A2B1C2D1: {
-                    name: "コイキング"
-                  },
-                  A2B1C2D2: {
-                    name: "コイキング"
-                  },
-                  A2B1C2D3: {
-                    name: "カイリュー"
-                  },
-                  A2B1C2D4: {
-                    name: "カビゴン"
-                  },
-                  A2B1C3D1: {
-                    name: "ディグダ"
-                  },
-                  A2B1C3D2: {
-                    name: "コダック"
-                  },
-                  A2B1C3D3: {
-                    name: "カイリュー"
-                  },
-                  A2B1C3D4: {
-                    name: "ラッキー"
-                  },
-                  A2B1C4D1: {
-                    name: "ポリゴン"
-                  },
-                  A2B1C4D2: {
-                    name: "ラプラス"
-                  },
-                  A2B1C4D3: {
-                    name: "ラプラス"
-                  },
-                  A2B1C4D4: {
-                    name: "ラッキー"
-                  },
-                  A2B2C1D1: {
-                    name: "マルマイン"
-                  },
-                  A2B2C1D2: {
-                    name: "コイキング"
-                  },
-                  A2B2C1D3: {
-                    name: "カビゴン"
-                  },
-                  A2B2C1D4: {
-                    name: "ピッピ"
-                  },
-                  A2B2C2D1: {
-                    name: "コイキング"
-                  },
-                  A2B2C2D2: {
-                    name: "メタモン"
-                  },
-                  A2B2C2D3: {
-                    name: "カイリュー"
-                  },
-                  A2B2C2D4: {
-                    name: "ピッピ"
-                  },
-                  A2B2C3D1: {
-                    name: "ディグダ"
-                  },
-                  A2B2C3D2: {
-                    name: "ディグダ"
-                  },
-                  A2B2C3D3: {
-                    name: "コダック"
-                  },
-                  A2B2C3D4: {
-                    name: "ラッキー"
-                  },
-                  A2B2C4D1: {
-                    name: "ポリゴン"
-                  },
-                  A2B2C4D2: {
-                    name: "ラプラス"
-                  },
-                  A2B2C4D3: {
-                    name: "ラプラス"
-                  },
-                  A2B2C4D4: {
-                    name: "カビゴン"
-                  },
-                  A2B3C1D1: {
-                    name: "フーディン"
-                  },
-                  A2B3C1D2: {
-                    name: "カイリキー"
-                  },
-                  A2B3C1D3: {
-                    name: "マルマイン"
-                  },
-                  A2B3C1D4: {
-                    name: "ピッピ"
-                  },
-                  A2B3C2D1: {
-                    name: "フーディン"
-                  },
-                  A2B3C2D2: {
-                    name: "カイリキー"
-                  },
-                  A2B3C2D3: {
-                    name: "メタモン"
-                  },
-                  A2B3C2D4: {
-                    name: "カビゴン"
-                  },
-                  A2B3C3D1: {
-                    name: "カイリキー"
-                  },
-                  A2B3C3D2: {
-                    name: "フーディン"
-                  },
-                  A2B3C3D3: {
-                    name: "ディグダ"
-                  },
-                  A2B3C3D4: {
-                    name: "ラッキー"
-                  },
-                  A2B3C4D1: {
-                    name: "ポリゴン"
-                  },
-                  A2B3C4D2: {
-                    name: "ポリゴン"
-                  },
-                  A2B3C4D3: {
-                    name: "コダック"
-                  },
-                  A2B3C4D4: {
-                    name: "ラプラス"
-                  },
-                  A2B4C1D1: {
-                    name: "リザードン"
-                  },
-                  A2B4C1D2: {
-                    name: "リザードン"
-                  },
-                  A2B4C1D3: {
-                    name: "リザードン"
-                  },
-                  A2B4C1D4: {
-                    name: "マルマイン"
-                  },
-                  A2B4C2D1: {
-                    name: "フーディン"
-                  },
-                  A2B4C2D2: {
-                    name: "リザードン"
-                  },
-                  A2B4C2D3: {
-                    name: "フーディン"
-                  },
-                  A2B4C2D4: {
-                    name: "イーブイ"
-                  },
-                  A2B4C3D1: {
-                    name: "スピアー"
-                  },
-                  A2B4C3D2: {
-                    name: "スピアー"
-                  },
-                  A2B4C3D3: {
-                    name: "スピアー"
-                  },
-                  A2B4C3D4: {
-                    name: "コダック"
-                  },
-                  A2B4C4D1: {
-                    name: "スピアー"
-                  },
-                  A2B4C4D2: {
-                    name: "ポリゴン"
-                  },
-                  A2B4C4D3: {
-                    name: "ポリゴン"
-                  },
-                  A2B4C4D4: {
-                    name: "ポリゴン"
-                  },
-                  A3B1C1D1: {
-                    name: "マルマイン"
-                  },
-                  A3B1C1D2: {
-                    name: "ニャース"
-                  },
-                  A3B1C1D3: {
-                    name: "ニャース"
-                  },
-                  A3B1C1D4: {
-                    name: "ピッピ"
-                  },
-                  A3B1C2D1: {
-                    name: "ニャース"
-                  },
-                  A3B1C2D2: {
-                    name: "ニャース"
-                  },
-                  A3B1C2D3: {
-                    name: "カイリュー"
-                  },
-                  A3B1C2D4: {
-                    name: "ピッピ"
-                  },
-                  A3B1C3D1: {
-                    name: "メタモン"
-                  },
-                  A3B1C3D2: {
-                    name: "カイリュー"
-                  },
-                  A3B1C3D3: {
-                    name: "カビゴン"
-                  },
-                  A3B1C3D4: {
-                    name: "カイリュー"
-                  },
-                  A3B1C4D1: {
-                    name: "ディグダ"
-                  },
-                  A3B1C4D2: {
-                    name: "ラプラス"
-                  },
-                  A3B1C4D3: {
-                    name: "ラプラス"
-                  },
-                  A3B1C4D4: {
-                    name: "ラッキー"
-                  },
-                  A3B2C1D1: {
-                    name: "マルマイン"
-                  },
-                  A3B2C1D2: {
-                    name: "ニャース"
-                  },
-                  A3B2C1D3: {
-                    name: "ニャース"
-                  },
-                  A3B2C1D4: {
-                    name: "ピッピ"
-                  },
-                  A3B2C2D1: {
-                    name: "ニャース"
-                  },
-                  A3B2C2D2: {
-                    name: "マルマイン"
-                  },
-                  A3B2C2D3: {
-                    name: "ニャース"
-                  },
-                  A3B2C2D4: {
-                    name: "ピッピ"
-                  },
-                  A3B2C3D1: {
-                    name: "カイリキー"
-                  },
-                  A3B2C3D2: {
-                    name: "メタモン"
-                  },
-                  A3B2C3D3: {
-                    name: "カイリュー"
-                  },
-                  A3B2C3D4: {
-                    name: "カイリュー"
-                  },
-                  A3B2C4D1: {
-                    name: "ディグダ"
-                  },
-                  A3B2C4D2: {
-                    name: "コダック"
-                  },
-                  A3B2C4D3: {
-                    name: "ラプラス"
-                  },
-                  A3B2C4D4: {
-                    name: "カビゴン"
-                  },
-                  A3B3C1D1: {
-                    name: "マルマイン"
-                  },
-                  A3B3C1D2: {
-                    name: "ニャース"
-                  },
-                  A3B3C1D3: {
-                    name: "フーディン"
-                  },
-                  A3B3C1D4: {
-                    name: "ピッピ"
-                  },
-                  A3B3C2D1: {
-                    name: "フーディン"
-                  },
-                  A3B3C2D2: {
-                    name: "マルマイン"
-                  },
-                  A3B3C2D3: {
-                    name: "マルマイン"
-                  },
-                  A3B3C2D4: {
-                    name: "ピッピ"
-                  },
-                  A3B3C3D1: {
-                    name: "カイリキー"
-                  },
-                  A3B3C3D2: {
-                    name: "フーディン"
-                  },
-                  A3B3C3D3: {
-                    name: "イーブイ"
-                  },
-                  A3B3C3D4: {
-                    name: "カビゴン"
-                  },
-                  A3B3C4D1: {
-                    name: "ポリゴン"
-                  },
-                  A3B3C4D2: {
-                    name: "ポリゴン"
-                  },
-                  A3B3C4D3: {
-                    name: "コダック"
-                  },
-                  A3B3C4D4: {
-                    name: "コダック"
-                  },
-                  A3B4C1D1: {
-                    name: "リザードン"
-                  },
-                  A3B4C1D2: {
-                    name: "リザードン"
-                  },
-                  A3B4C1D3: {
-                    name: "リザードン"
-                  },
-                  A3B4C1D4: {
-                    name: "ニャース"
-                  },
-                  A3B4C2D1: {
-                    name: "リザードン"
-                  },
-                  A3B4C2D2: {
-                    name: "リザードン"
-                  },
-                  A3B4C2D3: {
-                    name: "リザードン"
-                  },
-                  A3B4C2D4: {
-                    name: "ニャース"
-                  },
-                  A3B4C3D1: {
-                    name: "スピアー"
-                  },
-                  A3B4C3D2: {
-                    name: "フーディン"
-                  },
-                  A3B4C3D3: {
-                    name: "カイリキー"
-                  },
-                  A3B4C3D4: {
-                    name: "イーブイ"
-                  },
-                  A3B4C4D1: {
-                    name: "スピアー"
-                  },
-                  A3B4C4D2: {
-                    name: "スピアー"
-                  },
-                  A3B4C4D3: {
-                    name: "フーディン"
-                  },
-                  A3B4C4D4: {
-                    name: "ミュウ"
-                  },
-                  A4B1C1D1: {
-                    name: "ナッシー（アローラのすがた）"
-                  },
-                  A4B1C1D2: {
-                    name: "ピカチュウ"
-                  },
-                  A4B1C1D3: {
-                    name: "ピカチュウ"
-                  },
-                  A4B1C1D4: {
-                    name: "ピッピ"
-                  },
-                  A4B1C2D1: {
-                    name: "マルマイン"
-                  },
-                  A4B1C2D2: {
-                    name: "ピカチュウ"
-                  },
-                  A4B1C2D3: {
-                    name: "ピカチュウ"
-                  },
-                  A4B1C2D4: {
-                    name: "コダック"
-                  },
-                  A4B1C3D1: {
-                    name: "マルマイン"
-                  },
-                  A4B1C3D2: {
-                    name: "ピカチュウ"
-                  },
-                  A4B1C3D3: {
-                    name: "ピカチュウ"
-                  },
-                  A4B1C3D4: {
-                    name: "ピッピ"
-                  },
-                  A4B1C4D1: {
-                    name: "マルマイン"
-                  },
-                  A4B1C4D2: {
-                    name: "カイリュー"
-                  },
-                  A4B1C4D3: {
-                    name: "カビゴン"
-                  },
-                  A4B1C4D4: {
-                    name: "ラッキー"
-                  },
-                  A4B2C1D1: {
-                    name: "ナッシー（アローラのすがた）"
-                  },
-                  A4B2C1D2: {
-                    name: "ニャース"
-                  },
-                  A4B2C1D3: {
-                    name: "ピカチュウ"
-                  },
-                  A4B2C1D4: {
-                    name: "ナッシー（アローラのすがた）"
-                  },
-                  A4B2C2D1: {
-                    name: "ナッシー（アローラのすがた）"
-                  },
-                  A4B2C2D2: {
-                    name: "ピカチュウ"
-                  },
-                  A4B2C2D3: {
-                    name: "ピカチュウ"
-                  },
-                  A4B2C2D4: {
-                    name: "カビゴン"
-                  },
-                  A4B2C3D1: {
-                    name: "ナッシー（アローラのすがた）"
-                  },
-                  A4B2C3D2: {
-                    name: "マルマイン"
-                  },
-                  A4B2C3D3: {
-                    name: "ピカチュウ"
-                  },
-                  A4B2C3D4: {
-                    name: "ピッピ"
-                  },
-                  A4B2C4D1: {
-                    name: "カイリキー"
-                  },
-                  A4B2C4D2: {
-                    name: "メタモン"
-                  },
-                  A4B2C4D3: {
-                    name: "カビゴン"
-                  },
-                  A4B2C4D4: {
-                    name: "カイリュー"
-                  },
-                  A4B3C1D1: {
-                    name: "ナッシー（アローラのすがた）"
-                  },
-                  A4B3C1D2: {
-                    name: "ナッシー（アローラのすがた）"
-                  },
-                  A4B3C1D3: {
-                    name: "ナッシー（アローラのすがた）"
-                  },
-                  A4B3C1D4: {
-                    name: "ピカチュウ"
-                  },
-                  A4B3C2D1: {
-                    name: "ナッシー（アローラのすがた）"
-                  },
-                  A4B3C2D2: {
-                    name: "ナッシー（アローラのすがた）"
-                  },
-                  A4B3C2D3: {
-                    name: "ナッシー（アローラのすがた）"
-                  },
-                  A4B3C2D4: {
-                    name: "カイリキー"
-                  },
-                  A4B3C3D1: {
-                    name: "ナッシー（アローラのすがた）"
-                  },
-                  A4B3C3D2: {
-                    name: "ナッシー（アローラのすがた）"
-                  },
-                  A4B3C3D3: {
-                    name: "ピカチュウ"
-                  },
-                  A4B3C3D4: {
-                    name: "ニャース"
-                  },
-                  A4B3C4D1: {
-                    name: "フーディン"
-                  },
-                  A4B3C4D2: {
-                    name: "カイリキー"
-                  },
-                  A4B3C4D3: {
-                    name: "マルマイン"
-                  },
-                  A4B3C4D4: {
-                    name: "ミュウ"
-                  },
-                  A4B4C1D1: {
-                    name: "ラッキー"
-                  },
-                  A4B4C1D2: {
-                    name: "ピカチュウ"
-                  },
-                  A4B4C1D3: {
-                    name: "ピカチュウ"
-                  },
-                  A4B4C1D4: {
-                    name: "ナッシー（アローラのすがた）"
-                  },
-                  A4B4C2D1: {
-                    name: "リザードン"
-                  },
-                  A4B4C2D2: {
-                    name: "コダック"
-                  },
-                  A4B4C2D3: {
-                    name: "リザードン"
-                  },
-                  A4B4C2D4: {
-                    name: "ナッシー（アローラのすがた）"
-                  },
-                  A4B4C3D1: {
-                    name: "リザードン"
-                  },
-                  A4B4C3D2: {
-                    name: "リザードン"
-                  },
-                  A4B4C3D3: {
-                    name: "マルマイン"
-                  },
-                  A4B4C3D4: {
-                    name: "ミュウ"
-                  },
-                  A4B4C4D1: {
-                    name: "リザードン"
-                  },
-                  A4B4C4D2: {
-                    name: "フーディン"
-                  },
-                  A4B4C4D3: {
-                    name: "ミュウ"
-                  },
-                  A4B4C4D4: {
-                    name: "ミュウ"
-                  }
-                }
-              }, {}],</code></p>
-          <p></details>
-          </summary></p>
-          <p>ここまででポケモンの名前に変換できました。続いて、以下で英語に変換します。</p>
-          <p>この処理は不要と言えば不要ですが、日本語より英語（アルファベット）の方が何かと便利です。</p>
-          <p>※ちなみに、ここを見れば全部で20種類のポケモンがいたこともわかります。</p>
-          <div class="highlight"><pre><span></span><code><span class="nx">t</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;ピカチュウ&quot;</span><span class="o">:</span> <span class="s2">&quot;pikachu&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ニャース&quot;</span><span class="o">:</span> <span class="s2">&quot;meowth&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;イーブイ&quot;</span><span class="o">:</span> <span class="s2">&quot;eevee&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ナッシー（アローラのすがた）&quot;</span><span class="o">:</span> <span class="s2">&quot;exeggutor&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;リザードン&quot;</span><span class="o">:</span> <span class="s2">&quot;charizard&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;カイリキー&quot;</span><span class="o">:</span> <span class="s2">&quot;machamp&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;フーディン&quot;</span><span class="o">:</span> <span class="s2">&quot;alakazam&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;スピアー&quot;</span><span class="o">:</span> <span class="s2">&quot;beedrill&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ポリゴン&quot;</span><span class="o">:</span> <span class="s2">&quot;porygon&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ディグダ&quot;</span><span class="o">:</span> <span class="s2">&quot;diglett&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;コダック&quot;</span><span class="o">:</span> <span class="s2">&quot;psyduck&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ラプラス&quot;</span><span class="o">:</span> <span class="s2">&quot;lapras&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;カイリュー&quot;</span><span class="o">:</span> <span class="s2">&quot;dragonite&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ラッキー&quot;</span><span class="o">:</span> <span class="s2">&quot;chansey&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;カビゴン&quot;</span><span class="o">:</span> <span class="s2">&quot;snorlax&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ピッピ&quot;</span><span class="o">:</span> <span class="s2">&quot;clefairy&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;マルマイン&quot;</span><span class="o">:</span> <span class="s2">&quot;electrode&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ミュウ&quot;</span><span class="o">:</span> <span class="s2">&quot;mew&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;メタモン&quot;</span><span class="o">:</span> <span class="s2">&quot;ditto&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;コイキング&quot;</span><span class="o">:</span> <span class="s2">&quot;magikarp&quot;</span>
-          <span class="p">}</span>
-          </code></pre></div>
+<p>ここまでで、グループAの圧縮された得点(1-4),..,グループDの圧縮された得点(1-4)が求められます。</p>
+<h3>得点をポケモンと結びつける</h3>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nx">f</span><span class="p">.</span><span class="k">default</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">u</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">A</span><span class="p">),</span> <span class="s2">&quot;B&quot;</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">u</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">B</span><span class="p">),</span> <span class="s2">&quot;C&quot;</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">u</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">C</span><span class="p">),</span> <span class="s2">&quot;D&quot;</span><span class="p">).</span><span class="nx">concat</span><span class="p">(</span><span class="nx">u</span><span class="p">(</span><span class="nx">s</span><span class="p">.</span><span class="nx">D</span><span class="p">))].</span><span class="nx">name</span><span class="p">;</span>
+<span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="s2">&quot;../result/&quot;</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="k">default</span><span class="p">[</span><span class="nx">e</span><span class="p">],</span> <span class="s2">&quot;.html&quot;</span><span class="p">);</span>
+</code></pre></div>
 
 
-          <p>以上で、得点をポケモン名に変換することができました。</p>
-          <h2>urlでアクセス</h2>
-          <p>先ほど <code>../result/".concat(p.default[e], ".html"</code> と言う形でurlを作っていました。そのため、</p>
-          <p><code>https://www.pokemon.co.jp/corporate/job/pokemoncenter/special/result/{ポケモンの英語名}.html</code></p>
-          <p>と言う形でアクセスすれば、それぞれのポケモンの性格診断を見ることができます。</p>
-          <h2>おまけ</h2>
-          <p>結果の画像ファイル名が</p>
-          <p><code>https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/img/special/share/{ポケモンの英語名}.jpg</code></p>
-          <p>であることを利用すれば、直接各ポケモンの結果画像を入手することも可能です。</p>
-          <p>試しに、以下のテキストポックスにポケモンの英語名を入れて見てください！！</p>
-          <div class="pokemon-name">
-            <label for="text">Pokémon Name</label><br>
-            <input id="name" type="text" placeholder="ex) pikachu">
-          </div>
+<p>ここでは、各種グループ記号（<code>A</code>など）と圧縮された得点（<code>u(s.A)</code>など）を連結して、文字列を作っています。（<code>A1B1C1D1</code>などができる。）</p>
+<p>これを、ポケモンに対応させます。これは非常に単純で、コード内に対応関係が書いてありました。</p>
+<p><summary>非常に長いので、注意してください。
+  <details></p>
+<p><code>js
+  t.exports = {
+        A1B1C1D1: {
+          name: "コイキング"
+        },
+        A1B1C1D2: {
+          name: "コイキング"
+        },
+        A1B1C1D3: {
+          name: "カビゴン"
+        },
+        A1B1C1D4: {
+          name: "ラッキー"
+        },
+        A1B1C2D1: {
+          name: "コイキング"
+        },
+        A1B1C2D2: {
+          name: "コダック"
+        },
+        A1B1C2D3: {
+          name: "カイリュー"
+        },
+        A1B1C2D4: {
+          name: "ラッキー"
+        },
+        A1B1C3D1: {
+          name: "コダック"
+        },
+        A1B1C3D2: {
+          name: "コダック"
+        },
+        A1B1C3D3: {
+          name: "カイリュー"
+        },
+        A1B1C3D4: {
+          name: "ラッキー"
+        },
+        A1B1C4D1: {
+          name: "ラッキー"
+        },
+        A1B1C4D2: {
+          name: "ラプラス"
+        },
+        A1B1C4D3: {
+          name: "ラプラス"
+        },
+        A1B1C4D4: {
+          name: "ラッキー"
+        },
+        A1B2C1D1: {
+          name: "コイキング"
+        },
+        A1B2C1D2: {
+          name: "コイキング"
+        },
+        A1B2C1D3: {
+          name: "カイリュー"
+        },
+        A1B2C1D4: {
+          name: "カイリュー"
+        },
+        A1B2C2D1: {
+          name: "フーディン"
+        },
+        A1B2C2D2: {
+          name: "コイキング"
+        },
+        A1B2C2D3: {
+          name: "カイリュー"
+        },
+        A1B2C2D4: {
+          name: "ラッキー"
+        },
+        A1B2C3D1: {
+          name: "ディグダ"
+        },
+        A1B2C3D2: {
+          name: "コダック"
+        },
+        A1B2C3D3: {
+          name: "ディグダ"
+        },
+        A1B2C3D4: {
+          name: "ラッキー"
+        },
+        A1B2C4D1: {
+          name: "ポリゴン"
+        },
+        A1B2C4D2: {
+          name: "ディグダ"
+        },
+        A1B2C4D3: {
+          name: "ラプラス"
+        },
+        A1B2C4D4: {
+          name: "ポリゴン"
+        },
+        A1B3C1D1: {
+          name: "カイリキー"
+        },
+        A1B3C1D2: {
+          name: "カイリキー"
+        },
+        A1B3C1D3: {
+          name: "メタモン"
+        },
+        A1B3C1D4: {
+          name: "カビゴン"
+        },
+        A1B3C2D1: {
+          name: "カイリキー"
+        },
+        A1B3C2D2: {
+          name: "カイリキー"
+        },
+        A1B3C2D3: {
+          name: "コダック"
+        },
+        A1B3C2D4: {
+          name: "ラッキー"
+        },
+        A1B3C3D1: {
+          name: "ディグダ"
+        },
+        A1B3C3D2: {
+          name: "ディグダ"
+        },
+        A1B3C3D3: {
+          name: "ディグダ"
+        },
+        A1B3C3D4: {
+          name: "ラッキー"
+        },
+        A1B3C4D1: {
+          name: "ポリゴン"
+        },
+        A1B3C4D2: {
+          name: "ポリゴン"
+        },
+        A1B3C4D3: {
+          name: "ポリゴン"
+        },
+        A1B3C4D4: {
+          name: "ラプラス"
+        },
+        A1B4C1D1: {
+          name: "スピアー"
+        },
+        A1B4C1D2: {
+          name: "カイリキー"
+        },
+        A1B4C1D3: {
+          name: "カイリキー"
+        },
+        A1B4C1D4: {
+          name: "イーブイ"
+        },
+        A1B4C2D1: {
+          name: "スピアー"
+        },
+        A1B4C2D2: {
+          name: "スピアー"
+        },
+        A1B4C2D3: {
+          name: "スピアー"
+        },
+        A1B4C2D4: {
+          name: "コダック"
+        },
+        A1B4C3D1: {
+          name: "スピアー"
+        },
+        A1B4C3D2: {
+          name: "スピアー"
+        },
+        A1B4C3D3: {
+          name: "スピアー"
+        },
+        A1B4C3D4: {
+          name: "ディグダ"
+        },
+        A1B4C4D1: {
+          name: "スピアー"
+        },
+        A1B4C4D2: {
+          name: "ポリゴン"
+        },
+        A1B4C4D3: {
+          name: "ラプラス"
+        },
+        A1B4C4D4: {
+          name: "ラプラス"
+        },
+        A2B1C1D1: {
+          name: "コイキング"
+        },
+        A2B1C1D2: {
+          name: "ニャース"
+        },
+        A2B1C1D3: {
+          name: "カビゴン"
+        },
+        A2B1C1D4: {
+          name: "ピッピ"
+        },
+        A2B1C2D1: {
+          name: "コイキング"
+        },
+        A2B1C2D2: {
+          name: "コイキング"
+        },
+        A2B1C2D3: {
+          name: "カイリュー"
+        },
+        A2B1C2D4: {
+          name: "カビゴン"
+        },
+        A2B1C3D1: {
+          name: "ディグダ"
+        },
+        A2B1C3D2: {
+          name: "コダック"
+        },
+        A2B1C3D3: {
+          name: "カイリュー"
+        },
+        A2B1C3D4: {
+          name: "ラッキー"
+        },
+        A2B1C4D1: {
+          name: "ポリゴン"
+        },
+        A2B1C4D2: {
+          name: "ラプラス"
+        },
+        A2B1C4D3: {
+          name: "ラプラス"
+        },
+        A2B1C4D4: {
+          name: "ラッキー"
+        },
+        A2B2C1D1: {
+          name: "マルマイン"
+        },
+        A2B2C1D2: {
+          name: "コイキング"
+        },
+        A2B2C1D3: {
+          name: "カビゴン"
+        },
+        A2B2C1D4: {
+          name: "ピッピ"
+        },
+        A2B2C2D1: {
+          name: "コイキング"
+        },
+        A2B2C2D2: {
+          name: "メタモン"
+        },
+        A2B2C2D3: {
+          name: "カイリュー"
+        },
+        A2B2C2D4: {
+          name: "ピッピ"
+        },
+        A2B2C3D1: {
+          name: "ディグダ"
+        },
+        A2B2C3D2: {
+          name: "ディグダ"
+        },
+        A2B2C3D3: {
+          name: "コダック"
+        },
+        A2B2C3D4: {
+          name: "ラッキー"
+        },
+        A2B2C4D1: {
+          name: "ポリゴン"
+        },
+        A2B2C4D2: {
+          name: "ラプラス"
+        },
+        A2B2C4D3: {
+          name: "ラプラス"
+        },
+        A2B2C4D4: {
+          name: "カビゴン"
+        },
+        A2B3C1D1: {
+          name: "フーディン"
+        },
+        A2B3C1D2: {
+          name: "カイリキー"
+        },
+        A2B3C1D3: {
+          name: "マルマイン"
+        },
+        A2B3C1D4: {
+          name: "ピッピ"
+        },
+        A2B3C2D1: {
+          name: "フーディン"
+        },
+        A2B3C2D2: {
+          name: "カイリキー"
+        },
+        A2B3C2D3: {
+          name: "メタモン"
+        },
+        A2B3C2D4: {
+          name: "カビゴン"
+        },
+        A2B3C3D1: {
+          name: "カイリキー"
+        },
+        A2B3C3D2: {
+          name: "フーディン"
+        },
+        A2B3C3D3: {
+          name: "ディグダ"
+        },
+        A2B3C3D4: {
+          name: "ラッキー"
+        },
+        A2B3C4D1: {
+          name: "ポリゴン"
+        },
+        A2B3C4D2: {
+          name: "ポリゴン"
+        },
+        A2B3C4D3: {
+          name: "コダック"
+        },
+        A2B3C4D4: {
+          name: "ラプラス"
+        },
+        A2B4C1D1: {
+          name: "リザードン"
+        },
+        A2B4C1D2: {
+          name: "リザードン"
+        },
+        A2B4C1D3: {
+          name: "リザードン"
+        },
+        A2B4C1D4: {
+          name: "マルマイン"
+        },
+        A2B4C2D1: {
+          name: "フーディン"
+        },
+        A2B4C2D2: {
+          name: "リザードン"
+        },
+        A2B4C2D3: {
+          name: "フーディン"
+        },
+        A2B4C2D4: {
+          name: "イーブイ"
+        },
+        A2B4C3D1: {
+          name: "スピアー"
+        },
+        A2B4C3D2: {
+          name: "スピアー"
+        },
+        A2B4C3D3: {
+          name: "スピアー"
+        },
+        A2B4C3D4: {
+          name: "コダック"
+        },
+        A2B4C4D1: {
+          name: "スピアー"
+        },
+        A2B4C4D2: {
+          name: "ポリゴン"
+        },
+        A2B4C4D3: {
+          name: "ポリゴン"
+        },
+        A2B4C4D4: {
+          name: "ポリゴン"
+        },
+        A3B1C1D1: {
+          name: "マルマイン"
+        },
+        A3B1C1D2: {
+          name: "ニャース"
+        },
+        A3B1C1D3: {
+          name: "ニャース"
+        },
+        A3B1C1D4: {
+          name: "ピッピ"
+        },
+        A3B1C2D1: {
+          name: "ニャース"
+        },
+        A3B1C2D2: {
+          name: "ニャース"
+        },
+        A3B1C2D3: {
+          name: "カイリュー"
+        },
+        A3B1C2D4: {
+          name: "ピッピ"
+        },
+        A3B1C3D1: {
+          name: "メタモン"
+        },
+        A3B1C3D2: {
+          name: "カイリュー"
+        },
+        A3B1C3D3: {
+          name: "カビゴン"
+        },
+        A3B1C3D4: {
+          name: "カイリュー"
+        },
+        A3B1C4D1: {
+          name: "ディグダ"
+        },
+        A3B1C4D2: {
+          name: "ラプラス"
+        },
+        A3B1C4D3: {
+          name: "ラプラス"
+        },
+        A3B1C4D4: {
+          name: "ラッキー"
+        },
+        A3B2C1D1: {
+          name: "マルマイン"
+        },
+        A3B2C1D2: {
+          name: "ニャース"
+        },
+        A3B2C1D3: {
+          name: "ニャース"
+        },
+        A3B2C1D4: {
+          name: "ピッピ"
+        },
+        A3B2C2D1: {
+          name: "ニャース"
+        },
+        A3B2C2D2: {
+          name: "マルマイン"
+        },
+        A3B2C2D3: {
+          name: "ニャース"
+        },
+        A3B2C2D4: {
+          name: "ピッピ"
+        },
+        A3B2C3D1: {
+          name: "カイリキー"
+        },
+        A3B2C3D2: {
+          name: "メタモン"
+        },
+        A3B2C3D3: {
+          name: "カイリュー"
+        },
+        A3B2C3D4: {
+          name: "カイリュー"
+        },
+        A3B2C4D1: {
+          name: "ディグダ"
+        },
+        A3B2C4D2: {
+          name: "コダック"
+        },
+        A3B2C4D3: {
+          name: "ラプラス"
+        },
+        A3B2C4D4: {
+          name: "カビゴン"
+        },
+        A3B3C1D1: {
+          name: "マルマイン"
+        },
+        A3B3C1D2: {
+          name: "ニャース"
+        },
+        A3B3C1D3: {
+          name: "フーディン"
+        },
+        A3B3C1D4: {
+          name: "ピッピ"
+        },
+        A3B3C2D1: {
+          name: "フーディン"
+        },
+        A3B3C2D2: {
+          name: "マルマイン"
+        },
+        A3B3C2D3: {
+          name: "マルマイン"
+        },
+        A3B3C2D4: {
+          name: "ピッピ"
+        },
+        A3B3C3D1: {
+          name: "カイリキー"
+        },
+        A3B3C3D2: {
+          name: "フーディン"
+        },
+        A3B3C3D3: {
+          name: "イーブイ"
+        },
+        A3B3C3D4: {
+          name: "カビゴン"
+        },
+        A3B3C4D1: {
+          name: "ポリゴン"
+        },
+        A3B3C4D2: {
+          name: "ポリゴン"
+        },
+        A3B3C4D3: {
+          name: "コダック"
+        },
+        A3B3C4D4: {
+          name: "コダック"
+        },
+        A3B4C1D1: {
+          name: "リザードン"
+        },
+        A3B4C1D2: {
+          name: "リザードン"
+        },
+        A3B4C1D3: {
+          name: "リザードン"
+        },
+        A3B4C1D4: {
+          name: "ニャース"
+        },
+        A3B4C2D1: {
+          name: "リザードン"
+        },
+        A3B4C2D2: {
+          name: "リザードン"
+        },
+        A3B4C2D3: {
+          name: "リザードン"
+        },
+        A3B4C2D4: {
+          name: "ニャース"
+        },
+        A3B4C3D1: {
+          name: "スピアー"
+        },
+        A3B4C3D2: {
+          name: "フーディン"
+        },
+        A3B4C3D3: {
+          name: "カイリキー"
+        },
+        A3B4C3D4: {
+          name: "イーブイ"
+        },
+        A3B4C4D1: {
+          name: "スピアー"
+        },
+        A3B4C4D2: {
+          name: "スピアー"
+        },
+        A3B4C4D3: {
+          name: "フーディン"
+        },
+        A3B4C4D4: {
+          name: "ミュウ"
+        },
+        A4B1C1D1: {
+          name: "ナッシー（アローラのすがた）"
+        },
+        A4B1C1D2: {
+          name: "ピカチュウ"
+        },
+        A4B1C1D3: {
+          name: "ピカチュウ"
+        },
+        A4B1C1D4: {
+          name: "ピッピ"
+        },
+        A4B1C2D1: {
+          name: "マルマイン"
+        },
+        A4B1C2D2: {
+          name: "ピカチュウ"
+        },
+        A4B1C2D3: {
+          name: "ピカチュウ"
+        },
+        A4B1C2D4: {
+          name: "コダック"
+        },
+        A4B1C3D1: {
+          name: "マルマイン"
+        },
+        A4B1C3D2: {
+          name: "ピカチュウ"
+        },
+        A4B1C3D3: {
+          name: "ピカチュウ"
+        },
+        A4B1C3D4: {
+          name: "ピッピ"
+        },
+        A4B1C4D1: {
+          name: "マルマイン"
+        },
+        A4B1C4D2: {
+          name: "カイリュー"
+        },
+        A4B1C4D3: {
+          name: "カビゴン"
+        },
+        A4B1C4D4: {
+          name: "ラッキー"
+        },
+        A4B2C1D1: {
+          name: "ナッシー（アローラのすがた）"
+        },
+        A4B2C1D2: {
+          name: "ニャース"
+        },
+        A4B2C1D3: {
+          name: "ピカチュウ"
+        },
+        A4B2C1D4: {
+          name: "ナッシー（アローラのすがた）"
+        },
+        A4B2C2D1: {
+          name: "ナッシー（アローラのすがた）"
+        },
+        A4B2C2D2: {
+          name: "ピカチュウ"
+        },
+        A4B2C2D3: {
+          name: "ピカチュウ"
+        },
+        A4B2C2D4: {
+          name: "カビゴン"
+        },
+        A4B2C3D1: {
+          name: "ナッシー（アローラのすがた）"
+        },
+        A4B2C3D2: {
+          name: "マルマイン"
+        },
+        A4B2C3D3: {
+          name: "ピカチュウ"
+        },
+        A4B2C3D4: {
+          name: "ピッピ"
+        },
+        A4B2C4D1: {
+          name: "カイリキー"
+        },
+        A4B2C4D2: {
+          name: "メタモン"
+        },
+        A4B2C4D3: {
+          name: "カビゴン"
+        },
+        A4B2C4D4: {
+          name: "カイリュー"
+        },
+        A4B3C1D1: {
+          name: "ナッシー（アローラのすがた）"
+        },
+        A4B3C1D2: {
+          name: "ナッシー（アローラのすがた）"
+        },
+        A4B3C1D3: {
+          name: "ナッシー（アローラのすがた）"
+        },
+        A4B3C1D4: {
+          name: "ピカチュウ"
+        },
+        A4B3C2D1: {
+          name: "ナッシー（アローラのすがた）"
+        },
+        A4B3C2D2: {
+          name: "ナッシー（アローラのすがた）"
+        },
+        A4B3C2D3: {
+          name: "ナッシー（アローラのすがた）"
+        },
+        A4B3C2D4: {
+          name: "カイリキー"
+        },
+        A4B3C3D1: {
+          name: "ナッシー（アローラのすがた）"
+        },
+        A4B3C3D2: {
+          name: "ナッシー（アローラのすがた）"
+        },
+        A4B3C3D3: {
+          name: "ピカチュウ"
+        },
+        A4B3C3D4: {
+          name: "ニャース"
+        },
+        A4B3C4D1: {
+          name: "フーディン"
+        },
+        A4B3C4D2: {
+          name: "カイリキー"
+        },
+        A4B3C4D3: {
+          name: "マルマイン"
+        },
+        A4B3C4D4: {
+          name: "ミュウ"
+        },
+        A4B4C1D1: {
+          name: "ラッキー"
+        },
+        A4B4C1D2: {
+          name: "ピカチュウ"
+        },
+        A4B4C1D3: {
+          name: "ピカチュウ"
+        },
+        A4B4C1D4: {
+          name: "ナッシー（アローラのすがた）"
+        },
+        A4B4C2D1: {
+          name: "リザードン"
+        },
+        A4B4C2D2: {
+          name: "コダック"
+        },
+        A4B4C2D3: {
+          name: "リザードン"
+        },
+        A4B4C2D4: {
+          name: "ナッシー（アローラのすがた）"
+        },
+        A4B4C3D1: {
+          name: "リザードン"
+        },
+        A4B4C3D2: {
+          name: "リザードン"
+        },
+        A4B4C3D3: {
+          name: "マルマイン"
+        },
+        A4B4C3D4: {
+          name: "ミュウ"
+        },
+        A4B4C4D1: {
+          name: "リザードン"
+        },
+        A4B4C4D2: {
+          name: "フーディン"
+        },
+        A4B4C4D3: {
+          name: "ミュウ"
+        },
+        A4B4C4D4: {
+          name: "ミュウ"
+        }
+      }
+    }, {}],</code></p>
+<p></details>
+</summary></p>
+<p>ここまででポケモンの名前に変換できました。続いて、以下で英語に変換します。</p>
+<p>この処理は不要と言えば不要ですが、日本語より英語（アルファベット）の方が何かと便利です。</p>
+<p>※ちなみに、ここを見れば全部で20種類のポケモンがいたこともわかります。</p>
+<div class="highlight"><pre><span></span><code><span class="nx">t</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s2">&quot;ピカチュウ&quot;</span><span class="o">:</span> <span class="s2">&quot;pikachu&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;ニャース&quot;</span><span class="o">:</span> <span class="s2">&quot;meowth&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;イーブイ&quot;</span><span class="o">:</span> <span class="s2">&quot;eevee&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;ナッシー（アローラのすがた）&quot;</span><span class="o">:</span> <span class="s2">&quot;exeggutor&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;リザードン&quot;</span><span class="o">:</span> <span class="s2">&quot;charizard&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;カイリキー&quot;</span><span class="o">:</span> <span class="s2">&quot;machamp&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;フーディン&quot;</span><span class="o">:</span> <span class="s2">&quot;alakazam&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;スピアー&quot;</span><span class="o">:</span> <span class="s2">&quot;beedrill&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;ポリゴン&quot;</span><span class="o">:</span> <span class="s2">&quot;porygon&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;ディグダ&quot;</span><span class="o">:</span> <span class="s2">&quot;diglett&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;コダック&quot;</span><span class="o">:</span> <span class="s2">&quot;psyduck&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;ラプラス&quot;</span><span class="o">:</span> <span class="s2">&quot;lapras&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;カイリュー&quot;</span><span class="o">:</span> <span class="s2">&quot;dragonite&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;ラッキー&quot;</span><span class="o">:</span> <span class="s2">&quot;chansey&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;カビゴン&quot;</span><span class="o">:</span> <span class="s2">&quot;snorlax&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;ピッピ&quot;</span><span class="o">:</span> <span class="s2">&quot;clefairy&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;マルマイン&quot;</span><span class="o">:</span> <span class="s2">&quot;electrode&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;ミュウ&quot;</span><span class="o">:</span> <span class="s2">&quot;mew&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;メタモン&quot;</span><span class="o">:</span> <span class="s2">&quot;ditto&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;コイキング&quot;</span><span class="o">:</span> <span class="s2">&quot;magikarp&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
 
-          <div class="pokemon-img">
-            <img id="share" src="https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/img/special/ind/logo@2x.png" onerror="this.src='https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/img/special/ind/logo@2x.png';" />
-          </div>
 
-          <script>
-          window.addEventListener('DOMContentLoaded',
-            function() {
-              if (HTMLVideoElement) {
+<p>以上で、得点をポケモン名に変換することができました。</p>
+<h2>urlでアクセス</h2>
+<p>先ほど <code>../result/".concat(p.default[e], ".html"</code> と言う形でurlを作っていました。そのため、</p>
+<p><code>https://www.pokemon.co.jp/corporate/job/pokemoncenter/special/result/{ポケモンの英語名}.html</code></p>
+<p>と言う形でアクセスすれば、それぞれのポケモンの性格診断を見ることができます。</p>
+<h2>おまけ</h2>
+<p>結果の画像ファイル名が</p>
+<p><code>https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/img/special/share/{ポケモンの英語名}.jpg</code></p>
+<p>であることを利用すれば、直接各ポケモンの結果画像を入手することも可能です。</p>
+<p>試しに、以下のテキストポックスにポケモンの英語名を入れて見てください！！</p>
+<div class="pokemon-name">
+  <label for="text">Pokémon Name</label><br>
+  <input id="name" type="text" placeholder="ex) pikachu">
+</div>
 
-                // ページ上の要素を取得
-                var share = document.querySelector('#share');
-                var name  = document.querySelector('#name');
+<div class="pokemon-img">
+  <img id="share" src="https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/img/special/ind/logo@2x.png" onerror="this.src='https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/img/special/ind/logo@2x.png';" />
+</div>
 
-                // フォーム内の要素に変更があると発火
-                name.addEventListener('change', function (e) {
-                  const base = "https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/img/special/share/";
-                  const extension = ".jpg";
-                  var url = base + name.value + extension;
-                  share.setAttribute('src', url);
-                });
-              }
-            }
-          )
-          </script>
+<script>
+window.addEventListener('DOMContentLoaded',
+  function() {
+    if (HTMLVideoElement) {
 
-          <style>
-          .pokemon-img{
-            text-align: center;
-            margin: 20px auto;
-          }
-          .pokemon-name{
-            font-size: 1.2em;
-            font-weight: bold;
-            display: table-cell;
-            padding: 8px;
-          }
-          label {
-            color: #80273F;
-          }
-          #name {
-              border: 0;
-              border-bottom: 1px solid #d1d1d1;
-              font-size: 1.2em;
-              padding: 8px;
-          }
-          </style>
+      // ページ上の要素を取得
+      var share = document.querySelector('#share');
+      var name  = document.querySelector('#name');
 
-          <h3>再掲(ポケモンの名前)</h3>
-          <div class="highlight"><pre><span></span><code><span class="nx">t</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;ピカチュウ&quot;</span><span class="o">:</span> <span class="s2">&quot;pikachu&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ニャース&quot;</span><span class="o">:</span> <span class="s2">&quot;meowth&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;イーブイ&quot;</span><span class="o">:</span> <span class="s2">&quot;eevee&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ナッシー（アローラのすがた）&quot;</span><span class="o">:</span> <span class="s2">&quot;exeggutor&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;リザードン&quot;</span><span class="o">:</span> <span class="s2">&quot;charizard&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;カイリキー&quot;</span><span class="o">:</span> <span class="s2">&quot;machamp&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;フーディン&quot;</span><span class="o">:</span> <span class="s2">&quot;alakazam&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;スピアー&quot;</span><span class="o">:</span> <span class="s2">&quot;beedrill&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ポリゴン&quot;</span><span class="o">:</span> <span class="s2">&quot;porygon&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ディグダ&quot;</span><span class="o">:</span> <span class="s2">&quot;diglett&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;コダック&quot;</span><span class="o">:</span> <span class="s2">&quot;psyduck&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ラプラス&quot;</span><span class="o">:</span> <span class="s2">&quot;lapras&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;カイリュー&quot;</span><span class="o">:</span> <span class="s2">&quot;dragonite&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ラッキー&quot;</span><span class="o">:</span> <span class="s2">&quot;chansey&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;カビゴン&quot;</span><span class="o">:</span> <span class="s2">&quot;snorlax&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ピッピ&quot;</span><span class="o">:</span> <span class="s2">&quot;clefairy&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;マルマイン&quot;</span><span class="o">:</span> <span class="s2">&quot;electrode&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;ミュウ&quot;</span><span class="o">:</span> <span class="s2">&quot;mew&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;メタモン&quot;</span><span class="o">:</span> <span class="s2">&quot;ditto&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;コイキング&quot;</span><span class="o">:</span> <span class="s2">&quot;magikarp&quot;</span>
-          <span class="p">}</span>
-          </code></pre></div>
+      // フォーム内の要素に変更があると発火
+      name.addEventListener('change', function (e) {
+        const base = "https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/img/special/share/";
+        const extension = ".jpg";
+        var url = base + name.value + extension;
+        share.setAttribute('src', url);
+      });
+    }
+  }
+)
+</script>
+
+<style>
+.pokemon-img{
+  text-align: center;
+  margin: 20px auto;
+}
+.pokemon-name{
+  font-size: 1.2em;
+  font-weight: bold;
+  display: table-cell;
+  padding: 8px;
+}
+label {
+  color: #80273F;
+}
+#name {
+    border: 0;
+    border-bottom: 1px solid #d1d1d1;
+    font-size: 1.2em;
+    padding: 8px;
+}
+</style>
+
+<h3>再掲(ポケモンの名前)</h3>
+<div class="highlight"><pre><span></span><code><span class="nx">t</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s2">&quot;ピカチュウ&quot;</span><span class="o">:</span> <span class="s2">&quot;pikachu&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;ニャース&quot;</span><span class="o">:</span> <span class="s2">&quot;meowth&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;イーブイ&quot;</span><span class="o">:</span> <span class="s2">&quot;eevee&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;ナッシー（アローラのすがた）&quot;</span><span class="o">:</span> <span class="s2">&quot;exeggutor&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;リザードン&quot;</span><span class="o">:</span> <span class="s2">&quot;charizard&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;カイリキー&quot;</span><span class="o">:</span> <span class="s2">&quot;machamp&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;フーディン&quot;</span><span class="o">:</span> <span class="s2">&quot;alakazam&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;スピアー&quot;</span><span class="o">:</span> <span class="s2">&quot;beedrill&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;ポリゴン&quot;</span><span class="o">:</span> <span class="s2">&quot;porygon&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;ディグダ&quot;</span><span class="o">:</span> <span class="s2">&quot;diglett&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;コダック&quot;</span><span class="o">:</span> <span class="s2">&quot;psyduck&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;ラプラス&quot;</span><span class="o">:</span> <span class="s2">&quot;lapras&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;カイリュー&quot;</span><span class="o">:</span> <span class="s2">&quot;dragonite&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;ラッキー&quot;</span><span class="o">:</span> <span class="s2">&quot;chansey&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;カビゴン&quot;</span><span class="o">:</span> <span class="s2">&quot;snorlax&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;ピッピ&quot;</span><span class="o">:</span> <span class="s2">&quot;clefairy&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;マルマイン&quot;</span><span class="o">:</span> <span class="s2">&quot;electrode&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;ミュウ&quot;</span><span class="o">:</span> <span class="s2">&quot;mew&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;メタモン&quot;</span><span class="o">:</span> <span class="s2">&quot;ditto&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;コイキング&quot;</span><span class="o">:</span> <span class="s2">&quot;magikarp&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
 
 
-          <h2>ちなみに…</h2>
-          <p>以下のようにすることで、<a href="https://www.pokemon.co.jp/corporate/job/pokemoncenter/special/">ポケモン自己分析</a>(Pokémon Self-analysis)のサイトを真似ていました。</p>
-          <div class="highlight"><pre><span></span><code><span class="nt">body</span> <span class="p">{</span>
-           <span class="k">background-image</span><span class="p">:</span> <span class="nb">url</span><span class="p">(</span><span class="s2">&quot;https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/img/special/common/bg.png&quot;</span><span class="p">);</span>
-           <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="mi">246</span><span class="p">,</span><span class="mi">224</span><span class="p">,</span><span class="mi">105</span><span class="p">);</span>
-          <span class="p">}</span>
-          </code></pre></div>
-        
+<h2>ちなみに…</h2>
+<p>以下のようにすることで、<a href="https://www.pokemon.co.jp/corporate/job/pokemoncenter/special/">ポケモン自己分析</a>(Pokémon Self-analysis)のサイトを真似ていました。</p>
+<div class="highlight"><pre><span></span><code><span class="nt">body</span> <span class="p">{</span>
+ <span class="k">background-image</span><span class="p">:</span> <span class="nb">url</span><span class="p">(</span><span class="s2">&quot;https://www.pokemon.co.jp/corporate/job/pokemoncenter/assets/img/special/common/bg.png&quot;</span><span class="p">);</span>
+ <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="mi">246</span><span class="p">,</span><span class="mi">224</span><span class="p">,</span><span class="mi">105</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
         </div><!-- /.entry-content -->
     
       </article>

@@ -85,65 +85,66 @@
             <span>2020-11-12(Thu)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tips.html">tips</a></span>
           </footer><!-- /.post-info -->
-          <p>国旗のマークを押すと、対応する言語に翻訳されます。</p>
-          <div class="frame" style="text-align: center">
-            <a href="#googtrans(ja|en)" class="lang-select" data-lang="en">🇺🇸</a> 
-            <a href="#googtrans(ja|zh-CN)" class="lang-select" data-lang="zh-CN">🇨🇳</a> 
-            <a href="#googtrans(ja|es)" class="lang-select" data-lang="es">🇲🇽</a>
-            <a href="#googtrans(ja|fr)" class="lang-select" data-lang="fr">🇫🇷</a>
-            <a href="#googtrans(ja|ja)" class="lang-select" data-lang="ja">🇯🇵</a>
-            <h1 style="text-decoration: underline solid red; font-size: 3em;">こんにちは</h1>
-          </div>
+<!-- NOT "| indent(10, True)"  -->
+<p>国旗のマークを押すと、対応する言語に翻訳されます。</p>
+<div class="frame" style="text-align: center">
+  <a href="#googtrans(ja|en)" class="lang-select" data-lang="en">🇺🇸</a> 
+  <a href="#googtrans(ja|zh-CN)" class="lang-select" data-lang="zh-CN">🇨🇳</a> 
+  <a href="#googtrans(ja|es)" class="lang-select" data-lang="es">🇲🇽</a>
+  <a href="#googtrans(ja|fr)" class="lang-select" data-lang="fr">🇫🇷</a>
+  <a href="#googtrans(ja|ja)" class="lang-select" data-lang="ja">🇯🇵</a>
+  <h1 style="text-decoration: underline solid red; font-size: 3em;">こんにちは</h1>
+</div>
 
-          <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-          <script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
+<script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
 
-          <script>
-            $('.lang-select').click(function() {
-              var lang = $(this).attr('data-lang');
-              window.location = $(this).attr('href');
-              location.reload();
-            });
-            function googleTranslateElementInit() {
-              new google.translate.TranslateElement({
-                pageLanguage: 'ja', 
-                layout: google.translate.TranslateElement.FloatPosition.TOP_LEFT
-              }, 'google_translate_element');
-            }
-          </script>
+<script>
+  $('.lang-select').click(function() {
+    var lang = $(this).attr('data-lang');
+    window.location = $(this).attr('href');
+    location.reload();
+  });
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'ja', 
+      layout: google.translate.TranslateElement.FloatPosition.TOP_LEFT
+    }, 'google_translate_element');
+  }
+</script>
 
-          <h2>コード</h2>
-          <h3><code>html</code></h3>
-          <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;frame&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;text-align: center&quot;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#googtrans(ja|en)&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lang-select&quot;</span> <span class="na">data-lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>🇺🇸<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> 
-            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#googtrans(ja|zh-CN)&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lang-select&quot;</span> <span class="na">data-lang</span><span class="o">=</span><span class="s">&quot;zh-CN&quot;</span><span class="p">&gt;</span>🇨🇳<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> 
-            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#googtrans(ja|es)&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lang-select&quot;</span> <span class="na">data-lang</span><span class="o">=</span><span class="s">&quot;es&quot;</span><span class="p">&gt;</span>🇲🇽<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#googtrans(ja|fr)&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lang-select&quot;</span> <span class="na">data-lang</span><span class="o">=</span><span class="s">&quot;fr&quot;</span><span class="p">&gt;</span>🇫🇷<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#googtrans(ja|ja)&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lang-select&quot;</span> <span class="na">data-lang</span><span class="o">=</span><span class="s">&quot;ja&quot;</span><span class="p">&gt;</span>🇯🇵<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">h1</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;text-decoration: underline solid red; font-size: 3em;&quot;</span><span class="p">&gt;</span>こんにちは<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-          </code></pre></div>
+<h2>コード</h2>
+<h3><code>html</code></h3>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;frame&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;text-align: center&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#googtrans(ja|en)&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lang-select&quot;</span> <span class="na">data-lang</span><span class="o">=</span><span class="s">&quot;en&quot;</span><span class="p">&gt;</span>🇺🇸<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> 
+  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#googtrans(ja|zh-CN)&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lang-select&quot;</span> <span class="na">data-lang</span><span class="o">=</span><span class="s">&quot;zh-CN&quot;</span><span class="p">&gt;</span>🇨🇳<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span> 
+  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#googtrans(ja|es)&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lang-select&quot;</span> <span class="na">data-lang</span><span class="o">=</span><span class="s">&quot;es&quot;</span><span class="p">&gt;</span>🇲🇽<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#googtrans(ja|fr)&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lang-select&quot;</span> <span class="na">data-lang</span><span class="o">=</span><span class="s">&quot;fr&quot;</span><span class="p">&gt;</span>🇫🇷<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&quot;#googtrans(ja|ja)&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;lang-select&quot;</span> <span class="na">data-lang</span><span class="o">=</span><span class="s">&quot;ja&quot;</span><span class="p">&gt;</span>🇯🇵<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">h1</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;text-decoration: underline solid red; font-size: 3em;&quot;</span><span class="p">&gt;</span>こんにちは<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div>
 
 
-          <h3><code>js</code></h3>
-          <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span> <span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://iwasakishuto.github.io/js/jquery.js&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.lang-select&#39;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-              <span class="kd">var</span> <span class="nx">lang</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-lang&#39;</span><span class="p">);</span>
-              <span class="nb">window</span><span class="p">.</span><span class="nx">location</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">);</span>
-              <span class="nx">location</span><span class="p">.</span><span class="nx">reload</span><span class="p">();</span>
-            <span class="p">});</span>
-            <span class="kd">function</span> <span class="nx">googleTranslateElementInit</span><span class="p">()</span> <span class="p">{</span>
-              <span class="k">new</span> <span class="nx">google</span><span class="p">.</span><span class="nx">translate</span><span class="p">.</span><span class="nx">TranslateElement</span><span class="p">({</span>
-                <span class="nx">pageLanguage</span><span class="o">:</span> <span class="s1">&#39;ja&#39;</span><span class="p">,</span> 
-                <span class="nx">layout</span><span class="o">:</span> <span class="nx">google</span><span class="p">.</span><span class="nx">translate</span><span class="p">.</span><span class="nx">TranslateElement</span><span class="p">.</span><span class="nx">FloatPosition</span><span class="p">.</span><span class="nx">TOP_LEFT</span>
-              <span class="p">},</span> <span class="s1">&#39;google_translate_element&#39;</span><span class="p">);</span>
-            <span class="p">}</span>
-          <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-          </code></pre></div>
-        
+<h3><code>js</code></h3>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span> <span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://iwasakishuto.github.io/js/jquery.js&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.lang-select&#39;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">lang</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;data-lang&#39;</span><span class="p">);</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">location</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">);</span>
+    <span class="nx">location</span><span class="p">.</span><span class="nx">reload</span><span class="p">();</span>
+  <span class="p">});</span>
+  <span class="kd">function</span> <span class="nx">googleTranslateElementInit</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">new</span> <span class="nx">google</span><span class="p">.</span><span class="nx">translate</span><span class="p">.</span><span class="nx">TranslateElement</span><span class="p">({</span>
+      <span class="nx">pageLanguage</span><span class="o">:</span> <span class="s1">&#39;ja&#39;</span><span class="p">,</span> 
+      <span class="nx">layout</span><span class="o">:</span> <span class="nx">google</span><span class="p">.</span><span class="nx">translate</span><span class="p">.</span><span class="nx">TranslateElement</span><span class="p">.</span><span class="nx">FloatPosition</span><span class="p">.</span><span class="nx">TOP_LEFT</span>
+    <span class="p">},</span> <span class="s1">&#39;google_translate_element&#39;</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></div>
+
         </div><!-- /.entry-content -->
     
       </article>

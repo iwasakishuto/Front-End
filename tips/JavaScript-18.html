@@ -85,120 +85,121 @@
             <span>2019-09-07(Sat)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/cheat-sheet.html">Cheat-sheet</a></span>
           </footer><!-- /.post-info -->
-          <p>ディレクトリ内部の画像を全て表示します。</p>
-          <p>今後 <code>focus</code> などを用いてラベル付けが楽にできるようにしたいと思います。</p>
-          <div style='text-align: center;'>
-            <label for='InputFiles'>
-              ディレクトリを選択してください。
-              <input id="InputFiles" type="file" webkitdirectory style='display:none;'>
-            </label>
-          </div>
+<!-- NOT "| indent(10, True)"  -->
+<p>ディレクトリ内部の画像を全て表示します。</p>
+<p>今後 <code>focus</code> などを用いてラベル付けが楽にできるようにしたいと思います。</p>
+<div style='text-align: center;'>
+  <label for='InputFiles'>
+    ディレクトリを選択してください。
+    <input id="InputFiles" type="file" webkitdirectory style='display:none;'>
+  </label>
+</div>
 
-          <div style="padding: 10px; text-align: center;">
-            画像サイズ（現在<span id="currentSize">12%</span>）：5% <input id="sizeRange" type="range" min="5" max="100" step="1" value="12" />100%
-          </div>
+<div style="padding: 10px; text-align: center;">
+  画像サイズ（現在<span id="currentSize">12%</span>）：5% <input id="sizeRange" type="range" min="5" max="100" step="1" value="12" />100%
+</div>
 
-          <ul id="gallery" class="galleryCover">
-          </ul>
+<ul id="gallery" class="galleryCover">
+</ul>
 
-          <style>
-            label {
-              font-family: "Times New Roman", Times, serif;
-              font-size: 1.6em;
-              color: white;
-              background-color: red;
-              padding: 6px;
-              border-radius: 15px;
-            }
-            .galleryCover .galleryElements {
-              text-align: center;
-              display: inline;
-            }
-            .galleryCover {
-              text-align: left;
-            }
-            img.__canvas {
-              width: 12%;
-              height: auto;
-              margin: 3px;
-              border: 5;
-            }
-          </style>
+<style>
+  label {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 1.6em;
+    color: white;
+    background-color: red;
+    padding: 6px;
+    border-radius: 15px;
+  }
+  .galleryCover .galleryElements {
+    text-align: center;
+    display: inline;
+  }
+  .galleryCover {
+    text-align: left;
+  }
+  img.__canvas {
+    width: 12%;
+    height: auto;
+    margin: 3px;
+    border: 5;
+  }
+</style>
 
-          <script>
-            var DirInputTag = document.getElementById('InputFiles');
-            var GalleryTag = document.getElementById('gallery');
-            var sizeRange = document.getElementById('sizeRange');
-            var currentSize = document.getElementById('currentSize');
-            var files;
-            var file;
-            sizeRange.addEventListener('change', function (e) {
-              let size = sizeRange.value + "%";
-              currentSize.innerHTML = size;
-              let target = document.getElementsByClassName("__canvas");
-              for (var i = 0; i < target.length; i++) {
-                target[i].style.width = size;
-              }
-            });
-            DirInputTag.addEventListener('change', function(e){
-              files = e.target.files;
-              var img
-              var div;
-              for (var i=0; i<files.length; i++) {
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                  img = document.createElement('img');
-                  img.setAttribute('src', e.target.result);
-                  img.className = "__canvas"
-                  li = document.createElement('li');
-                  li.appendChild(img);
-                  li.className = 'galleryElements';
-                  GalleryTag.appendChild(li)
-                }
-                reader.readAsDataURL(files[i]);
-              }
-            });
-          </script>
+<script>
+  var DirInputTag = document.getElementById('InputFiles');
+  var GalleryTag = document.getElementById('gallery');
+  var sizeRange = document.getElementById('sizeRange');
+  var currentSize = document.getElementById('currentSize');
+  var files;
+  var file;
+  sizeRange.addEventListener('change', function (e) {
+    let size = sizeRange.value + "%";
+    currentSize.innerHTML = size;
+    let target = document.getElementsByClassName("__canvas");
+    for (var i = 0; i < target.length; i++) {
+      target[i].style.width = size;
+    }
+  });
+  DirInputTag.addEventListener('change', function(e){
+    files = e.target.files;
+    var img
+    var div;
+    for (var i=0; i<files.length; i++) {
+      let reader = new FileReader();
+      reader.onload = function(e) {
+        img = document.createElement('img');
+        img.setAttribute('src', e.target.result);
+        img.className = "__canvas"
+        li = document.createElement('li');
+        li.appendChild(img);
+        li.className = 'galleryElements';
+        GalleryTag.appendChild(li)
+      }
+      reader.readAsDataURL(files[i]);
+    }
+  });
+</script>
 
-          <h2>コード</h2>
-          <h3><code>html</code></h3>
-          <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&#39;text-align: center;&#39;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">label</span> <span class="na">for</span><span class="o">=</span><span class="s">&#39;InputFiles&#39;</span><span class="p">&gt;</span>
-              ディレクトリを選択してください。
-              <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;InputFiles&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;file&quot;</span> <span class="na">webkitdirectory</span> <span class="na">style</span><span class="o">=</span><span class="s">&#39;display:none;&#39;</span><span class="p">&gt;</span>
-            <span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">ul</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;gallery&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;galleryCover&quot;</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
-          </code></pre></div>
+<h2>コード</h2>
+<h3><code>html</code></h3>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">style</span><span class="o">=</span><span class="s">&#39;text-align: center;&#39;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">label</span> <span class="na">for</span><span class="o">=</span><span class="s">&#39;InputFiles&#39;</span><span class="p">&gt;</span>
+    ディレクトリを選択してください。
+    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;InputFiles&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;file&quot;</span> <span class="na">webkitdirectory</span> <span class="na">style</span><span class="o">=</span><span class="s">&#39;display:none;&#39;</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">ul</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;gallery&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;galleryCover&quot;</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+</code></pre></div>
 
 
-          <h3><code>js</code></h3>
-          <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">DirInputTag</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;InputFiles&#39;</span><span class="p">);</span>
-          <span class="kd">var</span> <span class="nx">GalleryTag</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;gallery&#39;</span><span class="p">);</span>
-          <span class="kd">var</span> <span class="nx">files</span><span class="p">;</span>
-          <span class="kd">var</span> <span class="nx">file</span><span class="p">;</span>
+<h3><code>js</code></h3>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">DirInputTag</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;InputFiles&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">GalleryTag</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;gallery&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">files</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">file</span><span class="p">;</span>
 
-          <span class="nx">DirInputTag</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
-            <span class="nx">files</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span><span class="p">;</span>
+<span class="nx">DirInputTag</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+  <span class="nx">files</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span><span class="p">;</span>
 
-            <span class="kd">var</span> <span class="nx">img</span>
-            <span class="kd">var</span> <span class="nx">div</span><span class="p">;</span>
-            <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">files</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-              <span class="kd">let</span> <span class="nx">reader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FileReader</span><span class="p">();</span>
-              <span class="nx">reader</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">img</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">);</span>
-                <span class="nx">img</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">result</span><span class="p">);</span>
-                <span class="nx">li</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">);</span>
-                <span class="nx">li</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">img</span><span class="p">);</span>
-                <span class="nx">li</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;galleryElements&#39;</span><span class="p">;</span>
-                <span class="nx">GalleryTag</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">li</span><span class="p">)</span>
-              <span class="p">}</span>
-              <span class="nx">reader</span><span class="p">.</span><span class="nx">readAsDataURL</span><span class="p">(</span><span class="nx">files</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
-            <span class="p">}</span>
-          <span class="p">});</span>
-          </code></pre></div>
-        
+  <span class="kd">var</span> <span class="nx">img</span>
+  <span class="kd">var</span> <span class="nx">div</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">files</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">reader</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FileReader</span><span class="p">();</span>
+    <span class="nx">reader</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">img</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">);</span>
+      <span class="nx">img</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">result</span><span class="p">);</span>
+      <span class="nx">li</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;li&#39;</span><span class="p">);</span>
+      <span class="nx">li</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">img</span><span class="p">);</span>
+      <span class="nx">li</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="s1">&#39;galleryElements&#39;</span><span class="p">;</span>
+      <span class="nx">GalleryTag</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">li</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">reader</span><span class="p">.</span><span class="nx">readAsDataURL</span><span class="p">(</span><span class="nx">files</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+
         </div><!-- /.entry-content -->
     
       </article>

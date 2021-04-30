@@ -85,427 +85,428 @@
             <span>2021-03-10(Wed)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tensorflowjs.html">TensorFlow.js</a></span>
           </footer><!-- /.post-info -->
-          <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+<!-- NOT "| indent(10, True)"  -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
 
-          <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
 
-          <div class="nunkiru">
-            <h1>Pose-Estimation</h1>
-            <p>Tensorflow.js を用いて、<b>"Pose-Estimation"</b>をブラウザで実行し、正解データから誤りを検出します。</p>
-            <p>※ 正解動画との角度が最も異なる部分を青く出力しています。</p>
-            <table id="fitness-mirror">
-              <thead><tr><th>Video</th><th><select id="answer-video-select"><option value="https://iwasakishuto.github.io/Front-End/tips/theme/video/radio_calisthenics.mp4" selected>ラジオ体操</option><option value="https://iwasakishuto.github.io/Front-End/tips/theme/video/akari_doi.mp4">Akari Doi</option></select></th></tr></thead>
-              <tbody>
-                <tr><td colspan="2" id="answer-video-canvas-wrapper" class="video-and-canvas">
-                  <video id="answer-video" style="z-index:10;" autoplay loop>
-                    <source id="answer-video-source" src="" type="video/mp4">
-                  </video>
-                  <canvas id="answer-canvas" style="z-index:20;"></canvas>
-                  <table id="answer-video-controls" style="z-index:30;">
-                    <thead>
-                      <tr>
-                        <th><label>Mute <input id="video-mute" type="checkbox"></label></th>
-                        <th>Curt</th>
-                        <th>
-                          <button id="video-back-10s" class="back">Back 10s</button>
-                          <button id="video-start-stop" class="playing">Pause</button>
-                          <button id="video-skip-10s" class="skip">Skip 10s</button>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Speed</td>
-                        <td><span id="video-curt-speed">1.0</span></td>
-                        <td>0.5 <input id="video-speed" type="range" min="0.5" max="5" step="0.1" value="1"> 5</td>
-                      </tr>
-                      <tr>
-                        <td>Position</td>
-                        <td><span id="video-curt-position">0</span></td>
-                        <td>00:00 <input id="video-position" type="range" min="0" step="0.2" value="0"> <span id="video-max-position"> 03:11</span></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </td></tr>
-              </tbody>
-              <thead><tr><th colspan="2">You</th></tr></thead>
-              <tbody>
-                <tr><td id="your-video-canvas-wrapper" class="video-and-canvas" colspan="2">
-                  <video id="your-video" style="z-index:10;" playsinline muted autoplay></video>
-                  <canvas id="your-canvas" style="z-index:20;"></canvas>
-                </td></tr>
-              </tbody>
-            </table>
-          </div>
+<div class="nunkiru">
+  <h1>Pose-Estimation</h1>
+  <p>Tensorflow.js を用いて、<b>"Pose-Estimation"</b>をブラウザで実行し、正解データから誤りを検出します。</p>
+  <p>※ 正解動画との角度が最も異なる部分を青く出力しています。</p>
+  <table id="fitness-mirror">
+    <thead><tr><th>Video</th><th><select id="answer-video-select"><option value="https://iwasakishuto.github.io/Front-End/tips/theme/video/radio_calisthenics.mp4" selected>ラジオ体操</option><option value="https://iwasakishuto.github.io/Front-End/tips/theme/video/akari_doi.mp4">Akari Doi</option></select></th></tr></thead>
+    <tbody>
+      <tr><td colspan="2" id="answer-video-canvas-wrapper" class="video-and-canvas">
+        <video id="answer-video" style="z-index:10;" autoplay loop>
+          <source id="answer-video-source" src="" type="video/mp4">
+        </video>
+        <canvas id="answer-canvas" style="z-index:20;"></canvas>
+        <table id="answer-video-controls" style="z-index:30;">
+          <thead>
+            <tr>
+              <th><label>Mute <input id="video-mute" type="checkbox"></label></th>
+              <th>Curt</th>
+              <th>
+                <button id="video-back-10s" class="back">Back 10s</button>
+                <button id="video-start-stop" class="playing">Pause</button>
+                <button id="video-skip-10s" class="skip">Skip 10s</button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Speed</td>
+              <td><span id="video-curt-speed">1.0</span></td>
+              <td>0.5 <input id="video-speed" type="range" min="0.5" max="5" step="0.1" value="1"> 5</td>
+            </tr>
+            <tr>
+              <td>Position</td>
+              <td><span id="video-curt-position">0</span></td>
+              <td>00:00 <input id="video-position" type="range" min="0" step="0.2" value="0"> <span id="video-max-position"> 03:11</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </td></tr>
+    </tbody>
+    <thead><tr><th colspan="2">You</th></tr></thead>
+    <tbody>
+      <tr><td id="your-video-canvas-wrapper" class="video-and-canvas" colspan="2">
+        <video id="your-video" style="z-index:10;" playsinline muted autoplay></video>
+        <canvas id="your-canvas" style="z-index:20;"></canvas>
+      </td></tr>
+    </tbody>
+  </table>
+</div>
 
-          <script>
-            var model, result;
-            var answer_video_select = document.getElementById("answer-video-select");
-            var answer_video_source = document.getElementById("answer-video-source");
-            var answer_video_controls = document.getElementById("answer-video-controls");
-            var answer_video_canvas_wrapper = document.getElementById("answer-video-canvas-wrapper");
-            var answer_video = document.getElementById("answer-video");
-            var answer_canvas = document.getElementById("answer-canvas");
-            var answer_context = answer_canvas.getContext("2d");
-            var your_video_canvas_wrapper = document.getElementById("your-video-canvas-wrapper");
-            var your_video = document.getElementById("your-video");
-            var your_canvas = document.getElementById("your-canvas");
-            var your_context = your_canvas.getContext("2d");
-            const imageScaleFactor = 0.50;
-            const flipHorizontal = false;
-            const outputStride = 16;
-            var isFacing = true; 
-            var minPoseConfidence = 0.1;
-            var minPartConfidence = 0.1;
-            var showMethod, minPoseConfidence, minPartConfidence;
-            var lineWidth = 2;
-            var color = "red"
-            var boundingBoxColor = "green";
-            var ans_poses = your_poses = [{
-              score: 0, 
-              keypoints: [
-                {score: 0, part: "nose",          position: {x:0,y:0}},
-                {score: 0, part: "leftEye",       position: {x:0,y:0}},
-                {score: 0, part: "rightEye",      position: {x:0,y:0}},
-                {score: 0, part: "leftEar",       position: {x:0,y:0}},
-                {score: 0, part: "rightEar",      position: {x:0,y:0}},
-                {score: 0, part: "leftShoulder",  position: {x:0,y:0}},
-                {score: 0, part: "rightShoulder", position: {x:0,y:0}},
-                {score: 0, part: "leftElbow",     position: {x:0,y:0}},
-                {score: 0, part: "rightElbow",    position: {x:0,y:0}},
-                {score: 0, part: "leftWrist",     position: {x:0,y:0}},
-                {score: 0, part: "rightWrist",    position: {x:0,y:0}},
-                {score: 0, part: "leftHip",       position: {x:0,y:0}},
-                {score: 0, part: "rightHip",      position: {x:0,y:0}},
-                {score: 0, part: "leftKnee",      position: {x:0,y:0}},
-                {score: 0, part: "rightKnee",     position: {x:0,y:0}},
-                {score: 0, part: "leftAnkle",     position: {x:0,y:0}},
-                {score: 0, part: "rightAnkle",    position: {x:0,y:0}},
-              ]
-            }];
-            // load the posenet model
-            posenet.load().then(function(pretrainedModel){
-              model = pretrainedModel;
-              setupCamera(isFacing=isFacing);
-            });
-            // Setup WebCamera
-            function switchFrontBackCamera(){
-              isFacing = !isFacing;
-              setupCamera(isFacing=isFacing)
-            }
-            function setupCamera(isFacing=true){
-              navigator.mediaDevices.getUserMedia({
-                audio: false,
-                video: { facingMode: isFacing ? "environment" : "user" },
-                audio: false,
-              }).then(function(stream){
-                your_video.addEventListener("loadedmetadata", function(){
-                  w = your_video.offsetWidth; h = your_video.offsetHeight;
-                  your_canvas.setAttribute('width', w.toString()); 
-                  your_canvas.setAttribute('height', h.toString()); 
-                  your_video_canvas_wrapper.style.height = h.toString()+"px";
-                })
-                your_video.srcObject = stream;
-                your_video.addEventListener("loadeddata", prediction);
-                setupAnswerVideo()
-              })
-            }
-            function setupAnswerVideo(){
-              answer_video_source.src = answer_video_select.value;
-              answer_video.load();
-              answer_video.play();
-              answer_video.addEventListener("timeupdate", function(){
-                w = answer_video.offsetWidth; h = answer_video.offsetHeight;
-                answer_canvas.setAttribute('width', w.toString()); 
-                answer_canvas.setAttribute('height', h.toString()); 
-                answer_video_canvas_wrapper.style.height = h.toString()+"px";
-                answer_video_controls.style.marginTop = (h+15).toString()+"px";
-                answer_canvas.getContext("2d").drawImage(answer_video, 0, 0, w, h); 
-                video_curt_position.textContent = answer_video.currentTime.toFixed(1);
-              }, true);
-            }
-            answer_video_select.onchange = setupAnswerVideo;
-            // Prediction.
-            var prevAnsCompleted = prevYourCompleted = true;
-            const posesProperties = {
-              flipHorizontal: false,
-              internalResolution: 'high',
-              segmentationThreshold: 0.9
-            };
-            function prediction(){
-              if (prevAnsCompleted && prevYourCompleted) {
-                prevAnsCompleted = prevYourCompleted = false;
-                model.estimatePoses(answer_canvas, posesProperties).then(function(poses) {
-                  ans_poses = poses;
-                  processResults(answer_canvas, answer_video, poses, answer_context);
-                  prevAnsCompleted = true;
-                });
-                model.estimatePoses(your_canvas, posesProperties).then(function(poses) {
-                  your_poses = poses;
-                  processResults(your_canvas, your_video, poses, your_context);
-                  prevYourCompleted = true;
-                  if (your_poses.length >= 1 && ans_poses.length >= 1){
-                    visualizeDifference(ans_poses[0]["keypoints"], your_poses[0]["keypoints"])
-                  }
-                });
-              }
-              window.requestAnimationFrame(prediction);
-            }
-            /**
-            * @license
-            * Copyright 2019 Google LLC. All Rights Reserved.
-            * Licensed under the Apache License, Version 2.0 (the "License");
-            * you may not use this file except in compliance with the License.
-            * You may obtain a copy of the License at
-            *
-            * https://www.apache.org/licenses/LICENSE-2.0
-            *
-            * Unless required by applicable law or agreed to in writing, software
-            * distributed under the License is distributed on an "AS IS" BASIS,
-            * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-            * See the License for the specific language governing permissions and
-            * limitations under the License.
-            * =============================================================================
-            */
-            /** 
-            * Calculate Angles of 3 points.
-            * @param {Number} x1, y1 Apex.
-            * @param {string} x2, y2, x3, y3 Other Points.
-            */
-            function getApexAngle(x1, y1, x2, y2, x3, y3) {
-              let apex = (Math.atan2 (y2-y1, x2-x1) - Math.atan2 (y3-y1, x3-x1)) / (Math.PI / 180);
-              if( -180 <= apex && apex < 180 ) return Math.abs(apex);
-              return Math.abs(360-Math.abs(apex));
-            }
-            function visualizeDifference(ans_keypoints, your_keypoints){
-              // Middle point is Apex.
-              points = [
-                [5,7,9],[7,5,11],[6,5,11],[5,11,12],[12,11,13],[11,13,15],[6,8,10],[8,6,12],[5,6,12],[6,12,11],[11,12,14],[12,14,16]
-              ]
-              var max_score = -1; 
-              var max_idx = 0;
-              points.forEach(function(point, idx){
-                if ((ans_keypoints[point[0]].score >= minPoseConfidence) 
-                && (ans_keypoints[point[1]].score >= minPoseConfidence)
-                && (ans_keypoints[point[2]].score >= minPoseConfidence)
-                && (your_keypoints[point[0]].score >= minPoseConfidence)
-                && (your_keypoints[point[1]].score >= minPoseConfidence)
-                && (your_keypoints[point[2]].score >= minPoseConfidence)){
-                  let score = Math.abs(getApexAngle(
-                    ans_keypoints[point[1]]["position"]["x"],
-                    ans_keypoints[point[1]]["position"]["y"],
-                    ans_keypoints[point[0]]["position"]["x"],
-                    ans_keypoints[point[0]]["position"]["y"],
-                    ans_keypoints[point[2]]["position"]["x"],
-                    ans_keypoints[point[2]]["position"]["y"],
-                  ) - getApexAngle(
-                    your_keypoints[point[1]]["position"]["x"],
-                    your_keypoints[point[1]]["position"]["y"],
-                    your_keypoints[point[0]]["position"]["x"],
-                    your_keypoints[point[0]]["position"]["y"],
-                    your_keypoints[point[2]]["position"]["x"],
-                    your_keypoints[point[2]]["position"]["y"],
-                  ));
-                  if (score>max_score){
-                    max_score = score;
-                    max_idx = idx;
-                  }
-                }
-              })
-              if (max_idx >=0){
-                drawSegment(
-                  toTuple(your_keypoints[points[max_idx][0]].position), 
-                  toTuple(your_keypoints[points[max_idx][1]].position),
-                  "blue",
-                  1,
-                  5,
-                  your_context,
-                )
-                drawSegment(
-                  toTuple(your_keypoints[points[max_idx][1]].position), 
-                  toTuple(your_keypoints[points[max_idx][2]].position),
-                  "blue",
-                  1,
-                  5,
-                  your_context,
-                )
-              }
-            }
-            function processResults(canvas, video, poses, context){
-              context.drawImage(video, 0, 0, video.offsetWidth, video.offsetHeight);
-              poses.forEach(({score, keypoints}) => {
-                if (score >= minPoseConfidence) {
-                  drawKeypoints(keypoints, minPartConfidence, context);
-                  drawSkeleton(keypoints, minPartConfidence, context);
-                }
-              });
-            }
-            function drawPoint(ctx, y, x, r, color, text="") {
-              ctx.beginPath();
-              ctx.arc(x, y, r, 0, 2*Math.PI);
-              ctx.fillStyle = color;
-              ctx.fill();
-              ctx.fillText(text, x+5, y-5);
-            }
-            function drawPoints(ctx, points, radius, color) {
-              var data = points.buffer().values;
-              for (let i=0; i<data.length; i += 2) {
-                const pointY = data[i];
-                const pointX = data[i+1];
-                if (pointX !== 0 && pointY !== 0) {
-                  ctx.beginPath();
-                  ctx.arc(pointX, pointY, radius, 0, 2*Math.PI);
-                  ctx.fillStyle = color;
-                  ctx.fill();
-                }
-              }
-            }
-            function drawKeypoints(keypoints, minConfidence, ctx, scale=1) {
-              for (let i=0; i<keypoints.length; i++) {
-                let keypoint = keypoints[i];
-                if (keypoint.score < minConfidence) {
-                  continue;
-                }
-                let {y, x} = keypoint.position;
-                // drawPoint(ctx, y*scale, x*scale, 3, color, keypoint.part);
-                drawPoint(ctx, y*scale, x*scale, 3, color, "");
-              }
-            }
-            function toTuple({y, x}) {
-              return [y, x];
-            }
-            function drawSegment([ay, ax], [by, bx], color, scale, linewidth, ctx) {
-              ctx.beginPath();
-              ctx.moveTo(ax*scale, ay*scale);
-              ctx.lineTo(bx*scale, by*scale);
-              ctx.lineWidth = linewidth;
-              ctx.strokeStyle = color;
-              ctx.stroke();
-            }
-            function drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
-              posenet.getAdjacentKeyPoints(keypoints, minConfidence).forEach(function(keypoints){
-                drawSegment(toTuple(keypoints[0].position), toTuple(keypoints[1].position), color, scale, lineWidth, ctx);
-              });
-            }
-          </script>
+<script>
+  var model, result;
+  var answer_video_select = document.getElementById("answer-video-select");
+  var answer_video_source = document.getElementById("answer-video-source");
+  var answer_video_controls = document.getElementById("answer-video-controls");
+  var answer_video_canvas_wrapper = document.getElementById("answer-video-canvas-wrapper");
+  var answer_video = document.getElementById("answer-video");
+  var answer_canvas = document.getElementById("answer-canvas");
+  var answer_context = answer_canvas.getContext("2d");
+  var your_video_canvas_wrapper = document.getElementById("your-video-canvas-wrapper");
+  var your_video = document.getElementById("your-video");
+  var your_canvas = document.getElementById("your-canvas");
+  var your_context = your_canvas.getContext("2d");
+  const imageScaleFactor = 0.50;
+  const flipHorizontal = false;
+  const outputStride = 16;
+  var isFacing = true; 
+  var minPoseConfidence = 0.1;
+  var minPartConfidence = 0.1;
+  var showMethod, minPoseConfidence, minPartConfidence;
+  var lineWidth = 2;
+  var color = "red"
+  var boundingBoxColor = "green";
+  var ans_poses = your_poses = [{
+    score: 0, 
+    keypoints: [
+      {score: 0, part: "nose",          position: {x:0,y:0}},
+      {score: 0, part: "leftEye",       position: {x:0,y:0}},
+      {score: 0, part: "rightEye",      position: {x:0,y:0}},
+      {score: 0, part: "leftEar",       position: {x:0,y:0}},
+      {score: 0, part: "rightEar",      position: {x:0,y:0}},
+      {score: 0, part: "leftShoulder",  position: {x:0,y:0}},
+      {score: 0, part: "rightShoulder", position: {x:0,y:0}},
+      {score: 0, part: "leftElbow",     position: {x:0,y:0}},
+      {score: 0, part: "rightElbow",    position: {x:0,y:0}},
+      {score: 0, part: "leftWrist",     position: {x:0,y:0}},
+      {score: 0, part: "rightWrist",    position: {x:0,y:0}},
+      {score: 0, part: "leftHip",       position: {x:0,y:0}},
+      {score: 0, part: "rightHip",      position: {x:0,y:0}},
+      {score: 0, part: "leftKnee",      position: {x:0,y:0}},
+      {score: 0, part: "rightKnee",     position: {x:0,y:0}},
+      {score: 0, part: "leftAnkle",     position: {x:0,y:0}},
+      {score: 0, part: "rightAnkle",    position: {x:0,y:0}},
+    ]
+  }];
+  // load the posenet model
+  posenet.load().then(function(pretrainedModel){
+    model = pretrainedModel;
+    setupCamera(isFacing=isFacing);
+  });
+  // Setup WebCamera
+  function switchFrontBackCamera(){
+    isFacing = !isFacing;
+    setupCamera(isFacing=isFacing)
+  }
+  function setupCamera(isFacing=true){
+    navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: { facingMode: isFacing ? "environment" : "user" },
+      audio: false,
+    }).then(function(stream){
+      your_video.addEventListener("loadedmetadata", function(){
+        w = your_video.offsetWidth; h = your_video.offsetHeight;
+        your_canvas.setAttribute('width', w.toString()); 
+        your_canvas.setAttribute('height', h.toString()); 
+        your_video_canvas_wrapper.style.height = h.toString()+"px";
+      })
+      your_video.srcObject = stream;
+      your_video.addEventListener("loadeddata", prediction);
+      setupAnswerVideo()
+    })
+  }
+  function setupAnswerVideo(){
+    answer_video_source.src = answer_video_select.value;
+    answer_video.load();
+    answer_video.play();
+    answer_video.addEventListener("timeupdate", function(){
+      w = answer_video.offsetWidth; h = answer_video.offsetHeight;
+      answer_canvas.setAttribute('width', w.toString()); 
+      answer_canvas.setAttribute('height', h.toString()); 
+      answer_video_canvas_wrapper.style.height = h.toString()+"px";
+      answer_video_controls.style.marginTop = (h+15).toString()+"px";
+      answer_canvas.getContext("2d").drawImage(answer_video, 0, 0, w, h); 
+      video_curt_position.textContent = answer_video.currentTime.toFixed(1);
+    }, true);
+  }
+  answer_video_select.onchange = setupAnswerVideo;
+  // Prediction.
+  var prevAnsCompleted = prevYourCompleted = true;
+  const posesProperties = {
+    flipHorizontal: false,
+    internalResolution: 'high',
+    segmentationThreshold: 0.9
+  };
+  function prediction(){
+    if (prevAnsCompleted && prevYourCompleted) {
+      prevAnsCompleted = prevYourCompleted = false;
+      model.estimatePoses(answer_canvas, posesProperties).then(function(poses) {
+        ans_poses = poses;
+        processResults(answer_canvas, answer_video, poses, answer_context);
+        prevAnsCompleted = true;
+      });
+      model.estimatePoses(your_canvas, posesProperties).then(function(poses) {
+        your_poses = poses;
+        processResults(your_canvas, your_video, poses, your_context);
+        prevYourCompleted = true;
+        if (your_poses.length >= 1 && ans_poses.length >= 1){
+          visualizeDifference(ans_poses[0]["keypoints"], your_poses[0]["keypoints"])
+        }
+      });
+    }
+    window.requestAnimationFrame(prediction);
+  }
+  /**
+  * @license
+  * Copyright 2019 Google LLC. All Rights Reserved.
+  * Licensed under the Apache License, Version 2.0 (the "License");
+  * you may not use this file except in compliance with the License.
+  * You may obtain a copy of the License at
+  *
+  * https://www.apache.org/licenses/LICENSE-2.0
+  *
+  * Unless required by applicable law or agreed to in writing, software
+  * distributed under the License is distributed on an "AS IS" BASIS,
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  * =============================================================================
+  */
+  /** 
+  * Calculate Angles of 3 points.
+  * @param {Number} x1, y1 Apex.
+  * @param {string} x2, y2, x3, y3 Other Points.
+  */
+  function getApexAngle(x1, y1, x2, y2, x3, y3) {
+    let apex = (Math.atan2 (y2-y1, x2-x1) - Math.atan2 (y3-y1, x3-x1)) / (Math.PI / 180);
+    if( -180 <= apex && apex < 180 ) return Math.abs(apex);
+    return Math.abs(360-Math.abs(apex));
+  }
+  function visualizeDifference(ans_keypoints, your_keypoints){
+    // Middle point is Apex.
+    points = [
+      [5,7,9],[7,5,11],[6,5,11],[5,11,12],[12,11,13],[11,13,15],[6,8,10],[8,6,12],[5,6,12],[6,12,11],[11,12,14],[12,14,16]
+    ]
+    var max_score = -1; 
+    var max_idx = 0;
+    points.forEach(function(point, idx){
+      if ((ans_keypoints[point[0]].score >= minPoseConfidence) 
+      && (ans_keypoints[point[1]].score >= minPoseConfidence)
+      && (ans_keypoints[point[2]].score >= minPoseConfidence)
+      && (your_keypoints[point[0]].score >= minPoseConfidence)
+      && (your_keypoints[point[1]].score >= minPoseConfidence)
+      && (your_keypoints[point[2]].score >= minPoseConfidence)){
+        let score = Math.abs(getApexAngle(
+          ans_keypoints[point[1]]["position"]["x"],
+          ans_keypoints[point[1]]["position"]["y"],
+          ans_keypoints[point[0]]["position"]["x"],
+          ans_keypoints[point[0]]["position"]["y"],
+          ans_keypoints[point[2]]["position"]["x"],
+          ans_keypoints[point[2]]["position"]["y"],
+        ) - getApexAngle(
+          your_keypoints[point[1]]["position"]["x"],
+          your_keypoints[point[1]]["position"]["y"],
+          your_keypoints[point[0]]["position"]["x"],
+          your_keypoints[point[0]]["position"]["y"],
+          your_keypoints[point[2]]["position"]["x"],
+          your_keypoints[point[2]]["position"]["y"],
+        ));
+        if (score>max_score){
+          max_score = score;
+          max_idx = idx;
+        }
+      }
+    })
+    if (max_idx >=0){
+      drawSegment(
+        toTuple(your_keypoints[points[max_idx][0]].position), 
+        toTuple(your_keypoints[points[max_idx][1]].position),
+        "blue",
+        1,
+        5,
+        your_context,
+      )
+      drawSegment(
+        toTuple(your_keypoints[points[max_idx][1]].position), 
+        toTuple(your_keypoints[points[max_idx][2]].position),
+        "blue",
+        1,
+        5,
+        your_context,
+      )
+    }
+  }
+  function processResults(canvas, video, poses, context){
+    context.drawImage(video, 0, 0, video.offsetWidth, video.offsetHeight);
+    poses.forEach(({score, keypoints}) => {
+      if (score >= minPoseConfidence) {
+        drawKeypoints(keypoints, minPartConfidence, context);
+        drawSkeleton(keypoints, minPartConfidence, context);
+      }
+    });
+  }
+  function drawPoint(ctx, y, x, r, color, text="") {
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, 2*Math.PI);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.fillText(text, x+5, y-5);
+  }
+  function drawPoints(ctx, points, radius, color) {
+    var data = points.buffer().values;
+    for (let i=0; i<data.length; i += 2) {
+      const pointY = data[i];
+      const pointX = data[i+1];
+      if (pointX !== 0 && pointY !== 0) {
+        ctx.beginPath();
+        ctx.arc(pointX, pointY, radius, 0, 2*Math.PI);
+        ctx.fillStyle = color;
+        ctx.fill();
+      }
+    }
+  }
+  function drawKeypoints(keypoints, minConfidence, ctx, scale=1) {
+    for (let i=0; i<keypoints.length; i++) {
+      let keypoint = keypoints[i];
+      if (keypoint.score < minConfidence) {
+        continue;
+      }
+      let {y, x} = keypoint.position;
+      // drawPoint(ctx, y*scale, x*scale, 3, color, keypoint.part);
+      drawPoint(ctx, y*scale, x*scale, 3, color, "");
+    }
+  }
+  function toTuple({y, x}) {
+    return [y, x];
+  }
+  function drawSegment([ay, ax], [by, bx], color, scale, linewidth, ctx) {
+    ctx.beginPath();
+    ctx.moveTo(ax*scale, ay*scale);
+    ctx.lineTo(bx*scale, by*scale);
+    ctx.lineWidth = linewidth;
+    ctx.strokeStyle = color;
+    ctx.stroke();
+  }
+  function drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
+    posenet.getAdjacentKeyPoints(keypoints, minConfidence).forEach(function(keypoints){
+      drawSegment(toTuple(keypoints[0].position), toTuple(keypoints[1].position), color, scale, lineWidth, ctx);
+    });
+  }
+</script>
 
-          <script>
-            var playtimer = null
-            const startTimer = function(){
-              playtimer = setInterval(function(){
-                video_position_control.value = answer_video.currentTime.toFixed(1);
-              }, 100);
-            };
-            const stopTimer = function(){
-              clearInterval(playtimer);
-            };
-            const video_start_stop_btn   = document.querySelector("button#video-start-stop")
-            const video_skip_10s         = document.querySelector("button#video-skip-10s");
-            const video_back_10s         = document.querySelector("button#video-back-10s");
-            const video_curt_speed       = document.querySelector("span#video-curt-speed");
-            const video_speed_control    = document.querySelector("input#video-speed");
-            const video_curt_position    = document.querySelector("span#video-curt-position");
-            const video_position_control = document.querySelector("input#video-position");
-            const video_mute_btn         = document.querySelector("input#video-mute");
-            const video_max_position     = document.querySelector("span#video-max-position");
-            video_skip_10s.addEventListener("click", function(){
-              answer_video.currentTime = Math.min(answer_video.currentTime+10, answer_video.duration)
-            })
-            video_back_10s.addEventListener("click", function(){
-              answer_video.currentTime = Math.max(answer_video.currentTime-10, 0)
-            })
-            video_start_stop_btn.addEventListener("click", function(){
-              if (video_start_stop_btn.classList.contains("playing")){
-                answer_video.pause();
-                stopTimer();
-                video_start_stop_btn.classList.add("pausing")
-                video_start_stop_btn.classList.remove("playing")
-                video_start_stop_btn.innerHTML = "Play"
-              }else{
-                answer_video.play();
-                startTimer();
-                video_start_stop_btn.classList.add("playing")
-                video_start_stop_btn.classList.remove("pausing")
-                video_start_stop_btn.innerHTML = "Pause"
-              }
-            })
-            video_speed_control.addEventListener('change', function() {
-              let curt_speed = video_speed_control.value;
-              answer_video.playbackRate = curt_speed;
-              video_curt_speed.textContent = curt_speed;
-            });
-            video_position_control.addEventListener('input', function() {
-              answer_video.currentTime = video_position_control.value
-              stopTimer()
-            });
-            video_position_control.addEventListener('change', function() {
-              answer_video.currentTime = video_position_control.value;
-              startTimer()
-            });
-            video_mute_btn.addEventListener('click', function() {
-              answer_video.muted = video_mute_btn.checked;
-            });
-            startTimer();
-          </script>
+<script>
+  var playtimer = null
+  const startTimer = function(){
+    playtimer = setInterval(function(){
+      video_position_control.value = answer_video.currentTime.toFixed(1);
+    }, 100);
+  };
+  const stopTimer = function(){
+    clearInterval(playtimer);
+  };
+  const video_start_stop_btn   = document.querySelector("button#video-start-stop")
+  const video_skip_10s         = document.querySelector("button#video-skip-10s");
+  const video_back_10s         = document.querySelector("button#video-back-10s");
+  const video_curt_speed       = document.querySelector("span#video-curt-speed");
+  const video_speed_control    = document.querySelector("input#video-speed");
+  const video_curt_position    = document.querySelector("span#video-curt-position");
+  const video_position_control = document.querySelector("input#video-position");
+  const video_mute_btn         = document.querySelector("input#video-mute");
+  const video_max_position     = document.querySelector("span#video-max-position");
+  video_skip_10s.addEventListener("click", function(){
+    answer_video.currentTime = Math.min(answer_video.currentTime+10, answer_video.duration)
+  })
+  video_back_10s.addEventListener("click", function(){
+    answer_video.currentTime = Math.max(answer_video.currentTime-10, 0)
+  })
+  video_start_stop_btn.addEventListener("click", function(){
+    if (video_start_stop_btn.classList.contains("playing")){
+      answer_video.pause();
+      stopTimer();
+      video_start_stop_btn.classList.add("pausing")
+      video_start_stop_btn.classList.remove("playing")
+      video_start_stop_btn.innerHTML = "Play"
+    }else{
+      answer_video.play();
+      startTimer();
+      video_start_stop_btn.classList.add("playing")
+      video_start_stop_btn.classList.remove("pausing")
+      video_start_stop_btn.innerHTML = "Pause"
+    }
+  })
+  video_speed_control.addEventListener('change', function() {
+    let curt_speed = video_speed_control.value;
+    answer_video.playbackRate = curt_speed;
+    video_curt_speed.textContent = curt_speed;
+  });
+  video_position_control.addEventListener('input', function() {
+    answer_video.currentTime = video_position_control.value
+    stopTimer()
+  });
+  video_position_control.addEventListener('change', function() {
+    answer_video.currentTime = video_position_control.value;
+    startTimer()
+  });
+  video_mute_btn.addEventListener('click', function() {
+    answer_video.muted = video_mute_btn.checked;
+  });
+  startTimer();
+</script>
 
-          <style>
-            .video-and-canvas {
-              position: relative;
-              margin: 0 auto;
-            }
-            .video-and-canvas video, .video-and-canvas canvas{
-              position: absolute;
-              left: 0;
-              right: 0;
-              margin: 0 auto;
-            }
-            table#answer-video-controls{
-              position: relative;
-              /* margin-top: 360px; */
-              background-color: black;
-              color: white;
-            }
-            /* #answer-video-canvas-wrapper, #answer-video, #answer-canvas{
-              height:360px;
-            }
-            #answer-video, #answer-canvas, #answer-video-controls{
-              width:640px
-            } */
-            table#fitness-mirror thead {
-              background-color: black;
-              color: white;
-            }
-            table#fitness-mirror th {
-              vertical-align: middle;
-              text-align: center;
-            }
-            table#fitness-mirror select {
-              border: 0;
-              width: 100%;
-              padding: .5em .4em;
-            }
-            input[type="range"]{
-              width: 70%;
-            }
-            button{
-              display: inline-block;
-              position: relative;
-              font-family: monaco;
-              color: #000;
-              padding: .75em 1.5em;
-              cursor: pointer;
-              border-radius: 5px;
-            }
-            button.pausing {
-              background-color: red;
-              color: white;
-            }
-            button.playing{
-              background-color: blue
-              color:white;
-            }
-          </style>
-        
+<style>
+  .video-and-canvas {
+    position: relative;
+    margin: 0 auto;
+  }
+  .video-and-canvas video, .video-and-canvas canvas{
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+  }
+  table#answer-video-controls{
+    position: relative;
+    /* margin-top: 360px; */
+    background-color: black;
+    color: white;
+  }
+  /* #answer-video-canvas-wrapper, #answer-video, #answer-canvas{
+    height:360px;
+  }
+  #answer-video, #answer-canvas, #answer-video-controls{
+    width:640px
+  } */
+  table#fitness-mirror thead {
+    background-color: black;
+    color: white;
+  }
+  table#fitness-mirror th {
+    vertical-align: middle;
+    text-align: center;
+  }
+  table#fitness-mirror select {
+    border: 0;
+    width: 100%;
+    padding: .5em .4em;
+  }
+  input[type="range"]{
+    width: 70%;
+  }
+  button{
+    display: inline-block;
+    position: relative;
+    font-family: monaco;
+    color: #000;
+    padding: .75em 1.5em;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  button.pausing {
+    background-color: red;
+    color: white;
+  }
+  button.playing{
+    background-color: blue
+    color:white;
+  }
+</style>
+
         </div><!-- /.entry-content -->
     
       </article>

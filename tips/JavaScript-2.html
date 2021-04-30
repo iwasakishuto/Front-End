@@ -85,189 +85,190 @@
             <span>2019-06-08(Sat)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/udemy.html">Udemy</a></span>
           </footer><!-- /.post-info -->
-          <ul>
-          <li>講座：<a href="https://www.udemy.com/html-css-js/">[HTML/CSS/JavaScript] フロントエンドエンジニアになりたい人の Webプログラミング入門</a></li>
-          <li>講師：<a href="https://www.udemy.com/user/taniguchi-makoto/">Taniguchi Makoto</a></li>
-          </ul>
-          <h2>はじめに</h2>
-          <p>今回は、<code>setInterval</code> と <code>clearInterval</code> を用いて、イベントドリブンなアプリケーションを作成した。</p>
-          <h2>作ったもの</h2>
-          <div class="stopwatch">
-            <p id="timer">00:00:00:00</p>    
-            <div>
-              <button id="start_stop" class="btn-blue">START</button>
-            </div>
-          </div>
+<!-- NOT "| indent(10, True)"  -->
+<ul>
+<li>講座：<a href="https://www.udemy.com/html-css-js/">[HTML/CSS/JavaScript] フロントエンドエンジニアになりたい人の Webプログラミング入門</a></li>
+<li>講師：<a href="https://www.udemy.com/user/taniguchi-makoto/">Taniguchi Makoto</a></li>
+</ul>
+<h2>はじめに</h2>
+<p>今回は、<code>setInterval</code> と <code>clearInterval</code> を用いて、イベントドリブンなアプリケーションを作成した。</p>
+<h2>作ったもの</h2>
+<div class="stopwatch">
+  <p id="timer">00:00:00:00</p>    
+  <div>
+    <button id="start_stop" class="btn-blue">START</button>
+  </div>
+</div>
 
-          <script>
-            var start;// グローバル変数にしている。
-            var timer_id;
+<script>
+  var start;// グローバル変数にしている。
+  var timer_id;
 
-            document.getElementById('start_stop').addEventListener('click', function() {
-              if (this.innerHTML === 'START'){
-                start = new Date();
-                timer_id = setInterval(goTimer, 10); // ここで返って来たIDを利用して↓
+  document.getElementById('start_stop').addEventListener('click', function() {
+    if (this.innerHTML === 'START'){
+      start = new Date();
+      timer_id = setInterval(goTimer, 10); // ここで返って来たIDを利用して↓
 
-                this.innerHTML = 'STOP'; // this = document.getElementById('start_stop')
-                this.classList.remove('btn-blue');
-                this.classList.add('btn-red');
-              } else {
-                clearInterval(timer_id); // ここで止める。
-                this.innerHTML = "START";
-                this.classList.remove('btn-red');
-                this.classList.add('btn-blue');
-              }
-            });
+      this.innerHTML = 'STOP'; // this = document.getElementById('start_stop')
+      this.classList.remove('btn-blue');
+      this.classList.add('btn-red');
+    } else {
+      clearInterval(timer_id); // ここで止める。
+      this.innerHTML = "START";
+      this.classList.remove('btn-red');
+      this.classList.add('btn-blue');
+    }
+  });
 
-            var addZero = function(value){
-              if (value < 10) {
-                value = '0' + value;
-              }
-              return value;
-            }
+  var addZero = function(value){
+    if (value < 10) {
+      value = '0' + value;
+    }
+    return value;
+  }
 
-            var goTimer = function(){
-              var now = new Date();
+  var goTimer = function(){
+    var now = new Date();
 
-              var milli = now.getTime() - start.getTime();
-              var seconds = Math.floor(milli / 1000);
-              var minutes = Math.floor(seconds / 60);
-              var hours = Math.floor(minutes / 60);
+    var milli = now.getTime() - start.getTime();
+    var seconds = Math.floor(milli / 1000);
+    var minutes = Math.floor(seconds / 60);
+    var hours = Math.floor(minutes / 60);
 
-              milli   = Math.floor((milli - seconds * 1000)/10);
-              seconds = seconds - minutes * 60;
-              minutes = minutes - hours * 60;
+    milli   = Math.floor((milli - seconds * 1000)/10);
+    seconds = seconds - minutes * 60;
+    minutes = minutes - hours * 60;
 
-              milli   = addZero(milli);
-              seconds = addZero(seconds);
-              minutes = addZero(minutes);
-              hours   = addZero(hours);
+    milli   = addZero(milli);
+    seconds = addZero(seconds);
+    minutes = addZero(minutes);
+    hours   = addZero(hours);
 
-              document.getElementById('timer').innerHTML = hours + ":" + minutes + ":" + seconds + ":" + milli;
-            }
-          </script>
+    document.getElementById('timer').innerHTML = hours + ":" + minutes + ":" + seconds + ":" + milli;
+  }
+</script>
 
-          <style>
-          .stopwatch {
-            text-align: center;
-            margin: 30px auto;
-          }
+<style>
+.stopwatch {
+  text-align: center;
+  margin: 30px auto;
+}
 
-          /*idは #で指定する。*/
-          #timer {
-            font-size: 36px;
-            border: 1px solid #ccc;
-            margin 30px auto;
-            padding: 50px;
-            background-color: #000;
-            color: #fff;
-            border-radius: 3px;
-            box-shadow: 1px 1px 3px rgba(0, 0, 0, .5);
-          }
+/*idは #で指定する。*/
+#timer {
+  font-size: 36px;
+  border: 1px solid #ccc;
+  margin 30px auto;
+  padding: 50px;
+  background-color: #000;
+  color: #fff;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, .5);
+}
 
-          .btn-blue {
-            background-color: rgba(68, 122, 178);
-            color: #fff;
-            padding: 10px;
-            border-radius: 3px;
-          }
+.btn-blue {
+  background-color: rgba(68, 122, 178);
+  color: #fff;
+  padding: 10px;
+  border-radius: 3px;
+}
 
-          .btn-red {
-            background-color: rgb(252, 92, 84);
-            color: #fff;
-            padding: 10px;
-            border-radius: 3px;
-          }
-          </style>
+.btn-red {
+  background-color: rgb(252, 92, 84);
+  color: #fff;
+  padding: 10px;
+  border-radius: 3px;
+}
+</style>
 
-          <h2>コード</h2>
-          <div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;container&quot;</span><span class="p">&gt;</span>
-            <span class="p">&lt;</span><span class="nt">p</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;timer&quot;</span><span class="p">&gt;</span>00:00:00:00<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>    
-            <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
-              <span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;start_stop&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;btn-blue&quot;</span><span class="p">&gt;</span>START<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-            <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-          <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-            <span class="kd">var</span> <span class="nx">start</span><span class="p">;</span><span class="c1">// グローバル変数にしている。</span>
-            <span class="kd">var</span> <span class="nx">timer_id</span><span class="p">;</span>
+<h2>コード</h2>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;container&quot;</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">p</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;timer&quot;</span><span class="p">&gt;</span>00:00:00:00<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>    
+  <span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;start_stop&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;btn-blue&quot;</span><span class="p">&gt;</span>START<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
+  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+  <span class="kd">var</span> <span class="nx">start</span><span class="p">;</span><span class="c1">// グローバル変数にしている。</span>
+  <span class="kd">var</span> <span class="nx">timer_id</span><span class="p">;</span>
 
-            <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;start_stop&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-              <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">===</span> <span class="s1">&#39;START&#39;</span><span class="p">){</span>
-                <span class="nx">start</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
-                <span class="nx">timer_id</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="p">(</span><span class="nx">goTimer</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span> <span class="c1">// ここで返って来たIDを利用して↓</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;start_stop&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">===</span> <span class="s1">&#39;START&#39;</span><span class="p">){</span>
+      <span class="nx">start</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+      <span class="nx">timer_id</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="p">(</span><span class="nx">goTimer</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span> <span class="c1">// ここで返って来たIDを利用して↓</span>
 
-                <span class="k">this</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;STOP&#39;</span><span class="p">;</span> <span class="c1">// this = document.getElementById(&#39;start_stop&#39;)</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="s1">&#39;btn-blue&#39;</span><span class="p">);</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">&#39;btn-red&#39;</span><span class="p">);</span>
-              <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                <span class="nx">clearInterval</span><span class="p">(</span><span class="nx">timer_id</span><span class="p">);</span> <span class="c1">// ここで止める。</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;START&quot;</span><span class="p">;</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="s1">&#39;btn-red&#39;</span><span class="p">);</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">&#39;btn-blue&#39;</span><span class="p">);</span>
-              <span class="p">}</span>
-            <span class="p">});</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;STOP&#39;</span><span class="p">;</span> <span class="c1">// this = document.getElementById(&#39;start_stop&#39;)</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="s1">&#39;btn-blue&#39;</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">&#39;btn-red&#39;</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">clearInterval</span><span class="p">(</span><span class="nx">timer_id</span><span class="p">);</span> <span class="c1">// ここで止める。</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;START&quot;</span><span class="p">;</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="s1">&#39;btn-red&#39;</span><span class="p">);</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">&#39;btn-blue&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
 
-            <span class="kd">var</span> <span class="nx">addZero</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
-              <span class="k">if</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span> <span class="o">+</span> <span class="nx">value</span><span class="p">;</span>
-              <span class="p">}</span>
-              <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
-            <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">addZero</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span> <span class="o">+</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
+  <span class="p">}</span>
 
-            <span class="kd">var</span> <span class="nx">goTimer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
-              <span class="kd">var</span> <span class="nx">now</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">goTimer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="kd">var</span> <span class="nx">now</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
 
-              <span class="kd">var</span> <span class="nx">milli</span> <span class="o">=</span> <span class="nx">now</span><span class="p">.</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">-</span> <span class="nx">start</span><span class="p">.</span><span class="nx">getTime</span><span class="p">();</span>
-              <span class="kd">var</span> <span class="nx">seconds</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">milli</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">);</span>
-              <span class="kd">var</span> <span class="nx">minutes</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">seconds</span> <span class="o">/</span> <span class="mi">60</span><span class="p">);</span>
-              <span class="kd">var</span> <span class="nx">hours</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">minutes</span> <span class="o">/</span> <span class="mi">60</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">milli</span> <span class="o">=</span> <span class="nx">now</span><span class="p">.</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">-</span> <span class="nx">start</span><span class="p">.</span><span class="nx">getTime</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">seconds</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">milli</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">minutes</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">seconds</span> <span class="o">/</span> <span class="mi">60</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">hours</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">minutes</span> <span class="o">/</span> <span class="mi">60</span><span class="p">);</span>
 
-              <span class="nx">milli</span>   <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">((</span><span class="nx">milli</span> <span class="o">-</span> <span class="nx">seconds</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">);</span>
-              <span class="nx">seconds</span> <span class="o">=</span> <span class="nx">seconds</span> <span class="o">-</span> <span class="nx">minutes</span> <span class="o">*</span> <span class="mi">60</span><span class="p">;</span>
-              <span class="nx">minutes</span> <span class="o">=</span> <span class="nx">minutes</span> <span class="o">-</span> <span class="nx">hours</span> <span class="o">*</span> <span class="mi">60</span><span class="p">;</span>
+    <span class="nx">milli</span>   <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">((</span><span class="nx">milli</span> <span class="o">-</span> <span class="nx">seconds</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span><span class="o">/</span><span class="mi">10</span><span class="p">);</span>
+    <span class="nx">seconds</span> <span class="o">=</span> <span class="nx">seconds</span> <span class="o">-</span> <span class="nx">minutes</span> <span class="o">*</span> <span class="mi">60</span><span class="p">;</span>
+    <span class="nx">minutes</span> <span class="o">=</span> <span class="nx">minutes</span> <span class="o">-</span> <span class="nx">hours</span> <span class="o">*</span> <span class="mi">60</span><span class="p">;</span>
 
-              <span class="nx">milli</span>   <span class="o">=</span> <span class="nx">addZero</span><span class="p">(</span><span class="nx">milli</span><span class="p">);</span>
-              <span class="nx">seconds</span> <span class="o">=</span> <span class="nx">addZero</span><span class="p">(</span><span class="nx">seconds</span><span class="p">);</span>
-              <span class="nx">minutes</span> <span class="o">=</span> <span class="nx">addZero</span><span class="p">(</span><span class="nx">minutes</span><span class="p">);</span>
-              <span class="nx">hours</span>   <span class="o">=</span> <span class="nx">addZero</span><span class="p">(</span><span class="nx">hours</span><span class="p">);</span>
+    <span class="nx">milli</span>   <span class="o">=</span> <span class="nx">addZero</span><span class="p">(</span><span class="nx">milli</span><span class="p">);</span>
+    <span class="nx">seconds</span> <span class="o">=</span> <span class="nx">addZero</span><span class="p">(</span><span class="nx">seconds</span><span class="p">);</span>
+    <span class="nx">minutes</span> <span class="o">=</span> <span class="nx">addZero</span><span class="p">(</span><span class="nx">minutes</span><span class="p">);</span>
+    <span class="nx">hours</span>   <span class="o">=</span> <span class="nx">addZero</span><span class="p">(</span><span class="nx">hours</span><span class="p">);</span>
 
-              <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;timer&#39;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">hours</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nx">minutes</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nx">seconds</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nx">milli</span><span class="p">;</span>
-            <span class="p">}</span>
-          <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-          <span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
-          <span class="p">.</span><span class="nc">container</span> <span class="p">{</span>
-            <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
-            <span class="k">margin</span><span class="p">:</span> <span class="mi">30</span><span class="kt">px</span> <span class="kc">auto</span><span class="p">;</span>
-          <span class="p">}</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;timer&#39;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">hours</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nx">minutes</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nx">seconds</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="o">+</span> <span class="nx">milli</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">style</span><span class="p">&gt;</span>
+<span class="p">.</span><span class="nc">container</span> <span class="p">{</span>
+  <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
+  <span class="k">margin</span><span class="p">:</span> <span class="mi">30</span><span class="kt">px</span> <span class="kc">auto</span><span class="p">;</span>
+<span class="p">}</span>
 
-          <span class="c">/*idは #で指定する。*/</span>
-          <span class="p">#</span><span class="nn">timer</span> <span class="p">{</span>
-            <span class="k">font-size</span><span class="p">:</span> <span class="mi">36</span><span class="kt">px</span><span class="p">;</span>
-            <span class="k">border</span><span class="p">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="kc">solid</span> <span class="mh">#ccc</span><span class="p">;</span>
-            <span class="err">margin</span> <span class="err">30px</span> <span class="err">auto</span><span class="p">;</span>
-            <span class="k">padding</span><span class="p">:</span> <span class="mi">50</span><span class="kt">px</span><span class="p">;</span>
-            <span class="k">background-color</span><span class="p">:</span> <span class="mh">#000</span><span class="p">;</span>
-            <span class="k">color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
-            <span class="k">border-radius</span><span class="p">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
-            <span class="k">box-shadow</span><span class="p">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="mi">1</span><span class="kt">px</span> <span class="mi">3</span><span class="kt">px</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">.5</span><span class="p">);</span>
-          <span class="p">}</span>
+<span class="c">/*idは #で指定する。*/</span>
+<span class="p">#</span><span class="nn">timer</span> <span class="p">{</span>
+  <span class="k">font-size</span><span class="p">:</span> <span class="mi">36</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">border</span><span class="p">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="kc">solid</span> <span class="mh">#ccc</span><span class="p">;</span>
+  <span class="err">margin</span> <span class="err">30px</span> <span class="err">auto</span><span class="p">;</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mi">50</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">background-color</span><span class="p">:</span> <span class="mh">#000</span><span class="p">;</span>
+  <span class="k">color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+  <span class="k">border-radius</span><span class="p">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">box-shadow</span><span class="p">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="mi">1</span><span class="kt">px</span> <span class="mi">3</span><span class="kt">px</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">.5</span><span class="p">);</span>
+<span class="p">}</span>
 
-          <span class="p">.</span><span class="nc">btn-blue</span> <span class="p">{</span>
-            <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">68</span><span class="p">,</span> <span class="mi">122</span><span class="p">,</span> <span class="mi">178</span><span class="p">);</span>
-            <span class="k">color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
-            <span class="k">padding</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-            <span class="k">border-radius</span><span class="p">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
-          <span class="p">}</span>
+<span class="p">.</span><span class="nc">btn-blue</span> <span class="p">{</span>
+  <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgba</span><span class="p">(</span><span class="mi">68</span><span class="p">,</span> <span class="mi">122</span><span class="p">,</span> <span class="mi">178</span><span class="p">);</span>
+  <span class="k">color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">border-radius</span><span class="p">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
 
-          <span class="p">.</span><span class="nc">btn-red</span> <span class="p">{</span>
-            <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="mi">252</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">84</span><span class="p">);</span>
-            <span class="k">color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
-            <span class="k">padding</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
-            <span class="k">border-radius</span><span class="p">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
-          <span class="p">}</span>
-          <span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
-          </code></pre></div>
-        
+<span class="p">.</span><span class="nc">btn-red</span> <span class="p">{</span>
+  <span class="k">background-color</span><span class="p">:</span> <span class="nb">rgb</span><span class="p">(</span><span class="mi">252</span><span class="p">,</span> <span class="mi">92</span><span class="p">,</span> <span class="mi">84</span><span class="p">);</span>
+  <span class="k">color</span><span class="p">:</span> <span class="mh">#fff</span><span class="p">;</span>
+  <span class="k">padding</span><span class="p">:</span> <span class="mi">10</span><span class="kt">px</span><span class="p">;</span>
+  <span class="k">border-radius</span><span class="p">:</span> <span class="mi">3</span><span class="kt">px</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">&lt;/</span><span class="nt">style</span><span class="p">&gt;</span>
+</code></pre></div>
+
         </div><!-- /.entry-content -->
     
       </article>
