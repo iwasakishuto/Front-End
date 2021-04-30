@@ -159,6 +159,11 @@
 
           <h3>選出されたポケモン & ダメージ計算</h3>
 
+          <ul>
+            <li>「攻」にチェックが付いているポケモンの技でダメージが計算されます。</li>
+            <li><a href="http://wiki.pokemonwiki.com/wiki/%E5%A8%81%E5%8A%9B#%E5%9F%BA%E7%A4%8E%E5%A8%81%E5%8A%9B%E3%81%8C%E5%A4%89%E3%82%8F%E3%82%8B%E3%82%8F%E3%81%96">威力 - ポケモンWiki</a>に記載されているような、状況によって基礎威力が変化する技は、手動で威力を変更して対応してください。</li>
+          </ul>
+
           <p><a class="btn-correct-ivs" id="js-popup-show">個体値(Individual Values)の修正</a></p>
 
           <div class="popup" id="js-popup">
@@ -182,6 +187,7 @@
 
           <form id="battle-situation-setting-form" name="SITUATION">
             <h3>戦況の設定</h3>
+            <p>以下の設定が、上記の計算に反映されます。</p>
             <table class="fixed" id="battle-situation-table">
               <thead><tr><th colspan="6" style="text-align: center">戦況</th></tr></thead>
               <tbody class="g1">
@@ -293,6 +299,22 @@
               else if (rentalCount < 43) ret = 4;
               else                       ret = 5;
               return ret;
+            }
+            const get_move_info = function(move_name, fixedIV){
+              var type,power;
+              if (move_name=="めざめるパワー"){
+                let ret = calculate_hidden_power(Array(6).fill(fixedIV));
+                type = TYPE_KANA2KANJI[ret[0]];
+                power = ret[1]
+              }else{
+                move_data = MOVENAME2DATA[move_name];
+                type = move_data[Mdata_typeIdx];
+                power = parseInt(move_data[Mdata_powerIdx]) || 0;
+              }
+              return {
+                type : type,
+                power: power,
+              }
             }
           </script>
 
@@ -561,6 +583,7 @@
                 e.addEventListener("change", function(){
                   store_factory_condition();
                   generate_selected_rental_pokemon_table();
+                  // recalculate_damages();
                 })
               })
               return tf_rental
@@ -588,29 +611,28 @@
                 let nature = tds[RPT_natureIdx].textContent;
                 let evals = tds.slice(RPT_evsIdx, RPT_evsIdx+6).map(function(e){return parseInt(e.textContent)});
                 let moves = tds[RPT_moveIdx].textContent.split("\n").slice(1,5);
-                let move_options = moves.map(function(e){return `<option>${e}</option>`}).join("");
+                let move_options = moves.map(function(e){return e.trim()=="" ? "" : `<option>${e.trim()}</option>`}).join("");
                 let curt_move = moves[0].trim();
-                let move_data = MOVENAME2DATA[curt_move]
-                let move_type = move_data[Mdata_typeIdx];
-                let move_type_options = POKETYPES.map(function(e){return `<option${e==move_type ? " selected" : ""}>${e}</option>`})
-                let power = move_data[Mdata_powerIdx];
+                let move_info = get_move_info(curt_move, fixedIV);
+                let move_type_options = POKETYPES.map(function(e){return `<option${e==move_info.type ? " selected" : ""}>${e}</option>`})
                 let ability_options = pokedata.slice(Pdata_abilityIdx, Pdata_abilityIdx+2).map(function(e,i){return e!="" ? `<option>${e}</option>` : ""}).join("");
                 let rstats = calculate_statistics(name=pokename, ivals=Array(6).fill(fixedIV), evals=evals, nature=nature, lv=lv);
                 selected_rental_pokemon_tbody_trs += `
                 <tr${i==0 ? ' class="attacking"' : ""}>
-                  <td rowspan="2"><input type="radio" name="attacking" value="${id}"${i==0 ? " checked" : ""}></td>
+                  <td rowspan="2"><label class="boxwrapper"><input type="radio" name="attacking" value="${id}"${i==0 ? " checked" : ""}><span class="box"></span></label></td>
                   <td>${id}</td>
-                  <td rowspan="2">${Pitem_img_create(item)}</td>
+                  <td><small>${item}</small></td>
                   <td colspan="2">${fixedIV}</td>
                   <td colspan="2"><select name="move">${move_options}</select></td>
                   <td rowspan="2"><select name="ability">${ability_options}</select></td>
                   <td>0~0</td>
                 </tr>
                 <tr${i==0 ? ' class="attacking"' : ""}>
-                  <td style="background-image: ${Pname2typeColor(pokename).color};">${Picon_img_create(pokename)}</td>
+                  <td style="background-color:white;background-image: ${Pname2typeColor(pokename).color};">${Picon_img_create(pokename)}</td>
+                  <td>${Pitem_img_create(item)}</td>
                   <td>${rstats[0]}</td>
                   <td>${rstats[5]}</td>
-                  <td><input name="power" type="number" size="1" min="0" max="999" step="5" value="${power=='--' ? 0 : parseInt(power)}"></td>
+                  <td><input name="power" type="number" size="1" min="0" max="999" step="5" value="${move_info.power}"></td>
                   <td><select name="move-type">${move_type_options}</select></td>
                   <td>0.0%~0.0%</td>
                 </tr>`
@@ -627,12 +649,8 @@
                 }else if (e.name=="move"){
                   e.addEventListener("change", function(){
                     // Change Move info.
-                    let move_data = MOVENAME2DATA[e.value];
                     let tr_upper = e.parentElement.parentElement;
-                    let tr_lower = tr_upper.nextElementSibling;
-                    let tds = Array.from(tr_upper.getElementsByTagName("td")).concat(Array.from(tr_lower.getElementsByTagName("td")));
-                    tds[SRPT_move_powerIdx].getElementByTagName("input").value = parseInt(move_data[Mdata_powerIdx]) || 0;
-                    tds[SRPT_move_typeIdx].getElementByTagName("select").value = move_data[Mdata_typeIdx];
+                    change_move_info(move_name=e.value, target_id=tr_upper.getElementsByTagName("td")[SRPT_idIdx].textContent)
                     recalculate_damages();
                   })
                 }else{ // if (e.name=="power" || e.name=="ability" || e.name=="move-type")
@@ -642,20 +660,38 @@
                 }
               })
             }
+            function change_move_info(move_name, target_id){
+              var selected_rental_pokemon_tbody_trs = selected_rental_pokemon_tbody.querySelectorAll("tr");
+              for (var i=0; i<selected_rental_pokemon_tbody_trs.length/2; i++){
+                let tds_upper = Array.from(selected_rental_pokemon_tbody_trs[i*2].getElementsByTagName("td"));
+                let tds_lower = Array.from(selected_rental_pokemon_tbody_trs[i*2+1].getElementsByTagName("td"));
+                let tds = tds_upper.concat(tds_lower);
+                let id = tds[SRPT_idIdx].textContent;
+                if (id==target_id){
+                  let ret = get_move_info(move_name, id2fixedIV[tds[SRPT_idIdx]])
+                  tds[SRPT_move_powerIdx].querySelector("input").value = ret.power;
+                  tds[SRPT_move_typeIdx].querySelector("select").value = ret.type;
+                  break
+                }
+              }
+            }
             const SRPT_idIdx          = 1;
-            const SRPT_ivIdx          = 4;
-            const SRPT_HrstatsIdx     = 8;
-            const SRPT_SrstatsIdx     = 9;
+            const SRPT_ivIdx          = 3;
+            const SRPT_HrstatsIdx     = 9;
+            const SRPT_SrstatsIdx     = 10;
             const SRPT_move_nameIdx   = 4;
-            const SRPT_move_powerIdx  = 10;
-            const SRPT_move_typeIdx   = 11;
+            const SRPT_move_powerIdx  = 11;
+            const SRPT_move_typeIdx   = 12;
             const SRPT_abilityIdx     = 5;
             const SRPT_damageIdx      = 6;
-            const SRPT_damage_rateIdx = 12;
+            const SRPT_damage_rateIdx = 13;
             function recalculate_selected_rental_pokemon_rstats(){
               var lv = parseInt(factory_setting_form.lv.value);
-              selected_rental_pokemon_tbody.querySelectorAll("tr").forEach(function(e){
-                let tds = e.querySelectorAll("td");
+              var selected_rental_pokemon_tbody_trs = selected_rental_pokemon_tbody.querySelectorAll("tr");
+              for (var i=0; i<selected_rental_pokemon_tbody_trs.length/2; i++){
+                let tds_upper = Array.from(selected_rental_pokemon_tbody_trs[i*2].getElementsByTagName("td"));
+                let tds_lower = Array.from(selected_rental_pokemon_tbody_trs[i*2+1].getElementsByTagName("td"));
+                let tds = tds_upper.concat(tds_lower);
                 let id = tds[SRPT_idIdx].textContent;
                 let fixedIV = id2fixedIV[id];
                 let rental_data = RENTAL_POKEMON_LIST[parseInt(id)]
@@ -666,7 +702,10 @@
                 tds[SRPT_ivIdx].textContent = fixedIV;
                 tds[SRPT_HrstatsIdx].textContent = rstats[0];
                 tds[SRPT_SrstatsIdx].textContent = rstats[5];
-              })
+                if (pokename=="アンノーン"){
+                  change_move_info(move_name=tds[SRPT_move_nameIdx].querySelector(`select[name="move"]`).value, target_id=id)
+                }
+              }
             }
           </script>
 
@@ -675,6 +714,7 @@
           <script>
             const battle_situation_setting_form = document.getElementById("battle-situation-setting-form");
             function recalculate_damages(){
+              if (clicked_id=="") return false;
               var move_name, move_type, move_class, move_range, move_base_power, 
                   Astats, Atypes, Aability, Aitem, Aranks;
               var Aranks = Array(6).fill(battle_situation_setting_form.attacking_rank.value);
@@ -719,7 +759,7 @@
                   selected_rental_pokemon_tbody_trs[i*2+1].classList.remove("attacking");
                 }
               }
-              var Dability, Dtypes, Ditem, Dstats, ret
+              var Dability, Dtypes, Ditem, Dstats, ret;
               for (var i=0; i<selected_rental_pokemon_tbody_trs.length/2; i++){
                 let tds_upper = Array.from(selected_rental_pokemon_tbody_trs[i*2].getElementsByTagName("td"));
                 let tds_lower = Array.from(selected_rental_pokemon_tbody_trs[i*2+1].getElementsByTagName("td"));
@@ -748,12 +788,17 @@
                     has_shield=has_shield, is_flash_fire=false, weather=weather, 
                     is_burned_state=is_burned_state, hit_critical=hit_critical,
                   )
+                  let percents    = ret.map(function(e){return (e/Dstats[0]*100)});
+                  let ave_percent = (percents[0]+percents[1])/2
+                  // TRANSPARENT, RED, YELLOW, GREEN
+                  let bg_color = ave_percent==0 ? "transparent" : (ave_percent>79) ? "#f7565e" : (ave_percent>=52) ? "#fff052" : "#84ffa4";
+                  tds[SRPT_damageIdx].textContent = ret.join(" ~ ");
+                  tds[SRPT_damage_rateIdx].textContent = percents.map(function(e){return e.toFixed(1)+"%"}).join(" ~ ");
+                  tds[SRPT_damageIdx].style.backgroundColor = tds[SRPT_damage_rateIdx].style.backgroundColor = bg_color;
                 }else{
-                  ret = [0, 0];
-                  Dstats = [1]
+                  tds[SRPT_damageIdx].textContent = tds[SRPT_damage_rateIdx].textContent = "";
+                  tds[SRPT_damageIdx].style.backgroundColor = tds[SRPT_damage_rateIdx].style.backgroundColor = "transparent";
                 }
-                tds[SRPT_damageIdx].textContent = ret.join(" ~ ");
-                tds[SRPT_damage_rateIdx].textContent = ret.map(function(e){return (e/Dstats[0]*100).toFixed(1)+"%"}).join(" ~ ")
               }
               curtAid = clicked_id;
             }
@@ -799,6 +844,12 @@
               for (let i=0; i<factory_setting_form.length; i++){
                 factory_setting_form[i].addEventListener("change", set_factory_condition)
               }
+              for(let i=0; i<battle_situation_setting_form.length; i++){
+                let e = battle_situation_setting_form.elements[i];
+                e.onchange = function(){
+                  recalculate_damages();
+                };
+              }
               load_rental_pokemons();
               tf_rental = filter_rental_pokemon_table();
               flt0_rental_pokemon_table_id_select = document.getElementById("flt0_rental-pokemon-table");
@@ -833,14 +884,14 @@
               width: 100%;
             }
             table#selected-rental-pokemon-table tr.attacking{
-              background-color: crimson;
+              background-image: radial-gradient( circle farthest-corner at 47.4% 55%,  rgba(218,61,61,1) 0%, rgba(170,13,71,0.81) 90% );
               color: white;
             }
             div.overflow-ms{
               width: 32px;
               height: 32px;
               overflow: visible;
-              display: flex;
+              display: inline-flex;
               align-items: center;
               justify-content: center;
               pointer-events: none;
@@ -890,6 +941,67 @@
             }
             .g2 {
               background-color: antiquewhite;
+            }
+            /* Radiobox */
+            label.boxwrapper {
+              display: inline-block;
+              vertical-align: middle;
+            }
+            label input + span {
+              display: block;
+              position: relative;
+              float: left;
+              width: 30px;
+              height: 30px;
+              background-color: #fff;
+              border-radius: 4px;
+              -webkit-transition: all 0.4s ease;
+              -moz-transition: all 0.4s ease;
+              transition: all 0.4s ease;
+              overflow: hidden;
+              cursor: pointer;
+            }
+            label input + span:after {
+              margin: auto;
+              position: absolute;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              border-radius: 4px;
+              background-color: #eee;
+              content: "";
+              -webkit-transition: all 0.1s ease;
+              -moz-transition: all 0.1s ease;
+              transition: all 0.1s ease;
+              z-index: 50;
+            }
+            label input + span:hover:after {
+              background-color: #ed143d66;
+            }
+            label input[type="radio"] {
+              display: none;
+            }
+            label input[type="radio"]:checked + span.box:before{
+              margin: auto;
+              position: absolute;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              background-color: crimson;
+              text-align: center;
+              line-height: 30px;
+              font-size: 16px;
+              color: #fff;
+              content: "○";
+              z-index: 60;
+            }
+            small{
+             font-size: .5em; 
             }
           </style>
 
