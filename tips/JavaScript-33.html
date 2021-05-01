@@ -91,7 +91,10 @@
 <table>
   <thead><tr><th colspan="4">見本データ</th></tr></thead>
   <tbody>
-    <tr><td colspan="4"><canvas width="100%" height="250px"></canvas></td></tr>
+    <tr><td colspan="4">
+      <canvas id="data-canvas"></canvas>
+      <span id="data-start-time" class="left">0[s]</span><span id="data-end-time" class="right">10[s]</span>
+    </td></tr>
     <tr>
       <td><a class="btn--click btn--shadow btn--red" id="start-btn">Start Recording</a></td>
       <td><a class="btn--click btn--shadow btn--blue" id="stop-btn">Stop Recording</a></td>
@@ -101,7 +104,10 @@
   </tbody>
   <thead><tr><th colspan="4">録音データ</th></tr></thead>
   <tbody>
-    <tr><td colspan="4"><canvas width="100%" height="250px"></canvas></td></tr>
+    <tr><td colspan="4">
+      <canvas id="recorded-canvas"></canvas>
+      <span id="record-start-time" class="left">0[s]</span><span id="record-end-time" class="right">10[s]</span>
+    </td></tr>
     <tr>
       <td colspan="2"><a class="btn--click btn--shadow btn--goldenrod" id="download-btn">Download Recorded Audio</a></td>
       <td colspan="2"><a class="btn--click btn--shadow" id="upload-btn" onclick="NotImprementedAlert()">Upload Training Audio</a></td>
@@ -121,17 +127,48 @@
 </script>
 
 <script>
-  const startBtn      = document.getElementById("start-btn");
-  const stopBtn       = document.getElementById("stop-btn");
-  const retryBtn      = document.getElementById("retry-btn");
-  const nextBtn       = document.getElementById("next-btn");
-  const downloadBtn   = document.getElementById("download-btn");
-  const uploadBtn     = document.getElementById("upload-btn");
-  const bufferSize    = 1024;
-  const headerSize    = 44;
-  var audioData       = [];
-  var audioSampleRate = null;
-  var audioContext    = null;
+  const startBtn         = document.getElementById("start-btn");
+  const stopBtn          = document.getElementById("stop-btn");
+  const retryBtn         = document.getElementById("retry-btn");
+  const nextBtn          = document.getElementById("next-btn");
+  const downloadBtn      = document.getElementById("download-btn");
+  const uploadBtn        = document.getElementById("upload-btn");
+  const dataCanvas       = document.getElementById("data-canvas");
+  const dataCtx          = dataCanvas.getContext('2d');
+  const recordedCanvas   = document.getElementById("recorded-canvas");
+  const recordedCtx      = recordedCanvas.getContext('2d');
+  const canvasWidth      = 700;
+  const canvasHeight     = 250;
+  const canvasTopOffset  = canvasHeight/2;
+  const MaximumRecordSecond    = 10; // Maximum length[s] of recorded data
+  const bufferSize       = 1024;
+  const headerSize       = 44;
+  const wavWidth         = 1;
+  const wavMagnification = 1000;
+  const wavSpeed         = 1;
+  const preparationSecond = 1;
+  const wavLengthSecond  = MaximumRecordSecond+preparationSecond
+  var audioData        = [];
+  var audioSampleRate  = null;
+  var audioContext     = null;
+  var startTime        = null;
+  var prev_pos = pos = 0;
+  dataCanvas.width  = recordedCanvas.width  = canvasWidth;
+  dataCanvas.height = recordedCanvas.height = canvasHeight;
+  dataCtx.fillStyle     = "green";
+  recordedCtx.fillStyle = "#008db8";
+
+  // Initialize the variables and context.
+  const Initialization = function(){
+    audioData = []; 
+    audioSampleRate = null; 
+    audioContext = null; 
+    startTime = null;
+    prev_pos = 0
+    pos = 0; 
+    dataCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+    recordedCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+  }
 
   /** 
   * Generate Trainer Table.
@@ -221,10 +258,16 @@
   * @param {Array} audioData
   */
   function copyAudioPerUnit(input, buf_size, audioData) {
-    const bufferData = new Float32Array(buf_size);
-    for (var i = 0; i < buf_size; i++) {
-      bufferData[i] = input[i];
-    }
+    var bufferData = new Float32Array(buf_size);
+    let sum=0;
+    input.forEach(function(wav, i){
+      sum+=wav;
+      bufferData[i]=wav;
+    })
+    if (startTime == null) startTime = new Date().getTime();
+    pos = ((new Date().getTime()-startTime)/1000)/wavLengthSecond*canvasWidth
+    recordedCtx.fillRect(prev_pos, canvasTopOffset, pos-prev_pos, sum*wavMagnification);
+    prev_pos = pos;
     audioData.push(bufferData);
   };
 
@@ -262,8 +305,7 @@
 
   // Click-Event for Start Button.
   const startRecording = async function(){
-    // Initialize
-    audioData = []; audioSampleRate = null; audioContext = null;
+    Initialization();
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
     await navigator.getUserMedia({
       audio: true,
@@ -294,6 +336,18 @@
     text-align: center;
     background-color: black;
     color: white;
+  }
+  canvas {
+     width: 700px;
+     height: 250px;
+     border: 2px solid #008db8;
+     background-color: black;
+  }
+  span.left {
+    float: left;
+  }
+  span.right {
+    float: right;
   }
   a.btn--click {
     color: #fff;
