@@ -86,21 +86,22 @@
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
           </footer><!-- /.post-info -->
 <!-- NOT "| indent(10, True)"  -->
-<p>まずは、ブラウザで録音ができるアプリを作成しました。今後[TODO]に書かれているように、訓練データ等の波形を表示できるようにします。</p>
+<p>まずは、ブラウザで録音ができるアプリを作成しました。今後 [TODO] に書かれているようにコンテンツを充実させます。</p>
 
 <p><audio id="uploaded-audio" style="display:none;"></audio>
 <table>
-  <thead><tr><th colspan="4">見本データ</th></tr></thead>
+  <thead><tr><th colspan="4">見本データ [<span id="curt_no"></span> / <span id="total_data_num"></span>]</th></tr></thead>
   <tbody>
-    <tr><td colspan="4">
+    <tr><td colspan="4" style="position:relative;">
       <canvas id="data-canvas"></canvas>
+      <input id="data-position" type="range" min="0" value="0"step="0.01" max="10">
       <span id="data-start-time" class="left">0[s]</span><span id="data-end-time" class="right">10[s]</span>
     </td></tr>
     <tr>
-      <td><a class="btn--click btn--shadow btn--red" id="start-btn">Start Recording</a></td>
-      <td><a class="btn--click btn--shadow btn--blue" id="stop-btn">Stop Recording</a></td>
-      <td><a class="btn--click btn--shadow btn--purple" id="retry-btn">Retry Recording</a></td>
-      <td><a class="btn--click btn--shadow" id="next-btn" onclick="NotImprementedAlert()">Next Data</a></td>
+      <td colspan="1"><a class="btn--click btn--red btn--retry-recording" id="retry-btn">Retry Recording</a></td>
+      <td colspan="1"><a class="btn--click btn--blue btn--stop-recording" id="stop-btn">Stop Recording</a></td>
+      <td colspan="1"><a class="btn--click btn--to-play btn--blue" id="audio-play-pause-btn">Pause Audio</a></td>
+      <td colspan="1"><a class="btn--click btn--green btn--next" id="next-btn" onclick="NotImprementedAlert()">Next Audio</a></td>
     </tr>
   </tbody>
   <thead><tr><th colspan="4">録音データ</th></tr></thead>
@@ -110,14 +111,15 @@
       <span id="record-start-time" class="left">0[s]</span><span id="record-end-time" class="right">10[s]</span>
     </td></tr>
     <tr>
-      <td colspan="2"><a class="btn--click btn--shadow btn--goldenrod" id="download-btn">Download Recorded Audio</a></td>
-      <td colspan="2"><label><input type="file" id="upload-btn" accept="audio/wav"></label></td>
+      <td colspan="2"><label class="btn--click btn--red btn--upload"><input type="file" id="upload-btn" accept="audio/wav">Upload Audio (Training Data)</label></td>
+      <td colspan="2"><a class="btn--click btn--download" id="download-btn">Download Recorded Audio</a></td>
     </tr>
   </tbody>
 </table></p>
 <ul>[TODO]
-  <li><a href="https://unpkg.com/wavesurfer.js"><code>wavesurfer.js</code></a>等を用いて、録音しているデータをリアルタイムに波形を表示する。</li>
-  <li>正解データを上に流すことで、より訓練データの作成を楽にする。</li>
+  <li>波形データをもう少し勉強する。</li>
+  <li>ディレクトリアップロードに対応させる。</li>
+  <li>キーボードで操作可能にする。</li>
 </ul>
 
 <script>
@@ -127,26 +129,28 @@
 </script>
 
 <script>
-  const startBtn         = document.getElementById("start-btn");
-  const stopBtn          = document.getElementById("stop-btn");
-  const retryBtn         = document.getElementById("retry-btn");
-  const nextBtn          = document.getElementById("next-btn");
-  const downloadBtn      = document.getElementById("download-btn");
-  const uploadBtn        = document.getElementById("upload-btn");
-  const uploadedAudio    = document.getElementById("uploaded-audio");
-  const dataCanvas       = document.getElementById("data-canvas");
-  const dataCtx          = dataCanvas.getContext('2d');
-  const recordedCanvas   = document.getElementById("recorded-canvas");
-  const recordedCtx      = recordedCanvas.getContext('2d');
-  const canvasWidth      = 700;
-  const canvasHeight     = 250;
-  const canvasTopOffset  = canvasHeight/2;
-  const MaximumRecordSecond    = 10; // Maximum length[s] of recorded data
-  const bufferSize       = 1024;
-  const headerSize       = 44;
-  const wavMagnification = 1000;
-  const preparationSecond = 1;
-  const wavLengthSecond  = MaximumRecordSecond+preparationSecond
+  const dataPositionControl = document.querySelector("input#data-position");
+  const audioPlayPauseBtn   = document.querySelector("a#audio-play-pause-btn")
+  const retryBtn            = document.querySelector("a#retry-btn");
+  const stopBtn             = document.querySelector("a#stop-btn");
+  const nextBtn             = document.querySelector("a#next-btn");
+  const downloadBtn         = document.querySelector("a#download-btn");
+  const uploadBtn           = document.querySelector("input#upload-btn");
+  const uploadedAudio       = document.querySelector("audio#uploaded-audio");
+  const dataCanvas          = document.querySelector("canvas#data-canvas");
+  const dataCtx             = dataCanvas.getContext("2d");
+  const recordedCanvas      = document.querySelector("canvas#recorded-canvas");
+  const recordedCtx         = recordedCanvas.getContext("2d");
+  const canvasWidth           = 700;
+  const canvasHeight          = 250;
+  const canvasTopOffset       = canvasHeight/2;
+  const wavMaxHeight          = canvasTopOffset*0.95;
+  const MaximumRecordDuration = 10; // Maximum length[s] of recorded data
+  const bufferSize            = 1024;
+  const headerSize            = 44;
+  const wavMagnification      = 1000;
+  const preparationSecond     = 1;
+  const wavLengthSecond       = MaximumRecordDuration+preparationSecond
   dataCanvas.width  = recordedCanvas.width  = canvasWidth;
   dataCanvas.height = recordedCanvas.height = canvasHeight;
   dataCtx.fillStyle     = "green";
@@ -178,6 +182,8 @@
   var duration = 0;
   var prev_pos_data = pos_data = 0;
   const InitializeForAudio = function(){
+    reader = null;
+    duration = 0;
     dataCtx.clearRect(0, 0, canvasWidth, canvasHeight);
   }
 
@@ -332,17 +338,23 @@
 
   function drawUploadedAudioPerUnit(samples){
     let sampleLength = samples.length
+    let buf_size = Math.max(Math.ceil(sampleLength/bufferSize),2);
+    let buffers = [];
     let sum = 0;
-    buf_size = Math.ceil(sampleLength/100);
     samples.forEach(function(wav, i){
       if (i%buf_size==0){
-        pos_data = i/sampleLength*(duration/10)*canvasWidth;
-        dataCtx.fillRect(prev_pos_data, canvasTopOffset, pos_data-prev_pos_data, -sum*wavMagnification);
-        prev_pos_data = pos_data;
+        buffers.push(Math.abs(sum))
         sum = 0;
       }else{
         sum += wav
       }
+    })
+    let max_height = Math.max(...buffers);
+    let tmp = buf_size/sampleLength*(duration/MaximumRecordDuration)*canvasWidth;
+    buffers.forEach(function(wav,i){
+      pos_data = i*tmp;
+      dataCtx.fillRect(prev_pos_data, canvasTopOffset, pos_data-prev_pos_data, -wav/max_height*wavMaxHeight);
+      prev_pos_data = pos_data;
     })
   }
 
@@ -392,7 +404,6 @@
       console.error(e)
     })
   }
-  startBtn.addEventListener("click", startRecording);
   retryBtn.addEventListener("click", startRecording);
   // Click-Event for Stop Button.
   stopBtn.addEventListener("click", async function(e){
@@ -400,7 +411,7 @@
     await audioContext.close()
   });
   uploadBtn.addEventListener("change", function(){
-    InitializeForAudio()
+    InitializeForAudio();
     if (!uploadBtn.value || !window.FileReader) return false;
     let file = uploadBtn.files[0]
     if (!file) return false
@@ -414,17 +425,63 @@
       uploadedAudio.addEventListener("loadedmetadata", function(){
         duration = uploadedAudio.duration;
         console.log("The duration of the song is of: ", duration)
-        drawUploadedAudioPerUnit(decodeWAV(view))
+        drawUploadedAudioPerUnit(decodeWAV(view));
+        uploadedAudio.play();
       }, false)
     }
     reader.readAsArrayBuffer(file)
   });
+
+  var playtimer = null
+  const startTimer = function(){
+    playtimer = setInterval(function(){
+      dataPositionControl.value = uploadedAudio.currentTime;
+      if (uploadedAudio.ended){
+        stopTimer();
+        to_play_class_names.forEach(function(e){audioPlayPauseBtn.classList.remove(e)})
+        to_pause_class_names.forEach(function(e){audioPlayPauseBtn.classList.add(e)})
+        audioPlayPauseBtn.innerHTML = "Play Audio"
+      }
+    }, 100);
+  };
+  const stopTimer = function(){
+    clearInterval(playtimer);
+  };
+  startTimer();
+  dataPositionControl.addEventListener("input", function() {
+    uploadedAudio.currentTime = dataPositionControl.value;
+    startTimer()
+  });
+  dataPositionControl.addEventListener("change", function() {
+    uploadedAudio.currentTime = dataPositionControl.value;
+    startTimer()
+  });
+  audioPlayPauseBtn.addEventListener("click", function(){
+    if (audioPlayPauseBtn.classList.contains(to_play_class_names[0])){
+      uploadedAudio.pause();
+      stopTimer();
+      to_play_class_names.forEach(function(e){audioPlayPauseBtn.classList.remove(e)})
+      to_pause_class_names.forEach(function(e){audioPlayPauseBtn.classList.add(e)})
+      audioPlayPauseBtn.innerHTML = "Play Audio"
+    }else{
+      uploadedAudio.play();
+      startTimer();
+      to_play_class_names.forEach(function(e){audioPlayPauseBtn.classList.add(e)})
+      to_pause_class_names.forEach(function(e){audioPlayPauseBtn.classList.remove(e)})
+      audioPlayPauseBtn.innerHTML = "Pause Audio"
+    }
+  })
+  const to_play_class_names = ["btn--to-play", "btn--blue"];
+  const to_pause_class_names = ["btn--to-pause", "btn--red"];
 </script>
 
 <style>
   table * {
     vertical-align: middle;
     text-align: center;
+  }
+  table.fixed {
+    table-layout: fixed;
   }
   thead th {
     vertical-align: middle;
@@ -444,7 +501,11 @@
   span.right {
     float: right;
   }
-  a.btn--click {
+  a.btn--click:link {
+      padding: 0.3em 1em;
+      color: inherit;
+  }
+  .btn--click {
     color: #fff;
     background-color: gray;
     border-bottom: 5px solid black;
@@ -452,33 +513,164 @@
     padding: 0.3em 1em;
     text-decoration: none;
     cursor: pointer;
-  }
-  a.btn--click:hover {
-    margin-top: 3px;
-  }
-  a.btn--shadow {
     -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
     box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
   }
-  a.btn--goldenrod {
+  .btn--click:hover {
+    border-bottom-width: 2.5px;
+    text-decoration: none;
+  }
+  .btn--click::before{
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    padding-right: 1em;
+  }
+  .btn--click input {
+    display: none;
+  }
+  .btn--goldenrod {
     background-color: goldenrod;
     border-bottom-color: darkgoldenrod;
   }
-  a.btn--red {
+  .btn--red {
     background-color: #c94663;
     border-bottom-color: #8a1010;
   }
-  a.btn--blue {
+  .btn--blue {
     background-color: #8ab6d6;
     border-bottom-color: #2978b5;
   }
-  a.btn--green {
+  .btn--green {
     background-color: #91c788;
     border-bottom-color: #52734d;
   }
-  a.btn--purple {
+  .btn--purple {
     background-color: #a685e2;
     border-bottom-color: #6155a6;
+  }
+  .btn--yellow {
+    background-color: #fafcc2;
+    border-bottom-color: #fcf876;
+    color: black;
+  }
+  .btn--upload::before{
+    content: "\f093"
+  }
+  .btn--download::before{
+    content: "\f019"
+  }
+  .btn--next::before{
+    content: "\f30b"
+  }
+  .btn--stop-recording::before{
+    content: "\f28d"
+  }
+  .btn--retry-recording::before{
+    content: "\f3c9"
+  }
+  .btn--to-pause::before{
+    content: "\f144"
+  }
+  .btn--to-play::before{
+    content: "\f28b"
+  }
+  input#data-position{
+    width: 700px;
+    margin: 0;
+    outline: none;
+    position: absolute;
+    top: 125px;
+    left: 20px;
+    background-color: black;
+  }
+  input#data-position{
+    width: 700px;
+    margin: 0;
+    outline: none;
+    position: absolute;
+    top: 125px;
+    left: 20px;
+    background-color: black;
+  }
+  input#data-position[type=range] {
+    -webkit-appearance: none;
+    margin: 10px 0;
+  }
+  input#data-position[type=range]:focus {
+    outline: none;
+  }
+  input#data-position[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 6.4px;
+    cursor: pointer;
+    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+    background: #fafcc2;
+    border-radius: 25px;
+    border: 0px solid #000101;
+  }
+  input#data-position[type=range]::-webkit-slider-thumb {
+    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+    border: 0px solid #000000;
+    height: 15px;
+    width: 20px;
+    border-radius: 7px;
+    background: #fcf876;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -3.0px;
+    /* margin-right: 10px; */
+  }
+  input#data-position[type=range]:focus::-webkit-slider-runnable-track {
+    background: #fafcc2;
+  }
+  input#data-position[type=range]::-moz-range-track {
+    width: 100%;
+    height: 12.8px;
+    cursor: pointer;
+    animate: 0.2s;
+    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+    background: #fafcc2;
+    border-radius: 25px;
+    border: 0px solid #000101;
+  }
+  input#data-position[type=range]::-moz-range-thumb {
+    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+    border: 0px solid #000000;
+    height: 20px;
+    width: 39px;
+    border-radius: 7px;
+    background: #fafcc2;
+    cursor: pointer;
+  }
+  input#data-position[type=range]::-ms-track {
+    width: 100%;
+    height: 12.8px;
+    cursor: pointer;
+    animate: 0.2s;
+    background: transparent;
+    border-color: transparent;
+    border-width: 39px 0;
+    color: transparent;
+  }
+  input#data-position[type=range]::-ms-thumb {
+    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+    border: 0px solid #000000;
+    height: 20px;
+    width: 39px;
+    border-radius: 7px;
+    background: #fafcc2;
+    cursor: pointer;
+  }
+  input#data-position[type=range]::-ms-fill-upper,
+  input#data-position[type=range]::-ms-fill-lower {
+    background: #fafcc2;
+    border: 0px solid #000101;
+    border-radius: 50px;
+    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+  }
+  input#data-position[type=range]:focus::-ms-fill-upper,
+  input#data-position[type=range]:focus::-ms-fill-lower {
+    background: #fafcc2;
   }
 </style>
 
