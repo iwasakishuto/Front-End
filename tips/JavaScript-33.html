@@ -88,6 +88,7 @@
 <!-- NOT "| indent(10, True)"  -->
 <p>まずは、ブラウザで録音ができるアプリを作成しました。今後[TODO]に書かれているように、訓練データ等の波形を表示できるようにします。</p>
 
+<p><audio id="uploaded-audio" style="display:none;"></audio>
 <table>
   <thead><tr><th colspan="4">見本データ</th></tr></thead>
   <tbody>
@@ -110,11 +111,10 @@
     </td></tr>
     <tr>
       <td colspan="2"><a class="btn--click btn--shadow btn--goldenrod" id="download-btn">Download Recorded Audio</a></td>
-      <td colspan="2"><a class="btn--click btn--shadow" id="upload-btn" onclick="NotImprementedAlert()">Upload Training Audio</a></td>
+      <td colspan="2"><label><input type="file" id="upload-btn" accept="audio/wav"></label></td>
     </tr>
   </tbody>
-</table>
-
+</table></p>
 <ul>[TODO]
   <li><a href="https://unpkg.com/wavesurfer.js"><code>wavesurfer.js</code></a>等を用いて、録音しているデータをリアルタイムに波形を表示する。</li>
   <li>正解データを上に流すことで、より訓練データの作成を楽にする。</li>
@@ -133,6 +133,7 @@
   const nextBtn          = document.getElementById("next-btn");
   const downloadBtn      = document.getElementById("download-btn");
   const uploadBtn        = document.getElementById("upload-btn");
+  const uploadedAudio    = document.getElementById("uploaded-audio");
   const dataCanvas       = document.getElementById("data-canvas");
   const dataCtx          = dataCanvas.getContext('2d');
   const recordedCanvas   = document.getElementById("recorded-canvas");
@@ -143,31 +144,41 @@
   const MaximumRecordSecond    = 10; // Maximum length[s] of recorded data
   const bufferSize       = 1024;
   const headerSize       = 44;
-  const wavWidth         = 1;
   const wavMagnification = 1000;
-  const wavSpeed         = 1;
   const preparationSecond = 1;
   const wavLengthSecond  = MaximumRecordSecond+preparationSecond
-  var audioData        = [];
-  var audioSampleRate  = null;
-  var audioContext     = null;
-  var startTime        = null;
-  var prev_pos = pos = 0;
   dataCanvas.width  = recordedCanvas.width  = canvasWidth;
   dataCanvas.height = recordedCanvas.height = canvasHeight;
   dataCtx.fillStyle     = "green";
   recordedCtx.fillStyle = "#008db8";
 
+  // Convert millsecond to position.
+  const msec2pos = function(msec){
+    return (msec/1000) * (canvasWidth/wavLengthSecond)
+  }
+
   // Initialize the variables and context.
-  const Initialization = function(){
+  var audioData        = [];
+  var audioSampleRate  = null;
+  var audioContext     = null;
+  var startTime        = null;
+  var prev_pos_record = pos_record = 0;
+  const InitializeForRecording = function(){
     audioData = []; 
     audioSampleRate = null; 
     audioContext = null; 
     startTime = null;
-    prev_pos = 0
-    pos = 0; 
-    dataCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+    prev_pos_record = 0
+    pos_record = 0; 
     recordedCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+  }
+
+  // Initialize the variables and context.
+  var reader = null
+  var duration = 0;
+  var prev_pos_data = pos_data = 0;
+  const InitializeForAudio = function(){
+    dataCtx.clearRect(0, 0, canvasWidth, canvasHeight);
   }
 
   /** 
@@ -181,6 +192,14 @@
       view.setUint8(offset+i, char.charCodeAt(0))
     })
   };
+
+  function readString(view, offset, length){
+    let text = ''
+    for (let i = 0; i < length; i++) {
+      text += String.fromCharCode(view.getUint8(offset + i))
+    }
+    return text
+  }
 
   /** 
   * Convert data from 8bit to 16bit
@@ -196,6 +215,18 @@
     })
   };
 
+  function read16bitPCM(view, offset, length){
+    let input = []
+    let output = []
+    for (let i = 0; i < length / 2; i++) {
+      input[i] = view.getInt16(offset + i * 2, true)
+      output[i] = parseFloat(input[i]) / parseFloat(32768)
+      if (output[i] > 1.0) output[i] = 1.0
+      else if (output[i] < -1.0) output[i] = -1.0
+    }
+    return output
+  }
+
   /** 
   * encode to WAV file.
   * @param {Float32Array} samples
@@ -207,10 +238,10 @@
     let outputDataLength = samples.length * 2;
     var outBuffer = new DataView(new ArrayBuffer(headerSize + outputDataLength));
 
-    writeString(outBuffer, 0, "RIFF");  // RIFFヘッダ
+    writeString(outBuffer, 0, "RIFF");  // "RIFF" header
     outBuffer.setUint32(4, 32 + outputDataLength, true); // これ以降のファイルサイズ
-    writeString(outBuffer, 8, "WAVE"); // WAVEヘッダ
-    writeString(outBuffer, 12, "fmt "); // fmtチャンク
+    writeString(outBuffer, 8, "WAVE");  // "WAVE" header
+    writeString(outBuffer, 12, "fmt "); // "fmt" chunk.
     outBuffer.setUint32(16, 16, true); // fmtチャンクのバイト数
     outBuffer.setUint16(20, 1, true); // フォーマットID
     outBuffer.setUint16(22, 1, true); // チャンネル数
@@ -224,6 +255,32 @@
 
     return outBuffer;
   };
+
+  function decodeWAV(view){
+    let riffHeader = readString(view, 0, 4) // RIFFヘッダ
+    let fileSize = view.getUint32(4, true) // これ以降のファイルサイズ (ファイルサイズ - 8byte)
+    let waveHeader = readString(view, 8, 4) // WAVEヘッダ
+
+    let fmt = readString(view, 12, 4) // fmtチャンク
+    let fmtChunkSize = view.getUint32(16, true) // fmtチャンクのバイト数(デフォルトは16)
+    let fmtID = view.getUint16(20, true) // フォーマットID(非圧縮PCMなら1)
+    let channelNum = view.getUint16(22, true) // チャンネル数
+    let sampleRate = view.getUint32(24, true) // サンプリングレート
+    let dataSpeed = view.getUint32(28, true) // バイト/秒 1秒間の録音に必要なバイト数(サンプリングレート*チャンネル数*ビットレート/8)
+    let blockSize = view.getUint16(32, true) // ブロック境界、(ステレオ16bitなら16bit*2=4byte)
+    let bitRate = view.getUint16(34, true) // ビットレート
+
+    let exOffset = 0 //拡張パラメータ分のオフセット
+    if (fmtChunkSize > 16) {
+      const extendedSize = fmtChunkSize - 16 // 拡張パラメータのサイズ
+      exOffset = extendedSize
+    }
+    const data = readString(view, 36 + exOffset, 4) // dataチャンク
+    const dataChunkSize = view.getUint32(40 + exOffset, true) // 波形データのバイト数
+    const samples = read16bitPCM(view, 44 + exOffset, dataChunkSize + exOffset) // 波形データを受け取る
+
+    return samples
+  }
 
   /** 
   * Merge the Float32Array arrays into one Float32Array.
@@ -256,8 +313,10 @@
   * @param {Float32Array} input
   * @param {number} buf_size Buffer Size
   * @param {Array} audioData
+  * @global startTime: Start time of Recording.
+  * @global prev_pos_record, pos_record: (Previous) Position in the canvas.
   */
-  function copyAudioPerUnit(input, buf_size, audioData) {
+  function copyANDdrawAudioPerUnit(input, buf_size, audioData) {
     var bufferData = new Float32Array(buf_size);
     let sum=0;
     input.forEach(function(wav, i){
@@ -265,11 +324,27 @@
       bufferData[i]=wav;
     })
     if (startTime == null) startTime = new Date().getTime();
-    pos = ((new Date().getTime()-startTime)/1000)/wavLengthSecond*canvasWidth
-    recordedCtx.fillRect(prev_pos, canvasTopOffset, pos-prev_pos, sum*wavMagnification);
-    prev_pos = pos;
+    pos_record = msec2pos(new Date().getTime()-startTime);
+    recordedCtx.fillRect(prev_pos_record, canvasTopOffset, pos_record-prev_pos_record, -sum*wavMagnification);
+    prev_pos_record = pos_record;
     audioData.push(bufferData);
   };
+
+  function drawUploadedAudioPerUnit(samples){
+    let sampleLength = samples.length
+    let sum = 0;
+    buf_size = Math.ceil(sampleLength/100);
+    samples.forEach(function(wav, i){
+      if (i%buf_size==0){
+        pos_data = i/sampleLength*(duration/10)*canvasWidth;
+        dataCtx.fillRect(prev_pos_data, canvasTopOffset, pos_data-prev_pos_data, -sum*wavMagnification);
+        prev_pos_data = pos_data;
+        sum = 0;
+      }else{
+        sum += wav
+      }
+    })
+  }
 
   /** 
   * Create a "ScriptProcessor" that stores audio data in "audioData"
@@ -283,7 +358,7 @@
     // const scriptProcessor = new AudioWorkletNode(audioContext, "", {channelCount: 1})
     var scriptProcessor = audioContext.createScriptProcessor(bufferSize, 1, 1);
     scriptProcessor.onaudioprocess = function(evt){
-      copyAudioPerUnit(evt.inputBuffer.getChannelData(0), bufferSize, audioData);
+      copyANDdrawAudioPerUnit(evt.inputBuffer.getChannelData(0), bufferSize, audioData);
     }
     var mediaStreamSource = audioContext.createMediaStreamSource(stream);
     mediaStreamSource.connect(scriptProcessor);
@@ -305,7 +380,7 @@
 
   // Click-Event for Start Button.
   const startRecording = async function(){
-    Initialization();
+    InitializeForRecording();
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
     await navigator.getUserMedia({
       audio: true,
@@ -323,6 +398,26 @@
   stopBtn.addEventListener("click", async function(e){
     downloadWavFile(audioData, audioSampleRate);
     await audioContext.close()
+  });
+  uploadBtn.addEventListener("change", function(){
+    InitializeForAudio()
+    if (!uploadBtn.value || !window.FileReader) return false;
+    let file = uploadBtn.files[0]
+    if (!file) return false
+    reader = new FileReader()
+    reader.onload = function(e){
+      // uploadedAudio.src = e.target.result;
+      let view = new DataView(reader.result);
+      let audioBlob = new Blob([view], { type: 'audio/wav' })
+      let myURL = window.URL || window.webkitURL
+      uploadedAudio.src = myURL.createObjectURL(audioBlob)
+      uploadedAudio.addEventListener("loadedmetadata", function(){
+        duration = uploadedAudio.duration;
+        console.log("The duration of the song is of: ", duration)
+        drawUploadedAudioPerUnit(decodeWAV(view))
+      }, false)
+    }
+    reader.readAsArrayBuffer(file)
   });
 </script>
 
