@@ -90,29 +90,36 @@
 
 <p><audio id="uploaded-audio" style="display:none;"></audio>
 <table>
-  <thead><tr><th colspan="4">見本データ [<span id="curt_no"></span> / <span id="total_data_num"></span>]</th></tr></thead>
+  <thead><tr><th colspan="2">見本データ</th><th colspan="2"><code id="current-uploaded-file"></code></th><th colspan="2">[<span id="current-file-idx">0</span> / <span id="num-total-files">0</span>]</th></tr></thead>
   <tbody>
-    <tr><td colspan="4" style="position:relative;">
-      <canvas id="data-canvas"></canvas>
-      <input id="data-position" type="range" min="0" value="0"step="0.01" max="10">
-      <span id="data-start-time" class="left">0[s]</span><span id="data-end-time" class="right">10[s]</span>
-    </td></tr>
     <tr>
-      <td colspan="1"><a class="btn--click btn--red btn--retry-recording" id="retry-btn">Retry Recording</a></td>
-      <td colspan="1"><a class="btn--click btn--blue btn--stop-recording" id="stop-btn">Stop Recording</a></td>
-      <td colspan="1"><a class="btn--click btn--to-play btn--blue" id="audio-play-pause-btn">Pause Audio</a></td>
-      <td colspan="1"><a class="btn--click btn--green btn--next" id="next-btn" onclick="NotImprementedAlert()">Next Audio</a></td>
+      <td colspan="2"><a class="btn--click btn--green btn--back" id="next-btn" onclick="back2nextAudio()">Previous Audio</a></td>
+      <td colspan="2"><a class="btn--click btn--to-play btn--blue" id="audio-play-pause-btn">Pause Audio</a></td>
+      <td colspan="2"><a class="btn--click btn--green btn--next" id="next-btn" onclick="proceed2nextAudio()">Next Audio</a></td>
+    </tr>
+    <tr>
+      <td colspan="6" style="position:relative;">
+        <canvas id="data-canvas"></canvas>
+        <input id="data-position" type="range" min="0" value="0"step="0.01" max="10">
+        <span id="data-start-time" class="left">0[s]</span><span id="data-end-time" class="right">10[s]</span>
+      </td>
     </tr>
   </tbody>
-  <thead><tr><th colspan="4">録音データ</th></tr></thead>
+  <thead><tr><th colspan="6">録音データ</th></tr></thead>
   <tbody>
-    <tr><td colspan="4">
-      <canvas id="recorded-canvas"></canvas>
-      <span id="record-start-time" class="left">0[s]</span><span id="record-end-time" class="right">10[s]</span>
-    </td></tr>
     <tr>
-      <td colspan="2"><label class="btn--click btn--red btn--upload"><input type="file" id="upload-btn" accept="audio/wav">Upload Audio (Training Data)</label></td>
-      <td colspan="2"><a class="btn--click btn--download" id="download-btn">Download Recorded Audio</a></td>
+      <td colspan="3"><a class="btn--click btn--red btn--retry-recording" id="retry-btn">Retry Recording</a></td>
+      <td colspan="3"><a class="btn--click btn--blue btn--stop-recording" id="stop-btn">Stop Recording</a></td>
+    </tr>
+    <tr>
+      <td colspan="6">
+        <canvas id="recorded-canvas"></canvas>
+        <span id="record-start-time" class="left">0[s]</span><span id="record-end-time" class="right">10[s]</span>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3"><label class="btn--click btn--red btn--upload"><input type="file" id="upload-btn" accept="audio/wav" webkitdirectory>Upload Audio (Training Data)</label></td>
+      <td colspan="3"><a class="btn--click btn--download" id="download-btn">Download Recorded Audio</a></td>
     </tr>
   </tbody>
 </table></p>
@@ -123,12 +130,9 @@
 </ul>
 
 <script>
-  function NotImprementedAlert(){
-    alert("Not Impremented.")
-  }
-</script>
-
-<script>
+  const num_total_files_view  = document.querySelector("span#num-total-files");
+  const current_file_idx_view = document.querySelector("span#current-file-idx");
+  const current_filename_view = document.querySelector("code#current-uploaded-file");
   const dataPositionControl = document.querySelector("input#data-position");
   const audioPlayPauseBtn   = document.querySelector("a#audio-play-pause-btn")
   const retryBtn            = document.querySelector("a#retry-btn");
@@ -150,11 +154,15 @@
   const headerSize            = 44;
   const wavMagnification      = 1000;
   const preparationSecond     = 1;
-  const wavLengthSecond       = MaximumRecordDuration+preparationSecond
+  const wavLengthSecond       = MaximumRecordDuration+preparationSecond;
+  const allowedExtensions     = ["wav"];
+  const to_play_class_names   = ["btn--to-play", "btn--blue"];
+  const to_pause_class_names  = ["btn--to-pause", "btn--red"];
   dataCanvas.width  = recordedCanvas.width  = canvasWidth;
   dataCanvas.height = recordedCanvas.height = canvasHeight;
   dataCtx.fillStyle     = "green";
   recordedCtx.fillStyle = "#008db8";
+  var recordedAudioData = {}
 
   // Convert millsecond to position.
   const msec2pos = function(msec){
@@ -166,7 +174,7 @@
   var audioSampleRate  = null;
   var audioContext     = null;
   var startTime        = null;
-  var prev_pos_record = pos_record = 0;
+  var prev_pos_record  = pos_record = 0;
   const InitializeForRecording = function(){
     audioData = []; 
     audioSampleRate = null; 
@@ -177,13 +185,27 @@
     recordedCtx.clearRect(0, 0, canvasWidth, canvasHeight);
   }
 
+  // Initialize for Uploading Files.
+  var uploadedFiles         = [];
+  var num_total_files       = 0;
+  var curt_fileIdx          = 0;
+  var current_uploaded_file = null;
+  const InitializeForUpload = function(){
+    uploadedFiles         = [];
+    num_total_files       = 0;
+    curt_fileIdx          = 0;
+    current_uploaded_file = null;
+  }
+
   // Initialize the variables and context.
   var reader = null
   var duration = 0;
   var prev_pos_data = pos_data = 0;
+  var playtimer        = null;
   const InitializeForAudio = function(){
     reader = null;
     duration = 0;
+    uploadedAudio.currentTime = dataPositionControl.value = 0;
     dataCtx.clearRect(0, 0, canvasWidth, canvasHeight);
   }
 
@@ -390,6 +412,18 @@
     // downloadBtn.click();
   }
 
+  const saveRecordedAudio = async function(){
+    var wav_data = encodeToWAV(mergeBuffers(audioData), audioSampleRate);
+    await audioContext.close()
+    recordedAudioData[current_uploaded_file.name] = wav_data;
+    // downloadBtn.href = toURL(wav_data, "audio/wav");
+    // downloadBtn.download = "test.wav";
+  }
+
+  const zipRecordedAllAudio = function(){
+    alert("Not Impremented.")
+  }
+
   // Click-Event for Start Button.
   const startRecording = async function(){
     InitializeForRecording();
@@ -404,17 +438,21 @@
       console.error(e)
     })
   }
-  retryBtn.addEventListener("click", startRecording);
-  // Click-Event for Stop Button.
-  stopBtn.addEventListener("click", async function(e){
-    downloadWavFile(audioData, audioSampleRate);
-    await audioContext.close()
-  });
-  uploadBtn.addEventListener("change", function(){
+
+  const proceed2nextAudio = function(){
+    curt_fileIdx = Math.min(curt_fileIdx+1, num_total_files-1);
+    readFile();
+  }
+  const back2nextAudio = function(){
+    curt_fileIdx = Math.max(curt_fileIdx-1, 0);
+    readFile();
+  }
+
+  const readFile = function(){
     InitializeForAudio();
-    if (!uploadBtn.value || !window.FileReader) return false;
-    let file = uploadBtn.files[0]
-    if (!file) return false
+    current_uploaded_file = uploadedFiles[curt_fileIdx];
+    current_filename_view.textContent = current_uploaded_file.name
+    current_file_idx_view.textContent = curt_fileIdx+1;
     reader = new FileReader()
     reader.onload = function(e){
       // uploadedAudio.src = e.target.result;
@@ -426,13 +464,12 @@
         duration = uploadedAudio.duration;
         console.log("The duration of the song is of: ", duration)
         drawUploadedAudioPerUnit(decodeWAV(view));
-        uploadedAudio.play();
+        playAudio()
       }, false)
     }
-    reader.readAsArrayBuffer(file)
-  });
+    reader.readAsArrayBuffer(current_uploaded_file)
+  }
 
-  var playtimer = null
   const startTimer = function(){
     playtimer = setInterval(function(){
       dataPositionControl.value = uploadedAudio.currentTime;
@@ -447,32 +484,54 @@
   const stopTimer = function(){
     clearInterval(playtimer);
   };
-  startTimer();
-  dataPositionControl.addEventListener("input", function() {
-    uploadedAudio.currentTime = dataPositionControl.value;
-    startTimer()
-  });
-  dataPositionControl.addEventListener("change", function() {
-    uploadedAudio.currentTime = dataPositionControl.value;
-    startTimer()
-  });
-  audioPlayPauseBtn.addEventListener("click", function(){
-    if (audioPlayPauseBtn.classList.contains(to_play_class_names[0])){
-      uploadedAudio.pause();
-      stopTimer();
-      to_play_class_names.forEach(function(e){audioPlayPauseBtn.classList.remove(e)})
-      to_pause_class_names.forEach(function(e){audioPlayPauseBtn.classList.add(e)})
-      audioPlayPauseBtn.innerHTML = "Play Audio"
-    }else{
-      uploadedAudio.play();
-      startTimer();
-      to_play_class_names.forEach(function(e){audioPlayPauseBtn.classList.add(e)})
-      to_pause_class_names.forEach(function(e){audioPlayPauseBtn.classList.remove(e)})
-      audioPlayPauseBtn.innerHTML = "Pause Audio"
-    }
-  })
-  const to_play_class_names = ["btn--to-play", "btn--blue"];
-  const to_pause_class_names = ["btn--to-pause", "btn--red"];
+
+  const playAudio = function(){
+    uploadedAudio.play();
+    startTimer();
+    to_play_class_names.forEach(function(e){audioPlayPauseBtn.classList.add(e)})
+    to_pause_class_names.forEach(function(e){audioPlayPauseBtn.classList.remove(e)})
+    audioPlayPauseBtn.innerHTML = "Pause Audio"
+  } 
+
+  window.onload = function(){
+    retryBtn.addEventListener("click", startRecording);
+    stopBtn.addEventListener("click", async function(e){
+      downloadWavFile(audioData, audioSampleRate);
+      await audioContext.close()
+    });
+    uploadBtn.addEventListener("change", function(){
+      if (!uploadBtn.value || !window.FileReader) return false;
+      InitializeForUpload();
+      for (let i=0; i<uploadBtn.files.length; i++){
+        let file = uploadBtn.files[i]
+        let file_ext = file.name.split(".").pop();
+        if (allowedExtensions.includes(file_ext)){
+          uploadedFiles.push(file)
+        }
+      }
+      num_total_files_view.textContent = num_total_files = uploadedFiles.length;
+      readFile()
+    });
+    dataPositionControl.addEventListener("input", function() {
+      uploadedAudio.currentTime = dataPositionControl.value;
+      startTimer()
+    });
+    dataPositionControl.addEventListener("change", function() {
+      uploadedAudio.currentTime = dataPositionControl.value;
+      startTimer()
+    });
+    audioPlayPauseBtn.addEventListener("click", function(){
+      if (audioPlayPauseBtn.classList.contains(to_play_class_names[0])){
+        uploadedAudio.pause();
+        stopTimer();
+        to_play_class_names.forEach(function(e){audioPlayPauseBtn.classList.remove(e)})
+        to_pause_class_names.forEach(function(e){audioPlayPauseBtn.classList.add(e)})
+        audioPlayPauseBtn.innerHTML = "Play Audio"
+      }else{
+        playAudio();
+      }
+    })
+  } 
 </script>
 
 <style>
@@ -490,10 +549,10 @@
     color: white;
   }
   canvas {
-     width: 700px;
-     height: 250px;
-     border: 2px solid #008db8;
-     background-color: black;
+    width: 700px;
+    height: 250px;
+    border: 2px solid #008db8;
+    background-color: black;
   }
   span.left {
     float: left;
@@ -502,8 +561,8 @@
     float: right;
   }
   a.btn--click:link {
-      padding: 0.3em 1em;
-      color: inherit;
+    padding: 0.3em 1em;
+    color: white;
   }
   .btn--click {
     color: #fff;
