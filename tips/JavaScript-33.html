@@ -86,7 +86,14 @@
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
           </footer><!-- /.post-info -->
 <!-- NOT "| indent(10, True)"  -->
-<p>まずは、ブラウザで録音ができるアプリを作成しました。今後 [TODO] に書かれているようにコンテンツを充実させます。</p>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
+
+<ul><h3>使い方</h3>
+  <li><label class="btn--click btn--red btn--upload">Upload Audio (Training Data)</label>から音声フォルダ（<code>.wav</code>のみ）をアップロードする。</li>
+  <li>上にアップロードした各データの波形が表示されるので、それを参考にしながら同じ言葉を <a class="btn--click btn--red btn--retry-recording">Retry Recording</a> を押して録音する。</li>
+  <li><a class="btn--click btn--green btn--back">Previous Audio</a>・<a class="btn--click btn--green btn--next">Next Audio</a>を押してそれぞれの音声データに対して録音を行う。</li>
+  <li><a class="btn--click btn--download">Download Recorded Audio</a>を押すと、それまでに録音されたデータが<code>zip</code>形式でダウンロードできる。</li>
+</ul>
 
 <p><audio id="uploaded-audio" style="display:none;"></audio>
 <table>
@@ -105,11 +112,11 @@
       </td>
     </tr>
   </tbody>
-  <thead><tr><th colspan="6">録音データ</th></tr></thead>
+  <thead><tr><th colspan="2">録音データ</th><th colspan="2"><code id="current-record-file">data.wav</code></th><th colspan="2">[<span id="num-record-data">0</span>データ]</th></tr></thead>
   <tbody>
     <tr>
       <td colspan="3"><a class="btn--click btn--red btn--retry-recording" id="retry-btn">Retry Recording</a></td>
-      <td colspan="3"><a class="btn--click btn--blue btn--stop-recording" id="stop-btn">Stop Recording</a></td>
+      <td colspan="3"><a class="btn--click btn--blue btn--stop-recording" id="stop-btn">End Recording</a></td>
     </tr>
     <tr>
       <td colspan="6">
@@ -123,16 +130,14 @@
     </tr>
   </tbody>
 </table></p>
-<ul>[TODO]
-  <li>波形データをもう少し勉強する。</li>
-  <li>ディレクトリアップロードに対応させる。</li>
-  <li>キーボードで操作可能にする。</li>
-</ul>
-
 <script>
-  const num_total_files_view  = document.querySelector("span#num-total-files");
-  const current_file_idx_view = document.querySelector("span#current-file-idx");
-  const current_filename_view = document.querySelector("code#current-uploaded-file");
+  const num_total_files_view     = document.querySelector("span#num-total-files");
+  const current_file_idx_view    = document.querySelector("span#current-file-idx");
+  const current_filename_view    = document.querySelector("code#current-uploaded-file");
+  const current_record_file_view = document.querySelector("code#current-record-file");
+  const num_record_data_view     = document.querySelector("span#num-record-data");
+  const data_end_time_view       = document.querySelector("span#data-end-time");
+  const record_end_time_view     = document.querySelector("span#record-end-time");
   const dataPositionControl = document.querySelector("input#data-position");
   const audioPlayPauseBtn   = document.querySelector("a#audio-play-pause-btn")
   const retryBtn            = document.querySelector("a#retry-btn");
@@ -147,17 +152,20 @@
   const recordedCtx         = recordedCanvas.getContext("2d");
   const canvasWidth           = 700;
   const canvasHeight          = 250;
-  const canvasTopOffset       = canvasHeight/2;
-  const wavMaxHeight          = canvasTopOffset*0.95;
-  const MaximumRecordDuration = 10; // Maximum length[s] of recorded data
+  const canvasTopOffsetRecord = canvasHeight/2;
+  const canvasTopOffsetData   = 240;
+  const wavMaxHeightData      = canvasTopOffsetData*0.95; // Maximu height for Uploaded Waves.
+  // const MaximumRecordDuration = 10; // Maximum length[s] of recorded data
   const bufferSize            = 1024;
   const headerSize            = 44;
-  const wavMagnification      = 1000;
-  const preparationSecond     = 1;
-  const wavLengthSecond       = MaximumRecordDuration+preparationSecond;
+  const wavMagnification      = 10;
   const allowedExtensions     = ["wav"];
   const to_play_class_names   = ["btn--to-play", "btn--blue"];
   const to_pause_class_names  = ["btn--to-pause", "btn--red"];
+  // Define in Global Scope.
+  const URL = window.URL || window.webkitURL
+  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+
   dataCanvas.width  = recordedCanvas.width  = canvasWidth;
   dataCanvas.height = recordedCanvas.height = canvasHeight;
   dataCtx.fillStyle     = "green";
@@ -166,7 +174,7 @@
 
   // Convert millsecond to position.
   const msec2pos = function(msec){
-    return (msec/1000) * (canvasWidth/wavLengthSecond)
+    return (msec/1000) * (canvasWidth/duration)
   }
 
   // Initialize the variables and context.
@@ -176,35 +184,37 @@
   var startTime        = null;
   var prev_pos_record  = pos_record = 0;
   const InitializeForRecording = function(){
-    audioData = []; 
+    audioData       = []; 
     audioSampleRate = null; 
-    audioContext = null; 
-    startTime = null;
+    audioContext    = null; 
+    startTime       = null;
     prev_pos_record = 0
-    pos_record = 0; 
+    pos_record      = 0; 
     recordedCtx.clearRect(0, 0, canvasWidth, canvasHeight);
   }
 
   // Initialize for Uploading Files.
-  var uploadedFiles         = [];
-  var num_total_files       = 0;
-  var curt_fileIdx          = 0;
-  var current_uploaded_file = null;
+  var uploadedFiles             = [];
+  var num_total_files           = 0;
+  var curt_fileIdx              = 0;
+  var current_uploaded_file     = null;
+  var current_uploaded_filename = "data.wav"
   const InitializeForUpload = function(){
-    uploadedFiles         = [];
-    num_total_files       = 0;
-    curt_fileIdx          = 0;
-    current_uploaded_file = null;
+    uploadedFiles             = [];
+    num_total_files           = 0;
+    curt_fileIdx              = 0;
+    current_uploaded_file     = null;
+    current_uploaded_filename = "data.wav"
   }
 
   // Initialize the variables and context.
   var reader = null
-  var duration = 0;
+  var duration = 10;
   var prev_pos_data = pos_data = 0;
-  var playtimer        = null;
+  var playtimer = null;
   const InitializeForAudio = function(){
     reader = null;
-    duration = 0;
+    duration = 10;
     uploadedAudio.currentTime = dataPositionControl.value = 0;
     dataCtx.clearRect(0, 0, canvasWidth, canvasHeight);
   }
@@ -325,17 +335,6 @@
   };
 
   /** 
-  * Convert DataView to windoURL
-  * @param {Float32Array} dataview
-  * @param {string} fileType
-  * @return {string} URL for recorded audioData.
-  */
-  function toURL(dataview, fileType) {
-    const audioBlob = new Blob([dataview], { type: fileType });
-    return window.URL.createObjectURL(audioBlob);
-  }
-
-  /** 
   * Save recorded data in an array in bufferSize units. (∵ Don't know the total size of it.) 
   * @ref <https://developer.mozilla.org/ja/docs/Web/API/AudioContext/createScriptProcessor>
   * @param {Float32Array} input
@@ -353,7 +352,7 @@
     })
     if (startTime == null) startTime = new Date().getTime();
     pos_record = msec2pos(new Date().getTime()-startTime);
-    recordedCtx.fillRect(prev_pos_record, canvasTopOffset, pos_record-prev_pos_record, -sum*wavMagnification);
+    recordedCtx.fillRect(prev_pos_record, canvasTopOffsetRecord, pos_record-prev_pos_record, -sum*wavMagnification);
     prev_pos_record = pos_record;
     audioData.push(bufferData);
   };
@@ -372,10 +371,10 @@
       }
     })
     let max_height = Math.max(...buffers);
-    let tmp = buf_size/sampleLength*(duration/MaximumRecordDuration)*canvasWidth;
+    let tmp = buf_size/sampleLength*canvasWidth;
     buffers.forEach(function(wav,i){
       pos_data = i*tmp;
-      dataCtx.fillRect(prev_pos_data, canvasTopOffset, pos_data-prev_pos_data, -wav/max_height*wavMaxHeight);
+      dataCtx.fillRect(prev_pos_data, canvasTopOffsetData, pos_data-prev_pos_data, -wav/max_height*wavMaxHeightData);
       prev_pos_data = pos_data;
     })
   }
@@ -388,46 +387,55 @@
   * @return {AudioWorklet} 
   */
   function copyAudioData(audioData, stream) {
-    var audioContext = new AudioContext();
+    let audioContext = new AudioContext();
     // const scriptProcessor = new AudioWorkletNode(audioContext, "", {channelCount: 1})
-    var scriptProcessor = audioContext.createScriptProcessor(bufferSize, 1, 1);
+    let scriptProcessor = audioContext.createScriptProcessor(bufferSize, 1, 1);
     scriptProcessor.onaudioprocess = function(evt){
       copyANDdrawAudioPerUnit(evt.inputBuffer.getChannelData(0), bufferSize, audioData);
     }
-    var mediaStreamSource = audioContext.createMediaStreamSource(stream);
+    let mediaStreamSource = audioContext.createMediaStreamSource(stream);
     mediaStreamSource.connect(scriptProcessor);
     scriptProcessor.connect(audioContext.destination);
     return audioContext
   };
 
-  /** 
-  * Download AudioData as .wav file.
-  * @param {Array} audioData 
-  * @param {number} sampleRate 
-  */
-  function downloadWavFile(audioData, sampleRate) {
-    let wav_data = encodeToWAV(mergeBuffers(audioData), sampleRate);
-    downloadBtn.href = toURL(wav_data, "audio/wav");
-    downloadBtn.download = "test.wav";
-    // downloadBtn.click();
-  }
+  // /** 
+  // * Download AudioData as .wav file.
+  // * @param {Array} audioData 
+  // * @param {number} sampleRate 
+  // */
+  // function downloadWavFile(audioData, sampleRate) {
+  //   let wav_data = encodeToWAV(mergeBuffers(audioData), sampleRate);
+  //   downloadBtn.href = toURL(wav_data, "audio/wav");
+  //   downloadBtn.download = "test.wav";
+  //   // downloadBtn.click();
+  // }
 
   const saveRecordedAudio = async function(){
-    var wav_data = encodeToWAV(mergeBuffers(audioData), audioSampleRate);
-    await audioContext.close()
-    recordedAudioData[current_uploaded_file.name] = wav_data;
-    // downloadBtn.href = toURL(wav_data, "audio/wav");
-    // downloadBtn.download = "test.wav";
+    let wav_data = encodeToWAV(mergeBuffers(audioData), audioSampleRate);
+    recordedAudioData[current_uploaded_filename] =  new Blob([wav_data], { type: "audio/wav" });
+    num_record_data_view.textContent = Object.keys(recordedAudioData).length;
+    if (audioContext!=null && audioContext.state!="closed") await audioContext.close();
   }
 
-  const zipRecordedAllAudio = function(){
-    alert("Not Impremented.")
+  const generateZipBlob = function(){
+    let zip = new JSZip();
+    let folder = zip.folder("Recorded-Audio");
+    Object.keys(recordedAudioData).forEach(function(filename){
+      folder.file(filename, recordedAudioData[filename]);
+    })
+    return zip.generateAsync({ type: 'blob' });
+  }
+
+  const zipRecordedAllAudio = async function(){
+    let zipBlob = await generateZipBlob();
+    downloadBtn.href = URL.createObjectURL(zipBlob);
+    downloadBtn.download = "RecordedAudio.zip";
   }
 
   // Click-Event for Start Button.
   const startRecording = async function(){
     InitializeForRecording();
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
     await navigator.getUserMedia({
       audio: true,
       video: false,
@@ -439,30 +447,39 @@
     })
   }
 
-  const proceed2nextAudio = function(){
-    curt_fileIdx = Math.min(curt_fileIdx+1, num_total_files-1);
-    readFile();
+  const proceed2nextAudio = async function(){
+    if (num_total_files>0){
+      saveRecordedAudio();
+      await zipRecordedAllAudio();
+      curt_fileIdx = Math.min(curt_fileIdx+1, num_total_files-1);
+      readFile();
+    }
   }
-  const back2nextAudio = function(){
-    curt_fileIdx = Math.max(curt_fileIdx-1, 0);
-    readFile();
+  const back2nextAudio = async function(){
+    if (num_total_files>0){
+      saveRecordedAudio();
+      await zipRecordedAllAudio();
+      curt_fileIdx = Math.max(curt_fileIdx-1, 0);
+      readFile();
+    }
   }
 
   const readFile = function(){
     InitializeForAudio();
     current_uploaded_file = uploadedFiles[curt_fileIdx];
-    current_filename_view.textContent = current_uploaded_file.name
+    current_uploaded_filename = current_uploaded_file.name
+    current_filename_view.textContent = current_record_file_view.textContent = current_uploaded_filename
     current_file_idx_view.textContent = curt_fileIdx+1;
     reader = new FileReader()
     reader.onload = function(e){
       // uploadedAudio.src = e.target.result;
       let view = new DataView(reader.result);
       let audioBlob = new Blob([view], { type: 'audio/wav' })
-      let myURL = window.URL || window.webkitURL
-      uploadedAudio.src = myURL.createObjectURL(audioBlob)
+      uploadedAudio.src = URL.createObjectURL(audioBlob)
       uploadedAudio.addEventListener("loadedmetadata", function(){
         duration = uploadedAudio.duration;
-        console.log("The duration of the song is of: ", duration)
+        data_end_time_view.textContent = record_end_time_view.textContent = duration.toFixed(1)+"[s]"
+        dataPositionControl.max = duration
         drawUploadedAudioPerUnit(decodeWAV(view));
         playAudio()
       }, false)
@@ -495,9 +512,9 @@
 
   window.onload = function(){
     retryBtn.addEventListener("click", startRecording);
-    stopBtn.addEventListener("click", async function(e){
-      downloadWavFile(audioData, audioSampleRate);
-      await audioContext.close()
+    stopBtn.addEventListener("click", async function(){
+      saveRecordedAudio();
+      await zipRecordedAllAudio();
     });
     uploadBtn.addEventListener("change", function(){
       if (!uploadBtn.value || !window.FileReader) return false;
@@ -535,6 +552,12 @@
 </script>
 
 <style>
+  ul {
+    margin: 1em;
+    border: black 1px solid;
+    padding: .5em .5em .5em 2.5em;
+    list-style: decimal;
+  }
   table * {
     vertical-align: middle;
     text-align: center;
@@ -584,6 +607,11 @@
     font-weight: 900;
     padding-right: 1em;
   }
+  .btn--click::after{
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    padding-left: 1em;
+  }
   .btn--click input {
     display: none;
   }
@@ -619,7 +647,7 @@
     content: "\f019"
   }
   .btn--next::before{
-    content: "\f30b"
+    content: "\f35a"
   }
   .btn--stop-recording::before{
     content: "\f28d"
@@ -633,21 +661,15 @@
   .btn--to-play::before{
     content: "\f28b"
   }
-  input#data-position{
-    width: 700px;
-    margin: 0;
-    outline: none;
-    position: absolute;
-    top: 125px;
-    left: 20px;
-    background-color: black;
+  .btn--back::after{
+    content: "\f359"
   }
   input#data-position{
     width: 700px;
     margin: 0;
     outline: none;
     position: absolute;
-    top: 125px;
+    top: 235px;
     left: 20px;
     background-color: black;
   }
