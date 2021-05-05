@@ -86,23 +86,24 @@
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
           </footer><!-- /.post-info -->
 <!-- NOT "| indent(10, True)"  -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
-
 <ul><h3>使い方</h3>
-  <li><label class="btn--click btn--red btn--upload">Upload Audio (Training Data)</label>から音声フォルダ（<code>.wav</code>のみ）をアップロードする。</li>
-  <li>上にアップロードした各データの波形が表示されるので、それを参考にしながら同じ言葉を <a class="btn--click btn--red btn--retry-recording">Retry Recording</a> を押して録音する。</li>
-  <li><a class="btn--click btn--green btn--back">Previous Audio</a>・<a class="btn--click btn--green btn--next">Next Audio</a>を押してそれぞれの音声データに対して録音を行う。</li>
-  <li><a class="btn--click btn--download">Download Recorded Audio</a>を押すと、それまでに録音されたデータが<code>zip</code>形式でダウンロードできる。</li>
+  <li><label class="btn--click btn--purple btn--upload btn--discription">Upload Audio (Training Data)</label>から音声フォルダ（<code>.wav</code>のみ）をアップロードします。</li>
+  <li>上にアップロードした各データの波形が表示されるので、それを参考にしながら同じ言葉を <a class="btn--click btn--red btn--retry-recording btn--discription">Retry Recording</a> <kbd>r</kbd> を押して録音開始し、<a class="btn--click btn--blue btn--stop-recording btn--discription">End Recording</a> <kbd>e</kbd> を押して終了してください。</li>
+  </li>
+  <li><a class="btn--click btn--green btn--back btn--discription">Previous Audio</a> <kbd>←</kbd> ・<a class="btn--click btn--green btn--next btn--discription">Next Audio</a> <kbd>→</kbd> を押してそれぞれの音声データに対して録音を行ってください。この時、<kbd>space</kbd>で音声を停止したり再生したりできます。</li>
+  <li><a class="btn--click btn--download btn--discription">Download Recorded Audio</a> <kbd>d</kbd> を押すと、それまでに録音されたデータが<code>zip</code>形式でダウンロードできます。</li>
 </ul>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
 
 <p><audio id="uploaded-audio" style="display:none;"></audio>
 <table>
   <thead><tr><th colspan="2">見本データ</th><th colspan="2"><code id="current-uploaded-file"></code></th><th colspan="2">[<span id="current-file-idx">0</span> / <span id="num-total-files">0</span>]</th></tr></thead>
   <tbody>
     <tr>
-      <td colspan="2"><a class="btn--click btn--green btn--back" id="next-btn" onclick="back2nextAudio()">Previous Audio</a></td>
+      <td colspan="2"><a class="btn--click btn--green btn--back" id="prev-btn">Previous Audio</a></td>
       <td colspan="2"><a class="btn--click btn--to-play btn--blue" id="audio-play-pause-btn">Pause Audio</a></td>
-      <td colspan="2"><a class="btn--click btn--green btn--next" id="next-btn" onclick="proceed2nextAudio()">Next Audio</a></td>
+      <td colspan="2"><a class="btn--click btn--green btn--next" id="next-btn">Next Audio</a></td>
     </tr>
     <tr>
       <td colspan="6" style="position:relative;">
@@ -125,7 +126,7 @@
       </td>
     </tr>
     <tr>
-      <td colspan="3"><label class="btn--click btn--red btn--upload"><input type="file" id="upload-btn" accept="audio/wav" webkitdirectory>Upload Audio (Training Data)</label></td>
+      <td colspan="3"><label class="btn--click btn--purple btn--upload"><input type="file" id="upload-btn" accept="audio/wav" webkitdirectory>Upload Audio (Training Data)</label></td>
       <td colspan="3"><a class="btn--click btn--download" id="download-btn">Download Recorded Audio</a></td>
     </tr>
   </tbody>
@@ -143,6 +144,7 @@
   const retryBtn            = document.querySelector("a#retry-btn");
   const stopBtn             = document.querySelector("a#stop-btn");
   const nextBtn             = document.querySelector("a#next-btn");
+  const prevBtn             = document.querySelector("a#prev-btn");
   const downloadBtn         = document.querySelector("a#download-btn");
   const uploadBtn           = document.querySelector("input#upload-btn");
   const uploadedAudio       = document.querySelector("audio#uploaded-audio");
@@ -158,10 +160,12 @@
   // const MaximumRecordDuration = 10; // Maximum length[s] of recorded data
   const bufferSize            = 1024;
   const headerSize            = 44;
-  const wavMagnification      = 10;
+  const wavMagnification      = 15;
   const allowedExtensions     = ["wav"];
   const to_play_class_names   = ["btn--to-play", "btn--blue"];
   const to_pause_class_names  = ["btn--to-pause", "btn--red"];
+  var prev_processLoadedAudio;
+  var processLoadedAudio;
   // Define in Global Scope.
   const URL = window.URL || window.webkitURL
   navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
@@ -355,6 +359,9 @@
     recordedCtx.fillRect(prev_pos_record, canvasTopOffsetRecord, pos_record-prev_pos_record, -sum*wavMagnification);
     prev_pos_record = pos_record;
     audioData.push(bufferData);
+    if ((new Date().getTime()-startTime)/1000>duration){
+      endRecording();
+    }
   };
 
   function drawUploadedAudioPerUnit(samples){
@@ -399,18 +406,6 @@
     return audioContext
   };
 
-  // /** 
-  // * Download AudioData as .wav file.
-  // * @param {Array} audioData 
-  // * @param {number} sampleRate 
-  // */
-  // function downloadWavFile(audioData, sampleRate) {
-  //   let wav_data = encodeToWAV(mergeBuffers(audioData), sampleRate);
-  //   downloadBtn.href = toURL(wav_data, "audio/wav");
-  //   downloadBtn.download = "test.wav";
-  //   // downloadBtn.click();
-  // }
-
   const saveRecordedAudio = async function(){
     let wav_data = encodeToWAV(mergeBuffers(audioData), audioSampleRate);
     recordedAudioData[current_uploaded_filename] =  new Blob([wav_data], { type: "audio/wav" });
@@ -431,11 +426,13 @@
     let zipBlob = await generateZipBlob();
     downloadBtn.href = URL.createObjectURL(zipBlob);
     downloadBtn.download = "RecordedAudio.zip";
+    downloadBtn.classList.add("btn--yellow");
   }
 
   // Click-Event for Start Button.
   const startRecording = async function(){
     InitializeForRecording();
+    recordedCanvas.classList.add("recording")
     await navigator.getUserMedia({
       audio: true,
       video: false,
@@ -447,21 +444,26 @@
     })
   }
 
-  const proceed2nextAudio = async function(){
+  const endRecording = async function(){
+    saveRecordedAudio();
+    recordedCanvas.classList.remove("recording")
+    await zipRecordedAllAudio();
+  }
+
+  const moveAudio = async function(is_next=true){
     if (num_total_files>0){
-      saveRecordedAudio();
-      await zipRecordedAllAudio();
-      curt_fileIdx = Math.min(curt_fileIdx+1, num_total_files-1);
+      await endRecording();
+      curt_fileIdx = is_next ? 
+        Math.min(curt_fileIdx+1, num_total_files-1) : 
+        Math.max(curt_fileIdx-1, 0);
       readFile();
     }
   }
-  const back2nextAudio = async function(){
-    if (num_total_files>0){
-      saveRecordedAudio();
-      await zipRecordedAllAudio();
-      curt_fileIdx = Math.max(curt_fileIdx-1, 0);
-      readFile();
-    }
+  const proceed2nextAudio = async function(){
+    await moveAudio(is_next=true)
+  }
+  const back2previousAudio = async function(){
+    await moveAudio(is_next=false)
   }
 
   const readFile = function(){
@@ -472,17 +474,20 @@
     current_file_idx_view.textContent = curt_fileIdx+1;
     reader = new FileReader()
     reader.onload = function(e){
-      // uploadedAudio.src = e.target.result;
+      console.log(e)
       let view = new DataView(reader.result);
       let audioBlob = new Blob([view], { type: 'audio/wav' })
       uploadedAudio.src = URL.createObjectURL(audioBlob)
-      uploadedAudio.addEventListener("loadedmetadata", function(){
+      uploadedAudio.removeEventListener("loadedmetadata", prev_processLoadedAudio)
+      processLoadedAudio = function(){
         duration = uploadedAudio.duration;
         data_end_time_view.textContent = record_end_time_view.textContent = duration.toFixed(1)+"[s]"
         dataPositionControl.max = duration
         drawUploadedAudioPerUnit(decodeWAV(view));
         playAudio()
-      }, false)
+      }
+      uploadedAudio.addEventListener("loadedmetadata", processLoadedAudio)
+      prev_processLoadedAudio = processLoadedAudio
     }
     reader.readAsArrayBuffer(current_uploaded_file)
   }
@@ -510,12 +515,47 @@
     audioPlayPauseBtn.innerHTML = "Pause Audio"
   } 
 
+  const audioPlayPause = function(){
+    if (audioPlayPauseBtn.classList.contains(to_play_class_names[0])){
+      uploadedAudio.pause();
+      stopTimer();
+      to_play_class_names.forEach(function(e){audioPlayPauseBtn.classList.remove(e)})
+      to_pause_class_names.forEach(function(e){audioPlayPauseBtn.classList.add(e)})
+      audioPlayPauseBtn.innerHTML = "Play Audio"
+    }else{
+      playAudio();
+    }
+  }
+
+  const keydownfunc = function( evt ){
+    if ((["r", "e", "d"].indexOf(evt.key)!=-1) || ([32,37,39].indexOf(evt.keyCode)!=-1)){
+      evt.preventDefault();
+    }
+    console.log(evt.key, evt.keyCode)
+    if (evt.key==="r"){
+      if (evt.metaKey){
+        location.reload();
+      }else{
+        startRecording();
+      }
+    }else if (evt.key==="e"){
+      endRecording();
+    }else if (evt.key==="d"){
+      downloadBtn.click();
+    }else if (evt.keyCode===39){ //  ←
+      proceed2nextAudio();
+    }else if (evt.keyCode===37){ // →
+      back2previousAudio();
+    }else if (evt.keyCode===32){ // Space
+      audioPlayPause();
+    } 
+  }
+
   window.onload = function(){
+    nextBtn.addEventListener("click", proceed2nextAudio);
+    prevBtn.addEventListener("click", back2previousAudio);
     retryBtn.addEventListener("click", startRecording);
-    stopBtn.addEventListener("click", async function(){
-      saveRecordedAudio();
-      await zipRecordedAllAudio();
-    });
+    stopBtn.addEventListener("click", endRecording);
     uploadBtn.addEventListener("change", function(){
       if (!uploadBtn.value || !window.FileReader) return false;
       InitializeForUpload();
@@ -537,17 +577,8 @@
       uploadedAudio.currentTime = dataPositionControl.value;
       startTimer()
     });
-    audioPlayPauseBtn.addEventListener("click", function(){
-      if (audioPlayPauseBtn.classList.contains(to_play_class_names[0])){
-        uploadedAudio.pause();
-        stopTimer();
-        to_play_class_names.forEach(function(e){audioPlayPauseBtn.classList.remove(e)})
-        to_pause_class_names.forEach(function(e){audioPlayPauseBtn.classList.add(e)})
-        audioPlayPauseBtn.innerHTML = "Play Audio"
-      }else{
-        playAudio();
-      }
-    })
+    audioPlayPauseBtn.addEventListener("click", audioPlayPause)
+        addEventListener("keydown", keydownfunc);
   } 
 </script>
 
@@ -557,6 +588,19 @@
     border: black 1px solid;
     padding: .5em .5em .5em 2.5em;
     list-style: decimal;
+  }
+  kbd {
+    display: inline-block;
+    padding: 0.2em 1em;
+    font: 14px Monaco, SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+    line-height: 20px;
+    color: #444d56;
+    vertical-align: middle;
+    background-color: #fafbfc;
+    border-bottom-color: #d1d5da;
+    border: 1px solid #d1d5da;
+    border-radius: 6px;
+    box-shadow: inset 0 -1px 0 #d1d5da;
   }
   table * {
     vertical-align: middle;
@@ -574,8 +618,11 @@
   canvas {
     width: 700px;
     height: 250px;
-    border: 2px solid #008db8;
+    border: 5px solid #008db8;
     background-color: black;
+  }
+  canvas.recording{
+    border-color: #c94663;
   }
   span.left {
     float: left;
@@ -598,8 +645,11 @@
     -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
     box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
   }
-  .btn--click:hover {
+  .btn--click:hover:not(.btn--discription) {
     border-bottom-width: 2.5px;
+    text-decoration: none;
+  }
+  .btn--click.btn--discription:hover {
     text-decoration: none;
   }
   .btn--click::before{
@@ -636,9 +686,12 @@
     border-bottom-color: #6155a6;
   }
   .btn--yellow {
-    background-color: #fafcc2;
-    border-bottom-color: #fcf876;
+    border-bottom-color: #f5d782;
+    background-color: #ffee93;
     color: black;
+  }
+  a.btn--click:link{
+    color: black
   }
   .btn--upload::before{
     content: "\f093"
