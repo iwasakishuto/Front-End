@@ -9,8 +9,8 @@
     <meta name="twitter:site" content="@cabernet_rock">
     <meta property="og:type" content="article" />
     <meta name="twitter:card" content="summary">
-    <meta name="keywords" content="Cheat-sheet, JavaScript, GAS, slack" />
-    <meta property="og:image" content="https://iwasakishuto.github.io/images/SPICE/mikuri.png"/>
+    <meta name="keywords" content="GAS, JavaScript, GAS, slack" />
+    <meta property="og:image" content="https://iwasakishuto.github.io/Front-End/tips/gas_laundry.png"/>
     <meta property="og:title" content="JS.13 GASでslackにメッセージを送る "/>
     <meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-13.html" />
     <meta property="og:description" content="GASでslackにメッセージを送る。" />
@@ -83,7 +83,7 @@
         <div class="entry-content">
           <footer class="post-info">
             <span>2019-06-18(Tue)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/cheat-sheet.html">Cheat-sheet</a></span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
           </footer><!-- /.post-info -->
 <!-- NOT "| indent(10, True)"  -->
 <h2>GASとは</h2>
@@ -91,7 +91,7 @@
 <p>シェアハウスのslackで必要だと感じた<b>「予定を共有すること」</b>と<b>「家事の役割分担をすること」</b>を自動化しました。</p>
 <h2>その日の予定を共有する関数</h2>
 <p>以下のようなものができます。</p>
-<p><img alt="環奈日報" src="https://iwasakishuto.github.io/images/SPICE/kanna.png"></p>
+<p><img alt="環奈日報" src="https://iwasakishuto.github.io/Front-End/tips/gas_schedule_for_today.png"></p>
 <h3><code>listupEvent</code></h3>
 <p>gmailアドレスを受け取り、その日にある予定を全て取得する関数</p>
 <div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">listupEvent</span><span class="p">(</span><span class="nx">cal_id</span><span class="p">){</span>
@@ -172,7 +172,7 @@
 
 <h2>朝、その日の夜に洗濯物を取り込む人を決める関数</h2>
 <p>以下のようなものができます。</p>
-<p><img alt="みくり洗濯選択" src="https://iwasakishuto.github.io/images/SPICE/mikuri.png"></p>
+<p><img alt="みくり洗濯選択" src="https://iwasakishuto.github.io/Front-End/tips/gas_laundry.png"></p>
 <h3><code>getWeatherData</code></h3>
 <p><a href="http://www.jma.go.jp/jp/yoho/319.html">気象庁 | 天気予報：東京都</a> のサイトをスクレイピングして、欲しい情報を取得します。</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// 天気を取得する</span>

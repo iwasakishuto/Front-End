@@ -9,7 +9,18 @@
     <meta name="twitter:site" content="@cabernet_rock">
     <meta property="og:type" content="article" />
     <meta name="twitter:card" content="summary">
-    <title>Shuto's Front-End</title>
+    <meta name="keywords" content="GAS, JavaScript, Trello, 予定管理, slack" />
+    <meta property="og:image" content="https://iwasakishuto.github.io/Front-End/tips/gas_trello.png"/>
+    <meta property="og:title" content="JS.34 GASでTrelloのタスクを定期的に通知する。 "/>
+    <meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-34.html" />
+    <meta property="og:description" content="GASでTrelloのタスクを定期的に通知する。" />
+    <meta property="og:site_name" content="Shuto&#39;s Front-End" />
+    <meta property="og:article:author" content="Shuto" />
+    <meta property="og:article:published_time" content="2021-05-14T00:00:00+09:00" />
+    <meta property="og:article:modified_time" content="2020-05-14T00:00:00+09:00" />
+    <meta name="twitter:title" content="JS.34 GASでTrelloのタスクを定期的に通知する。 ">
+    <meta name="twitter:description" content="GASでTrelloのタスクを定期的に通知する。">
+    <title>JS.34 GASでTrelloのタスクを定期的に通知する。</title>
     <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
     <!-- Added by Shuto Iwasaki. -->
     <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
@@ -46,21 +57,36 @@
         <ul>
           <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html">CSS</a></li>
           <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html">HTML</a></li>
-          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
+          <li class="active"><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
         </ul>
         <form id="search" action"#" onsubmit="javascript:window.open('https://duckduckgo.com/?q='+document.getElementById('keywords').value+'+site:https://iwasakishuto.github.io/Front-End/tips');">
           <input id="keywords" type="text" />
         </form>
       </nav>
     </header><!-- /#banner -->
-
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-34.html">JS.34 GASでTrelloのタスクを定期的に通知する。</a></h1>
+    <div id="loading" style="display: none;">
+      <div class="loading_wrapper">
+        <img class="loading_img" src="https://iwasakishuto.github.io/Front-End/tips/images/Bean Eater-1s-400px.gif">
+        <p class="loading_info">Loading...</p>
+      </div>
+    </div>
+    <section id="content" class="body" style="display: block;">
+      <article>
+        <header>
+          <h1 class="entry-title">
+            <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-34.html" rel="bookmark" title="Permalink to JS.34 GASでTrelloのタスクを定期的に通知する。">JS.34 GASでTrelloのタスクを定期的に通知する。</a>
+          </h1>
+          <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
+          <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
+        </header>
+    
+        <div class="entry-content">
           <footer class="post-info">
             <span>2021-05-14(Fri)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
-          </footer><!-- /.post-info --><h2>GASとは</h2>
+          </footer><!-- /.post-info -->
+<!-- NOT "| indent(10, True)"  -->
+<h2>GASとは</h2>
 <p><font color="red"><b>Google Apps Script(GAS, ガス)</b></font>とは、Googleが提供するサーバーサイド・スクリプト環境です。<code>JavaScript</code> ではありませんが、<code>JavaScript</code> っぽいのでここに記載しています。</p>
 <p>なお、どんなことができるかは以前の記事 <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-13.html">JS.13 GASでslackにメッセージを送る</a> を参照していただければと思います。</p>
 <h2>Trello</h2>
@@ -154,153 +180,12 @@
     <span class="s2">&quot;text&quot;</span>     <span class="o">:</span> <span class="nx">text</span><span class="p">,</span>
   <span class="p">})</span>
 <span class="p">}</span>
-</code></pre></div>                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <ol id="posts-list" class="hfeed">
+</code></pre></div>
 
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-33.html" rel="bookmark"
-                           title="Permalink to JS.33 ボイスチェンジャーモデルの訓練データ作成ツールを作成する">JS.33 ボイスチェンジャーモデルの訓練データ作成ツールを作成する</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-05-01(Sat)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
-          </footer><!-- /.post-info -->                <p>ボイスチェンジャーをDeepLearningで作成する際の訓練データを簡単に作成する。</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-33.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-32.html" rel="bookmark"
-                           title="Permalink to JS.32 ポケモンエメラルドでフロンティア マスターを目指す（その４）">JS.32 ポケモンエメラルドでフロンティア マスターを目指す（その４）</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-04-28(Wed)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
-          </footer><!-- /.post-info -->                <p>ポケモンエメラルドでバトルフロンティアを攻略する</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-32.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-31.html" rel="bookmark"
-                           title="Permalink to JS.31 ポケモンしりとりクイズ">JS.31 ポケモンしりとりクイズ</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-04-24(Sat)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/game.html">game</a></span>
-          </footer><!-- /.post-info -->                <p>ポケモンしりとりクイズで遊ぼう。</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-31.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-30.html" rel="bookmark"
-                           title="Permalink to JS.30 Pose-Estimation で正解の動きとの誤差を知る。">JS.30 Pose-Estimation で正解の動きとの誤差を知る。</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-03-10(Wed)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tensorflowjs.html">TensorFlow.js</a></span>
-          </footer><!-- /.post-info -->                <p>Pose-Estimation で正解の動きとの誤差を知る。</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-30.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-29.html" rel="bookmark"
-                           title="Permalink to JS.29 TensorflowJS で Pose-Estimation">JS.29 TensorflowJS で Pose-Estimation</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-03-06(Sat)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tensorflowjs.html">TensorFlow.js</a></span>
-          </footer><!-- /.post-info -->                <p>TensorflowJS で Pose-Estimationを動かす。</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-29.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-28.html" rel="bookmark"
-                           title="Permalink to JS.28 ポケモンエメラルドでフロンティア マスターを目指す（その３）">JS.28 ポケモンエメラルドでフロンティア マスターを目指す（その３）</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-02-21(Sun)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
-          </footer><!-- /.post-info -->                <p>ポケモンエメラルドでフロンティア マスターを目指す（その３）</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-28.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-27.html" rel="bookmark"
-                           title="Permalink to JS.27 ポケモンエメラルドでフロンティア マスターを目指す（その２）">JS.27 ポケモンエメラルドでフロンティア マスターを目指す（その２）</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-02-18(Thu)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
-          </footer><!-- /.post-info -->                <p>ポケモンエメラルドでフロンティア マスターを目指す（その２）</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-27.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-26.html" rel="bookmark"
-                           title="Permalink to JS.26 モーダル（ポップアップ）の作成">JS.26 モーダル（ポップアップ）の作成</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-02-16(Tue)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/cheat-sheet.html">Cheat-sheet</a></span>
-          </footer><!-- /.post-info -->                <p>モーダル（ポップアップ）の作成</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-26.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-25.html" rel="bookmark"
-                           title="Permalink to JS.25 ポケモンエメラルドでフロンティア マスターを目指す（その１）">JS.25 ポケモンエメラルドでフロンティア マスターを目指す（その１）</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-02-15(Mon)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
-          </footer><!-- /.post-info -->                <p>ポケモンエメラルドでフロンティア マスターを目指す（その１）</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-25.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-            </ol><!-- /#posts-list -->
-<p class="paginator">
-    Page 1 / 4
-        <a href="https://iwasakishuto.github.io/Front-End/tips/index2.html">&raquo;</a>
-        <a href="https://iwasakishuto.github.io/Front-End/tips/index4.html">&#8649;</a>
-</p>
-            </section><!-- /#content -->
+        </div><!-- /.entry-content -->
+    
+      </article>
+    </section>
     <section id="extras" class="body">
       <div class="blogroll">
         <h5>other contents</h5>

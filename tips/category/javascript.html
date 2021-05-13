@@ -56,735 +56,124 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-33.html">JS.33 ボイスチェンジャーモデルの訓練データ作成ツールを作成する</a></h1>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-34.html">JS.34 GASでTrelloのタスクを定期的に通知する。</a></h1>
           <footer class="post-info">
-            <span>2021-05-01(Sat)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
-          </footer><!-- /.post-info --><ul><h3>使い方</h3>
-  <li><label class="btn--click btn--purple btn--upload btn--discription">Upload Audio (Training Data)</label>から音声フォルダ（<code>.wav</code>のみ）をアップロードします。</li>
-  <li>上にアップロードした各データの波形が表示されるので、それを参考にしながら同じ言葉を <a class="btn--click btn--red btn--retry-recording btn--discription">Retry Recording</a> <kbd>r</kbd> を押して録音開始し、<a class="btn--click btn--blue btn--stop-recording btn--discription">End Recording</a> <kbd>e</kbd> を押して終了してください。</li>
-  </li>
-  <li><a class="btn--click btn--green btn--back btn--discription">Previous Audio</a> <kbd>←</kbd> ・<a class="btn--click btn--green btn--next btn--discription">Next Audio</a> <kbd>→</kbd> を押してそれぞれの音声データに対して録音を行ってください。この時、<kbd>space</kbd>で音声を停止したり再生したりできます。</li>
-  <li><a class="btn--click btn--download btn--discription">Download Recorded Audio</a> <kbd>d</kbd> を押すと、それまでに録音されたデータが<code>zip</code>形式でダウンロードできます。</li>
-</ul>
+            <span>2021-05-14(Fri)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
+          </footer><!-- /.post-info --><h2>GASとは</h2>
+<p><font color="red"><b>Google Apps Script(GAS, ガス)</b></font>とは、Googleが提供するサーバーサイド・スクリプト環境です。<code>JavaScript</code> ではありませんが、<code>JavaScript</code> っぽいのでここに記載しています。</p>
+<p>なお、どんなことができるかは以前の記事 <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-13.html">JS.13 GASでslackにメッセージを送る</a> を参照していただければと思います。</p>
+<h2>Trello</h2>
+<p><a href="https://trello.com/">Trello</a>は、カードを動かしながらタスクを視覚的に管理できるカンバン方式のツールです。付箋を貼るように直感的にタスクを管理できるのが使いやすく、普段から利用しているのですが、定期的にどのタスクが残っているのかslack等に通知できれば良いと思い、<a href="https://developer.atlassian.com/cloud/trello/">TrelloのAPI</a>を用いてこれを実現しました。</p>
+<p>※ APIを使うにあたり、API key と Token が必要になります。Trelloにログインした状態で <a href="https://trello.com/app-key">https://trello.com/app-key</a> にアクセスして取得してください。</p>
+<p>なお、ボードIDは <a href="https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-memberships-get">Get Memberships of a Board</a>というメソッドを用いればわかりますが、TrelloのAPIをPythonでWrapした<a href="https://github.com/iwasakishuto/Python-Charmers">Python-Charmers</a> の <a href="https://iwasakishuto.github.io/Python-Charmers/pycharmers.api.trello.html"><code>pycharmers.api.trello</code> というモジュール</a>を利用すると、以下のように簡単に取得できます。</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pycharmers.api</span> <span class="kn">import</span> <span class="n">Trello</span>
+<span class="n">trello</span> <span class="o">=</span> <span class="n">Trello</span><span class="p">(</span><span class="n">apikey</span><span class="o">=</span><span class="s2">&quot;APIKEY&quot;</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="s2">&quot;TOKEN&quot;</span><span class="p">)</span>
+<span class="n">trello</span><span class="o">.</span><span class="n">show_memberships_of_a_board</span><span class="p">(</span><span class="s2">&quot;iwasakishuto&quot;</span><span class="p">)</span>
+</code></pre></div>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
 
-<p><audio id="uploaded-audio" style="display:none;"></audio>
-<table>
-  <thead><tr><th colspan="2">見本データ</th><th colspan="2"><code id="current-uploaded-file"></code></th><th colspan="2">[<span id="current-file-idx">0</span> / <span id="num-total-files">0</span>]</th></tr></thead>
-  <tbody>
-    <tr>
-      <td colspan="2"><a class="btn--click btn--green btn--back" id="prev-btn">Previous Audio</a></td>
-      <td colspan="2"><a class="btn--click btn--to-play btn--blue" id="audio-play-pause-btn">Pause Audio</a></td>
-      <td colspan="2"><a class="btn--click btn--green btn--next" id="next-btn">Next Audio</a></td>
-    </tr>
-    <tr>
-      <td colspan="6" style="position:relative;">
-        <canvas id="data-canvas"></canvas>
-        <input id="data-position" type="range" min="0" value="0"step="0.01" max="10">
-        <span id="data-start-time" class="left">0[s]</span><span id="data-end-time" class="right">10[s]</span>
-      </td>
-    </tr>
-  </tbody>
-  <thead><tr><th colspan="2">録音データ</th><th colspan="2"><code id="current-record-file">data.wav</code></th><th colspan="2">[<span id="num-record-data">0</span>データ]</th></tr></thead>
-  <tbody>
-    <tr>
-      <td colspan="3"><a class="btn--click btn--red btn--retry-recording" id="retry-btn">Retry Recording</a></td>
-      <td colspan="3"><a class="btn--click btn--blue btn--stop-recording" id="stop-btn">End Recording</a></td>
-    </tr>
-    <tr>
-      <td colspan="6">
-        <canvas id="recorded-canvas"></canvas>
-        <span id="record-start-time" class="left">0[s]</span><span id="record-end-time" class="right">10[s]</span>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="3"><label class="btn--click btn--purple btn--upload"><input type="file" id="upload-btn" accept="audio/wav" webkitdirectory>Upload Audio (Training Data)</label></td>
-      <td colspan="3"><a class="btn--click btn--download" id="download-btn">Download Recorded Audio</a></td>
-    </tr>
-  </tbody>
-</table></p>
-<script>
-  const num_total_files_view     = document.querySelector("span#num-total-files");
-  const current_file_idx_view    = document.querySelector("span#current-file-idx");
-  const current_filename_view    = document.querySelector("code#current-uploaded-file");
-  const current_record_file_view = document.querySelector("code#current-record-file");
-  const num_record_data_view     = document.querySelector("span#num-record-data");
-  const data_end_time_view       = document.querySelector("span#data-end-time");
-  const record_end_time_view     = document.querySelector("span#record-end-time");
-  const dataPositionControl = document.querySelector("input#data-position");
-  const audioPlayPauseBtn   = document.querySelector("a#audio-play-pause-btn")
-  const retryBtn            = document.querySelector("a#retry-btn");
-  const stopBtn             = document.querySelector("a#stop-btn");
-  const nextBtn             = document.querySelector("a#next-btn");
-  const prevBtn             = document.querySelector("a#prev-btn");
-  const downloadBtn         = document.querySelector("a#download-btn");
-  const uploadBtn           = document.querySelector("input#upload-btn");
-  const uploadedAudio       = document.querySelector("audio#uploaded-audio");
-  const dataCanvas          = document.querySelector("canvas#data-canvas");
-  const dataCtx             = dataCanvas.getContext("2d");
-  const recordedCanvas      = document.querySelector("canvas#recorded-canvas");
-  const recordedCtx         = recordedCanvas.getContext("2d");
-  const canvasWidth           = 700;
-  const canvasHeight          = 250;
-  const canvasTopOffsetRecord = canvasHeight/2;
-  const canvasTopOffsetData   = 240;
-  const wavMaxHeightData      = canvasTopOffsetData*0.95; // Maximu height for Uploaded Waves.
-  // const MaximumRecordDuration = 10; // Maximum length[s] of recorded data
-  const bufferSize            = 1024;
-  const headerSize            = 44;
-  const wavMagnification      = 15;
-  const allowedExtensions     = ["wav"];
-  const to_play_class_names   = ["btn--to-play", "btn--blue"];
-  const to_pause_class_names  = ["btn--to-pause", "btn--red"];
-  var prev_processLoadedAudio;
-  var processLoadedAudio;
-  // Define in Global Scope.
-  const URL = window.URL || window.webkitURL
-  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+<h2>作成したもの</h2>
+<p><img alt="Trelloタスク管理" src="https://iwasakishuto.github.io/Front-End/tips/gas_trello.png"></p>
+<h3>変数定義</h3>
+<p>セキュリティの観点から、API key や Token はコード内に直書きするのではなく、Propertyに書き、<code>PropertiesService.getScriptProperties()</code> で取得します。</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">PropertiesService</span><span class="p">.</span><span class="nx">getScriptProperties</span><span class="p">();</span>
+<span class="kr">const</span> <span class="nx">add_trello_params</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">url</span><span class="p">){</span>
+  <span class="k">return</span> <span class="nx">url</span> <span class="o">+</span> <span class="s2">&quot;?key=&quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;TRELLO_APIKEY&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&amp;token=&quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;TRELLO_TOKEN&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="kr">const</span> <span class="nx">url_get_lists_on_a_board</span> <span class="o">=</span> <span class="nx">add_trello_params</span><span class="p">(</span><span class="s2">&quot;https://api.trello.com/1/boards/&quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;TRELLO_BOARDID&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/lists&quot;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">url_cards_in_a_list</span>      <span class="o">=</span> <span class="nx">add_trello_params</span><span class="p">(</span><span class="s2">&quot;https://api.trello.com/1/boards/&quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;TRELLO_BOARDID&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/cards&quot;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">private_list_names</span>       <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Trash&quot;</span><span class="p">]</span>
+</code></pre></div>
 
-  dataCanvas.width  = recordedCanvas.width  = canvasWidth;
-  dataCanvas.height = recordedCanvas.height = canvasHeight;
-  dataCtx.fillStyle     = "green";
-  recordedCtx.fillStyle = "#008db8";
-  var recordedAudioData = {}
 
-  // Convert millsecond to position.
-  const msec2pos = function(msec){
-    return (msec/1000) * (canvasWidth/duration)
-  }
+<h3><code>getTasks</code></h3>
+<p>Trello から予定を取得します。</p>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">getTasks</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">boardId2name</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url_get_lists_on_a_board</span><span class="p">).</span><span class="nx">getContentText</span><span class="p">()).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+    <span class="nx">boardId2name</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">e</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+  <span class="p">})</span>
+  <span class="kd">var</span> <span class="nx">list2cards</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url_cards_in_a_list</span><span class="p">).</span><span class="nx">getContentText</span><span class="p">()).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">boardname</span> <span class="o">=</span> <span class="nx">boardId2name</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="s2">&quot;idList&quot;</span><span class="p">]];</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">boardname</span> <span class="k">in</span> <span class="nx">list2cards</span><span class="p">){</span>
+      <span class="nx">list2cards</span><span class="p">[</span><span class="nx">boardname</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">e</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+      <span class="nx">list2cards</span><span class="p">[</span><span class="nx">boardname</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+  <span class="k">return</span> <span class="nx">list2cards</span>
+<span class="p">}</span>
+</code></pre></div>
 
-  // Initialize the variables and context.
-  var audioData        = [];
-  var audioSampleRate  = null;
-  var audioContext     = null;
-  var startTime        = null;
-  var prev_pos_record  = pos_record = 0;
-  const InitializeForRecording = function(){
-    audioData       = []; 
-    audioSampleRate = null; 
-    audioContext    = null; 
-    startTime       = null;
-    prev_pos_record = 0
-    pos_record      = 0; 
-    recordedCtx.clearRect(0, 0, canvasWidth, canvasHeight);
-  }
 
-  // Initialize for Uploading Files.
-  var uploadedFiles             = [];
-  var num_total_files           = 0;
-  var curt_fileIdx              = 0;
-  var current_uploaded_file     = null;
-  var current_uploaded_filename = "data.wav"
-  const InitializeForUpload = function(){
-    uploadedFiles             = [];
-    num_total_files           = 0;
-    curt_fileIdx              = 0;
-    current_uploaded_file     = null;
-    current_uploaded_filename = "data.wav"
-  }
+<h3><code>arrange_message</code></h3>
+<p>取得したタスクを、slackで見やすいように整形します。</p>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">arrange_message</span><span class="p">(</span><span class="nx">list2cards</span><span class="p">){</span>
+  <span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="kd">var</span> <span class="nx">num_tasks</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">list2cards</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">l</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">private_list_names</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">l</span><span class="p">)){</span>
+      <span class="nx">cards</span> <span class="o">=</span> <span class="nx">list2cards</span><span class="p">[</span><span class="nx">l</span><span class="p">]</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s2">&quot;\n*【&quot;</span> <span class="o">+</span> <span class="nx">l</span> <span class="o">+</span> <span class="s2">&quot;】(&quot;</span> <span class="o">+</span> <span class="nx">cards</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s2">&quot;)*&quot;</span>
+      <span class="nx">num_tasks</span> <span class="o">+=</span> <span class="nx">cards</span><span class="p">.</span><span class="nx">length</span>
+      <span class="nx">cards</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">c</span><span class="p">){</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s2">&quot;\n\t\t* &quot;</span> <span class="o">+</span> <span class="nx">c</span>
+      <span class="p">})</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+  <span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;今の &lt;@UTANWKEBU&gt; のタスク *(&quot;</span> <span class="o">+</span> <span class="nx">num_tasks</span> <span class="o">+</span> <span class="s2">&quot;)*&quot;</span> <span class="o">+</span> <span class="nx">text</span>
+  <span class="k">return</span> <span class="nx">text</span>
+<span class="p">}</span>
+</code></pre></div>
 
-  // Initialize the variables and context.
-  var reader = null
-  var duration = 10;
-  var prev_pos_data = pos_data = 0;
-  var playtimer = null;
-  const InitializeForAudio = function(){
-    reader = null;
-    duration = 10;
-    uploadedAudio.currentTime = dataPositionControl.value = 0;
-    dataCtx.clearRect(0, 0, canvasWidth, canvasHeight);
-  }
 
-  /** 
-  * Generate Trainer Table.
-  * @param {DataView} view 
-  * @param {number} offset 
-  * @param {string} string 
-  */
-  function writeString(view, offset, string) {
-    [...string].forEach(function(char, i){
-      view.setUint8(offset+i, char.charCodeAt(0))
-    })
-  };
+<h3><code>postSlack</code></h3>
+<p>slack にメッセージを送ります。</p>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">postSlack</span><span class="p">(</span><span class="nx">payload</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;method&quot;</span> <span class="o">:</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;payload&quot;</span> <span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">payload</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;WEBHOOK_URL&quot;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">getContentText</span><span class="p">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
 
-  function readString(view, offset, length){
-    let text = ''
-    for (let i = 0; i < length; i++) {
-      text += String.fromCharCode(view.getUint8(offset + i))
-    }
-    return text
-  }
 
-  /** 
-  * Convert data from 8bit to 16bit
-  * @param {DataView} output 
-  * @param {number} offset headerSize.
-  * @param {Float32Array} input input data.
-  */
-  function floatTo16BitPCM(output, offset, input) {
-    input.forEach(function(datum, i){
-      let s = Math.max(-1, Math.min(1, datum));
-      let pcm = s < 0 ? s * 0x8000 : s * 0x7FFF
-      output.setInt16(offset+i*2, pcm, true);
-    })
-  };
-
-  function read16bitPCM(view, offset, length){
-    let input = []
-    let output = []
-    for (let i = 0; i < length / 2; i++) {
-      input[i] = view.getInt16(offset + i * 2, true)
-      output[i] = parseFloat(input[i]) / parseFloat(32768)
-      if (output[i] > 1.0) output[i] = 1.0
-      else if (output[i] < -1.0) output[i] = -1.0
-    }
-    return output
-  }
-
-  /** 
-  * encode to WAV file.
-  * @param {Float32Array} samples
-  * @param {number} sampleRate 
-  * @return {DataView} 
-  */
-  function encodeToWAV(samples, sampleRate) {
-    // Data size doubles (∵ 8bit -> 16bit)
-    let outputDataLength = samples.length * 2;
-    var outBuffer = new DataView(new ArrayBuffer(headerSize + outputDataLength));
-
-    writeString(outBuffer, 0, "RIFF");  // "RIFF" header
-    outBuffer.setUint32(4, 32 + outputDataLength, true); // これ以降のファイルサイズ
-    writeString(outBuffer, 8, "WAVE");  // "WAVE" header
-    writeString(outBuffer, 12, "fmt "); // "fmt" chunk.
-    outBuffer.setUint32(16, 16, true); // fmtチャンクのバイト数
-    outBuffer.setUint16(20, 1, true); // フォーマットID
-    outBuffer.setUint16(22, 1, true); // チャンネル数
-    outBuffer.setUint32(24, sampleRate, true); // サンプリングレート
-    outBuffer.setUint32(28, sampleRate * 2, true); // データ速度
-    outBuffer.setUint16(32, 2, true); // ブロックサイズ
-    outBuffer.setUint16(34, 16, true); // サンプルあたりのビット数
-    writeString(outBuffer, 36, "data"); // dataチャンク
-    outBuffer.setUint32(40, outputDataLength, true); // 波形データのバイト数
-    floatTo16BitPCM(outBuffer, headerSize, samples); // 波形データ
-
-    return outBuffer;
-  };
-
-  function decodeWAV(view){
-    let riffHeader = readString(view, 0, 4) // RIFFヘッダ
-    let fileSize = view.getUint32(4, true) // これ以降のファイルサイズ (ファイルサイズ - 8byte)
-    let waveHeader = readString(view, 8, 4) // WAVEヘッダ
-
-    let fmt = readString(view, 12, 4) // fmtチャンク
-    let fmtChunkSize = view.getUint32(16, true) // fmtチャンクのバイト数(デフォルトは16)
-    let fmtID = view.getUint16(20, true) // フォーマットID(非圧縮PCMなら1)
-    let channelNum = view.getUint16(22, true) // チャンネル数
-    let sampleRate = view.getUint32(24, true) // サンプリングレート
-    let dataSpeed = view.getUint32(28, true) // バイト/秒 1秒間の録音に必要なバイト数(サンプリングレート*チャンネル数*ビットレート/8)
-    let blockSize = view.getUint16(32, true) // ブロック境界、(ステレオ16bitなら16bit*2=4byte)
-    let bitRate = view.getUint16(34, true) // ビットレート
-
-    let exOffset = 0 //拡張パラメータ分のオフセット
-    if (fmtChunkSize > 16) {
-      const extendedSize = fmtChunkSize - 16 // 拡張パラメータのサイズ
-      exOffset = extendedSize
-    }
-    const data = readString(view, 36 + exOffset, 4) // dataチャンク
-    const dataChunkSize = view.getUint32(40 + exOffset, true) // 波形データのバイト数
-    const samples = read16bitPCM(view, 44 + exOffset, dataChunkSize + exOffset) // 波形データを受け取る
-
-    return samples
-  }
-
-  /** 
-  * Merge the Float32Array arrays into one Float32Array.
-  * @param {Array} audioData Audio data arrays stored in bufferSize units.
-  * @return {Float32Array} Merged Audio Data.
-  */
-  function mergeBuffers(audioData) {
-    // let buf_size = audioData[0].length // Same as "bufferSize"
-    var totalBuffer = new Float32Array(audioData.length * bufferSize);
-    audioData.forEach(function(e,i){
-      totalBuffer.set(e, i*bufferSize)
-    })
-    return totalBuffer;
-  };
-
-  /** 
-  * Save recorded data in an array in bufferSize units. (∵ Don't know the total size of it.) 
-  * @ref <https://developer.mozilla.org/ja/docs/Web/API/AudioContext/createScriptProcessor>
-  * @param {Float32Array} input
-  * @param {number} buf_size Buffer Size
-  * @param {Array} audioData
-  * @global startTime: Start time of Recording.
-  * @global prev_pos_record, pos_record: (Previous) Position in the canvas.
-  */
-  function copyANDdrawAudioPerUnit(input, buf_size, audioData) {
-    var bufferData = new Float32Array(buf_size);
-    let sum=0;
-    input.forEach(function(wav, i){
-      sum+=wav;
-      bufferData[i]=wav;
-    })
-    if (startTime == null) startTime = new Date().getTime();
-    pos_record = msec2pos(new Date().getTime()-startTime);
-    recordedCtx.fillRect(prev_pos_record, canvasTopOffsetRecord, pos_record-prev_pos_record, -sum*wavMagnification);
-    prev_pos_record = pos_record;
-    audioData.push(bufferData);
-    if ((new Date().getTime()-startTime)/1000>duration){
-      endRecording();
-    }
-  };
-
-  function drawUploadedAudioPerUnit(samples){
-    let sampleLength = samples.length
-    let buf_size = Math.max(Math.ceil(sampleLength/bufferSize),2);
-    let buffers = [];
-    let sum = 0;
-    samples.forEach(function(wav, i){
-      if (i%buf_size==0){
-        buffers.push(Math.abs(sum))
-        sum = 0;
-      }else{
-        sum += wav
-      }
-    })
-    let max_height = Math.max(...buffers);
-    let tmp = buf_size/sampleLength*canvasWidth;
-    buffers.forEach(function(wav,i){
-      pos_data = i*tmp;
-      dataCtx.fillRect(prev_pos_data, canvasTopOffsetData, pos_data-prev_pos_data, -wav/max_height*wavMaxHeightData);
-      prev_pos_data = pos_data;
-    })
-  }
-
-  /** 
-  * Create a "ScriptProcessor" that stores audio data in "audioData"
-  * @ref <https://developer.mozilla.org/ja/docs/Web/API/AudioContext/createScriptProcessor>
-  * @param {Array} audioData 
-  * @param {MediaStream} stream 
-  * @return {AudioWorklet} 
-  */
-  function copyAudioData(audioData, stream) {
-    let audioContext = new AudioContext();
-    // const scriptProcessor = new AudioWorkletNode(audioContext, "", {channelCount: 1})
-    let scriptProcessor = audioContext.createScriptProcessor(bufferSize, 1, 1);
-    scriptProcessor.onaudioprocess = function(evt){
-      copyANDdrawAudioPerUnit(evt.inputBuffer.getChannelData(0), bufferSize, audioData);
-    }
-    let mediaStreamSource = audioContext.createMediaStreamSource(stream);
-    mediaStreamSource.connect(scriptProcessor);
-    scriptProcessor.connect(audioContext.destination);
-    return audioContext
-  };
-
-  const saveRecordedAudio = async function(){
-    let wav_data = encodeToWAV(mergeBuffers(audioData), audioSampleRate);
-    recordedAudioData[current_uploaded_filename] =  new Blob([wav_data], { type: "audio/wav" });
-    num_record_data_view.textContent = Object.keys(recordedAudioData).length;
-    if (audioContext!=null && audioContext.state!="closed") await audioContext.close();
-  }
-
-  const generateZipBlob = function(){
-    let zip = new JSZip();
-    let folder = zip.folder("Recorded-Audio");
-    Object.keys(recordedAudioData).forEach(function(filename){
-      folder.file(filename, recordedAudioData[filename]);
-    })
-    return zip.generateAsync({ type: 'blob' });
-  }
-
-  const zipRecordedAllAudio = async function(){
-    let zipBlob = await generateZipBlob();
-    downloadBtn.href = URL.createObjectURL(zipBlob);
-    downloadBtn.download = "RecordedAudio.zip";
-    downloadBtn.classList.add("btn--yellow");
-  }
-
-  // Click-Event for Start Button.
-  const startRecording = async function(){
-    InitializeForRecording();
-    recordedCanvas.classList.add("recording")
-    await navigator.getUserMedia({
-      audio: true,
-      video: false,
-    }, function(stream){
-      audioContext = copyAudioData(audioData, stream);
-      audioSampleRate = audioContext.sampleRate;
-    }, function(e){
-      console.error(e)
-    })
-  }
-
-  const endRecording = async function(){
-    saveRecordedAudio();
-    recordedCanvas.classList.remove("recording")
-    await zipRecordedAllAudio();
-  }
-
-  const moveAudio = async function(is_next=true){
-    if (num_total_files>0){
-      await endRecording();
-      curt_fileIdx = is_next ? 
-        Math.min(curt_fileIdx+1, num_total_files-1) : 
-        Math.max(curt_fileIdx-1, 0);
-      readFile();
-    }
-  }
-  const proceed2nextAudio = async function(){
-    await moveAudio(is_next=true)
-  }
-  const back2previousAudio = async function(){
-    await moveAudio(is_next=false)
-  }
-
-  const readFile = function(){
-    InitializeForAudio();
-    current_uploaded_file = uploadedFiles[curt_fileIdx];
-    current_uploaded_filename = current_uploaded_file.name
-    current_filename_view.textContent = current_record_file_view.textContent = current_uploaded_filename
-    current_file_idx_view.textContent = curt_fileIdx+1;
-    reader = new FileReader()
-    reader.onload = function(e){
-      console.log(e)
-      let view = new DataView(reader.result);
-      let audioBlob = new Blob([view], { type: 'audio/wav' })
-      uploadedAudio.src = URL.createObjectURL(audioBlob)
-      uploadedAudio.removeEventListener("loadedmetadata", prev_processLoadedAudio)
-      processLoadedAudio = function(){
-        duration = uploadedAudio.duration;
-        data_end_time_view.textContent = record_end_time_view.textContent = duration.toFixed(1)+"[s]"
-        dataPositionControl.max = duration
-        drawUploadedAudioPerUnit(decodeWAV(view));
-        playAudio()
-      }
-      uploadedAudio.addEventListener("loadedmetadata", processLoadedAudio)
-      prev_processLoadedAudio = processLoadedAudio
-    }
-    reader.readAsArrayBuffer(current_uploaded_file)
-  }
-
-  const startTimer = function(){
-    playtimer = setInterval(function(){
-      dataPositionControl.value = uploadedAudio.currentTime;
-      if (uploadedAudio.ended){
-        stopTimer();
-        to_play_class_names.forEach(function(e){audioPlayPauseBtn.classList.remove(e)})
-        to_pause_class_names.forEach(function(e){audioPlayPauseBtn.classList.add(e)})
-        audioPlayPauseBtn.innerHTML = "Play Audio"
-      }
-    }, 100);
-  };
-  const stopTimer = function(){
-    clearInterval(playtimer);
-  };
-
-  const playAudio = function(){
-    uploadedAudio.play();
-    startTimer();
-    to_play_class_names.forEach(function(e){audioPlayPauseBtn.classList.add(e)})
-    to_pause_class_names.forEach(function(e){audioPlayPauseBtn.classList.remove(e)})
-    audioPlayPauseBtn.innerHTML = "Pause Audio"
-  } 
-
-  const audioPlayPause = function(){
-    if (audioPlayPauseBtn.classList.contains(to_play_class_names[0])){
-      uploadedAudio.pause();
-      stopTimer();
-      to_play_class_names.forEach(function(e){audioPlayPauseBtn.classList.remove(e)})
-      to_pause_class_names.forEach(function(e){audioPlayPauseBtn.classList.add(e)})
-      audioPlayPauseBtn.innerHTML = "Play Audio"
-    }else{
-      playAudio();
-    }
-  }
-
-  const keydownfunc = function( evt ){
-    if ((["r", "e", "d"].indexOf(evt.key)!=-1) || ([32,37,39].indexOf(evt.keyCode)!=-1)){
-      evt.preventDefault();
-    }
-    console.log(evt.key, evt.keyCode)
-    if (evt.key==="r"){
-      if (evt.metaKey){
-        location.reload();
-      }else{
-        startRecording();
-      }
-    }else if (evt.key==="e"){
-      endRecording();
-    }else if (evt.key==="d"){
-      downloadBtn.click();
-    }else if (evt.keyCode===39){ //  ←
-      proceed2nextAudio();
-    }else if (evt.keyCode===37){ // →
-      back2previousAudio();
-    }else if (evt.keyCode===32){ // Space
-      audioPlayPause();
-    } 
-  }
-
-  window.onload = function(){
-    nextBtn.addEventListener("click", proceed2nextAudio);
-    prevBtn.addEventListener("click", back2previousAudio);
-    retryBtn.addEventListener("click", startRecording);
-    stopBtn.addEventListener("click", endRecording);
-    uploadBtn.addEventListener("change", function(){
-      if (!uploadBtn.value || !window.FileReader) return false;
-      InitializeForUpload();
-      for (let i=0; i<uploadBtn.files.length; i++){
-        let file = uploadBtn.files[i]
-        let file_ext = file.name.split(".").pop();
-        if (allowedExtensions.includes(file_ext)){
-          uploadedFiles.push(file)
-        }
-      }
-      num_total_files_view.textContent = num_total_files = uploadedFiles.length;
-      readFile()
-    });
-    dataPositionControl.addEventListener("input", function() {
-      uploadedAudio.currentTime = dataPositionControl.value;
-      startTimer()
-    });
-    dataPositionControl.addEventListener("change", function() {
-      uploadedAudio.currentTime = dataPositionControl.value;
-      startTimer()
-    });
-    audioPlayPauseBtn.addEventListener("click", audioPlayPause)
-        addEventListener("keydown", keydownfunc);
-  } 
-</script>
-
-<style>
-  ul {
-    margin: 1em;
-    border: black 1px solid;
-    padding: .5em .5em .5em 2.5em;
-    list-style: decimal;
-  }
-  kbd {
-    display: inline-block;
-    padding: 0.2em 1em;
-    font: 14px Monaco, SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
-    line-height: 20px;
-    color: #444d56;
-    vertical-align: middle;
-    background-color: #fafbfc;
-    border-bottom-color: #d1d5da;
-    border: 1px solid #d1d5da;
-    border-radius: 6px;
-    box-shadow: inset 0 -1px 0 #d1d5da;
-  }
-  table * {
-    vertical-align: middle;
-    text-align: center;
-  }
-  table.fixed {
-    table-layout: fixed;
-  }
-  thead th {
-    vertical-align: middle;
-    text-align: center;
-    background-color: black;
-    color: white;
-  }
-  canvas {
-    width: 700px;
-    height: 250px;
-    border: 5px solid #008db8;
-    background-color: black;
-  }
-  canvas.recording{
-    border-color: #c94663;
-  }
-  span.left {
-    float: left;
-  }
-  span.right {
-    float: right;
-  }
-  a.btn--click:link {
-    padding: 0.3em 1em;
-    color: white;
-  }
-  .btn--click {
-    color: #fff;
-    background-color: gray;
-    border-bottom: 5px solid black;
-    display: inline-block;
-    padding: 0.3em 1em;
-    text-decoration: none;
-    cursor: pointer;
-    -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
-    box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
-  }
-  .btn--click:hover:not(.btn--discription) {
-    border-bottom-width: 2.5px;
-    text-decoration: none;
-  }
-  .btn--click.btn--discription:hover {
-    text-decoration: none;
-  }
-  .btn--click::before{
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    padding-right: 1em;
-  }
-  .btn--click::after{
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    padding-left: 1em;
-  }
-  .btn--click input {
-    display: none;
-  }
-  .btn--goldenrod {
-    background-color: goldenrod;
-    border-bottom-color: darkgoldenrod;
-  }
-  .btn--red {
-    background-color: #c94663;
-    border-bottom-color: #8a1010;
-  }
-  .btn--blue {
-    background-color: #8ab6d6;
-    border-bottom-color: #2978b5;
-  }
-  .btn--green {
-    background-color: #91c788;
-    border-bottom-color: #52734d;
-  }
-  .btn--purple {
-    background-color: #a685e2;
-    border-bottom-color: #6155a6;
-  }
-  .btn--yellow {
-    border-bottom-color: #f5d782;
-    background-color: #ffee93;
-    color: black;
-  }
-  a.btn--click:link{
-    color: black
-  }
-  .btn--upload::before{
-    content: "\f093"
-  }
-  .btn--download::before{
-    content: "\f019"
-  }
-  .btn--next::before{
-    content: "\f35a"
-  }
-  .btn--stop-recording::before{
-    content: "\f28d"
-  }
-  .btn--retry-recording::before{
-    content: "\f3c9"
-  }
-  .btn--to-pause::before{
-    content: "\f144"
-  }
-  .btn--to-play::before{
-    content: "\f28b"
-  }
-  .btn--back::after{
-    content: "\f359"
-  }
-  input#data-position{
-    width: 700px;
-    margin: 0;
-    outline: none;
-    position: absolute;
-    top: 235px;
-    left: 20px;
-    background-color: black;
-  }
-  input#data-position[type=range] {
-    -webkit-appearance: none;
-    margin: 10px 0;
-  }
-  input#data-position[type=range]:focus {
-    outline: none;
-  }
-  input#data-position[type=range]::-webkit-slider-runnable-track {
-    width: 100%;
-    height: 6.4px;
-    cursor: pointer;
-    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-    background: #fafcc2;
-    border-radius: 25px;
-    border: 0px solid #000101;
-  }
-  input#data-position[type=range]::-webkit-slider-thumb {
-    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-    border: 0px solid #000000;
-    height: 15px;
-    width: 20px;
-    border-radius: 7px;
-    background: #fcf876;
-    cursor: pointer;
-    -webkit-appearance: none;
-    margin-top: -3.0px;
-    /* margin-right: 10px; */
-  }
-  input#data-position[type=range]:focus::-webkit-slider-runnable-track {
-    background: #fafcc2;
-  }
-  input#data-position[type=range]::-moz-range-track {
-    width: 100%;
-    height: 12.8px;
-    cursor: pointer;
-    animate: 0.2s;
-    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-    background: #fafcc2;
-    border-radius: 25px;
-    border: 0px solid #000101;
-  }
-  input#data-position[type=range]::-moz-range-thumb {
-    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-    border: 0px solid #000000;
-    height: 20px;
-    width: 39px;
-    border-radius: 7px;
-    background: #fafcc2;
-    cursor: pointer;
-  }
-  input#data-position[type=range]::-ms-track {
-    width: 100%;
-    height: 12.8px;
-    cursor: pointer;
-    animate: 0.2s;
-    background: transparent;
-    border-color: transparent;
-    border-width: 39px 0;
-    color: transparent;
-  }
-  input#data-position[type=range]::-ms-thumb {
-    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-    border: 0px solid #000000;
-    height: 20px;
-    width: 39px;
-    border-radius: 7px;
-    background: #fafcc2;
-    cursor: pointer;
-  }
-  input#data-position[type=range]::-ms-fill-upper,
-  input#data-position[type=range]::-ms-fill-lower {
-    background: #fafcc2;
-    border: 0px solid #000101;
-    border-radius: 50px;
-    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-  }
-  input#data-position[type=range]:focus::-ms-fill-upper,
-  input#data-position[type=range]:focus::-ms-fill-lower {
-    background: #fafcc2;
-  }
-</style>                </article>
+<h3><code>main</code></h3>
+<p>以上をまとめた関数です。</p>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">main</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">list2cards</span> <span class="o">=</span> <span class="nx">getTasks</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">arrange_message</span><span class="p">(</span><span class="nx">list2cards</span><span class="p">);</span>
+  <span class="nx">postSlack</span><span class="p">({</span>
+    <span class="s2">&quot;channel&quot;</span>  <span class="o">:</span> <span class="s2">&quot;#002_tasks&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;username&quot;</span> <span class="o">:</span> <span class="s2">&quot;文乃【秘書】&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;text&quot;</span>     <span class="o">:</span> <span class="nx">text</span><span class="p">,</span>
+  <span class="p">})</span>
+<span class="p">}</span>
+</code></pre></div>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
                     <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-33.html" rel="bookmark"
+                           title="Permalink to JS.33 ボイスチェンジャーモデルの訓練データ作成ツールを作成する">JS.33 ボイスチェンジャーモデルの訓練データ作成ツールを作成する</a></h1>
+                </header>
+
+                <div class="entry-content">
+          <footer class="post-info">
+            <span>2021-05-01(Sat)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
+          </footer><!-- /.post-info -->                <p>ボイスチェンジャーをDeepLearningで作成する際の訓練データを簡単に作成する。</p>
+                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-33.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -903,21 +292,6 @@
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
           </footer><!-- /.post-info -->                <p>ポケモンエメラルドでフロンティア マスターを目指す（その１）</p>
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-25.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-24.html" rel="bookmark"
-                           title="Permalink to JS.24 ヌンキル (눈길)を作る">JS.24 ヌンキル (눈길)を作る</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-02-10(Wed)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tensorflowjs.html">TensorFlow.js</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/app.html">app</a></span>
-          </footer><!-- /.post-info -->                <p>ヌンキル (눈길)を作る</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-24.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
             </ol><!-- /#posts-list -->
