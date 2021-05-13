@@ -69,12 +69,19 @@
 <p>なお、ボードIDは <a href="https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-memberships-get">Get Memberships of a Board</a>というメソッドを用いればわかりますが、TrelloのAPIをPythonでWrapした<a href="https://github.com/iwasakishuto/Python-Charmers">Python-Charmers</a> の <a href="https://iwasakishuto.github.io/Python-Charmers/pycharmers.api.trello.html"><code>pycharmers.api.trello</code> というモジュール</a>を利用すると、以下のように簡単に取得できます。</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pycharmers.api</span> <span class="kn">import</span> <span class="n">Trello</span>
 <span class="n">trello</span> <span class="o">=</span> <span class="n">Trello</span><span class="p">(</span><span class="n">apikey</span><span class="o">=</span><span class="s2">&quot;APIKEY&quot;</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="s2">&quot;TOKEN&quot;</span><span class="p">)</span>
-<span class="n">trello</span><span class="o">.</span><span class="n">show_memberships_of_a_board</span><span class="p">(</span><span class="s2">&quot;iwasakishuto&quot;</span><span class="p">)</span>
+<span class="n">trello</span><span class="o">.</span><span class="n">show_memberships_of_a_board</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;iwasakishuto&quot;</span><span class="p">)</span>
+<span class="o">+--------------+---------------------+--------------------------------------+</span>
+<span class="o">|</span>     <span class="n">name</span>     <span class="o">|</span>         <span class="nb">id</span>          <span class="o">|</span>             <span class="n">url</span>                      <span class="o">|</span>
+<span class="o">+==============+=====================+======================================+</span>
+<span class="o">|</span>  <span class="n">boardname1</span>  <span class="o">|</span>  <span class="nb">id</span> <span class="k">for</span> <span class="n">boardname1</span>  <span class="o">|</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">trello</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">YYYY</span><span class="o">/</span><span class="n">boardname2</span> <span class="o">|</span>
+<span class="o">+--------------+---------------------+--------------------------------------+</span>
+<span class="o">|</span>  <span class="n">boardname2</span>  <span class="o">|</span>  <span class="nb">id</span> <span class="k">for</span> <span class="n">boardname1</span>  <span class="o">|</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">trello</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">XXXX</span><span class="o">/</span><span class="n">boardname2</span> <span class="o">|</span>
+<span class="o">+--------------+---------------------+--------------------------------------+</span>
 </code></pre></div>
 
 
 <h2>作成したもの</h2>
-<p><img alt="Trelloタスク管理" src="https://iwasakishuto.github.io/Front-End/tips/gas_trello.png"></p>
+<p><img alt="Trelloタスク管理" src="https://iwasakishuto.github.io/Front-End/tips/images/gas_trello.png"></p>
 <h3>変数定義</h3>
 <p>セキュリティの観点から、API key や Token はコード内に直書きするのではなく、Propertyに書き、<code>PropertiesService.getScriptProperties()</code> で取得します。</p>
 <div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">PropertiesService</span><span class="p">.</span><span class="nx">getScriptProperties</span><span class="p">();</span>
