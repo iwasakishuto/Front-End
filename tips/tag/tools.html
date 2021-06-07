@@ -56,592 +56,198 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-33.html">JS.33 ボイスチェンジャーモデルの訓練データ作成ツールを作成する</a></h1>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-35.html">JS.35 タイピング風動画を楽に作成する</a></h1>
           <footer class="post-info">
-            <span>2021-05-01(Sat)</span>
+            <span>2021-06-07(Mon)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
-          </footer><!-- /.post-info --><ul><h3>使い方</h3>
-  <li><label class="btn--click btn--purple btn--upload btn--discription">Upload Audio (Training Data)</label>から音声フォルダ（<code>.wav</code>のみ）をアップロードします。</li>
-  <li>上にアップロードした各データの波形が表示されるので、それを参考にしながら同じ言葉を <a class="btn--click btn--red btn--retry-recording btn--discription">Retry Recording</a> <kbd>r</kbd> を押して録音開始し、<a class="btn--click btn--blue btn--stop-recording btn--discription">End Recording</a> <kbd>e</kbd> を押して終了してください。</li>
-  </li>
-  <li><a class="btn--click btn--green btn--back btn--discription">Previous Audio</a> <kbd>←</kbd> ・<a class="btn--click btn--green btn--next btn--discription">Next Audio</a> <kbd>→</kbd> を押してそれぞれの音声データに対して録音を行ってください。この時、<kbd>space</kbd>で音声を停止したり再生したりできます。</li>
-  <li><a class="btn--click btn--download btn--discription">Download Recorded Audio</a> <kbd>d</kbd> を押すと、それまでに録音されたデータが<code>zip</code>形式でダウンロードできます。</li>
-</ul>
+          </footer><!-- /.post-info --><h2>作成したもの</h2>
+<div>
+  <table class="fixed">
+    <thead><tr><th colspan="4">入力欄</th></tr></thead>
+    <tbody>
+      <tr><td colspan="4"><button class="btn--click btn--shadow btn--red btn--reset">Reset</button></td></tr>
+      <tr><td colspan="4"><textarea id="input-textarea" rows="5" placeholder="ここに入力してください。"></textarea></td></tr>
+    </tbody>
+    <thead>
+      <tr><th colspan="4">Demo Options</th></tr>
+      <tr><th>Span [ms]</th><th>Font Size</th><th>Line Height</th><th>Font Family</th></tr>
+    </thead>
+    <tbody>
+      <tr class="g1">
+        <td><input id="spanMS" type="number" min="0" value="100" step="50" max="1000"/></td>
+        <td><select id="fontFamily"><option selected>Arial</option><option>Verdana</option><option>Times New Roman</option><option>Courier New</option><option>serif</option><option>sans-serif</option></select></td>
+        <td><input id="fontSize" type="number" min="1" value="16" step="1" max="100"/></td>
+        <td><input id="lineHeight" type="number" min="1" value="16" step="1" max="100"/></td>
+      </tr>
+      <tr><td colspan="4"><button class="btn--click btn--shadow btn--green btn--demo">Demo</button></td></tr>
+      <tr>
+        <td colspan="4"><canvas id="demoCanvas"></canvas></td>
+      </tr>
+    </tbody>
+    <thead><tr><th colspan="4">ダウンロード</th></tr></thead>
+    <tbody>
+      <tr>
+        <td colspan="4"><button class="btn--click btn--shadow btn--blue btn--download">Download</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
-
-<p><audio id="uploaded-audio" style="display:none;"></audio>
-<table>
-  <thead><tr><th colspan="2">見本データ</th><th colspan="2"><code id="current-uploaded-file"></code></th><th colspan="2">[<span id="current-file-idx">0</span> / <span id="num-total-files">0</span>]</th></tr></thead>
-  <tbody>
-    <tr>
-      <td colspan="2"><a class="btn--click btn--green btn--back" id="prev-btn">Previous Audio</a></td>
-      <td colspan="2"><a class="btn--click btn--to-play btn--blue" id="audio-play-pause-btn">Pause Audio</a></td>
-      <td colspan="2"><a class="btn--click btn--green btn--next" id="next-btn">Next Audio</a></td>
-    </tr>
-    <tr>
-      <td colspan="6" style="position:relative;">
-        <canvas id="data-canvas"></canvas>
-        <input id="data-position" type="range" min="0" value="0"step="0.01" max="10">
-        <span id="data-start-time" class="left">0[s]</span><span id="data-end-time" class="right">10[s]</span>
-      </td>
-    </tr>
-  </tbody>
-  <thead><tr><th colspan="2">録音データ</th><th colspan="2"><code id="current-record-file">data.wav</code></th><th colspan="2">[<span id="num-record-data">0</span>データ]</th></tr></thead>
-  <tbody>
-    <tr>
-      <td colspan="3"><a class="btn--click btn--red btn--retry-recording" id="retry-btn">Retry Recording</a></td>
-      <td colspan="3"><a class="btn--click btn--blue btn--stop-recording" id="stop-btn">End Recording</a></td>
-    </tr>
-    <tr>
-      <td colspan="6">
-        <canvas id="recorded-canvas"></canvas>
-        <span id="record-start-time" class="left">0[s]</span><span id="record-end-time" class="right">10[s]</span>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="3"><label class="btn--click btn--purple btn--upload"><input type="file" id="upload-btn" accept="audio/wav" webkitdirectory>Upload Audio (Training Data)</label></td>
-      <td colspan="3"><a class="btn--click btn--download btn--yellow" id="download-btn">Download Recorded Audio</a></td>
-    </tr>
-  </tbody>
-</table></p>
 <script>
-  const num_total_files_view     = document.querySelector("span#num-total-files");
-  const current_file_idx_view    = document.querySelector("span#current-file-idx");
-  const current_filename_view    = document.querySelector("code#current-uploaded-file");
-  const current_record_file_view = document.querySelector("code#current-record-file");
-  const num_record_data_view     = document.querySelector("span#num-record-data");
-  const data_end_time_view       = document.querySelector("span#data-end-time");
-  const record_end_time_view     = document.querySelector("span#record-end-time");
-  const dataPositionControl = document.querySelector("input#data-position");
-  const audioPlayPauseBtn   = document.querySelector("a#audio-play-pause-btn")
-  const retryBtn            = document.querySelector("a#retry-btn");
-  const stopBtn             = document.querySelector("a#stop-btn");
-  const nextBtn             = document.querySelector("a#next-btn");
-  const prevBtn             = document.querySelector("a#prev-btn");
-  const downloadBtn         = document.querySelector("a#download-btn");
-  const uploadBtn           = document.querySelector("input#upload-btn");
-  const uploadedAudio       = document.querySelector("audio#uploaded-audio");
-  const dataCanvas          = document.querySelector("canvas#data-canvas");
-  const dataCtx             = dataCanvas.getContext("2d");
-  const recordedCanvas      = document.querySelector("canvas#recorded-canvas");
-  const recordedCtx         = recordedCanvas.getContext("2d");
-  const canvasWidth           = 700;
-  const canvasHeight          = 250;
-  const canvasTopOffsetRecord = canvasHeight/2;
-  const canvasTopOffsetData   = 240;
-  const wavMaxHeightData      = canvasTopOffsetData*0.95; // Maximu height for Uploaded Waves.
-  // const MaximumRecordDuration = 10; // Maximum length[s] of recorded data
-  const bufferSize            = 1024;
-  const headerSize            = 44;
-  const wavMagnification      = 15;
-  const allowedExtensions     = ["wav"];
-  const to_play_class_names   = ["btn--to-play", "btn--blue"];
-  const to_pause_class_names  = ["btn--to-pause", "btn--red"];
-  var prev_processLoadedAudio;
-  var processLoadedAudio;
-  // Define in Global Scope.
-  const URL = window.URL || window.webkitURL
-  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-
-  dataCanvas.width  = recordedCanvas.width  = canvasWidth;
-  dataCanvas.height = recordedCanvas.height = canvasHeight;
-  dataCtx.fillStyle     = "green";
-  recordedCtx.fillStyle = "#008db8";
-  var recordedAudioData = {}
-
-  // Convert millsecond to position.
-  const msec2pos = function(msec){
-    return (msec/1000) * (canvasWidth/duration)
-  }
-
-  // Initialize the variables and context.
-  var audioData        = [];
-  var audioSampleRate  = null;
-  var audioContext     = null;
-  var startTime        = null;
-  var prev_pos_record  = pos_record = 0;
-  const InitializeForRecording = function(){
-    audioData       = []; 
-    audioSampleRate = null; 
-    audioContext    = null; 
-    startTime       = null;
-    prev_pos_record = 0
-    pos_record      = 0; 
-    recordedCtx.clearRect(0, 0, canvasWidth, canvasHeight);
-  }
-
-  // Initialize for Uploading Files.
-  var uploadedFiles             = [];
-  var num_total_files           = 0;
-  var curt_fileIdx              = 0;
-  var current_uploaded_file     = null;
-  var current_uploaded_filename = "data.wav"
-  const InitializeForUpload = function(){
-    uploadedFiles             = [];
-    num_total_files           = 0;
-    curt_fileIdx              = 0;
-    current_uploaded_file     = null;
-    current_uploaded_filename = "data.wav"
-  }
-
-  // Initialize the variables and context.
-  var reader = null
-  var duration = 10;
-  var prev_pos_data = pos_data = 0;
-  var playtimer = null;
-  const InitializeForAudio = function(){
-    reader = null;
-    duration = 10;
-    uploadedAudio.currentTime = dataPositionControl.value = 0;
-    dataCtx.clearRect(0, 0, canvasWidth, canvasHeight);
-  }
-
-  /** 
-  * Generate Trainer Table.
-  * @param {DataView} view 
-  * @param {number} offset 
-  * @param {string} string 
-  */
-  function writeString(view, offset, string) {
-    [...string].forEach(function(char, i){
-      view.setUint8(offset+i, char.charCodeAt(0))
-    })
-  };
-
-  function readString(view, offset, length){
-    let text = ''
-    for (let i = 0; i < length; i++) {
-      text += String.fromCharCode(view.getUint8(offset + i))
+  const typingTextarea  = document.querySelector("textarea#input-textarea");
+  const resetBtn         = document.querySelector("button.btn--reset");
+  const downloadBtn      = document.querySelector("button.btn--download");
+  const demoBtn          = document.querySelector("button.btn--demo");
+  const spanMS           = document.querySelector("input#spanMS");
+  const fontSizeInput    = document.querySelector("input#fontSize");
+  const lineHeightInput  = document.querySelector("input#lineHeight");
+  const fontFamilySelect = document.querySelector("select#fontFamily");
+  const demoCanvas  = document.getElementById("demoCanvas");
+  const demoCtx     = demoCanvas.getContext("2d");
+  var input_typing = [];
+  var prev_text = "";
+  const addCurtTypingKey = function(){
+    let curt_text = typingTextarea.value
+    if (prev_text != curt_text){
+      input_typing.push(curt_text);
+      prev_text = curt_text;
+      console.log(input_typing.length, curt_text)
     }
-    return text
   }
-
-  /** 
-  * Convert data from 8bit to 16bit
-  * @param {DataView} output 
-  * @param {number} offset headerSize.
-  * @param {Float32Array} input input data.
-  */
-  function floatTo16BitPCM(output, offset, input) {
-    input.forEach(function(datum, i){
-      let s = Math.max(-1, Math.min(1, datum));
-      let pcm = s < 0 ? s * 0x8000 : s * 0x7FFF
-      output.setInt16(offset+i*2, pcm, true);
-    })
-  };
-
-  function read16bitPCM(view, offset, length){
-    let input = []
-    let output = []
-    for (let i = 0; i < length / 2; i++) {
-      input[i] = view.getInt16(offset + i * 2, true)
-      output[i] = parseFloat(input[i]) / parseFloat(32768)
-      if (output[i] > 1.0) output[i] = 1.0
-      else if (output[i] < -1.0) output[i] = -1.0
-    }
-    return output
+  const clearTypingMemory = function(){
+    input_typing = [];
+    prev_text = "";
   }
-
-  /** 
-  * encode to WAV file.
-  * @param {Float32Array} samples
-  * @param {number} sampleRate 
-  * @return {DataView} 
-  */
-  function encodeToWAV(samples, sampleRate) {
-    // Data size doubles (∵ 8bit -> 16bit)
-    let outputDataLength = samples.length * 2;
-    var outBuffer = new DataView(new ArrayBuffer(headerSize + outputDataLength));
-
-    writeString(outBuffer, 0, "RIFF");  // "RIFF" header
-    outBuffer.setUint32(4, 32 + outputDataLength, true); // これ以降のファイルサイズ
-    writeString(outBuffer, 8, "WAVE");  // "WAVE" header
-    writeString(outBuffer, 12, "fmt "); // "fmt" chunk.
-    outBuffer.setUint32(16, 16, true); // fmtチャンクのバイト数
-    outBuffer.setUint16(20, 1, true); // フォーマットID
-    outBuffer.setUint16(22, 1, true); // チャンネル数
-    outBuffer.setUint32(24, sampleRate, true); // サンプリングレート
-    outBuffer.setUint32(28, sampleRate * 2, true); // データ速度
-    outBuffer.setUint16(32, 2, true); // ブロックサイズ
-    outBuffer.setUint16(34, 16, true); // サンプルあたりのビット数
-    writeString(outBuffer, 36, "data"); // dataチャンク
-    outBuffer.setUint32(40, outputDataLength, true); // 波形データのバイト数
-    floatTo16BitPCM(outBuffer, headerSize, samples); // 波形データ
-
-    return outBuffer;
-  };
-
-  function decodeWAV(view){
-    let riffHeader = readString(view, 0, 4) // RIFFヘッダ
-    let fileSize = view.getUint32(4, true) // これ以降のファイルサイズ (ファイルサイズ - 8byte)
-    let waveHeader = readString(view, 8, 4) // WAVEヘッダ
-
-    let fmt = readString(view, 12, 4) // fmtチャンク
-    let fmtChunkSize = view.getUint32(16, true) // fmtチャンクのバイト数(デフォルトは16)
-    let fmtID = view.getUint16(20, true) // フォーマットID(非圧縮PCMなら1)
-    let channelNum = view.getUint16(22, true) // チャンネル数
-    let sampleRate = view.getUint32(24, true) // サンプリングレート
-    let dataSpeed = view.getUint32(28, true) // バイト/秒 1秒間の録音に必要なバイト数(サンプリングレート*チャンネル数*ビットレート/8)
-    let blockSize = view.getUint16(32, true) // ブロック境界、(ステレオ16bitなら16bit*2=4byte)
-    let bitRate = view.getUint16(34, true) // ビットレート
-
-    let exOffset = 0 //拡張パラメータ分のオフセット
-    if (fmtChunkSize > 16) {
-      const extendedSize = fmtChunkSize - 16 // 拡張パラメータのサイズ
-      exOffset = extendedSize
-    }
-    const data = readString(view, 36 + exOffset, 4) // dataチャンク
-    const dataChunkSize = view.getUint32(40 + exOffset, true) // 波形データのバイト数
-    const samples = read16bitPCM(view, 44 + exOffset, dataChunkSize + exOffset) // 波形データを受け取る
-
-    return samples
+  const downloadJson = function(){
+    var data = {date: now_str(), typing: input_typing}
+    var jsonString = JSON.stringify(data, null, '\t');
+    var blob = new Blob([jsonString], {type: "application/json" });
+    let link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "typing.json";
+    link.click();
   }
-
-  /** 
-  * Merge the Float32Array arrays into one Float32Array.
-  * @param {Array} audioData Audio data arrays stored in bufferSize units.
-  * @return {Float32Array} Merged Audio Data.
-  */
-  function mergeBuffers(audioData) {
-    // let buf_size = audioData[0].length // Same as "bufferSize"
-    var totalBuffer = new Float32Array(audioData.length * bufferSize);
-    audioData.forEach(function(e,i){
-      totalBuffer.set(e, i*bufferSize)
-    })
-    return totalBuffer;
-  };
-
-  /** 
-  * Save recorded data in an array in bufferSize units. (∵ Don't know the total size of it.) 
-  * @ref <https://developer.mozilla.org/ja/docs/Web/API/AudioContext/createScriptProcessor>
-  * @param {Float32Array} input
-  * @param {number} buf_size Buffer Size
-  * @param {Array} audioData
-  * @global startTime: Start time of Recording.
-  * @global prev_pos_record, pos_record: (Previous) Position in the canvas.
-  */
-  function copyANDdrawAudioPerUnit(input, buf_size, audioData) {
-    var bufferData = new Float32Array(buf_size);
-    let sum=0;
-    input.forEach(function(wav, i){
-      sum+=wav;
-      bufferData[i]=wav;
-    })
-    if (startTime == null) startTime = new Date().getTime();
-    pos_record = msec2pos(new Date().getTime()-startTime);
-    recordedCtx.fillRect(prev_pos_record, canvasTopOffsetRecord, pos_record-prev_pos_record, -sum*wavMagnification);
-    prev_pos_record = pos_record;
-    audioData.push(bufferData);
-    if ((new Date().getTime()-startTime)/1000>duration){
-      endRecording();
-    }
-  };
-
-  function drawUploadedAudioPerUnit(samples){
-    let sampleLength = samples.length
-    let buf_size = Math.max(Math.ceil(sampleLength/bufferSize),2);
-    let buffers = [];
-    let sum = 0;
-    samples.forEach(function(wav, i){
-      if (i%buf_size==0){
-        buffers.push(Math.abs(sum))
-        sum = 0;
-      }else{
-        sum += wav
+  const startDemo = function(){
+    addCurtTypingKey();
+    var fontSize = parseInt(fontSizeInput.value);
+    var lineheight = parseInt(lineHeightInput.value);
+    demoCtx.font = `${fontSize}px ${fontFamilySelect.value}`;
+    loopSleep(input_typing.length, parseInt(spanMS.value), function(i){
+      demoCtx.clearRect(0, 0, demoCanvas.width, demoCanvas.height);
+      var lines = input_typing[i].split("\n");
+      for (let j=0; j<lines.length; j++){
+        demoCtx.fillText(lines[j], 10, (j+1)*lineheight);
       }
-    })
-    let max_height = Math.max(...buffers);
-    let tmp = buf_size/sampleLength*canvasWidth;
-    buffers.forEach(function(wav,i){
-      pos_data = i*tmp;
-      dataCtx.fillRect(prev_pos_data, canvasTopOffsetData, pos_data-prev_pos_data, -wav/max_height*wavMaxHeightData);
-      prev_pos_data = pos_data;
-    })
+    });
   }
-
-  /** 
-  * Create a "ScriptProcessor" that stores audio data in "audioData"
-  * @ref <https://developer.mozilla.org/ja/docs/Web/API/AudioContext/createScriptProcessor>
-  * @param {Array} audioData 
-  * @param {MediaStream} stream 
-  * @return {AudioWorklet} 
-  */
-  function copyAudioData(audioData, stream) {
-    let audioContext = new AudioContext();
-    // const scriptProcessor = new AudioWorkletNode(audioContext, "", {channelCount: 1})
-    let scriptProcessor = audioContext.createScriptProcessor(bufferSize, 1, 1);
-    scriptProcessor.onaudioprocess = function(evt){
-      copyANDdrawAudioPerUnit(evt.inputBuffer.getChannelData(0), bufferSize, audioData);
+  typingTextarea.addEventListener("keydown", addCurtTypingKey);
+  resetBtn.addEventListener("click", clearTypingMemory);
+  downloadBtn.addEventListener("click", downloadJson);
+  demoBtn.addEventListener("click", startDemo);
+  fontSizeInput.addEventListener("change", function(){
+    lineHeightInput.value = fontSizeInput.value;
+  })
+  /* <--- Utility Functions --- */
+  // Return current date as string.
+  function now_str(){
+    function padLeft(no){
+      let len = (2-String(no).length)+1;
+      return len > 0? new Array(len).join('0')+no : no;  
     }
-    let mediaStreamSource = audioContext.createMediaStreamSource(stream);
-    mediaStreamSource.connect(scriptProcessor);
-    scriptProcessor.connect(audioContext.destination);
-    return audioContext
-  };
-
-  const saveRecordedAudio = async function(){
-    let wav_data = encodeToWAV(mergeBuffers(audioData), audioSampleRate);
-    recordedAudioData[current_uploaded_filename] =  new Blob([wav_data], { type: "audio/wav" });
-    num_record_data_view.textContent = Object.keys(recordedAudioData).length;
-    if (audioContext!=null && audioContext.state!="closed") await audioContext.close();
+    var d = new Date
+    return `${d.getFullYear()}/${padLeft(d.getMonth()+1)}/${padLeft(d.getDate())} ${padLeft(d.getHours())}:${padLeft(d.getMinutes())}:${padLeft(d.getSeconds())}`
   }
-
-  const generateZipBlob = function(){
-    let zip = new JSZip();
-    let folder = zip.folder("Recorded-Audio");
-    Object.keys(recordedAudioData).forEach(function(filename){
-      folder.file(filename, recordedAudioData[filename]);
-    })
-    return zip.generateAsync({ type: 'blob' });
-  }
-
-  const zipRecordedAllAudio = async function(){
-    let zipBlob = await generateZipBlob();
-    downloadBtn.href = URL.createObjectURL(zipBlob);
-    downloadBtn.download = "RecordedAudio.zip";
-    downloadBtn.classList.add("btn--yellow");
-  }
-
-  // Click-Event for Start Button.
-  const startRecording = async function(){
-    InitializeForRecording();
-    recordedCanvas.classList.add("recording")
-    await navigator.getUserMedia({
-      audio: true,
-      video: false,
-    }, function(stream){
-      audioContext = copyAudioData(audioData, stream);
-      audioSampleRate = audioContext.sampleRate;
-    }, function(e){
-      console.error(e)
-    })
-  }
-
-  const endRecording = async function(){
-    saveRecordedAudio();
-    recordedCanvas.classList.remove("recording")
-    await zipRecordedAllAudio();
-  }
-
-  const moveAudio = async function(is_next=true){
-    if (num_total_files>0){
-      await endRecording();
-      curt_fileIdx = is_next ? 
-        Math.min(curt_fileIdx+1, num_total_files-1) : 
-        Math.max(curt_fileIdx-1, 0);
-      readFile();
+  // Loop with sleep function
+  function loopSleep(_loopLimit,_interval, _mainFunc){
+    // @ref: https://qiita.com/akyao/items/a718cc78436df68d7e15
+    var loopLimit = _loopLimit;
+    var interval = _interval;
+    var mainFunc = _mainFunc;
+    var i = 0;
+    var loopFunc = function () {
+      var result = mainFunc(i);
+      if (result === false) return;
+      i++;
+      if (i<loopLimit) setTimeout(loopFunc, interval);
     }
+    loopFunc();
   }
-  const proceed2nextAudio = async function(){
-    await moveAudio(is_next=true)
-  }
-  const back2previousAudio = async function(){
-    await moveAudio(is_next=false)
-  }
-
-  const readFile = function(){
-    InitializeForAudio();
-    current_uploaded_file = uploadedFiles[curt_fileIdx];
-    current_uploaded_filename = current_uploaded_file.name
-    current_filename_view.textContent = current_record_file_view.textContent = current_uploaded_filename
-    current_file_idx_view.textContent = curt_fileIdx+1;
-    reader = new FileReader()
-    reader.onload = function(e){
-      console.log(e)
-      let view = new DataView(reader.result);
-      let audioBlob = new Blob([view], { type: 'audio/wav' })
-      uploadedAudio.src = URL.createObjectURL(audioBlob)
-      uploadedAudio.removeEventListener("loadedmetadata", prev_processLoadedAudio)
-      processLoadedAudio = function(){
-        duration = uploadedAudio.duration;
-        data_end_time_view.textContent = record_end_time_view.textContent = duration.toFixed(1)+"[s]"
-        dataPositionControl.max = duration
-        drawUploadedAudioPerUnit(decodeWAV(view));
-        playAudio()
-      }
-      uploadedAudio.addEventListener("loadedmetadata", processLoadedAudio)
-      prev_processLoadedAudio = processLoadedAudio
-    }
-    reader.readAsArrayBuffer(current_uploaded_file)
-  }
-
-  const startTimer = function(){
-    playtimer = setInterval(function(){
-      dataPositionControl.value = uploadedAudio.currentTime;
-      if (uploadedAudio.ended){
-        stopTimer();
-        to_play_class_names.forEach(function(e){audioPlayPauseBtn.classList.remove(e)})
-        to_pause_class_names.forEach(function(e){audioPlayPauseBtn.classList.add(e)})
-        audioPlayPauseBtn.innerHTML = "Play Audio"
-      }
-    }, 100);
-  };
-  const stopTimer = function(){
-    clearInterval(playtimer);
-  };
-
-  const playAudio = function(){
-    uploadedAudio.play();
-    startTimer();
-    to_play_class_names.forEach(function(e){audioPlayPauseBtn.classList.add(e)})
-    to_pause_class_names.forEach(function(e){audioPlayPauseBtn.classList.remove(e)})
-    audioPlayPauseBtn.innerHTML = "Pause Audio"
-  } 
-
-  const audioPlayPause = function(){
-    if (audioPlayPauseBtn.classList.contains(to_play_class_names[0])){
-      uploadedAudio.pause();
-      stopTimer();
-      to_play_class_names.forEach(function(e){audioPlayPauseBtn.classList.remove(e)})
-      to_pause_class_names.forEach(function(e){audioPlayPauseBtn.classList.add(e)})
-      audioPlayPauseBtn.innerHTML = "Play Audio"
-    }else{
-      playAudio();
-    }
-  }
-
-  const keydownfunc = function( evt ){
-    if ((["r", "e", "d"].indexOf(evt.key)!=-1) || ([32,37,39].indexOf(evt.keyCode)!=-1)){
+  document.addEventListener("keydown", function(evt){
+    if (evt.key=="Tab"){
+      var cur_focused = document.activeElement;
       evt.preventDefault();
-    }
-    console.log(evt.key, evt.keyCode)
-    if (evt.key==="r"){
-      if (evt.metaKey){
-        location.reload();
+      console.log(cur_focused, cur_focused==typingTextarea)
+      if (cur_focused == typingTextarea){
+        demoBtn.focus()
       }else{
-        startRecording();
-      }
-    }else if (evt.key==="e"){
-      endRecording();
-    }else if (evt.key==="d"){
-      downloadBtn.click();
-    }else if (evt.keyCode===39){ //  ←
-      proceed2nextAudio();
-    }else if (evt.keyCode===37){ // →
-      back2previousAudio();
-    }else if (evt.keyCode===32){ // Space
-      audioPlayPause();
-    } 
-  }
-
-  window.onload = function(){
-    nextBtn.addEventListener("click", proceed2nextAudio);
-    prevBtn.addEventListener("click", back2previousAudio);
-    retryBtn.addEventListener("click", startRecording);
-    stopBtn.addEventListener("click", endRecording);
-    uploadBtn.addEventListener("change", function(){
-      if (!uploadBtn.value || !window.FileReader) return false;
-      InitializeForUpload();
-      for (let i=0; i<uploadBtn.files.length; i++){
-        let file = uploadBtn.files[i]
-        let file_ext = file.name.split(".").pop();
-        if (allowedExtensions.includes(file_ext)){
-          uploadedFiles.push(file)
-        }
-      }
-      num_total_files_view.textContent = num_total_files = uploadedFiles.length;
-      readFile()
-    });
-    dataPositionControl.addEventListener("input", function() {
-      uploadedAudio.currentTime = dataPositionControl.value;
-      startTimer()
-    });
-    dataPositionControl.addEventListener("change", function() {
-      uploadedAudio.currentTime = dataPositionControl.value;
-      startTimer()
-    });
-    audioPlayPauseBtn.addEventListener("click", audioPlayPause)
-        addEventListener("keydown", keydownfunc);
-  } 
+        typingTextarea.focus();
+      } 
+    }
+  })
+  /* --- Utility Functions ---> */
 </script>
 
 <style>
-  ul {
-    margin: 1em;
-    border: black 1px solid;
-    padding: .5em .5em .5em 2.5em;
-    list-style: decimal;
-  }
-  kbd {
-    display: inline-block;
-    padding: 0.2em 1em;
-    font: 14px Monaco, SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
-    line-height: 20px;
-    color: #444d56;
-    vertical-align: middle;
-    background-color: #fafbfc;
-    border-bottom-color: #d1d5da;
-    border: 1px solid #d1d5da;
-    border-radius: 6px;
-    box-shadow: inset 0 -1px 0 #d1d5da;
-  }
-  table * {
+  table *{
     vertical-align: middle;
     text-align: center;
   }
   table.fixed {
     table-layout: fixed;
   }
-  thead th {
-    vertical-align: middle;
-    text-align: center;
+  thead {
     background-color: black;
     color: white;
+    text-align: center;
+  }
+  table textarea, table input, table select{
+    padding: .5em .4em;
+    background-color: transparent;
+    font-family: Monaco, monospace, sans-serif;
+    width: 100%;
+  }
+  table textarea {
+    width: 90%;
+    text-align: left;
+  }
+  textarea:focus-visible{
+    background-color: lightgoldenrodyellow;
+  }
+  table input, table select{
+    border: 0;
   }
   canvas {
-    width: 700px;
-    height: 250px;
-    border: 5px solid #008db8;
-    background-color: black;
-  }
-  canvas.recording{
-    border-color: #c94663;
-  }
-  span.left {
-    float: left;
-  }
-  span.right {
-    float: right;
-  }
-  a.btn--click:link {
-    padding: 0.3em 1em;
-    color: white;
+    border: solid 1.5px black;
+    box-shadow: 3px 3px 3px 0px #aaa;
+    margin: 10px;
   }
   .btn--click {
     color: #fff;
-    background-color: gray;
+    background-color: black;
+    border: 0;
+    border-radius: 5px;
     border-bottom: 5px solid black;
     display: inline-block;
-    padding: 0.3em 1em;
+    padding: .5em 2em;
     text-decoration: none;
     cursor: pointer;
-    -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
-    box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+    font-family: monaco, monospace;
   }
-  .btn--click:hover:not(.btn--discription) {
+  .btn--click:hover, .btn--click:focus {
     border-bottom-width: 2.5px;
     text-decoration: none;
   }
-  .btn--click.btn--discription:hover {
-    text-decoration: none;
-  }
-  .btn--click::before{
+  .btn--click::before {
     font-family: 'Font Awesome 5 Free';
     font-weight: 900;
     padding-right: 1em;
   }
-  .btn--click::after{
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    padding-left: 1em;
+  .btn--click:focus-visible{
+    /* outline: yellow auto 0; */
   }
-  .btn--click input {
-    display: none;
-  }
-  .btn--goldenrod {
-    background-color: goldenrod;
-    border-bottom-color: darkgoldenrod;
+  .btn--shadow {
+    -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
   }
   .btn--red {
     background-color: #c94663;
@@ -655,136 +261,38 @@
     background-color: #91c788;
     border-bottom-color: #52734d;
   }
-  .btn--purple {
-    background-color: #a685e2;
-    border-bottom-color: #6155a6;
+  .btn--download::before {
+    content: "\f019";
   }
-  .btn--yellow {
-    border-bottom-color: #f5d782;
-    background-color: #ffee93;
-    color: black;
+  .btn--reset::before{
+    content: "\f0e2";
   }
-  a.btn--click:link{
-    color: black
+  .btn--demo::before{
+    content: "\f303";
   }
-  .btn--upload::before{
-    content: "\f093"
-  }
-  .btn--download::before{
-    content: "\f019"
-  }
-  .btn--next::before{
-    content: "\f35a"
-  }
-  .btn--stop-recording::before{
-    content: "\f28d"
-  }
-  .btn--retry-recording::before{
-    content: "\f3c9"
-  }
-  .btn--to-pause::before{
-    content: "\f144"
-  }
-  .btn--to-play::before{
-    content: "\f28b"
-  }
-  .btn--back::after{
-    content: "\f359"
-  }
-  input#data-position{
-    width: 700px;
-    margin: 0;
-    outline: none;
-    position: absolute;
-    top: 235px;
-    left: 20px;
-    background-color: black;
-  }
-  input#data-position[type=range] {
-    -webkit-appearance: none;
-    margin: 10px 0;
-  }
-  input#data-position[type=range]:focus {
-    outline: none;
-  }
-  input#data-position[type=range]::-webkit-slider-runnable-track {
-    width: 100%;
-    height: 6.4px;
-    cursor: pointer;
-    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-    background: #fafcc2;
-    border-radius: 25px;
-    border: 0px solid #000101;
-  }
-  input#data-position[type=range]::-webkit-slider-thumb {
-    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-    border: 0px solid #000000;
-    height: 15px;
-    width: 20px;
-    border-radius: 7px;
-    background: #fcf876;
-    cursor: pointer;
-    -webkit-appearance: none;
-    margin-top: -3.0px;
-    /* margin-right: 10px; */
-  }
-  input#data-position[type=range]:focus::-webkit-slider-runnable-track {
-    background: #fafcc2;
-  }
-  input#data-position[type=range]::-moz-range-track {
-    width: 100%;
-    height: 12.8px;
-    cursor: pointer;
-    animate: 0.2s;
-    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-    background: #fafcc2;
-    border-radius: 25px;
-    border: 0px solid #000101;
-  }
-  input#data-position[type=range]::-moz-range-thumb {
-    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-    border: 0px solid #000000;
-    height: 20px;
-    width: 39px;
-    border-radius: 7px;
-    background: #fafcc2;
-    cursor: pointer;
-  }
-  input#data-position[type=range]::-ms-track {
-    width: 100%;
-    height: 12.8px;
-    cursor: pointer;
-    animate: 0.2s;
-    background: transparent;
-    border-color: transparent;
-    border-width: 39px 0;
-    color: transparent;
-  }
-  input#data-position[type=range]::-ms-thumb {
-    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-    border: 0px solid #000000;
-    height: 20px;
-    width: 39px;
-    border-radius: 7px;
-    background: #fafcc2;
-    cursor: pointer;
-  }
-  input#data-position[type=range]::-ms-fill-upper,
-  input#data-position[type=range]::-ms-fill-lower {
-    background: #fafcc2;
-    border: 0px solid #000101;
-    border-radius: 50px;
-    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-  }
-  input#data-position[type=range]:focus::-ms-fill-upper,
-  input#data-position[type=range]:focus::-ms-fill-lower {
-    background: #fafcc2;
+  .g1{
+    background-color: azure;
   }
 </style>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
                     <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-33.html" rel="bookmark"
+                           title="Permalink to JS.33 ボイスチェンジャーモデルの訓練データ作成ツールを作成する">JS.33 ボイスチェンジャーモデルの訓練データ作成ツールを作成する</a></h1>
+                </header>
+
+                <div class="entry-content">
+          <footer class="post-info">
+            <span>2021-05-01(Sat)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
+          </footer><!-- /.post-info -->                <p>ボイスチェンジャーをDeepLearningで作成する際の訓練データを簡単に作成する。</p>
+                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-33.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>

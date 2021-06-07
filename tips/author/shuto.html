@@ -56,116 +56,243 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-34.html">JS.34 GASでTrelloのタスクを定期的に通知する。</a></h1>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-35.html">JS.35 タイピング風動画を楽に作成する</a></h1>
           <footer class="post-info">
-            <span>2021-05-14(Fri)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
-          </footer><!-- /.post-info --><h2>GASとは</h2>
-<p><font color="red"><b>Google Apps Script(GAS, ガス)</b></font>とは、Googleが提供するサーバーサイド・スクリプト環境です。<code>JavaScript</code> ではありませんが、<code>JavaScript</code> っぽいのでここに記載しています。</p>
-<p>なお、どんなことができるかは以前の記事 <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-13.html">JS.13 GASでslackにメッセージを送る</a> を参照していただければと思います。</p>
-<h2>Trello</h2>
-<p><a href="https://trello.com/">Trello</a>は、カードを動かしながらタスクを視覚的に管理できるカンバン方式のツールです。付箋を貼るように直感的にタスクを管理できるのが使いやすく、普段から利用しているのですが、定期的にどのタスクが残っているのかslack等に通知できれば良いと思い、<a href="https://developer.atlassian.com/cloud/trello/">TrelloのAPI</a>を用いてこれを実現しました。</p>
-<p>※ APIを使うにあたり、API key と Token が必要になります。Trelloにログインした状態で <a href="https://trello.com/app-key">https://trello.com/app-key</a> にアクセスして取得してください。</p>
-<p>なお、ボードIDは <a href="https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-memberships-get">Get Memberships of a Board</a>というメソッドを用いればわかりますが、TrelloのAPIをPythonでWrapした<a href="https://github.com/iwasakishuto/Python-Charmers">Python-Charmers</a> の <a href="https://iwasakishuto.github.io/Python-Charmers/pycharmers.api.trello.html"><code>pycharmers.api.trello</code> というモジュール</a>を利用すると、以下のように簡単に取得できます。</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pycharmers.api</span> <span class="kn">import</span> <span class="n">Trello</span>
-<span class="n">trello</span> <span class="o">=</span> <span class="n">Trello</span><span class="p">(</span><span class="n">apikey</span><span class="o">=</span><span class="s2">&quot;APIKEY&quot;</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="s2">&quot;TOKEN&quot;</span><span class="p">)</span>
-<span class="n">trello</span><span class="o">.</span><span class="n">show_memberships_of_a_board</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;iwasakishuto&quot;</span><span class="p">)</span>
-<span class="o">+--------------+---------------------+--------------------------------------+</span>
-<span class="o">|</span>     <span class="n">name</span>     <span class="o">|</span>         <span class="nb">id</span>          <span class="o">|</span>             <span class="n">url</span>                      <span class="o">|</span>
-<span class="o">+==============+=====================+======================================+</span>
-<span class="o">|</span>  <span class="n">boardname1</span>  <span class="o">|</span>  <span class="nb">id</span> <span class="k">for</span> <span class="n">boardname1</span>  <span class="o">|</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">trello</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">YYYY</span><span class="o">/</span><span class="n">boardname2</span> <span class="o">|</span>
-<span class="o">+--------------+---------------------+--------------------------------------+</span>
-<span class="o">|</span>  <span class="n">boardname2</span>  <span class="o">|</span>  <span class="nb">id</span> <span class="k">for</span> <span class="n">boardname1</span>  <span class="o">|</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">trello</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">XXXX</span><span class="o">/</span><span class="n">boardname2</span> <span class="o">|</span>
-<span class="o">+--------------+---------------------+--------------------------------------+</span>
-</code></pre></div>
+            <span>2021-06-07(Mon)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
+          </footer><!-- /.post-info --><h2>作成したもの</h2>
+<div>
+  <table class="fixed">
+    <thead><tr><th colspan="4">入力欄</th></tr></thead>
+    <tbody>
+      <tr><td colspan="4"><button class="btn--click btn--shadow btn--red btn--reset">Reset</button></td></tr>
+      <tr><td colspan="4"><textarea id="input-textarea" rows="5" placeholder="ここに入力してください。"></textarea></td></tr>
+    </tbody>
+    <thead>
+      <tr><th colspan="4">Demo Options</th></tr>
+      <tr><th>Span [ms]</th><th>Font Size</th><th>Line Height</th><th>Font Family</th></tr>
+    </thead>
+    <tbody>
+      <tr class="g1">
+        <td><input id="spanMS" type="number" min="0" value="100" step="50" max="1000"/></td>
+        <td><select id="fontFamily"><option selected>Arial</option><option>Verdana</option><option>Times New Roman</option><option>Courier New</option><option>serif</option><option>sans-serif</option></select></td>
+        <td><input id="fontSize" type="number" min="1" value="16" step="1" max="100"/></td>
+        <td><input id="lineHeight" type="number" min="1" value="16" step="1" max="100"/></td>
+      </tr>
+      <tr><td colspan="4"><button class="btn--click btn--shadow btn--green btn--demo">Demo</button></td></tr>
+      <tr>
+        <td colspan="4"><canvas id="demoCanvas"></canvas></td>
+      </tr>
+    </tbody>
+    <thead><tr><th colspan="4">ダウンロード</th></tr></thead>
+    <tbody>
+      <tr>
+        <td colspan="4"><button class="btn--click btn--shadow btn--blue btn--download">Download</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
+<script>
+  const typingTextarea  = document.querySelector("textarea#input-textarea");
+  const resetBtn         = document.querySelector("button.btn--reset");
+  const downloadBtn      = document.querySelector("button.btn--download");
+  const demoBtn          = document.querySelector("button.btn--demo");
+  const spanMS           = document.querySelector("input#spanMS");
+  const fontSizeInput    = document.querySelector("input#fontSize");
+  const lineHeightInput  = document.querySelector("input#lineHeight");
+  const fontFamilySelect = document.querySelector("select#fontFamily");
+  const demoCanvas  = document.getElementById("demoCanvas");
+  const demoCtx     = demoCanvas.getContext("2d");
+  var input_typing = [];
+  var prev_text = "";
+  const addCurtTypingKey = function(){
+    let curt_text = typingTextarea.value
+    if (prev_text != curt_text){
+      input_typing.push(curt_text);
+      prev_text = curt_text;
+      console.log(input_typing.length, curt_text)
+    }
+  }
+  const clearTypingMemory = function(){
+    input_typing = [];
+    prev_text = "";
+  }
+  const downloadJson = function(){
+    var data = {date: now_str(), typing: input_typing}
+    var jsonString = JSON.stringify(data, null, '\t');
+    var blob = new Blob([jsonString], {type: "application/json" });
+    let link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "typing.json";
+    link.click();
+  }
+  const startDemo = function(){
+    addCurtTypingKey();
+    var fontSize = parseInt(fontSizeInput.value);
+    var lineheight = parseInt(lineHeightInput.value);
+    demoCtx.font = `${fontSize}px ${fontFamilySelect.value}`;
+    loopSleep(input_typing.length, parseInt(spanMS.value), function(i){
+      demoCtx.clearRect(0, 0, demoCanvas.width, demoCanvas.height);
+      var lines = input_typing[i].split("\n");
+      for (let j=0; j<lines.length; j++){
+        demoCtx.fillText(lines[j], 10, (j+1)*lineheight);
+      }
+    });
+  }
+  typingTextarea.addEventListener("keydown", addCurtTypingKey);
+  resetBtn.addEventListener("click", clearTypingMemory);
+  downloadBtn.addEventListener("click", downloadJson);
+  demoBtn.addEventListener("click", startDemo);
+  fontSizeInput.addEventListener("change", function(){
+    lineHeightInput.value = fontSizeInput.value;
+  })
+  /* <--- Utility Functions --- */
+  // Return current date as string.
+  function now_str(){
+    function padLeft(no){
+      let len = (2-String(no).length)+1;
+      return len > 0? new Array(len).join('0')+no : no;  
+    }
+    var d = new Date
+    return `${d.getFullYear()}/${padLeft(d.getMonth()+1)}/${padLeft(d.getDate())} ${padLeft(d.getHours())}:${padLeft(d.getMinutes())}:${padLeft(d.getSeconds())}`
+  }
+  // Loop with sleep function
+  function loopSleep(_loopLimit,_interval, _mainFunc){
+    // @ref: https://qiita.com/akyao/items/a718cc78436df68d7e15
+    var loopLimit = _loopLimit;
+    var interval = _interval;
+    var mainFunc = _mainFunc;
+    var i = 0;
+    var loopFunc = function () {
+      var result = mainFunc(i);
+      if (result === false) return;
+      i++;
+      if (i<loopLimit) setTimeout(loopFunc, interval);
+    }
+    loopFunc();
+  }
+  document.addEventListener("keydown", function(evt){
+    if (evt.key=="Tab"){
+      var cur_focused = document.activeElement;
+      evt.preventDefault();
+      console.log(cur_focused, cur_focused==typingTextarea)
+      if (cur_focused == typingTextarea){
+        demoBtn.focus()
+      }else{
+        typingTextarea.focus();
+      } 
+    }
+  })
+  /* --- Utility Functions ---> */
+</script>
 
-<h2>作成したもの</h2>
-<p><img alt="Trelloタスク管理" src="https://iwasakishuto.github.io/Front-End/tips/images/gas_trello.png"></p>
-<h3>変数定義</h3>
-<p>セキュリティの観点から、API key や Token はコード内に直書きするのではなく、Propertyに書き、<code>PropertiesService.getScriptProperties()</code> で取得します。</p>
-<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">PropertiesService</span><span class="p">.</span><span class="nx">getScriptProperties</span><span class="p">();</span>
-<span class="kr">const</span> <span class="nx">add_trello_params</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">url</span><span class="p">){</span>
-  <span class="k">return</span> <span class="nx">url</span> <span class="o">+</span> <span class="s2">&quot;?key=&quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;TRELLO_APIKEY&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&amp;token=&quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;TRELLO_TOKEN&quot;</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="kr">const</span> <span class="nx">url_get_lists_on_a_board</span> <span class="o">=</span> <span class="nx">add_trello_params</span><span class="p">(</span><span class="s2">&quot;https://api.trello.com/1/boards/&quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;TRELLO_BOARDID&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/lists&quot;</span><span class="p">);</span>
-<span class="kr">const</span> <span class="nx">url_cards_in_a_list</span>      <span class="o">=</span> <span class="nx">add_trello_params</span><span class="p">(</span><span class="s2">&quot;https://api.trello.com/1/boards/&quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;TRELLO_BOARDID&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/cards&quot;</span><span class="p">);</span>
-<span class="kr">const</span> <span class="nx">private_list_names</span>       <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Trash&quot;</span><span class="p">]</span>
-</code></pre></div>
-
-
-<h3><code>getTasks</code></h3>
-<p>Trello から予定を取得します。</p>
-<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">getTasks</span><span class="p">(){</span>
-  <span class="kd">var</span> <span class="nx">boardId2name</span> <span class="o">=</span> <span class="p">{}</span>
-  <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url_get_lists_on_a_board</span><span class="p">).</span><span class="nx">getContentText</span><span class="p">()).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
-    <span class="nx">boardId2name</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">e</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
-  <span class="p">})</span>
-  <span class="kd">var</span> <span class="nx">list2cards</span> <span class="o">=</span> <span class="p">{}</span>
-  <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url_cards_in_a_list</span><span class="p">).</span><span class="nx">getContentText</span><span class="p">()).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
-    <span class="kd">var</span> <span class="nx">boardname</span> <span class="o">=</span> <span class="nx">boardId2name</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="s2">&quot;idList&quot;</span><span class="p">]];</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">boardname</span> <span class="k">in</span> <span class="nx">list2cards</span><span class="p">){</span>
-      <span class="nx">list2cards</span><span class="p">[</span><span class="nx">boardname</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">e</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
-    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-      <span class="nx">list2cards</span><span class="p">[</span><span class="nx">boardname</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span>
-    <span class="p">}</span>
-  <span class="p">})</span>
-  <span class="k">return</span> <span class="nx">list2cards</span>
-<span class="p">}</span>
-</code></pre></div>
-
-
-<h3><code>arrange_message</code></h3>
-<p>取得したタスクを、slackで見やすいように整形します。</p>
-<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">arrange_message</span><span class="p">(</span><span class="nx">list2cards</span><span class="p">){</span>
-  <span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-  <span class="kd">var</span> <span class="nx">num_tasks</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">list2cards</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">l</span><span class="p">){</span>
-    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">private_list_names</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">l</span><span class="p">)){</span>
-      <span class="nx">cards</span> <span class="o">=</span> <span class="nx">list2cards</span><span class="p">[</span><span class="nx">l</span><span class="p">]</span>
-      <span class="nx">text</span> <span class="o">+=</span> <span class="s2">&quot;\n*【&quot;</span> <span class="o">+</span> <span class="nx">l</span> <span class="o">+</span> <span class="s2">&quot;】(&quot;</span> <span class="o">+</span> <span class="nx">cards</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s2">&quot;)*&quot;</span>
-      <span class="nx">num_tasks</span> <span class="o">+=</span> <span class="nx">cards</span><span class="p">.</span><span class="nx">length</span>
-      <span class="nx">cards</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">c</span><span class="p">){</span>
-        <span class="nx">text</span> <span class="o">+=</span> <span class="s2">&quot;\n\t\t* &quot;</span> <span class="o">+</span> <span class="nx">c</span>
-      <span class="p">})</span>
-    <span class="p">}</span>
-  <span class="p">})</span>
-  <span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;今の &lt;@UTANWKEBU&gt; のタスク *(&quot;</span> <span class="o">+</span> <span class="nx">num_tasks</span> <span class="o">+</span> <span class="s2">&quot;)*&quot;</span> <span class="o">+</span> <span class="nx">text</span>
-  <span class="k">return</span> <span class="nx">text</span>
-<span class="p">}</span>
-</code></pre></div>
-
-
-<h3><code>postSlack</code></h3>
-<p>slack にメッセージを送ります。</p>
-<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">postSlack</span><span class="p">(</span><span class="nx">payload</span><span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;method&quot;</span> <span class="o">:</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;payload&quot;</span> <span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">payload</span><span class="p">)</span>
-  <span class="p">}</span>
-  <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;WEBHOOK_URL&quot;</span><span class="p">);</span>
-  <span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-  <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">getContentText</span><span class="p">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
-
-
-<h3><code>main</code></h3>
-<p>以上をまとめた関数です。</p>
-<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">main</span><span class="p">(){</span>
-  <span class="kd">var</span> <span class="nx">list2cards</span> <span class="o">=</span> <span class="nx">getTasks</span><span class="p">();</span>
-  <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">arrange_message</span><span class="p">(</span><span class="nx">list2cards</span><span class="p">);</span>
-  <span class="nx">postSlack</span><span class="p">({</span>
-    <span class="s2">&quot;channel&quot;</span>  <span class="o">:</span> <span class="s2">&quot;#002_tasks&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;username&quot;</span> <span class="o">:</span> <span class="s2">&quot;文乃【秘書】&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;text&quot;</span>     <span class="o">:</span> <span class="nx">text</span><span class="p">,</span>
-  <span class="p">})</span>
-<span class="p">}</span>
-</code></pre></div>                </article>
+<style>
+  table *{
+    vertical-align: middle;
+    text-align: center;
+  }
+  table.fixed {
+    table-layout: fixed;
+  }
+  thead {
+    background-color: black;
+    color: white;
+    text-align: center;
+  }
+  table textarea, table input, table select{
+    padding: .5em .4em;
+    background-color: transparent;
+    font-family: Monaco, monospace, sans-serif;
+    width: 100%;
+  }
+  table textarea {
+    width: 90%;
+    text-align: left;
+  }
+  textarea:focus-visible{
+    background-color: lightgoldenrodyellow;
+  }
+  table input, table select{
+    border: 0;
+  }
+  canvas {
+    border: solid 1.5px black;
+    box-shadow: 3px 3px 3px 0px #aaa;
+    margin: 10px;
+  }
+  .btn--click {
+    color: #fff;
+    background-color: black;
+    border: 0;
+    border-radius: 5px;
+    border-bottom: 5px solid black;
+    display: inline-block;
+    padding: .5em 2em;
+    text-decoration: none;
+    cursor: pointer;
+    font-family: monaco, monospace;
+  }
+  .btn--click:hover, .btn--click:focus {
+    border-bottom-width: 2.5px;
+    text-decoration: none;
+  }
+  .btn--click::before {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    padding-right: 1em;
+  }
+  .btn--click:focus-visible{
+    /* outline: yellow auto 0; */
+  }
+  .btn--shadow {
+    -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+    box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
+  }
+  .btn--red {
+    background-color: #c94663;
+    border-bottom-color: #8a1010;
+  }
+  .btn--blue {
+    background-color: #8ab6d6;
+    border-bottom-color: #2978b5;
+  }
+  .btn--green {
+    background-color: #91c788;
+    border-bottom-color: #52734d;
+  }
+  .btn--download::before {
+    content: "\f019";
+  }
+  .btn--reset::before{
+    content: "\f0e2";
+  }
+  .btn--demo::before{
+    content: "\f303";
+  }
+  .g1{
+    background-color: azure;
+  }
+</style>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
                     <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-34.html" rel="bookmark"
+                           title="Permalink to JS.34 GASでTrelloのタスクを定期的に通知する。">JS.34 GASでTrelloのタスクを定期的に通知する。</a></h1>
+                </header>
+
+                <div class="entry-content">
+          <footer class="post-info">
+            <span>2021-05-14(Fri)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
+          </footer><!-- /.post-info -->                <p>GASでTrelloのタスクを定期的に通知する。</p>
+                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-34.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -284,21 +411,6 @@
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/cheat-sheet.html">Cheat-sheet</a></span>
           </footer><!-- /.post-info -->                <p>モーダル（ポップアップ）の作成</p>
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-26.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-25.html" rel="bookmark"
-                           title="Permalink to JS.25 ポケモンエメラルドでフロンティア マスターを目指す（その１）">JS.25 ポケモンエメラルドでフロンティア マスターを目指す（その１）</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-02-15(Mon)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
-          </footer><!-- /.post-info -->                <p>ポケモンエメラルドでフロンティア マスターを目指す（その１）</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-25.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
             </ol><!-- /#posts-list -->
