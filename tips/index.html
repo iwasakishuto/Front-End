@@ -56,115 +56,251 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-36.html">JS.36 GASでLINE BOTを作成し、各種IDを取得する。</a></h1>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-37.html">JS.37 GASでLINE Botからの送信を自動化する</a></h1>
           <footer class="post-info">
-            <span>2021-06-21(Mon)</span>
+            <span>2021-06-22(Tue)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
-          </footer><!-- /.post-info --><p>LINE Official Account に友達登録している人の user ID リストを作成したかったのですが、<a href="https://developers.line.biz/en/reference/messaging-api/#get-follower-ids">Messaging API reference</a>を見る限り、<strong>verified</strong> or <strong>premium</strong> アカウントでしかこの機能を使えないようなので、メッセージが送信された際に取得できる情報を利用することにしました。</p>
-<h2>LINE BOTの作成</h2>
-<p><a href="https://developers.line.biz/console/">LINE developers Console</a>で必要な登録と設定を済ませ、LINE BOT(Channel)を作成します。それに関しては、<a href="https://qiita.com/nkjm/items/38808bbc97d6927837cd">LINEのBot開発 超入門（前編） ゼロから応答ができるまで</a>が参考になるかと思います。</p>
-<p>Channelが作成できたら、[LINE developer] -&gt; [Messaging API] から、<strong>Channel access token</strong> を取得してください。また、以下で作成するGAS(web application)のWebhook URLの設定箇所も同じ場所です。</p>
-<p>※ LINE アカウントを作成したい場合は <a href="https://manager.line.biz/">LINE Official Account Manager</a> から作成してください。</p>
-<h2>GASの設定</h2>
-<p>※ Property の <code>CHANNEL_ACCESS_TOKEN</code> に上記で取得した <strong>Channel access token</strong> の値を設定してください。</p>
-<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">doPost</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">contents</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">postData</span><span class="p">.</span><span class="nx">contents</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">contents</span><span class="p">)</span>
-  <span class="kd">var</span> <span class="nx">events</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">[</span><span class="s2">&quot;events&quot;</span><span class="p">];</span>
-  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">events</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">events</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;message&quot;</span><span class="p">){</span>
-      <span class="nx">reply_message</span><span class="p">(</span><span class="nx">events</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+          </footer><!-- /.post-info --><p><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-36.html">JS.36 GASでLINE BOTを作成し、各種IDを取得する</a>で、LINE BOTを作成し、userIDを取得したり、そのuserID宛にメッセージを送る方法を理解したので、ここではそれらを自動化し、GASを用いて定期実行等を実現する。</p>
+<p><img alt="LINE API Automation" src="https://iwasakishuto.github.io/Front-End/tips/images/gas_line_api_automation.png"></p>
+<h3>変数定義</h3>
+<ul>
+<li>スプレッドシート</li>
+<li><code>WEBHOOK_URL</code> 等の外部から隠すべき変数を保持する <code>PropertiesService</code></li>
+</ul>
+<p>は、global変数として定義する。</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">PropertiesService</span><span class="p">.</span><span class="nx">getScriptProperties</span><span class="p">();</span>
+<span class="kr">const</span> <span class="nx">ss</span> <span class="o">=</span> <span class="nx">SpreadsheetApp</span><span class="p">.</span><span class="nx">getActiveSpreadsheet</span><span class="p">();</span>
+<span class="kr">const</span> <span class="nx">sheet</span> <span class="o">=</span> <span class="nx">ss</span><span class="p">.</span><span class="nx">getSheetByName</span><span class="p">(</span><span class="s1">&#39;SHEET NAME&#39;</span><span class="p">);</span>
+</code></pre></div>
+
+
+<h3><code>send_all_table_messages</code></h3>
+<p><code>${getColName(col)}${row} : ${getColName(col+2)}</code> のテーブルデータを用いて各ユーザーにメッセージを送信し、各行の右端列（<code>getColName(col+3)</code>）に結果を記録する。</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/** Send all messages in table[`${getColName(col)}${row}:${getColName(col+3)}`] in &quot;自動送信&quot; tab.</span>
+<span class="cm"> * @param {Number} col Column index (1-based).</span>
+<span class="cm"> * @param {Number} row Row index (1-based)</span>
+<span class="cm">*/</span>
+<span class="kd">function</span> <span class="nx">send_all_table_messages</span><span class="p">(</span><span class="nx">col</span><span class="p">,</span> <span class="nx">row</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">table</span> <span class="o">=</span> <span class="nx">sheet</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">getColName</span><span class="p">(</span><span class="nx">col</span><span class="p">)</span><span class="si">}${</span><span class="nx">row</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">getColName</span><span class="p">(</span><span class="nx">col</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="sb">`</span><span class="p">).</span><span class="nx">getValues</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">rowIdx</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">){</span>
+    <span class="nx">user</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">User</span><span class="p">(</span><span class="nx">rowData</span><span class="o">=</span><span class="nx">table</span><span class="p">[</span><span class="nx">rowIdx</span><span class="p">],</span> <span class="nx">result_cell</span><span class="o">=</span><span class="nx">sheetn</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">getColName</span><span class="p">(</span><span class="nx">col</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span><span class="si">}${</span><span class="mi">4</span><span class="o">+</span><span class="nx">rowIdx</span><span class="si">}</span><span class="sb">`</span><span class="p">))</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="o">==</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">break</span>
+    <span class="nx">user</span><span class="p">.</span><span class="nx">send_message</span><span class="p">()</span>
+    <span class="nx">rowIdx</span><span class="o">++</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<h3><code>User</code></h3>
+<p>上記の関数でやりたいことが実行できるよう以下の <code>User</code> クラスを作成し、「メッセージの送信」や「結果の報告等」を楽に記述できるようにする。</p>
+<p>なお、以下のような表形式でデータが格納されていることを想定している。</p>
+<table>
+<thead>
+<tr>
+<th align="center">Name</th>
+<th align="center">userId</th>
+<th align="center">message</th>
+<th align="center">Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center">iwasakishuto</td>
+<td align="center"><code>Uxxx</code></td>
+<td align="center">Hello world</td>
+<td align="center">OK</td>
+</tr>
+<tr>
+<td align="center">tanakataro</td>
+<td align="center"><code>Uxxx</code></td>
+<td align="center">Hello world!!</td>
+<td align="center">OK</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre><span></span><code><span class="c1">// A class that handles sending messages and reporting results (to Slack and Spread Sheet)</span>
+<span class="kr">class</span> <span class="nx">User</span> <span class="p">{</span>
+  <span class="cm">/** Construct the user class.</span>
+<span class="cm">   * @param {list} rowData A row data that holds ``[&quot;name&quot;,&quot;userId&quot;,&quot;message&quot;]`` in this order. Corresponds to one row in the spreadsheet.</span>
+<span class="cm">   * @param {Range} result_cell Location of the sheet that describes the result. ( ``Spreadsheet.getRange(&quot;&quot;)`` )</span>
+<span class="cm">  */</span>
+  <span class="nx">constructor</span><span class="p">(</span><span class="nx">rowData</span><span class="p">,</span> <span class="nx">result_cell</span><span class="p">){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">name</span>    <span class="o">=</span> <span class="nx">rowData</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">userId</span>  <span class="o">=</span> <span class="nx">rowData</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">message</span> <span class="o">=</span> <span class="nx">rowData</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">result_cell</span> <span class="o">=</span> <span class="nx">result_cell</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="cm">/** Set result to ``this.result_cell``</span>
+<span class="cm">   * @param {string} message Contents to be described in ``this.reault_cell``. (Function result) </span>
+<span class="cm">  */</span>
+  <span class="nx">set_result</span><span class="p">(</span><span class="nx">message</span><span class="p">){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">result_cell</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="cm">/** Report the function result to the administrator.</span>
+<span class="cm">   * @param {string} message Message to report.</span>
+<span class="cm">   * @param {boolean} to_slack Whether to send a message to slack.</span>
+<span class="cm">  */</span>
+  <span class="nx">report_result</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">to_slack</span><span class="o">=</span><span class="kc">false</span><span class="p">){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">set_result</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">to_slack</span><span class="p">){</span>
+      <span class="c1">// postSlack(`${now_str()}\n${this.userId}: ${message}`)</span>
+      <span class="nx">postSlack</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="c1">// Get ``this.userId``&#39;s profile information.</span>
+  <span class="nx">get_profile</span><span class="p">(){</span>
+    <span class="k">try</span><span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;method&quot;</span> <span class="o">:</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;headers&quot;</span> <span class="o">:</span> <span class="p">{</span>
+          <span class="s2">&quot;Content-Type&quot;</span> <span class="o">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;Authorization&quot;</span> <span class="o">:</span> <span class="s2">&quot;Bearer &quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;CHANNEL_ACCESS_TOKEN&quot;</span><span class="p">)</span>
+        <span class="p">},</span>
+      <span class="p">};</span>
+      <span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="sb">`https://api.line.me/v2/bot/profile/</span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">userId</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+      <span class="k">return</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">getContentText</span><span class="p">());</span>
+    <span class="p">}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">ex</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;displayName&quot;</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;userId&quot;</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;language&quot;</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pictureUrl&quot;</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;statusMessage&quot;</span><span class="o">:</span> <span class="s2">&quot;&quot;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="cm">/** Send a message to ``this.userId``</span>
+<span class="cm">   * @param {string} message A message to send to ``this.userId``.</span>
+<span class="cm">  */</span>
+  <span class="nx">send_message</span><span class="p">(</span><span class="nx">message</span><span class="o">=</span><span class="kc">undefined</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">message</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">){</span>
+      <span class="nx">message</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">postData</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="s2">&quot;to&quot;</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">userId</span><span class="p">,</span>
+      <span class="s2">&quot;messages&quot;</span> <span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span> <span class="o">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;text&quot;</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">message</span><span class="p">,</span>
+        <span class="p">}</span>
+      <span class="p">]</span>
+    <span class="p">};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">send_push_message</span><span class="p">(</span><span class="nx">postData</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="cm">/** Post the data of ``postData``.</span>
+<span class="cm">   * @reference https://developers.line.biz/en/reference/messaging-api/#send-reply-message</span>
+<span class="cm">   * @param {Object} postData A data structure for &quot;https://api.line.me/v2/bot/message/push&quot;</span>
+<span class="cm">  */</span>
+  <span class="nx">send_push_message</span><span class="p">(</span><span class="nx">postData</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">displayName</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get_profile</span><span class="p">().</span><span class="nx">displayName</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">==</span> <span class="nx">displayName</span><span class="p">){</span>
+      <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;method&quot;</span> <span class="o">:</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;headers&quot;</span> <span class="o">:</span> <span class="p">{</span>
+          <span class="s2">&quot;Content-Type&quot;</span> <span class="o">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;Authorization&quot;</span> <span class="o">:</span> <span class="s2">&quot;Bearer &quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;CHANNEL_ACCESS_TOKEN&quot;</span><span class="p">)</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;payload&quot;</span> <span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">postData</span><span class="p">)</span>
+      <span class="p">};</span>
+      <span class="k">try</span><span class="p">{</span>
+        <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="s2">&quot;https://api.line.me/v2/bot/message/push&quot;</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">report_result</span><span class="p">(</span><span class="s2">&quot;OK&quot;</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>     
+      <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">ex</span><span class="p">){</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">report_result</span><span class="p">(</span><span class="nx">ex</span><span class="p">.</span><span class="nx">message</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
+      <span class="p">}</span>
+    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">report_result</span><span class="p">(</span><span class="sb">`名前 != displayName (</span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="sb">!=</span><span class="si">${</span><span class="nx">displayName</span><span class="si">}</span><span class="sb">)`</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
+</code></pre></div>
 
-<span class="kd">function</span> <span class="nx">reply_message</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">user_id</span>  <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">userId</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">group_id</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">groupId</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">room_id</span>  <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">roomId</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">ids</span> <span class="o">=</span> <span class="p">[</span><span class="nx">user_id</span><span class="p">,</span> <span class="nx">group_id</span><span class="p">,</span> <span class="nx">room_id</span><span class="p">];</span>
-  <span class="kd">var</span> <span class="nx">postData</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;replyToken&quot;</span> <span class="o">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">replyToken</span><span class="p">,</span>
-    <span class="s2">&quot;messages&quot;</span> <span class="o">:</span> <span class="p">[</span>
-      <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span> <span class="o">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;text&quot;</span> <span class="o">:</span> <span class="sb">`[IDs]</span>
-<span class="sb">        * User ID : </span><span class="si">${</span><span class="nx">user_id</span><span class="si">}</span><span class="sb"></span>
-<span class="sb">        * Group ID: </span><span class="si">${</span><span class="nx">group_id</span><span class="si">}</span><span class="sb"></span>
-<span class="sb">        * Room ID : </span><span class="si">${</span><span class="nx">room_id</span><span class="si">}</span><span class="sb"></span>
-<span class="sb">        `</span>
-      <span class="p">}</span>
-    <span class="p">]</span>
-  <span class="p">};</span>
-  <span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">PropertiesService</span><span class="p">.</span><span class="nx">getScriptProperties</span><span class="p">();</span>
+
+<h3><code>postSlack</code></h3>
+<p>エラーや、実行結果などをslackに通知する関数。</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/** Post a Message to Slack using Incoming Webhook</span>
+<span class="cm"> * @param {string} text A default message to send to ``this.userId``.</span>
+<span class="cm"> * @param {string} channel Where to report the result.</span>
+<span class="cm"> * @param {string} username Bot&#39;s user name.</span>
+<span class="cm"> * @param {string} icon_url Image url for Bot Icon</span>
+<span class="cm">*/</span>
+<span class="kd">function</span> <span class="nx">postSlack</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> 
+                   <span class="nx">username</span><span class="o">=</span><span class="s2">&quot;USERNAME&quot;</span><span class="p">,</span> 
+                   <span class="nx">channel</span><span class="o">=</span><span class="s2">&quot;#CHANNEL_NAME&quot;</span><span class="p">,</span> 
+                   <span class="nx">icon_url</span><span class="o">=</span><span class="s2">&quot;https://iwasakishuto.github.io/images/profile/twitter.png&quot;</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">payload</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;text&quot;</span>     <span class="o">:</span> <span class="nx">text</span><span class="p">,</span>
+    <span class="s2">&quot;channel&quot;</span>  <span class="o">:</span> <span class="nx">channel</span><span class="p">,</span>
+    <span class="s2">&quot;username&quot;</span> <span class="o">:</span> <span class="nx">username</span><span class="p">,</span>
+    <span class="s2">&quot;icon_url&quot;</span> <span class="o">:</span> <span class="nx">icon_url</span><span class="p">,</span>
+  <span class="p">}</span>
   <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;method&quot;</span> <span class="o">:</span> <span class="s2">&quot;post&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;headers&quot;</span> <span class="o">:</span> <span class="p">{</span>
-      <span class="s2">&quot;Content-Type&quot;</span> <span class="o">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;Authorization&quot;</span> <span class="o">:</span> <span class="s2">&quot;Bearer &quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;CHANNEL_ACCESS_TOKEN&quot;</span><span class="p">)</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;payload&quot;</span> <span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">postData</span><span class="p">)</span>
-  <span class="p">};</span>
-  <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="s2">&quot;https://api.line.me/v2/bot/message/reply&quot;</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+    <span class="s2">&quot;method&quot;</span> <span class="o">:</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;payload&quot;</span> <span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">payload</span><span class="p">)</span>
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;WEBHOOK_URL&quot;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">getContentText</span><span class="p">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
 
 
-<p>上記の内容でスクリプトを作成し、web applicationとして公開、そのURLを先ほどのwebhook URLに設定すれば、<strong>「送信者の各種IDを返してくれるLINE BOT」</strong> の完成です。</p>
-<h2>Python で LINE BOT を操作する</h2>
-<p><a href="https://github.com/line/line-bot-sdk-python">line-bot-sdk-python</a>という便利なSDKがあったので、これを用いて操作してみます。</p>
-<div class="highlight"><pre><span></span><code>$ pip install line-bot-sdk
+<h3><code>now_str</code></h3>
+<p>エラー等の報告には、当時の時間情報が必要になるため、「現在の時間を取得し、文字列に整形する」関数を作成する。</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/** Return the current time as a string.</span>
+<span class="cm"> * @return {string} The current time as a string.</span>
+<span class="cm">*/</span>
+<span class="kd">function</span> <span class="nx">now_str</span><span class="p">(){</span>
+  <span class="cm">/** Fill in the numbers with 0 to make it beautiful.</span>
+<span class="cm">   * @param {Number} no The input number.</span>
+<span class="cm">   * @return {string} 0 filled number.</span>
+<span class="cm">  */</span>
+  <span class="kd">function</span> <span class="nx">padLeft</span><span class="p">(</span><span class="nx">no</span><span class="p">){</span>
+    <span class="nx">no</span> <span class="o">=</span> <span class="nb">String</span><span class="p">(</span><span class="nx">no</span><span class="p">);</span>
+    <span class="kd">let</span> <span class="nx">len</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">-</span><span class="nx">no</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">len</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">?</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">len</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="p">)</span><span class="o">+</span><span class="nx">no</span> <span class="o">:</span> <span class="nx">no</span><span class="p">;</span>  
+  <span class="p">}</span>
+  <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span>
+  <span class="k">return</span> <span class="sb">`</span><span class="si">${</span><span class="nx">d</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">()</span><span class="si">}</span><span class="sb">/</span><span class="si">${</span><span class="nx">padLeft</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="sb">/</span><span class="si">${</span><span class="nx">padLeft</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getDate</span><span class="p">())</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">padLeft</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getHours</span><span class="p">())</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">padLeft</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getMinutes</span><span class="p">())</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">padLeft</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getSeconds</span><span class="p">())</span><span class="si">}</span><span class="sb">`</span>
+<span class="p">}</span>
 </code></pre></div>
 
 
-<p>以下のコードでメッセージの送信が可能です。なお、サンプルコードには、flaskと連携し、LINE BOTをカスタマイズする方法が記載されています。</p>
-<h3>シンプルなテキストを送信する</h3>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">linebot</span> <span class="kn">import</span> <span class="n">LineBotApi</span>
-<span class="kn">from</span> <span class="nn">linebot.models</span> <span class="kn">import</span> <span class="n">TextSendMessage</span>
-
-<span class="n">line_bot_api</span> <span class="o">=</span> <span class="n">LineBotApi</span><span class="p">(</span><span class="n">channel_access_token</span><span class="o">=</span><span class="n">channel_access_token</span><span class="p">)</span>
-<span class="n">line_bot_api</span><span class="o">.</span><span class="n">push_message</span><span class="p">(</span><span class="n">to</span><span class="o">=</span><span class="n">user_ID</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="n">TextSendMessage</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s1">&#39;Hello World!&#39;</span><span class="p">))</span>
-</code></pre></div>
-
-
-<h3>テンプレートテキストを送信する</h3>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">linebot</span> <span class="kn">import</span> <span class="n">LineBotApi</span>
-<span class="kn">from</span> <span class="nn">linebot.models</span> <span class="kn">import</span> <span class="n">ButtonsTemplate</span><span class="p">,</span> <span class="n">PostbackAction</span><span class="p">,</span> <span class="n">MessageAction</span><span class="p">,</span> <span class="n">URIAction</span><span class="p">,</span> <span class="n">TemplateSendMessage</span>
-
-<span class="n">line_bot_api</span> <span class="o">=</span> <span class="n">LineBotApi</span><span class="p">(</span><span class="n">channel_access_token</span><span class="o">=</span><span class="n">channel_access_token</span><span class="p">)</span>
-<span class="n">line_bot_api</span><span class="o">.</span><span class="n">push_message</span><span class="p">(</span><span class="n">to</span><span class="o">=</span><span class="n">user_ID</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="n">TemplateSendMessage</span><span class="p">(</span>
-    <span class="n">alt_text</span><span class="o">=</span><span class="s1">&#39;Buttons template&#39;</span><span class="p">,</span>
-    <span class="n">template</span><span class="o">=</span><span class="n">ButtonsTemplate</span><span class="p">(</span>
-        <span class="n">thumbnail_image_url</span><span class="o">=</span><span class="s1">&#39;https://iwasakishuto.github.io/images/profile/twitter.png&#39;</span><span class="p">,</span>
-        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Menu&#39;</span><span class="p">,</span>
-        <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Please select&#39;</span><span class="p">,</span>
-        <span class="n">actions</span><span class="o">=</span><span class="p">[</span>
-            <span class="n">PostbackAction</span><span class="p">(</span>
-                <span class="n">label</span><span class="o">=</span><span class="s1">&#39;postback&#39;</span><span class="p">,</span>
-                <span class="n">display_text</span><span class="o">=</span><span class="s1">&#39;postback text&#39;</span><span class="p">,</span>
-                <span class="n">data</span><span class="o">=</span><span class="s1">&#39;action=buy&amp;itemid=1&#39;</span>
-            <span class="p">),</span>
-            <span class="n">MessageAction</span><span class="p">(</span>
-                <span class="n">label</span><span class="o">=</span><span class="s1">&#39;message&#39;</span><span class="p">,</span>
-                <span class="n">text</span><span class="o">=</span><span class="s1">&#39;message text&#39;</span>
-            <span class="p">),</span>
-            <span class="n">URIAction</span><span class="p">(</span>
-                <span class="n">label</span><span class="o">=</span><span class="s1">&#39;portfolio&#39;</span><span class="p">,</span>
-                <span class="n">uri</span><span class="o">=</span><span class="s1">&#39;https://iwasakishuto.github.io/&#39;</span>
-            <span class="p">)</span>
-        <span class="p">]</span>
-
-    <span class="p">)</span>
-<span class="p">))</span>
-</code></pre></div>
-
-
-<p>これらによって、以下のようなメッセージを送信できます。</p>
-<p><img alt="sample Image" src="https://iwasakishuto.github.io/Front-End/tips/images/gas_line_api.png"></p>                </article>
+<h3><code>getColName</code></h3>
+<p>スプレッドシート特有の列名を、列のindexから取得できるようにする関数。</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/** Get the column name on the spreadsheet from index.</span>
+<span class="cm"> * @param {Number} idx Column name specified by 1-based index.</span>
+<span class="cm"> * @return {string} Column Name.</span>
+<span class="cm">*/</span>
+<span class="kd">function</span> <span class="nx">getColName</span><span class="p">(</span><span class="nx">idx</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">sheet</span> <span class="o">=</span> <span class="nx">SpreadsheetApp</span><span class="p">.</span><span class="nx">getActiveSheet</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">sheet</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">idx</span><span class="p">);</span>
+  <span class="nx">result</span> <span class="o">=</span> <span class="nx">result</span><span class="p">.</span><span class="nx">getA1Notation</span><span class="p">();</span>
+  <span class="nx">result</span> <span class="o">=</span> <span class="nx">result</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\d/</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
                     <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-36.html" rel="bookmark"
+                           title="Permalink to JS.36 GASでLINE BOTを作成し、各種IDを取得する">JS.36 GASでLINE BOTを作成し、各種IDを取得する</a></h1>
+                </header>
+
+                <div class="entry-content">
+          <footer class="post-info">
+            <span>2021-06-21(Mon)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
+          </footer><!-- /.post-info -->                <p>GASでLINE BOTを作成し、User ID を取得する。</p>
+                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-36.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -283,21 +419,6 @@
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
           </footer><!-- /.post-info -->                <p>ポケモンエメラルドでフロンティア マスターを目指す（その３）</p>
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-28.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-27.html" rel="bookmark"
-                           title="Permalink to JS.27 ポケモンエメラルドでフロンティア マスターを目指す（その２）">JS.27 ポケモンエメラルドでフロンティア マスターを目指す（その２）</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-02-18(Thu)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
-          </footer><!-- /.post-info -->                <p>ポケモンエメラルドでフロンティア マスターを目指す（その２）</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-27.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
             </ol><!-- /#posts-list -->
