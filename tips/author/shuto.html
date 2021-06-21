@@ -56,228 +56,130 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-35.html">JS.35 タイピング風動画を楽に作成する</a></h1>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-36.html">JS.36 GASでLINE BOTを作成し、各種IDを取得する。</a></h1>
           <footer class="post-info">
-            <span>2021-06-07(Mon)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
-          </footer><!-- /.post-info --><h2>作成したもの</h2>
-<div>
-  <table class="fixed">
-    <thead><tr><th colspan="4">入力欄</th></tr></thead>
-    <tbody>
-      <tr><td colspan="4"><button class="btn--click btn--shadow btn--red btn--reset">Reset</button></td></tr>
-      <tr><td colspan="4"><textarea id="input-textarea" rows="5" placeholder="ここに入力してください。"></textarea></td></tr>
-    </tbody>
-    <thead>
-      <tr><th colspan="4">Demo Options</th></tr>
-      <tr><th>Span [ms]</th><th>Font Size</th><th>Line Height</th><th>Font Family</th></tr>
-    </thead>
-    <tbody>
-      <tr class="g1">
-        <td><input id="spanMS" type="number" min="0" value="100" step="50" max="1000"/></td>
-        <td><select id="fontFamily"><option selected>Arial</option><option>Verdana</option><option>Times New Roman</option><option>Courier New</option><option>serif</option><option>sans-serif</option></select></td>
-        <td><input id="fontSize" type="number" min="1" value="16" step="1" max="100"/></td>
-        <td><input id="lineHeight" type="number" min="1" value="16" step="1" max="100"/></td>
-      </tr>
-      <tr><td colspan="4"><button class="btn--click btn--shadow btn--green btn--demo">Demo</button></td></tr>
-      <tr>
-        <td colspan="4"><canvas id="demoCanvas"></canvas></td>
-      </tr>
-    </tbody>
-    <thead><tr><th colspan="4">ダウンロード</th></tr></thead>
-    <tbody>
-      <tr>
-        <td colspan="4"><button class="btn--click btn--shadow btn--blue btn--download">Download</button></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+            <span>2021-06-21(Mon)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
+          </footer><!-- /.post-info --><p>LINE Official Account に友達登録している人の user ID リストを作成したかったのですが、<a href="https://developers.line.biz/en/reference/messaging-api/#get-follower-ids">Messaging API reference</a>を見る限り、<strong>verified</strong> or <strong>premium</strong> アカウントでしかこの機能を使えないようなので、メッセージが送信された際に取得できる情報を利用することにしました。</p>
+<h2>LINE BOTの作成</h2>
+<p><a href="https://developers.line.biz/console/">LINE developers Console</a>で必要な登録と設定を済ませ、LINE BOT(Channel)を作成します。それに関しては、<a href="https://qiita.com/nkjm/items/38808bbc97d6927837cd">LINEのBot開発 超入門（前編） ゼロから応答ができるまで</a>が参考になるかと思います。</p>
+<p>Channelが作成できたら、[LINE developer] -&gt; [Messaging API] から、<strong>Channel access token</strong> を取得してください。また、以下で作成するGAS(web application)のWebhook URLの設定箇所も同じ場所です。</p>
+<p>※ LINE アカウントを作成したい場合は <a href="https://manager.line.biz/">LINE Official Account Manager</a> から作成してください。</p>
+<h2>GASの設定</h2>
+<p>※ Property の <code>CHANNEL_ACCESS_TOKEN</code> に上記で取得した <strong>Channel access token</strong> の値を設定してください。</p>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">doPost</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">contents</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">postData</span><span class="p">.</span><span class="nx">contents</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">contents</span><span class="p">)</span>
+  <span class="kd">var</span> <span class="nx">events</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">[</span><span class="s2">&quot;events&quot;</span><span class="p">];</span>
+  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">events</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">events</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;message&quot;</span><span class="p">){</span>
+      <span class="nx">reply_message</span><span class="p">(</span><span class="nx">events</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 
-<script>
-  const typingTextarea  = document.querySelector("textarea#input-textarea");
-  const resetBtn         = document.querySelector("button.btn--reset");
-  const downloadBtn      = document.querySelector("button.btn--download");
-  const demoBtn          = document.querySelector("button.btn--demo");
-  const spanMS           = document.querySelector("input#spanMS");
-  const fontSizeInput    = document.querySelector("input#fontSize");
-  const lineHeightInput  = document.querySelector("input#lineHeight");
-  const fontFamilySelect = document.querySelector("select#fontFamily");
-  const demoCanvas  = document.getElementById("demoCanvas");
-  const demoCtx     = demoCanvas.getContext("2d");
-  var input_typing = [];
-  var prev_text = "";
-  const addCurtTypingKey = function(){
-    let curt_text = typingTextarea.value
-    if (prev_text != curt_text){
-      input_typing.push(curt_text);
-      prev_text = curt_text;
-      console.log(input_typing.length, curt_text)
-    }
-  }
-  const clearTypingMemory = function(){
-    input_typing = [];
-    prev_text = "";
-  }
-  const downloadJson = function(){
-    var data = {date: now_str(), typing: input_typing}
-    var jsonString = JSON.stringify(data, null, '\t');
-    var blob = new Blob([jsonString], {type: "application/json" });
-    let link = document.createElement("a");
-    link.href = window.URL.createObjectURL(blob);
-    link.download = "typing.json";
-    link.click();
-  }
-  const startDemo = function(){
-    addCurtTypingKey();
-    var fontSize = parseInt(fontSizeInput.value);
-    var lineheight = parseInt(lineHeightInput.value);
-    demoCtx.font = `${fontSize}px ${fontFamilySelect.value}`;
-    loopSleep(input_typing.length, parseInt(spanMS.value), function(i){
-      demoCtx.clearRect(0, 0, demoCanvas.width, demoCanvas.height);
-      var lines = input_typing[i].split("\n");
-      for (let j=0; j<lines.length; j++){
-        demoCtx.fillText(lines[j], 10, (j+1)*lineheight);
-      }
-    });
-  }
-  typingTextarea.addEventListener("keydown", addCurtTypingKey);
-  resetBtn.addEventListener("click", clearTypingMemory);
-  downloadBtn.addEventListener("click", downloadJson);
-  demoBtn.addEventListener("click", startDemo);
-  fontSizeInput.addEventListener("change", function(){
-    lineHeightInput.value = fontSizeInput.value;
-  })
-  /* <--- Utility Functions --- */
-  // Return current date as string.
-  function now_str(){
-    function padLeft(no){
-      let len = (2-String(no).length)+1;
-      return len > 0? new Array(len).join('0')+no : no;  
-    }
-    var d = new Date
-    return `${d.getFullYear()}/${padLeft(d.getMonth()+1)}/${padLeft(d.getDate())} ${padLeft(d.getHours())}:${padLeft(d.getMinutes())}:${padLeft(d.getSeconds())}`
-  }
-  // Loop with sleep function
-  function loopSleep(_loopLimit,_interval, _mainFunc){
-    // @ref: https://qiita.com/akyao/items/a718cc78436df68d7e15
-    var loopLimit = _loopLimit;
-    var interval = _interval;
-    var mainFunc = _mainFunc;
-    var i = 0;
-    var loopFunc = function () {
-      var result = mainFunc(i);
-      if (result === false) return;
-      i++;
-      if (i<loopLimit) setTimeout(loopFunc, interval);
-    }
-    loopFunc();
-  }
-  document.addEventListener("keydown", function(evt){
-    if (evt.key=="Tab"){
-      var cur_focused = document.activeElement;
-      evt.preventDefault();
-      console.log(cur_focused, cur_focused==typingTextarea)
-      if (cur_focused == typingTextarea){
-        demoBtn.focus()
-      }else{
-        typingTextarea.focus();
-      } 
-    }
-  })
-  /* --- Utility Functions ---> */
-</script>
+<span class="kd">function</span> <span class="nx">reply_message</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">user_id</span>  <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">userId</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">group_id</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">groupId</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">room_id</span>  <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">roomId</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">ids</span> <span class="o">=</span> <span class="p">[</span><span class="nx">user_id</span><span class="p">,</span> <span class="nx">group_id</span><span class="p">,</span> <span class="nx">room_id</span><span class="p">];</span>
+  <span class="kd">var</span> <span class="nx">postData</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;replyToken&quot;</span> <span class="o">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">replyToken</span><span class="p">,</span>
+    <span class="s2">&quot;messages&quot;</span> <span class="o">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span> <span class="o">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;text&quot;</span> <span class="o">:</span> <span class="sb">`[IDs]</span>
+<span class="sb">        * User ID : </span><span class="si">${</span><span class="nx">user_id</span><span class="si">}</span><span class="sb"></span>
+<span class="sb">        * Group ID: </span><span class="si">${</span><span class="nx">group_id</span><span class="si">}</span><span class="sb"></span>
+<span class="sb">        * Room ID : </span><span class="si">${</span><span class="nx">room_id</span><span class="si">}</span><span class="sb"></span>
+<span class="sb">        `</span>
+      <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">};</span>
+  <span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">PropertiesService</span><span class="p">.</span><span class="nx">getScriptProperties</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;method&quot;</span> <span class="o">:</span> <span class="s2">&quot;post&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;headers&quot;</span> <span class="o">:</span> <span class="p">{</span>
+      <span class="s2">&quot;Content-Type&quot;</span> <span class="o">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;Authorization&quot;</span> <span class="o">:</span> <span class="s2">&quot;Bearer &quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;CHANNEL_ACCESS_TOKEN&quot;</span><span class="p">)</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;payload&quot;</span> <span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">postData</span><span class="p">)</span>
+  <span class="p">};</span>
+  <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="s2">&quot;https://api.line.me/v2/bot/message/reply&quot;</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
 
-<style>
-  table *{
-    vertical-align: middle;
-    text-align: center;
-  }
-  table.fixed {
-    table-layout: fixed;
-  }
-  thead {
-    background-color: black;
-    color: white;
-    text-align: center;
-  }
-  table textarea, table input, table select{
-    padding: .5em .4em;
-    background-color: transparent;
-    font-family: Monaco, monospace, sans-serif;
-    width: 100%;
-  }
-  table textarea {
-    width: 90%;
-    text-align: left;
-  }
-  textarea:focus-visible{
-    background-color: lightgoldenrodyellow;
-  }
-  table input, table select{
-    border: 0;
-  }
-  canvas {
-    border: solid 1.5px black;
-    box-shadow: 3px 3px 3px 0px #aaa;
-    margin: 10px;
-  }
-  .btn--click {
-    color: #fff;
-    background-color: black;
-    border: 0;
-    border-radius: 5px;
-    border-bottom: 5px solid black;
-    display: inline-block;
-    padding: .5em 2em;
-    text-decoration: none;
-    cursor: pointer;
-    font-family: monaco, monospace;
-  }
-  .btn--click:hover, .btn--click:focus {
-    border-bottom-width: 2.5px;
-    text-decoration: none;
-  }
-  .btn--click::before {
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
-    padding-right: 1em;
-  }
-  .btn--click:focus-visible{
-    /* outline: yellow auto 0; */
-  }
-  .btn--shadow {
-    -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
-    box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
-  }
-  .btn--red {
-    background-color: #c94663;
-    border-bottom-color: #8a1010;
-  }
-  .btn--blue {
-    background-color: #8ab6d6;
-    border-bottom-color: #2978b5;
-  }
-  .btn--green {
-    background-color: #91c788;
-    border-bottom-color: #52734d;
-  }
-  .btn--download::before {
-    content: "\f019";
-  }
-  .btn--reset::before{
-    content: "\f0e2";
-  }
-  .btn--demo::before{
-    content: "\f303";
-  }
-  .g1{
-    background-color: azure;
-  }
-</style>                </article>
+
+<p>上記の内容でスクリプトを作成し、web applicationとして公開、そのURLを先ほどのwebhook URLに設定すれば、<strong>「送信者の各種IDを返してくれるLINE BOT」</strong> の完成です。</p>
+<h2>Python で LINE BOT を操作する</h2>
+<p><a href="https://github.com/line/line-bot-sdk-python">line-bot-sdk-python</a>という便利なSDKがあったので、これを用いて操作してみます。</p>
+<div class="highlight"><pre><span></span><code>$ pip install line-bot-sdk
+</code></pre></div>
+
+
+<p>以下のコードでメッセージの送信が可能です。なお、サンプルコードには、flaskと連携し、LINE BOTをカスタマイズする方法が記載されています。</p>
+<h3>シンプルなテキストを送信する</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">linebot</span> <span class="kn">import</span> <span class="n">LineBotApi</span>
+<span class="kn">from</span> <span class="nn">linebot.models</span> <span class="kn">import</span> <span class="n">TextSendMessage</span>
+
+<span class="n">line_bot_api</span> <span class="o">=</span> <span class="n">LineBotApi</span><span class="p">(</span><span class="n">channel_access_token</span><span class="o">=</span><span class="n">channel_access_token</span><span class="p">)</span>
+<span class="n">line_bot_api</span><span class="o">.</span><span class="n">push_message</span><span class="p">(</span><span class="n">to</span><span class="o">=</span><span class="n">user_ID</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="n">TextSendMessage</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s1">&#39;Hello World!&#39;</span><span class="p">))</span>
+</code></pre></div>
+
+
+<h3>テンプレートテキストを送信する</h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">linebot</span> <span class="kn">import</span> <span class="n">LineBotApi</span>
+<span class="kn">from</span> <span class="nn">linebot.models</span> <span class="kn">import</span> <span class="n">ButtonsTemplate</span><span class="p">,</span> <span class="n">PostbackAction</span><span class="p">,</span> <span class="n">MessageAction</span><span class="p">,</span> <span class="n">URIAction</span><span class="p">,</span> <span class="n">TemplateSendMessage</span>
+
+<span class="n">line_bot_api</span> <span class="o">=</span> <span class="n">LineBotApi</span><span class="p">(</span><span class="n">channel_access_token</span><span class="o">=</span><span class="n">channel_access_token</span><span class="p">)</span>
+<span class="n">line_bot_api</span><span class="o">.</span><span class="n">push_message</span><span class="p">(</span><span class="n">to</span><span class="o">=</span><span class="n">user_ID</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="n">TemplateSendMessage</span><span class="p">(</span>
+    <span class="n">alt_text</span><span class="o">=</span><span class="s1">&#39;Buttons template&#39;</span><span class="p">,</span>
+    <span class="n">template</span><span class="o">=</span><span class="n">ButtonsTemplate</span><span class="p">(</span>
+        <span class="n">thumbnail_image_url</span><span class="o">=</span><span class="s1">&#39;https://iwasakishuto.github.io/images/profile/twitter.png&#39;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Menu&#39;</span><span class="p">,</span>
+        <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Please select&#39;</span><span class="p">,</span>
+        <span class="n">actions</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">PostbackAction</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="s1">&#39;postback&#39;</span><span class="p">,</span>
+                <span class="n">display_text</span><span class="o">=</span><span class="s1">&#39;postback text&#39;</span><span class="p">,</span>
+                <span class="n">data</span><span class="o">=</span><span class="s1">&#39;action=buy&amp;itemid=1&#39;</span>
+            <span class="p">),</span>
+            <span class="n">MessageAction</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="s1">&#39;message&#39;</span><span class="p">,</span>
+                <span class="n">text</span><span class="o">=</span><span class="s1">&#39;message text&#39;</span>
+            <span class="p">),</span>
+            <span class="n">URIAction</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">=</span><span class="s1">&#39;portfolio&#39;</span><span class="p">,</span>
+                <span class="n">uri</span><span class="o">=</span><span class="s1">&#39;https://iwasakishuto.github.io/&#39;</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+
+    <span class="p">)</span>
+<span class="p">))</span>
+</code></pre></div>
+
+
+<p>これらによって、以下のようなメッセージを送信できます。</p>
+<p><img alt="sample Image" src="https://iwasakishuto.github.io/Front-End/tips/images/gas_line_api.png"></p>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
                     <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-35.html" rel="bookmark"
+                           title="Permalink to JS.35 タイピング風動画を楽に作成する">JS.35 タイピング風動画を楽に作成する</a></h1>
+                </header>
+
+                <div class="entry-content">
+          <footer class="post-info">
+            <span>2021-06-07(Mon)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
+          </footer><!-- /.post-info -->                <p>タイピング風動画を楽に作成するためのJSONファイルを作成します。</p>
+                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-35.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -396,21 +298,6 @@
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
           </footer><!-- /.post-info -->                <p>ポケモンエメラルドでフロンティア マスターを目指す（その２）</p>
                 <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-27.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-26.html" rel="bookmark"
-                           title="Permalink to JS.26 モーダル（ポップアップ）の作成">JS.26 モーダル（ポップアップ）の作成</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-02-16(Tue)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/cheat-sheet.html">Cheat-sheet</a></span>
-          </footer><!-- /.post-info -->                <p>モーダル（ポップアップ）の作成</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-26.html">read more</a>
                 </div><!-- /.entry-content -->
             </article></li>
             </ol><!-- /#posts-list -->

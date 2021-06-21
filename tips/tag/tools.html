@@ -107,7 +107,7 @@
   var input_typing = [];
   var prev_text = "";
   const addCurtTypingKey = function(){
-    let curt_text = typingTextarea.value
+    let curt_text = typingTextarea.value;
     if (prev_text != curt_text){
       input_typing.push(curt_text);
       prev_text = curt_text;
@@ -132,13 +132,15 @@
     var fontSize = parseInt(fontSizeInput.value);
     var lineheight = parseInt(lineHeightInput.value);
     demoCtx.font = `${fontSize}px ${fontFamilySelect.value}`;
-    loopSleep(input_typing.length, parseInt(spanMS.value), function(i){
-      demoCtx.clearRect(0, 0, demoCanvas.width, demoCanvas.height);
-      var lines = input_typing[i].split("\n");
-      for (let j=0; j<lines.length; j++){
-        demoCtx.fillText(lines[j], 10, (j+1)*lineheight);
-      }
-    });
+    if (input_typing.length>0){
+      loopSleep(input_typing.length, parseInt(spanMS.value), function(i){
+        demoCtx.clearRect(0, 0, demoCanvas.width, demoCanvas.height);
+        var lines = input_typing[i].split("\n");
+        for (let j=0; j<lines.length; j++){
+          demoCtx.fillText(lines[j], 10, (j+1)*lineheight);
+        }
+      });
+    }
   }
   typingTextarea.addEventListener("keydown", addCurtTypingKey);
   resetBtn.addEventListener("click", clearTypingMemory);
@@ -176,7 +178,6 @@
     if (evt.key=="Tab"){
       var cur_focused = document.activeElement;
       evt.preventDefault();
-      console.log(cur_focused, cur_focused==typingTextarea)
       if (cur_focused == typingTextarea){
         demoBtn.focus()
       }else{
@@ -233,17 +234,15 @@
     cursor: pointer;
     font-family: monaco, monospace;
   }
-  .btn--click:hover, .btn--click:focus {
-    border-bottom-width: 2.5px;
-    text-decoration: none;
+  .btn--click:hover, .btn--click:hover:before, 
+  .btn--click:focus, .btn--click:focus:before,
+  .btn--click:focus-visible, .btn--click:focus-visible:before {
+    color: #ffd43b;
   }
   .btn--click::before {
     font-family: 'Font Awesome 5 Free';
     font-weight: 900;
     padding-right: 1em;
-  }
-  .btn--click:focus-visible{
-    /* outline: yellow auto 0; */
   }
   .btn--shadow {
     -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .3);
@@ -265,10 +264,10 @@
     content: "\f019";
   }
   .btn--reset::before{
-    content: "\f0e2";
+    content: "\f2ed";
   }
   .btn--demo::before{
-    content: "\f303";
+    content: "\f04b";
   }
   .g1{
     background-color: azure;

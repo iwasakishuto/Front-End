@@ -9,7 +9,18 @@
     <meta name="twitter:site" content="@cabernet_rock">
     <meta property="og:type" content="article" />
     <meta name="twitter:card" content="summary">
-    <title>Shuto's Front-End - GAS</title>
+    <meta name="keywords" content="GAS, JavaScript, LINE API, LINE BOT, Messaging API" />
+    <meta property="og:image" content="https://iwasakishuto.github.io/Front-End/tips/images/gas_line_api.png"/>
+    <meta property="og:title" content="JS.36 GASでLINE BOTを作成し、各種IDを取得する。 "/>
+    <meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-36.html" />
+    <meta property="og:description" content="GASでLINE BOTを作成し、User ID を取得する。" />
+    <meta property="og:site_name" content="Shuto&#39;s Front-End" />
+    <meta property="og:article:author" content="Shuto" />
+    <meta property="og:article:published_time" content="2021-06-21T00:00:00+09:00" />
+    <meta property="og:article:modified_time" content="2021-06-21T00:00:00+09:00" />
+    <meta name="twitter:title" content="JS.36 GASでLINE BOTを作成し、各種IDを取得する。 ">
+    <meta name="twitter:description" content="GASでLINE BOTを作成し、User ID を取得する。">
+    <title>JS.36 GASでLINE BOTを作成し、各種IDを取得する。</title>
     <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
     <!-- Added by Shuto Iwasaki. -->
     <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
@@ -46,21 +57,36 @@
         <ul>
           <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/css.html">CSS</a></li>
           <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/html.html">HTML</a></li>
-          <li><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
+          <li class="active"><a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript.html">JavaScript</a></li>
         </ul>
         <form id="search" action"#" onsubmit="javascript:window.open('https://duckduckgo.com/?q='+document.getElementById('keywords').value+'+site:https://iwasakishuto.github.io/Front-End/tips');">
           <input id="keywords" type="text" />
         </form>
       </nav>
     </header><!-- /#banner -->
-
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-36.html">JS.36 GASでLINE BOTを作成し、各種IDを取得する。</a></h1>
+    <div id="loading" style="display: none;">
+      <div class="loading_wrapper">
+        <img class="loading_img" src="https://iwasakishuto.github.io/Front-End/tips/images/Bean Eater-1s-400px.gif">
+        <p class="loading_info">Loading...</p>
+      </div>
+    </div>
+    <section id="content" class="body" style="display: block;">
+      <article>
+        <header>
+          <h1 class="entry-title">
+            <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-36.html" rel="bookmark" title="Permalink to JS.36 GASでLINE BOTを作成し、各種IDを取得する。">JS.36 GASでLINE BOTを作成し、各種IDを取得する。</a>
+          </h1>
+          <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
+          <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
+        </header>
+    
+        <div class="entry-content">
           <footer class="post-info">
             <span>2021-06-21(Mon)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
-          </footer><!-- /.post-info --><p>LINE Official Account に友達登録している人の user ID リストを作成したかったのですが、<a href="https://developers.line.biz/en/reference/messaging-api/#get-follower-ids">Messaging API reference</a>を見る限り、<strong>verified</strong> or <strong>premium</strong> アカウントでしかこの機能を使えないようなので、メッセージが送信された際に取得できる情報を利用することにしました。</p>
+          </footer><!-- /.post-info -->
+<!-- NOT "| indent(10, True)"  -->
+<p>LINE Official Account に友達登録している人の user ID リストを作成したかったのですが、<a href="https://developers.line.biz/en/reference/messaging-api/#get-follower-ids">Messaging API reference</a>を見る限り、<strong>verified</strong> or <strong>premium</strong> アカウントでしかこの機能を使えないようなので、メッセージが送信された際に取得できる情報を利用することにしました。</p>
 <h2>LINE BOTの作成</h2>
 <p><a href="https://developers.line.biz/console/">LINE developers Console</a>で必要な登録と設定を済ませ、LINE BOT(Channel)を作成します。それに関しては、<a href="https://qiita.com/nkjm/items/38808bbc97d6927837cd">LINEのBot開発 超入門（前編） ゼロから応答ができるまで</a>が参考になるかと思います。</p>
 <p>Channelが作成できたら、[LINE developer] -&gt; [Messaging API] から、<strong>Channel access token</strong> を取得してください。また、以下で作成するGAS(web application)のWebhook URLの設定箇所も同じ場所です。</p>
@@ -160,46 +186,12 @@
 
 
 <p>これらによって、以下のようなメッセージを送信できます。</p>
-<p><img alt="sample Image" src="https://iwasakishuto.github.io/Front-End/tips/images/gas_line_api.png"></p>                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <ol id="posts-list" class="hfeed">
+<p><img alt="sample Image" src="https://iwasakishuto.github.io/Front-End/tips/images/gas_line_api.png"></p>
 
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-34.html" rel="bookmark"
-                           title="Permalink to JS.34 GASでTrelloのタスクを定期的に通知する。">JS.34 GASでTrelloのタスクを定期的に通知する。</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-05-14(Fri)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
-          </footer><!-- /.post-info -->                <p>GASでTrelloのタスクを定期的に通知する。</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-34.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-13.html" rel="bookmark"
-                           title="Permalink to JS.13 GASでslackにメッセージを送る">JS.13 GASでslackにメッセージを送る</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2019-06-18(Tue)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
-          </footer><!-- /.post-info -->                <p>GASでslackにメッセージを送る。</p>
-                <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-13.html">read more</a>
-                </div><!-- /.entry-content -->
-            </article></li>
-            </ol><!-- /#posts-list -->
-<p class="paginator">
-    Page 1 / 1
-</p>
-            </section><!-- /#content -->
+        </div><!-- /.entry-content -->
+    
+      </article>
+    </section>
     <section id="extras" class="body">
       <div class="blogroll">
         <h5>other contents</h5>
