@@ -10,7 +10,7 @@
     <meta property="og:type" content="article" />
     <meta name="twitter:card" content="summary">
     <meta name="keywords" content="GAS, JavaScript, LINE API, LINE BOT, Messaging API" />
-    <meta property="og:image" content="https://iwasakishuto.github.io/Front-End/tips/images/gas_line_api.png"/>
+    <meta property="og:image" content="https://iwasakishuto.github.io/Front-End/tips/images/gas_line_api_store_messages.gif"/>
     <meta property="og:title" content="JS.36 GASでLINE BOTを作成し、各種IDを取得する "/>
     <meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-36.html" />
     <meta property="og:description" content="GASでLINE BOTを作成し、User ID を取得する。" />
@@ -92,37 +92,56 @@
 <p>Channelが作成できたら、[LINE developer] -&gt; [Messaging API] から、<strong>Channel access token</strong> を取得してください。また、以下で作成するGAS(web application)のWebhook URLの設定箇所も同じ場所です。</p>
 <p>※ LINE アカウントを作成したい場合は <a href="https://manager.line.biz/">LINE Official Account Manager</a> から作成してください。</p>
 <h2>GASの設定</h2>
-<p>※ Property の <code>CHANNEL_ACCESS_TOKEN</code> に上記で取得した <strong>Channel access token</strong> の値を設定してください。</p>
-<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">doPost</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+<p>以下のように <code>doPost</code> を定義したスクリプトを用意し、web applicationとして公開、そのURLを先ほどのwebhook URLに設定すれば、（例えば以下では <code>"message"</code> のみの） event に反応して特殊な反応（<code>FUNC</code>）をさせることができます。</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">PropertiesService</span><span class="p">.</span><span class="nx">getScriptProperties</span><span class="p">();</span>
+<span class="kr">const</span> <span class="nx">ss</span> <span class="o">=</span> <span class="nx">SpreadsheetApp</span><span class="p">.</span><span class="nx">getActiveSpreadsheet</span><span class="p">();</span>
+
+<span class="kd">function</span> <span class="nx">doPost</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">contents</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">postData</span><span class="p">.</span><span class="nx">contents</span><span class="p">;</span>
   <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">contents</span><span class="p">)</span>
   <span class="kd">var</span> <span class="nx">events</span> <span class="o">=</span> <span class="nx">obj</span><span class="p">[</span><span class="s2">&quot;events&quot;</span><span class="p">];</span>
   <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">events</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
     <span class="k">if</span><span class="p">(</span><span class="nx">events</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;message&quot;</span><span class="p">){</span>
-      <span class="nx">reply_message</span><span class="p">(</span><span class="nx">events</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+      <span class="nx">FUNC</span><span class="p">(</span><span class="nx">events</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
+</code></pre></div>
 
-<span class="kd">function</span> <span class="nx">reply_message</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">user_id</span>  <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">userId</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">group_id</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">groupId</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">room_id</span>  <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">roomId</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">ids</span> <span class="o">=</span> <span class="p">[</span><span class="nx">user_id</span><span class="p">,</span> <span class="nx">group_id</span><span class="p">,</span> <span class="nx">room_id</span><span class="p">];</span>
+
+<h3><code>store_message_info</code></h3>
+<p>例えば以下のように設定すれば、user ID などを記録することができ、user ID の収集に非常に役立ちます。</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">sheet_message_store</span> <span class="o">=</span> <span class="nx">ss</span><span class="p">.</span><span class="nx">getSheetByName</span><span class="p">(</span><span class="s2">&quot;LINE messages&quot;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">COUNTER_CELL</span> <span class="o">=</span> <span class="nx">sheet_message_store</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span><span class="s2">&quot;B1&quot;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">TABLE_A1</span> <span class="o">=</span> <span class="nx">sheet_message_store</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span><span class="s2">&quot;A3&quot;</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">TABLE_OFFSET_ROW</span> <span class="o">=</span> <span class="nx">TABLE_A1</span><span class="p">.</span><span class="nx">getRow</span><span class="p">();</span>
+<span class="kr">const</span> <span class="nx">TABLE_OFFSET_COL</span> <span class="o">=</span> <span class="nx">TABLE_A1</span><span class="p">.</span><span class="nx">getColumn</span><span class="p">();</span>
+
+<span class="kd">function</span> <span class="nx">store_message_info</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">userId</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">userId</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="nx">get_profile</span><span class="p">(</span><span class="nx">userId</span><span class="p">)</span>
+  <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">[[</span><span class="nx">e</span><span class="p">.</span><span class="nx">timestamp</span><span class="p">,</span> <span class="nx">profile</span><span class="p">.</span><span class="nx">displayName</span><span class="p">,</span> <span class="nx">userId</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">groupId</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">roomId</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">.</span><span class="nx">text</span><span class="p">]]</span>
+  <span class="kd">var</span> <span class="nx">num_stored_messages</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">COUNTER_CELL</span><span class="p">.</span><span class="nx">getValue</span><span class="p">());</span>
+  <span class="nx">sheet_message_store</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span><span class="nx">TABLE_OFFSET_ROW</span><span class="o">+</span><span class="nx">num_stored_messages</span><span class="p">,</span> <span class="nx">TABLE_OFFSET_COL</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> <span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">).</span><span class="nx">setValues</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+  <span class="nx">COUNTER_CELL</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="nx">num_stored_messages</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+
+
+<p><img src="https://iwasakishuto.github.io/Front-End/tips/images/gas_line_api_store_messages.gif" alt="demo image"></p>
+<h3><code>reply_message_echolalia</code></h3>
+<p>同様にして、送信されたメッセージをそのまま返すLINE BOTを作成することもできます。</p>
+<p>※ Property の <code>CHANNEL_ACCESS_TOKEN</code> に上記で取得した <strong>Channel access token</strong> の値を設定してください。</p>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">reply_message_echolalia</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">postData</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;replyToken&quot;</span> <span class="o">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">replyToken</span><span class="p">,</span>
     <span class="s2">&quot;messages&quot;</span> <span class="o">:</span> <span class="p">[</span>
       <span class="p">{</span>
         <span class="s2">&quot;type&quot;</span> <span class="o">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;text&quot;</span> <span class="o">:</span> <span class="sb">`[IDs]</span>
-<span class="sb">        * User ID : </span><span class="si">${</span><span class="nx">user_id</span><span class="si">}</span><span class="sb"></span>
-<span class="sb">        * Group ID: </span><span class="si">${</span><span class="nx">group_id</span><span class="si">}</span><span class="sb"></span>
-<span class="sb">        * Room ID : </span><span class="si">${</span><span class="nx">room_id</span><span class="si">}</span><span class="sb"></span>
-<span class="sb">        `</span>
+        <span class="s2">&quot;text&quot;</span> <span class="o">:</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">.</span><span class="nx">text</span><span class="p">,</span>
       <span class="p">}</span>
     <span class="p">]</span>
   <span class="p">};</span>
-  <span class="kd">var</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">PropertiesService</span><span class="p">.</span><span class="nx">getScriptProperties</span><span class="p">();</span>
   <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;method&quot;</span> <span class="o">:</span> <span class="s2">&quot;post&quot;</span><span class="p">,</span>
     <span class="s2">&quot;headers&quot;</span> <span class="o">:</span> <span class="p">{</span>
@@ -136,7 +155,6 @@
 </code></pre></div>
 
 
-<p>上記の内容でスクリプトを作成し、web applicationとして公開、そのURLを先ほどのwebhook URLに設定すれば、<strong>「送信者の各種IDを返してくれるLINE BOT」</strong> の完成です。</p>
 <h2>Python で LINE BOT を操作する</h2>
 <p><a href="https://github.com/line/line-bot-sdk-python">line-bot-sdk-python</a>という便利なSDKがあったので、これを用いて操作してみます。</p>
 <div class="highlight"><pre><span></span><code>$ pip install line-bot-sdk
@@ -186,7 +204,9 @@
 
 
 <p>これらによって、以下のようなメッセージを送信できます。</p>
-<p><img alt="sample Image" src="https://iwasakishuto.github.io/Front-End/tips/images/gas_line_api.png"></p>
+<div style="margin:0 auto;">
+  <img src="https://iwasakishuto.github.io/Front-End/tips/images/python_line_api_template_message.png" width="50%" alt="demo image">
+</div>
 
         </div><!-- /.entry-content -->
     
