@@ -54,6 +54,24 @@ h3, h4, h5, h6 { margin-top: .8em; }
 hr { border: 2px solid #EEEEEE; }
 
 /* <--- Add by iwasakishuto <https://github.com/iwasakishuto> --- */
+a.readmore{
+	color: #fff;
+	background-color: #008db8;
+	display: inline-block;
+	padding: 0.3em 1em;
+	text-decoration: none;
+	cursor: pointer;
+	-webkit-box-shadow: 0 3px 5px rgb(0 0 0 / 30%);
+	box-shadow: 0 3px 5px rgb(0 0 0 / 30%);
+	border-radius: 5px;
+}
+table#top-table img {
+	border: 2px solid #EEE;
+	padding: 5px;
+	text-align: center;
+	width: 100%;
+	height: auto;
+}
 /* img:not(.__canvas .sort-arrow):not(.lb-image) {
     border: 2px solid #EEE;
     padding: 5px;
