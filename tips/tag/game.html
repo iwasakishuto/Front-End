@@ -75,12 +75,14 @@
 <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/utils/popup/popup.css"/>
 <!-- Button -->
 <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/button.css"/></p>
-<h2>チェス</h2>
+<h3>チェス</h3>
 
 <p><a id="js-popup-show" class="btn--click btn--green btn--book">チェスのルールを見る</a>
 <div class="popup" id="js-popup">
   <h3>ルール</h3>
+  <p></p>
   <h3>駒の動かし方</h3>
+  <p></p>
 </div>
 <div class="board-wrapper">
   <ul>
@@ -129,7 +131,7 @@
     border: 0;
   }
   div.board-wrapper{
-    margin: 60px;
+    margin: 20px;
   }
   div.board-wrapper div#board{
     width:100%
@@ -197,7 +199,14 @@
   }
   function updateStatus(){
     var status = ''
-    var moveColor = game.turn() === 'b' ? 'Black' : 'White'
+    var moveColor = game.turn() === 'b' ? 'Black' : 'White';
+    if (moveColor=="Black"){ 
+      board_frame.style.borderTop = "solid 5px blue";
+      board_frame.style.borderBottom = "solid 2px black";
+    }else{
+      board_frame.style.borderTop = "solid 2px black";
+      board_frame.style.borderBottom = "solid 5px red";
+    }
     // checkmate?
     if (game.in_checkmate()) {
       status = `Game over, ${moveColor} is in checkmate.`
@@ -224,7 +233,8 @@
     onSnapEnd: onSnapEnd
   };
   var board = ChessBoard('board', chessboardConfig);
-
+  var board_frame = document.querySelector(".board-b72b1");
+  updateStatus();
   const load_fen = function(){
     game.load($fen.val());
     board.position(game.fen());
@@ -269,7 +279,7 @@
             <span>2019-06-12(Wed)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/game.html">game</a></span>
           </footer><!-- /.post-info -->                <p>
-                    <p>ブロック崩しを作る</p>
+                    <p>javascriptでブロック崩しを作る</p>
                     <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-9.html">read more →</a>
                 </p>
                 </div><!-- /.entry-content -->
