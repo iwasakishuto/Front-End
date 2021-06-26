@@ -1,0 +1,66 @@
+.btn--click{
+  color: #fff;
+  background-color: gray;
+  border-bottom: 5px solid black;
+  display: inline-block;
+  padding: 0.3em 1em;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-box-shadow: 0 3px 5px rgb(0 0 0 / 30%);
+  box-shadow: 0 3px 5px rgb(0 0 0 / 30%);
+}
+.btn--click:hover {
+  border-bottom-width: 2.5px;
+  text-decoration: none;
+}
+.btn--click::before{
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  padding-right: 1em;
+}
+.btn--red {
+  background-color: #c94663;
+  border-bottom-color: #8a1010;
+}
+.btn--blue {
+  background-color: #8ab6d6;
+  border-bottom-color: #2978b5;
+}
+.btn--green {
+  background-color: #91c788;
+  border-bottom-color: #52734d;
+}
+.btn--purple {
+  background-color: #a685e2;
+  border-bottom-color: #6155a6;
+}
+.btn--yellow {
+  border-bottom-color: #f5d782;
+  background-color: #ffee93;
+  color: black;
+}
+/* Font-Awsome */
+.btn--upload::before{
+  content: "\f093"
+}
+.btn--download::before{
+  content: "\f019"
+}
+.btn--next::before{
+  content: "\f35a"
+}
+.btn--stop-recording::before{
+  content: "\f28d"
+}
+.btn--retry-recording::before{
+  content: "\f3c9"
+}
+.btn--to-pause::before{
+  content: "\f144"
+}
+.btn--to-play::before{
+  content: "\f28b"
+}
+.btn--back::after{
+  content: "\f359"
+}

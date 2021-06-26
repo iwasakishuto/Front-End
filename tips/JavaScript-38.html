@@ -87,41 +87,75 @@
           </footer><!-- /.post-info -->
 <!-- NOT "| indent(10, True)"  -->
 <p>チェスを趣味にしたいな。と思ったのでチェスを作ります。なお、<a href="https://github.com/oakmac/chessboardjs/">chessboard.js</a> と <a href="https://github.com/jhlywa/chess.js">chess.js</a> の極めて有用なJavaScriptライブラリをフル活用します。</p>
-<p><link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/chessboard-1.0.0.min.css"/>
 <script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.min.js"></script>
-<script src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/chessboard-1.0.0.min.js" type="text/javascript"></script></p>
-<div class="board-wrapper">
-  <div id="board">
+
+<!-- ChessboardJs -->
+
+<script src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/chessboard-1.0.0.min.js" type="text/javascript"></script>
+
+<p><link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/chessboard-1.0.0.min.css"/>
+<!-- Popup -->
+<script src="https://iwasakishuto.github.io/Front-End/tips/theme/utils/popup/popup.js" type="text/javascript"></script>
+<link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/utils/popup/popup.css"/>
+<!-- Button -->
+<link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/button.css"/></p>
+<h2>チェス</h2>
+
+<p><a id="js-popup-show" class="btn--click btn--green btn--book">チェスのルールを見る</a>
+<div class="popup" id="js-popup">
+  <h3>ルール</h3>
+  <h3>駒の動かし方</h3>
 </div>
+<div class="board-wrapper">
+  <ul>
+    <li>Status: <b id="status"></b></li>
+  </ul>
+  <div id="board"></div>
+</div></p>
+<h3>Records</h3>
+
 <div>
   <table>
-    <thead>
-      <tr><th>Status</th><th id="status"></th></tr>
-    </thead>
+    <thead><th>Forsyth–Edwards Notation</th><th><a onclick="load_fen()" class="btn--click btn--red btn--generate">Generate</a></th></thead>
     <tbody>
-      <tr><td>FEN</td><td><input id="fen"></td></tr>
-      <tr><td>PGN</td><td><input id="pgn"></td></tr>
+      <tr><td colspan="2"><input id="fen"/></td></tr>
+    </tbody>
+    <thead><th>Portable Game Notation</th><th><a onclick="load_pgn()" class="btn--click btn--blue btn--replay">Replay</a></th></thead>
+    <tbody>
+      <tr><td colspan="2"><input id="pgn"/></td></tr>
     </tbody>
   </table>
 </div>
 
 <!-- CSS -->
+
 <style>
-  table thead {
+  .btn--replay::before {
+    content: "\f01e";
+  }
+  .btn--generate::before {
+    content: "\f43c";
+  }
+  .btn--book::before {
+    content: "\f5da";
+  }
+  table {
+    table-layout: fixed;
+  }
+  table th {
+    vertical-align: middle;
+    text-align: center;
     background-color: black;
     color: white;
-  }
-  table tbody td{
-    padding: 0
   }
   table input {
     width: 100%;
     border: 0;
-    padding: .5em 0;
   }
   div.board-wrapper{
-    margin:20px;
+    margin: 60px;
   }
   div.board-wrapper div#board{
     width:100%
@@ -129,13 +163,14 @@
 </style>
 
 <!-- JavaScript -->
+
 <script>
   var game = new Chess()
   var $status = $('#status')
   var $fen = $('#fen')
   var $pgn = $('#pgn')
-  var whiteSquareGrey = '#a9a9a9'
-  var blackSquareGrey = '#696969'
+  var whiteSquareGrey = '#f0d9e7' // '#a9a9a9'
+  var blackSquareGrey = '#ff94cc' // '#696969'
   function removeGreySquares () {
     $('#board .square-55d63').css('background', '')
   }
@@ -191,13 +226,13 @@
     var moveColor = game.turn() === 'b' ? 'Black' : 'White'
     // checkmate?
     if (game.in_checkmate()) {
-      status = 'Game over, ' + moveColor + ' is in checkmate.'
+      status = `Game over, ${moveColor} is in checkmate.`
     } else if (game.in_draw()) {
       status = 'Game over, drawn position'
     } else {
-      status = moveColor + ' to move'
+      status = `${moveColor} to move`;
       if (game.in_check()) {
-        status += ', ' + moveColor + ' is in check'
+        status += `, ${moveColor} is in check.`;
       }
     }
     $status.html(status)
@@ -215,6 +250,17 @@
     onSnapEnd: onSnapEnd
   };
   var board = ChessBoard('board', chessboardConfig);
+
+  const load_fen = function(){
+    game.load($fen.val());
+    board.position(game.fen());
+    updateStatus()
+  }
+  const load_png = function(){
+    game.load_pgn($pgn.val());
+    board.position(game.fen());
+    updateStatus()
+  }
 </script>
 
         </div><!-- /.entry-content -->

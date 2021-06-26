@@ -54,7 +54,7 @@ h3, h4, h5, h6 { margin-top: .8em; }
 hr { border: 2px solid #EEEEEE; }
 
 /* <--- Add by iwasakishuto <https://github.com/iwasakishuto> --- */
-a.readmore{
+a.readmore, a:link.readmore, a:visited.readmore {
 	color: #fff;
 	background-color: #008db8;
 	display: inline-block;
