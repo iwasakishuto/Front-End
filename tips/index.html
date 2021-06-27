@@ -61,11 +61,15 @@
             <span>2021-06-25(Fri)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/game.html">game</a></span>
           </footer><!-- /.post-info --><p>チェスを趣味にしたいな。と思ったのでチェスを作ります。なお、<a href="https://github.com/oakmac/chessboardjs/">chessboard.js</a> と <a href="https://github.com/jhlywa/chess.js">chess.js</a> の極めて有用なJavaScriptライブラリをフル活用します。</p>
+<!-- JQuery -->
+
 <script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
+
+<!-- Chess.js -->
 
 <script src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chess/chess.js"></script>
 
-<!-- ChessboardJs -->
+<!-- ChessboardJs.js -->
 
 <script src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/chessboard-1.0.0.min.js" type="text/javascript"></script>
 
@@ -74,7 +78,10 @@
 <script src="https://iwasakishuto.github.io/Front-End/tips/theme/utils/popup/popup.js" type="text/javascript"></script>
 <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/utils/popup/popup.css"/>
 <!-- Button -->
-<link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/button.css"/></p>
+<link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/button.css"/>
+<!-- ChessboardJs.js -->
+<script src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/sweetalert/sweetalert.js" type="text/javascript"></script>
+<link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/sweetalert/sweetalert.css"/></p>
 <h3>チェス</h3>
 
 <p><a id="js-popup-show" class="btn--click btn--green btn--book">チェスのルールを見る</a>
@@ -219,12 +226,31 @@
   }
   function onDrop (source, target) {
     removeGreySquares()
+    // <--- Added by iwasakishuto <https://github.com/iwasakishuto> ---
+    // Allow promotion to other than queen.
+    move_option = {from: source, to: target}
+    if ("81".includes(target[1]) && (source.length==2 && game.board()[8-parseInt(source[1])]["abcdefgh".indexOf(source[0])].type==game.PAWN)){
+      while (true){
+        // Which piece do you want to promote to??
+        var result = swal({   
+          title: "どの駒へとプロモートしますか？？",   
+          text: "Queen\nRook\nBishop\nKnight",   
+          type: "input",   
+          showCancelButton: true,   
+          closeOnConfirm: false,   
+          animation: "slide-from-top",   
+          inputPlaceholder: "Queen"
+        }, function(inputValue){   
+          if ((inputValue === false) || !game.PROMOTION_CANDIDATES.includes(inputValue.toUpperCase())) return false;       
+          swal(`Promote to ${inputValue}!!`); });
+        }
+        if (result) break
+      }
+      move_option["promotion"] = game[result.toUpperCase()]
+    }
+    // --- Added by iwasakishuto <https://github.com/iwasakishuto> -->
     // See if the move is legal
-    var move = game.move({
-      from: source,
-      to: target,
-      promotion: 'q' // NOTE: always promote to a queen for example simplicity
-    })
+    var move = game.move(move_option)
     // illegal move
     if (move === null) return 'snapback'
     updateStatus()
