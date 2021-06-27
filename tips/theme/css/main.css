@@ -72,6 +72,13 @@ table#top-table img {
 	width: 100%;
 	height: auto;
 }
+article.img {
+	max-width: 100%;
+	display: block;
+	margin: 0 auto;
+	/* border: 2px solid #EEE; */
+	/* padding: 5px; */
+}
 /* img:not(.__canvas .sort-arrow):not(.lb-image) {
     border: 2px solid #EEE;
     padding: 5px;

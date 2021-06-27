@@ -63,7 +63,7 @@
           </footer><!-- /.post-info --><p>チェスを趣味にしたいな。と思ったのでチェスを作ります。なお、<a href="https://github.com/oakmac/chessboardjs/">chessboard.js</a> と <a href="https://github.com/jhlywa/chess.js">chess.js</a> の極めて有用なJavaScriptライブラリをフル活用します。</p>
 <script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.min.js"></script>
+<script src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chess/chess.js"></script>
 
 <!-- ChessboardJs -->
 
@@ -79,10 +79,63 @@
 
 <p><a id="js-popup-show" class="btn--click btn--green btn--book">チェスのルールを見る</a>
 <div class="popup" id="js-popup">
+  <h4>引用</h4>
+  <ul style="list-style: disc; margin:0.3em 0 0 1.6em">
+    <li><a href="https://ja.wikipedia.org/wiki/%E3%83%81%E3%82%A7%E3%82%B9">チェス - Wikipedia</a></li>
+    <li><a href="https://www.bodoge-intl.com/column/chess_rule/">チェスで覚えるべき3つの要素【図解ルール説明】コマの動きだけじゃない！ | Board Game to Life</a></li>
+  </ul>
   <h3>ルール</h3>
-  <p></p>
-  <h3>駒の動かし方</h3>
-  <p></p>
+  <ul style="list-style: disc; margin:0.3em 0 0 1.6em">
+    <li>ゲームは2人のプレイヤーにより、チェスボードの上で行われる。</li>
+    <li>白が先手、黒が後手となる。</li>
+    <li>双方のプレイヤーは、交互に盤上にある自分のコマを1回ずつ動かす。パスをすることはできない。</li>
+    <li>味方のコマの動ける範囲に敵のコマがあれば、それを取ることができる。ただし<b><i class="fas fa-chess-pawn"></i>ポーン</b>だけは、敵のコマを取れる範囲が移動範囲と異なる。</li>
+    <li>敵のコマを取ったコマは、取られたコマのあったマスへ移動する。これは<b><i class="fas fa-chess-pawn"></i>ポーン</b>も同じだが、<b><i class="fas fa-chess-pawn"></i>ポーン</b>同士による<b>アンパッサン</b>は例外である。
+    <li>取られたコマは盤上から取りのぞき、以降そのゲームが終わるまで使用しない。</li>
+    <li>チェスのコマは、他のコマを飛び越して移動することはできない。ただし、<b><i class="fas fa-chess-knight"></i>ナイト</b>と、<b>キャスリング</b>時の<b><i class="fas fa-chess-king"></i>キング</b>・<b><i class="fas fa-chess-rook"></i>ルーク</b>は例外である。</li>
+    <li><b><i class="fas fa-chess-king"></i>キング</b>は、<b>敵のコマが利いている（直後の手で取られるような）</b>場所には移動することができない。</li>
+    <li>相手の<b><i class="fas fa-chess-king"></i>キング</b>に、自分のコマを利かせて取ろうとする手を「<b>チェック</b>」と呼ぶ。この状態では、相手側は次の手ですぐに<b><i class="fas fa-chess-king"></i>キング</b>の安全を確保しなければならない。</li>
+    <li><b><i class="fas fa-chess-king"></i>キング</b>が次の手で絶対に逃げられないように追い詰めた<b>チェック</b>のことを、「<b>チェックメイト</b>」と呼ぶ。双方のプレイヤーは、相手の<b><i class="fas fa-chess-king"></i>キング</b>を<b>チェックメイト</b>することを目指す。</li>
+    <li>ルール上動かせるコマがなくなったがチェックにはならない状態は、「<b>ステイルメイト</b>」と呼ばれ、引き分けとなる。どちらもチェックメイトができなくなるほどにコマを失った場合も引き分け。</li>
+  </ul>
+  <h3>初期配置</h3>
+  <p style="color:red">※ <b><i class="fas fa-chess-queen"></i>クイーン</b>と<b><i class="fas fa-chess-king"></i>キング</b>の初期配置は、白と黒とで異なります！！！</p>
+  <h3>コマの動かし方</h3>
+  <table>
+    <thead><tr><th>画像</th><th>名前</th><th>Name</th><th style="text-align: left">説明</th></tr></thead>
+    <tbody>
+      <tr><td><img style="width:3em;" src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/img/chesspieces/wikipedia/wK.png" alt="KING"></td><td><i class="fas fa-chess-king"></i>キング</td><td>King</td><td style="text-align: left">全方向に１マス勧めます。</td></tr>
+      <tr><td><img style="width:3em;" src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/img/chesspieces/wikipedia/wQ.png" alt="QUEEN"></td><td><i class="fas fa-chess-queen"></i>クイーン</td><td>Queen</td><td style="text-align: left">縦横斜めに好きなだけ進めます。</td></tr>
+      <tr><td><img style="width:3em;" src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/img/chesspieces/wikipedia/wR.png" alt="ROOK"></td><td><i class="fas fa-chess-rook"></i>ルーク</td><td>Rook</td><td style="text-align: left">縦横に好きなだけ進めます。</td></tr>
+      <tr><td><img style="width:3em;" src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/img/chesspieces/wikipedia/wB.png" alt="BISHOP"></td><td><i class="fas fa-chess-bishop"></i>ビショップ</td><td>Bishop</td><td style="text-align: left">斜めに好きなだけ進めます。</td></tr>
+      <tr><td><img style="width:3em;" src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/img/chesspieces/wikipedia/wN.png" alt="KNIGHT"></td><td><i class="fas fa-chess-knight"></i>ナイト</td><td>Knight</td><td style="text-align: left">桂馬と同じ動き（前に２マス・横に１マスの場所への移動）が全方向にできます。td&gt;</tr>
+      <tr><td><img style="width:3em;" src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/img/chesspieces/wikipedia/wP.png" alt="PAWN"></td><td><i class="fas fa-chess-pawn"></i>ポーン</td><td>Pawn</td><td style="text-align: left">前に１マス進めます。敵陣まで進むとプロモーション（後述）ができます。</td></tr>
+    </tbody>
+  </table>
+  <img src="https://www.bodoge-intl.com/wp-content/uploads/2019/05/%E9%A7%92%E5%8B%95%E3%81%8D-1.jpg">
+  <p>※ しかし、<b><i class="fas fa-chess-pawn"></i>ポーン</b>は以下のように特殊な動きをいくつかするので、注意が必要です。</p>
+  <h3><b><i class="fas fa-chess-pawn"></i>ポーン</b></h3>
+  <p><i class="fas fa-chess-pawn"></i>ポーン</b>はかなり特殊なコマです。</p>
+  <h4>動きの特殊性</h4>
+  <ul style="list-style: disc; margin:0.3em 0 0 1.6em">
+    <li><i class="fas fa-chess-pawn"></i>ポーン</b>は、<b style="color:red">初期位置からの移動の場合のみ、2マス進むことができます。</b></li>
+    <li><i class="fas fa-chess-pawn"></i>ポーン</b>は、<b style="color:red">前にコマがある場合は前に進むことができず、そのコマを取ることができません。</b></li>
+    <li><i class="fas fa-chess-pawn"></i>ポーン</b>は、<b style="color:red">相手のコマをとるときだけは斜めに動くことができます。</b></li>
+  </ul>
+  <h4>プロモーション</h4>
+  <p><b><i class="fas fa-chess-pawn"></i>ポーン</b>は、敵陣地（<b>の最奥</b>）まで進むと<b>プロモーション</b>と言って<b><i class="fas fa-chess-queen"></i>クイーン</b>・<b><i class="fas fa-chess-rook"></i>ルーク</b>・<b><i class="fas fa-chess-bishop"></i>ビショップ</b>・<b><i class="fas fa-chess-knight"></i>ナイト</b>の好きなどれかに変身することが出来ます。</b></p>
+  <p>基本的には最強のコマである<b><i class="fas fa-chess-queen"></i>クイーン</b>に<b>プロモーション</b>しますが、<b><i class="fas fa-chess-queen"></i>クイーン</b>にできない動きの出来る<b><i class="fas fa-chess-knight"></i>ナイト</b>や、後述するドロー回避のために<b><i class="fas fa-chess-rook"></i>ルーク</b>・<b><i class="fas fa-chess-bishop"></i>ビショップ</b>に変わる事も稀にあります。</p>
+  <h4>アンパッサン</h4>
+  <p>先述の通り、<i class="fas fa-chess-pawn"></i>ポーン</b>は初期位置からのみ2マス進むことが出来るのですが、<b style="color:red">2マス進んだ場合はデメリットとしてその1マス後ろに敵のコマが来ると取られてしまいます。</b></p>
+  <img src="https://www.bodoge-intl.com/wp-content/uploads/2019/05/S__18636830%E3%81%AE%E3%82%B3%E3%83%92%E3%82%9A%E3%83%BC-1024x342.jpg" alt="アンパッサン">
+  <h3>キャスリング</h3>
+  <p>以下の条件の時、一手で<b><i class="fas fa-chess-rook"></i>ルーク</b>を<b><i class="fas fa-chess-bishop"></i>ビショップ</b>の初期位置に、<b><i class="fas fa-chess-king"></i>キング</b>を<b><i class="fas fa-chess-knight"></i>ナイト</b>の初期位置に一手で移動させる事ができます。</p>
+  <ul style="list-style: disc; margin:0.3em 0 0 1.6em">
+    <li><b><i class="fas fa-chess-king"></i>キング</b>にチェック（＝王手）がかかっていないこと。</li>
+    <li><b><i class="fas fa-chess-king"></i>キング</b>とキャスリングする<b><i class="fas fa-chess-rook"></i>ルーク</b>が一度も動いていないこと。</li>
+    <li><b><i class="fas fa-chess-rook"></i>ルーク</b>と<b><i class="fas fa-chess-king"></i>キング</b>の間にコマがなく、敵のコマにも狙われていないこと。</li>
+  </ul>
+  <img src="https://www.bodoge-intl.com/wp-content/uploads/2019/05/S__18636836%E3%81%AE%E3%82%B3%E3%83%92%E3%82%9A%E3%83%BC.jpg" alt="キャスリング">
 </div>
 <div class="board-wrapper">
   <ul>
