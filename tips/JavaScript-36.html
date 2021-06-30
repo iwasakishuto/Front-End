@@ -87,6 +87,7 @@
           </footer><!-- /.post-info -->
 <!-- NOT "| indent(10, True)"  -->
 <p>LINE Official Account に友達登録している人の user ID リストを作成したかったのですが、<a href="https://developers.line.biz/en/reference/messaging-api/#get-follower-ids">Messaging API reference</a>を見る限り、<strong>verified</strong> or <strong>premium</strong> アカウントでしかこの機能を使えないようなので、メッセージが送信された際に取得できる情報を利用することにしました。</p>
+<p>※ 認証済みアカウントで上記のAPIを用いる時のコードは<a href="#get-followers-profile-verified">認証済みアカウントでuserIdを収集する</a>に記載しました。（ページ下部）</p>
 <h2>LINE BOTの作成</h2>
 <p><a href="https://developers.line.biz/console/">LINE developers Console</a>で必要な登録と設定を済ませ、LINE BOT(Channel)を作成します。それに関しては、<a href="https://qiita.com/nkjm/items/38808bbc97d6927837cd">LINEのBot開発 超入門（前編） ゼロから応答ができるまで</a>が参考になるかと思います。</p>
 <p>Channelが作成できたら、[LINE developer] -&gt; [Messaging API] から、<strong>Channel access token</strong> を取得してください。また、以下で作成するGAS(web application)のWebhook URLの設定箇所も同じ場所です。</p>
@@ -278,6 +279,42 @@
 <div style="text-align:center;">
   <img src="https://iwasakishuto.github.io/Front-End/tips/images/python_line_api_template_message.png" alt="demo image" style="width:50%">
 </div>
+
+<h3 id="get-followers-profile-verified">認証済みアカウントでuserIdを収集する</h3>
+
+<p>認証済みアカウントであれば <a href="https://developers.line.biz/en/reference/messaging-api/#get-follower-ids"><code>https://api.line.me/v2/bot/followers/ids</code></a> のAPIが使えるので、以下のコードで一度に全てのuserIdリストを作成することができます。</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/** Get followers&#39; userId list.</span>
+<span class="cm"> * @param {string} continuationToken Value of the continuation token found in the ``next`` property of the JSON object returned in the response. Include this parameter to get the next array of user IDs.</span>
+<span class="cm"> * @ref &lt;https://developers.line.biz/en/reference/messaging-api/#get-follower-ids&gt;</span>
+<span class="cm">*/</span>
+<span class="kd">function</span> <span class="nx">get_followers_profile</span><span class="p">(</span><span class="nx">continuationToken</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">){</span>
+  <span class="nx">start_param</span> <span class="o">=</span> <span class="p">(</span><span class="nx">continuationToken</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="s2">&quot;&quot;</span> <span class="o">:</span> <span class="sb">`?start=</span><span class="si">${</span><span class="nx">continuationToken</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;method&quot;</span> <span class="o">:</span> <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;headers&quot;</span> <span class="o">:</span> <span class="p">{</span>
+      <span class="s2">&quot;Content-Type&quot;</span> <span class="o">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;Authorization&quot;</span> <span class="o">:</span> <span class="s2">&quot;Bearer &quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;CHANNEL_ACCESS_TOKEN_VERIFIED&quot;</span><span class="p">),</span>
+    <span class="p">},</span>
+  <span class="p">};</span>
+  <span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="sb">`https://api.line.me/v2/bot/followers/ids</span><span class="si">${</span><span class="nx">start_param</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">getContentText</span><span class="p">());</span>
+<span class="p">}</span>
+
+<span class="cm">/** Get all followers&#39; userId list.</span>
+<span class="cm"> * @ref https://developers.line.biz/en/reference/messaging-api/#get-follower-ids&gt;</span>
+<span class="cm">*/</span>
+<span class="kd">function</span> <span class="nx">get_all_followers_profile</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">userIds</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="kd">var</span> <span class="nx">continuationToken</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">){</span>
+    <span class="nx">response</span> <span class="o">=</span> <span class="nx">get_followers_profile</span><span class="p">(</span><span class="nx">continuationToken</span><span class="p">)</span>
+    <span class="nx">userIds</span> <span class="o">=</span> <span class="nx">userIds</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">userIds</span><span class="p">)</span>
+    <span class="nx">continuationToken</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">next</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">continuationToken</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="k">break</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">userIds</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
 
         </div><!-- /.entry-content -->
     
