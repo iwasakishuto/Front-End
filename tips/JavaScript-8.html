@@ -39,13 +39,7 @@
     		}
     	});
     </script>
-    <!-- Mermaid -->
-    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
-    <script>
-      mermaid.initialize({
-        startOnLoad:true
-      });
-    </script>
+    <script type="text/javascript" src="https://iwasakishuto.github.io/js/smooth-scroll.polyfills.min.js"></script>
     <!--[if IE]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -79,6 +73,13 @@
           <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
           <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
         </header>
+
+          <aside class="toc">
+            <div class="col-lg-3 hidden-xs hidden-sm">
+              <h4>Table of Contents</h4>
+              <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.8 Webカメラの映像で遊んでみる-2">JS.8 Webカメラの映像で遊んでみる-2</a><ul><li><a class="toc-href" href="#webkameranodong-hua-nohuremuwocanvasnimiao-hua-suru" title="Webカメラの動画のフレームをCanvasに描画する">Webカメラの動画のフレームをCanvasに描画する</a><ul><li><a class="toc-href" href="#streaming" title="Streaming">Streaming</a></li><li><a class="toc-href" href="#canvas" title="Canvas">Canvas</a></li></ul></li><li><a class="toc-href" href="#kodo_1" title="コード">コード</a><ul><li><a class="toc-href" href="#html" title="html">html</a></li><li><a class="toc-href" href="#javascript" title="JavaScript">JavaScript</a></li><li><a class="toc-href" href="#css" title="css">css</a></li></ul></li></ul></li></ul></div>
+            </div>
+          </aside>
     
         <div class="entry-content">
           <footer class="post-info">
@@ -90,15 +91,14 @@
 <p>それはまたの機会にやってみるとして、ここではサーバーにWebカメラの映像を送る、といったことをしたいと思います。</p>
 <p>この時、動画はフレームの重ね合わせなので、一定時間ごとのフレームを送る、という方法をとります。</p>
 <p>まずは、<code>Canvas</code>タグに動画のフレームを描画することをやってみます。</p>
-<h2>Webカメラの動画のフレームをCanvasに描画する</h2>
+<h2 id="webkameranodong-hua-nohuremuwocanvasnimiao-hua-suru">Webカメラの動画のフレームをCanvasに描画する</h2>
 <div class="video-streaming">
-  <h3>Streaming</h3>
-  <video id="video" width="640" height="480" playsinline muted autoplay ></video><br>
-  <button id="start_stop" class="btn-red">STOP</button><br>
-  <h3>Canvas</h3>
-  <canvas id="canvas"></canvas><br>
+<h3 id="streaming">Streaming</h3>
+<video autoplay="" height="480" id="video" muted="" playsinline="" width="640"></video><br/>
+<button class="btn-red" id="start_stop">STOP</button><br/>
+<h3 id="canvas">Canvas</h3>
+<canvas id="canvas"></canvas><br/>
 </div>
-
 <script>
   var video = document.getElementById("video");
   var media = navigator.mediaDevices.getUserMedia({
@@ -132,7 +132,6 @@
   }
   });
 </script>
-
 <style>
   .video-streaming {  
     text-align: center;
@@ -163,38 +162,33 @@
     border-radius: 3px;
   }
 </style>
-
-<h2>コード</h2>
-<h3><code>html</code></h3>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;video-streaming&quot;</span><span class="p">&gt;</span>
+<h2 id="kodo_1">コード</h2>
+<h3 id="html"><code>html</code></h3>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"video-streaming"</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>Streaming<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">video</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;video&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;640&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;480&quot;</span> <span class="na">playsinline</span> <span class="na">muted</span> <span class="na">autoplay</span> <span class="p">&gt;&lt;/</span><span class="nt">video</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">video</span> <span class="na">id</span><span class="o">=</span><span class="s">"video"</span> <span class="na">width</span><span class="o">=</span><span class="s">"640"</span> <span class="na">height</span><span class="o">=</span><span class="s">"480"</span> <span class="na">playsinline</span> <span class="na">muted</span> <span class="na">autoplay</span> <span class="p">&gt;&lt;/</span><span class="nt">video</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">h3</span><span class="p">&gt;</span>Canvas<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;canvas&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">"canvas"</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 </code></pre></div>
-
-
-<h3><code>JavaScript</code></h3>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">video</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;video&quot;</span><span class="p">);</span>
+<h3 id="javascript"><code>JavaScript</code></h3>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">video</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"video"</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">mediaDevices</span><span class="p">.</span><span class="nx">getUserMedia</span><span class="p">({</span>
-  <span class="nx">video</span><span class="o">:</span> <span class="p">{</span> <span class="nx">facingMode</span><span class="o">:</span> <span class="s2">&quot;user&quot;</span> <span class="p">},</span>
+  <span class="nx">video</span><span class="o">:</span> <span class="p">{</span> <span class="nx">facingMode</span><span class="o">:</span> <span class="s2">"user"</span> <span class="p">},</span>
   <span class="nx">audio</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
 <span class="p">});</span>
 <span class="nx">media</span><span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">stream</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="nx">video</span><span class="p">.</span><span class="nx">srcObject</span> <span class="o">=</span> <span class="nx">stream</span><span class="p">;</span>
   <span class="nx">setInterval</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;canvas&#39;</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">&#39;2d&#39;</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="nx">video</span><span class="p">.</span><span class="nx">offsetWidth</span><span class="p">;</span>  <span class="nx">canvas</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">,</span>  <span class="nx">w</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
-    <span class="kd">var</span> <span class="nx">h</span> <span class="o">=</span> <span class="nx">video</span><span class="p">.</span><span class="nx">offsetHeight</span><span class="p">;</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+    <span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'canvas'</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">w</span> <span class="o">=</span> <span class="nx">video</span><span class="p">.</span><span class="nx">offsetWidth</span><span class="p">;</span>  <span class="nx">canvas</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">'width'</span><span class="p">,</span>  <span class="nx">w</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+    <span class="kd">var</span> <span class="nx">h</span> <span class="o">=</span> <span class="nx">video</span><span class="p">.</span><span class="nx">offsetHeight</span><span class="p">;</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s1">'height'</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
     <span class="nx">context</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">video</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">);</span>
   <span class="p">},</span><span class="mi">1000</span><span class="p">);</span> <span class="c1">//1000ms(=1s)毎に描画しています。</span>
 <span class="p">});</span>
 </code></pre></div>
-
-
-<h3><code>css</code></h3>
+<h3 id="css"><code>css</code></h3>
 <div class="highlight"><pre><span></span><code><span class="p">.</span><span class="nc">video-streaming</span> <span class="p">{</span>  
   <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
   <span class="k">margin</span><span class="p">:</span> <span class="mi">30</span><span class="kt">px</span> <span class="kc">auto</span><span class="p">;</span>

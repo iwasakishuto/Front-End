@@ -39,13 +39,7 @@
     		}
     	});
     </script>
-    <!-- Mermaid -->
-    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
-    <script>
-      mermaid.initialize({
-        startOnLoad:true
-      });
-    </script>
+    <script type="text/javascript" src="https://iwasakishuto.github.io/js/smooth-scroll.polyfills.min.js"></script>
     <!--[if IE]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -79,6 +73,13 @@
           <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
           <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
         </header>
+
+          <aside class="toc">
+            <div class="col-lg-3 hidden-xs hidden-sm">
+              <h4>Table of Contents</h4>
+              <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.35 タイピング風動画を楽に作成する">JS.35 タイピング風動画を楽に作成する</a><ul><li><a class="toc-href" href="#zuo-cheng-shitamono" title="作成したもの">作成したもの</a></li></ul></li></ul></div>
+            </div>
+          </aside>
     
         <div class="entry-content">
           <footer class="post-info">
@@ -86,40 +87,39 @@
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
           </footer><!-- /.post-info -->
 <!-- NOT "| indent(10, True)"  -->
-<h2>作成したもの</h2>
+<h2 id="zuo-cheng-shitamono">作成したもの</h2>
 <p>※ <a href="https://iwasakishuto.github.io/Python-Charmers/pycharmers.cli.video_of_typing.html">pycharmers.cli.video_of_typing module</a>を用いれば、楽にタイピング動画を作成することができます！！</p>
 <div>
-  <table class="fixed">
-    <thead><tr><th colspan="4">入力欄</th></tr></thead>
-    <tbody>
-      <tr><td colspan="4"><button class="btn--click btn--shadow btn--red btn--reset">Reset</button></td></tr>
-      <tr><td colspan="4"><textarea id="input-textarea" rows="5" placeholder="ここに入力してください。"></textarea></td></tr>
-    </tbody>
-    <thead>
-      <tr><th colspan="4">Demo Options</th></tr>
-      <tr><th>Span [ms]</th><th>Font Size</th><th>Line Height</th><th>Font Family</th></tr>
-    </thead>
-    <tbody>
-      <tr class="g1">
-        <td><input id="spanMS" type="number" min="0" value="100" step="50" max="1000"/></td>
-        <td><select id="fontFamily"><option selected>Arial</option><option>Verdana</option><option>Times New Roman</option><option>Courier New</option><option>serif</option><option>sans-serif</option></select></td>
-        <td><input id="fontSize" type="number" min="1" value="16" step="1" max="100"/></td>
-        <td><input id="lineHeight" type="number" min="1" value="16" step="1" max="100"/></td>
-      </tr>
-      <tr><td colspan="4"><button class="btn--click btn--shadow btn--green btn--demo">Demo</button></td></tr>
-      <tr>
-        <td colspan="4"><canvas id="demoCanvas"></canvas></td>
-      </tr>
-    </tbody>
-    <thead><tr><th colspan="4">ダウンロード</th></tr></thead>
-    <tbody>
-      <tr>
-        <td colspan="4"><button class="btn--click btn--shadow btn--blue btn--download">Download</button></td>
-      </tr>
-    </tbody>
-  </table>
+<table class="fixed">
+<thead><tr><th colspan="4">入力欄</th></tr></thead>
+<tbody>
+<tr><td colspan="4"><button class="btn--click btn--shadow btn--red btn--reset">Reset</button></td></tr>
+<tr><td colspan="4"><textarea id="input-textarea" placeholder="ここに入力してください。" rows="5"></textarea></td></tr>
+</tbody>
+<thead>
+<tr><th colspan="4">Demo Options</th></tr>
+<tr><th>Span [ms]</th><th>Font Size</th><th>Line Height</th><th>Font Family</th></tr>
+</thead>
+<tbody>
+<tr class="g1">
+<td><input id="spanMS" max="1000" min="0" step="50" type="number" value="100"/></td>
+<td><select id="fontFamily"><option selected="">Arial</option><option>Verdana</option><option>Times New Roman</option><option>Courier New</option><option>serif</option><option>sans-serif</option></select></td>
+<td><input id="fontSize" max="100" min="1" step="1" type="number" value="16"/></td>
+<td><input id="lineHeight" max="100" min="1" step="1" type="number" value="16"/></td>
+</tr>
+<tr><td colspan="4"><button class="btn--click btn--shadow btn--green btn--demo">Demo</button></td></tr>
+<tr>
+<td colspan="4"><canvas id="demoCanvas"></canvas></td>
+</tr>
+</tbody>
+<thead><tr><th colspan="4">ダウンロード</th></tr></thead>
+<tbody>
+<tr>
+<td colspan="4"><button class="btn--click btn--shadow btn--blue btn--download">Download</button></td>
+</tr>
+</tbody>
+</table>
 </div>
-
 <script>
   const typingTextarea  = document.querySelector("textarea#input-textarea");
   const resetBtn         = document.querySelector("button.btn--reset");
@@ -214,7 +214,6 @@
   })
   /* --- Utility Functions ---> */
 </script>
-
 <style>
   table *{
     vertical-align: middle;

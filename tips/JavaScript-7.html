@@ -39,13 +39,7 @@
     		}
     	});
     </script>
-    <!-- Mermaid -->
-    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
-    <script>
-      mermaid.initialize({
-        startOnLoad:true
-      });
-    </script>
+    <script type="text/javascript" src="https://iwasakishuto.github.io/js/smooth-scroll.polyfills.min.js"></script>
     <!--[if IE]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -79,6 +73,13 @@
           <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
           <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
         </header>
+
+          <aside class="toc">
+            <div class="col-lg-3 hidden-xs hidden-sm">
+              <h4>Table of Contents</h4>
+              <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.7 Webカメラの映像で遊んでみる-1">JS.7 Webカメラの映像で遊んでみる-1</a><ul><li><a class="toc-href" href="#webkameranoying-xiang-wosonomamaburauzanibiao-shi-suru" title="Webカメラの映像をそのままブラウザに表示する。">Webカメラの映像をそのままブラウザに表示する。</a></li><li><a class="toc-href" href="#kodo" title="コード">コード</a><ul><li><a class="toc-href" href="#html" title="html">html</a></li><li><a class="toc-href" href="#javascript" title="JavaScript">JavaScript</a></li><li><a class="toc-href" href="#css" title="css">css</a></li></ul></li></ul></li></ul></div>
+            </div>
+          </aside>
     
         <div class="entry-content">
           <footer class="post-info">
@@ -95,14 +96,13 @@
 <li>ローカルホストで取得したWebカメラの映像を機械学習モデルのあるサーバーに送り、結果を受け取って表示する。</li>
 <li>どちらもサーバーにあげる。（セキュリティの問題ですぐには厳しそう。）</li>
 </ol>
-<h2>Webカメラの映像をそのままブラウザに表示する。</h2>
+<h2 id="webkameranoying-xiang-wosonomamaburauzanibiao-shi-suru">Webカメラの映像をそのままブラウザに表示する。</h2>
 <p><font color="red">※ GitHub Pages は静的サイトなので、映像が僕の元に送信される心配はありません。</font></p>
 <div class="video-streaming">
-  <!--サイズの初期値は640×480(4:3)-->
-  <video id="video" width="640" height="480" playsinline muted autoplay></video><br>
-  <button id="start_stop" class="btn-red">STOP</button>
+<!--サイズの初期値は640×480(4:3)-->
+<video autoplay="" height="480" id="video" muted="" playsinline="" width="640"></video><br/>
+<button class="btn-red" id="start_stop">STOP</button>
 </div>
-
 <script>
   var video = document.getElementById("video");
   var media = navigator.mediaDevices.getUserMedia({
@@ -129,7 +129,6 @@
     }
   });
 </script>
-
 <style>
   .video-streaming {  
     text-align: center;
@@ -157,23 +156,20 @@
     }
   }
 </style>
-
-<h2>コード</h2>
-<h3><code>html</code></h3>
-<div class="highlight"><pre><span></span><code><span class="c">&lt;!--サイズの初期値は640×480(4:3)--&gt;</span>
-<span class="p">&lt;</span><span class="nt">video</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;video&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;640&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;480&quot;</span> <span class="na">autoplay</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;border: 1px solid; margin: 0 auto&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">video</span><span class="p">&gt;</span>
+<h2 id="kodo">コード</h2>
+<h3 id="html"><code>html</code></h3>
+<div class="highlight"><pre><span></span><code><span class="c">&lt;!--サイズの初期値は640&times;480(4:3)--&gt;</span>
+<span class="p">&lt;</span><span class="nt">video</span> <span class="na">id</span><span class="o">=</span><span class="s">"video"</span> <span class="na">width</span><span class="o">=</span><span class="s">"640"</span> <span class="na">height</span><span class="o">=</span><span class="s">"480"</span> <span class="na">autoplay</span> <span class="na">style</span><span class="o">=</span><span class="s">"border: 1px solid; margin: 0 auto"</span><span class="p">&gt;&lt;/</span><span class="nt">video</span><span class="p">&gt;</span>
 </code></pre></div>
-
-
-<h3><code>JavaScript</code></h3>
+<h3 id="javascript"><code>JavaScript</code></h3>
 <div class="highlight"><pre><span></span><code><span class="c1">//動画流す準備</span>
-<span class="kd">var</span> <span class="nx">video</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;video&quot;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">video</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"video"</span><span class="p">);</span>
 <span class="c1">// getUserMedia によるカメラ映像の取得</span>
 <span class="kd">var</span> <span class="nx">media</span> <span class="o">=</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">mediaDevices</span><span class="p">.</span><span class="nx">getUserMedia</span><span class="p">({</span>
     <span class="nx">video</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span><span class="c1">//ビデオを取得する</span>
     <span class="c1">//使うカメラをインカメラか背面カメラかを指定する場合には</span>
-    <span class="c1">//video: { facingMode: &quot;environment&quot; },//背面カメラ</span>
-    <span class="c1">//video: { facingMode: &quot;user&quot; },//インカメラ</span>
+    <span class="c1">//video: { facingMode: "environment" },//背面カメラ</span>
+    <span class="c1">//video: { facingMode: "user" },//インカメラ</span>
     <span class="nx">audio</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span><span class="c1">//音声が必要な場合はture</span>
 <span class="p">});</span>
 <span class="c1">//リアルタイムに再生（ストリーミング）させるためにビデオタグに流し込む</span>
@@ -181,9 +177,7 @@
     <span class="nx">video</span><span class="p">.</span><span class="nx">srcObject</span> <span class="o">=</span> <span class="nx">stream</span><span class="p">;</span>
 <span class="p">});</span>
 </code></pre></div>
-
-
-<h3><code>css</code></h3>
+<h3 id="css"><code>css</code></h3>
 <div class="highlight"><pre><span></span><code><span class="p">.</span><span class="nc">video-streaming</span> <span class="p">{</span>  
   <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
   <span class="k">margin</span><span class="p">:</span> <span class="mi">30</span><span class="kt">px</span> <span class="kc">auto</span><span class="p">;</span>

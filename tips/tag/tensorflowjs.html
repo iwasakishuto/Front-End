@@ -28,13 +28,7 @@
     		}
     	});
     </script>
-    <!-- Mermaid -->
-    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
-    <script>
-      mermaid.initialize({
-        startOnLoad:true
-      });
-    </script>
+    <script type="text/javascript" src="https://iwasakishuto.github.io/js/smooth-scroll.polyfills.min.js"></script>
     <!--[if IE]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -61,58 +55,55 @@
             <span>2021-03-10(Wed)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tensorflowjs.html">TensorFlow.js</a></span>
           </footer><!-- /.post-info --><script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/posenet"></script>
-
 <div class="nunkiru">
-  <h1>Pose-Estimation</h1>
-  <p>Tensorflow.js を用いて、<b>"Pose-Estimation"</b>をブラウザで実行し、正解データから誤りを検出します。</p>
-  <p>※ 正解動画との角度が最も異なる部分を青く出力しています。</p>
-  <table id="fitness-mirror">
-    <thead><tr><th>Video</th><th><select id="answer-video-select"><option value="https://iwasakishuto.github.io/Front-End/tips/theme/video/radio_calisthenics.mp4" selected>ラジオ体操</option><option value="https://iwasakishuto.github.io/Front-End/tips/theme/video/akari_doi.mp4">Akari Doi</option></select></th></tr></thead>
-    <tbody>
-      <tr><td colspan="2" id="answer-video-canvas-wrapper" class="video-and-canvas">
-        <video id="answer-video" style="z-index:10;" autoplay loop>
-          <source id="answer-video-source" src="" type="video/mp4">
-        </video>
-        <canvas id="answer-canvas" style="z-index:20;"></canvas>
-        <table id="answer-video-controls" style="z-index:30;">
-          <thead>
-            <tr>
-              <th><label>Mute <input id="video-mute" type="checkbox"></label></th>
-              <th>Curt</th>
-              <th>
-                <button id="video-back-10s" class="back">Back 10s</button>
-                <button id="video-start-stop" class="playing">Pause</button>
-                <button id="video-skip-10s" class="skip">Skip 10s</button>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Speed</td>
-              <td><span id="video-curt-speed">1.0</span></td>
-              <td>0.5 <input id="video-speed" type="range" min="0.5" max="5" step="0.1" value="1"> 5</td>
-            </tr>
-            <tr>
-              <td>Position</td>
-              <td><span id="video-curt-position">0</span></td>
-              <td>00:00 <input id="video-position" type="range" min="0" step="0.2" value="0"> <span id="video-max-position"> 03:11</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </td></tr>
-    </tbody>
-    <thead><tr><th colspan="2">You</th></tr></thead>
-    <tbody>
-      <tr><td id="your-video-canvas-wrapper" class="video-and-canvas" colspan="2">
-        <video id="your-video" style="z-index:10;" playsinline muted autoplay></video>
-        <canvas id="your-canvas" style="z-index:20;"></canvas>
-      </td></tr>
-    </tbody>
-  </table>
+<h1 id="pose-estimation">Pose-Estimation</h1>
+<p>Tensorflow.js を用いて、<b>"Pose-Estimation"</b>をブラウザで実行し、正解データから誤りを検出します。</p>
+<p>※ 正解動画との角度が最も異なる部分を青く出力しています。</p>
+<table id="fitness-mirror">
+<thead><tr><th>Video</th><th><select id="answer-video-select"><option selected="" value="https://iwasakishuto.github.io/Front-End/tips/theme/video/radio_calisthenics.mp4">ラジオ体操</option><option value="https://iwasakishuto.github.io/Front-End/tips/theme/video/akari_doi.mp4">Akari Doi</option></select></th></tr></thead>
+<tbody>
+<tr><td class="video-and-canvas" colspan="2" id="answer-video-canvas-wrapper">
+<video autoplay="" id="answer-video" loop="" style="z-index:10;">
+<source id="answer-video-source" src="" type="video/mp4"/>
+</video>
+<canvas id="answer-canvas" style="z-index:20;"></canvas>
+<table id="answer-video-controls" style="z-index:30;">
+<thead>
+<tr>
+<th><label>Mute <input id="video-mute" type="checkbox"/></label></th>
+<th>Curt</th>
+<th>
+<button class="back" id="video-back-10s">Back 10s</button>
+<button class="playing" id="video-start-stop">Pause</button>
+<button class="skip" id="video-skip-10s">Skip 10s</button>
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Speed</td>
+<td><span id="video-curt-speed">1.0</span></td>
+<td>0.5 <input id="video-speed" max="5" min="0.5" step="0.1" type="range" value="1"/> 5</td>
+</tr>
+<tr>
+<td>Position</td>
+<td><span id="video-curt-position">0</span></td>
+<td>00:00 <input id="video-position" min="0" step="0.2" type="range" value="0"/> <span id="video-max-position"> 03:11</span></td>
+</tr>
+</tbody>
+</table>
+</td></tr>
+</tbody>
+<thead><tr><th colspan="2">You</th></tr></thead>
+<tbody>
+<tr><td class="video-and-canvas" colspan="2" id="your-video-canvas-wrapper">
+<video autoplay="" id="your-video" muted="" playsinline="" style="z-index:10;"></video>
+<canvas id="your-canvas" style="z-index:20;"></canvas>
+</td></tr>
+</tbody>
+</table>
 </div>
-
 <script>
   var model, result;
   var answer_video_select = document.getElementById("answer-video-select");
@@ -363,7 +354,6 @@
     });
   }
 </script>
-
 <script>
   var playtimer = null
   const startTimer = function(){
@@ -422,7 +412,6 @@
   });
   startTimer();
 </script>
-
 <style>
   .video-and-canvas {
     position: relative;

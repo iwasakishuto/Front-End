@@ -39,13 +39,7 @@
     		}
     	});
     </script>
-    <!-- Mermaid -->
-    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
-    <script>
-      mermaid.initialize({
-        startOnLoad:true
-      });
-    </script>
+    <script type="text/javascript" src="https://iwasakishuto.github.io/js/smooth-scroll.polyfills.min.js"></script>
     <!--[if IE]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -79,6 +73,13 @@
           <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
           <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
         </header>
+
+          <aside class="toc">
+            <div class="col-lg-3 hidden-xs hidden-sm">
+              <h4>Table of Contents</h4>
+              <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.17 アノテーションデータ（バウンディングボックス）作成ツールのコード">JS.17 アノテーションデータ（バウンディングボックス）作成ツールのコード</a><ul><li><a class="toc-href" href="#deirekutoriwoshou-kequ-ru" title="ディレクトリを受け取る">ディレクトリを受け取る</a></li><li><a class="toc-href" href="#mausunozuo-biao-woke-shi-hua-suru" title="マウスの座標を可視化する。">マウスの座標を可視化する。</a></li><li><a class="toc-href" href="#baundeingubotsukusuwomiao-ku" title="バウンディングボックスを描く">バウンディングボックスを描く</a></li></ul></li></ul></div>
+            </div>
+          </aside>
     
         <div class="entry-content">
           <footer class="post-info">
@@ -87,25 +88,20 @@
           </footer><!-- /.post-info -->
 <!-- NOT "| indent(10, True)"  -->
 <p><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-16.html">アノテーションデータ（バウンディングボックス）作成ツール</a>のコードを簡単に解説します。</p>
-<h2>ディレクトリを受け取る</h2>
+<h2 id="deirekutoriwoshou-kequ-ru">ディレクトリを受け取る</h2>
 <p>これは非常に簡単で、<code>&lt;input&gt;</code> タグに <code>webkitdirectory</code> と書けばそれで終了です。</p>
-<p><input id="" type="file" webkitdirectory></p>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;ex1&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;file&quot;</span> <span class="na">webkitdirectory</span><span class="p">&gt;</span>
+<p><input id="" type="file" webkitdirectory=""/></p>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">input</span> <span class="na">id</span><span class="o">=</span><span class="s">"ex1"</span> <span class="na">type</span><span class="o">=</span><span class="s">"file"</span> <span class="na">webkitdirectory</span><span class="p">&gt;</span>
 </code></pre></div>
-
-
 <p>なお、以下のようにすれば、ディレクトリの各種情報を得ることができます。</p>
-<div class="highlight"><pre><span></span><code><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;ex1&#39;</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+<div class="highlight"><pre><span></span><code><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'ex1'</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'change'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
   <span class="nx">dir</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span><span class="p">;</span> <span class="c1">// これでディレクトリを受け取る。</span>
   <span class="nx">dirname</span> <span class="o">=</span> <span class="nx">dir</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">webkitRelativePath</span><span class="p">;</span> <span class="c1">// 一つめのファイルのパス</span>
   <span class="nx">filenum</span> <span class="o">=</span> <span class="nx">dir</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="c1">// ファイルの数</span>
 <span class="p">});</span>
 </code></pre></div>
-
-
-<h2>マウスの座標を可視化する。</h2>
-<canvas id="ex2" width="200px" height="200px" style="border: 1.5px solid #000; background-color: #eee"></canvas>
-
+<h2 id="mausunozuo-biao-woke-shi-hua-suru">マウスの座標を可視化する。</h2>
+<canvas height="200px" id="ex2" style="border: 1.5px solid #000; background-color: #eee" width="200px"></canvas>
 <script>
   window.addEventListener('load', function() {
     var ex2Canvas = document.getElementById('ex2');
@@ -134,13 +130,12 @@
     });
   });
 </script>
-
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;ex2&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;200px&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;200px&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;border: 1.5px solid #000; background-color: #eee&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">"ex2"</span> <span class="na">width</span><span class="o">=</span><span class="s">"200px"</span> <span class="na">height</span><span class="o">=</span><span class="s">"200px"</span> <span class="na">style</span><span class="o">=</span><span class="s">"border: 1.5px solid #000; background-color: #eee"</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-  <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;load&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">Canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;ex2&#39;</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">Context</span> <span class="o">=</span> <span class="nx">Canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">&#39;2d&#39;</span><span class="p">);</span>
-    <span class="nx">Context</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="s2">&quot;#0082af&quot;</span><span class="p">;</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'load'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">Canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'ex2'</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">Context</span> <span class="o">=</span> <span class="nx">Canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
+    <span class="nx">Context</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="s2">"#0082af"</span><span class="p">;</span>
     <span class="nx">Context</span><span class="p">.</span><span class="nx">lineWidth</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 
     <span class="kd">function</span> <span class="nx">ex2draw</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">){</span>
@@ -159,18 +154,15 @@
       <span class="nx">Context</span><span class="p">.</span><span class="nx">stroke</span><span class="p">();</span>
     <span class="p">}</span>
 
-    <span class="nx">Canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;mousemove&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">Canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'mousemove'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
       <span class="nx">ex2draw</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">layerX</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">layerY</span><span class="p">);</span>
     <span class="p">});</span>
   <span class="p">});</span>
 <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 </code></pre></div>
-
-
 <p><code>&lt;canvas&gt;</code> には、<code>Context.beginPath()</code> から <code>Context.closePath()</code> までに描いたものが <code>Context.stroke()</code> によって描かれます。</p>
-<h2>バウンディングボックスを描く</h2>
-<canvas id="ex3" width="200px" height="200px" style="border: 1.5px solid #000; background-color: #fff"></canvas>
-
+<h2 id="baundeingubotsukusuwomiao-ku">バウンディングボックスを描く</h2>
+<canvas height="200px" id="ex3" style="border: 1.5px solid #000; background-color: #fff" width="200px"></canvas>
 <script>
   var ex3Canvas;
   var ex3Context;
@@ -261,19 +253,18 @@
     ex3Context.clearRect(0, 0, ex3Canvas.width, ex3Canvas.height);
   }
 </script>
-
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;ex3&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;200px&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;200px&quot;</span> <span class="na">style</span><span class="o">=</span><span class="s">&quot;border: 1.5px solid #000; background-color: #fff&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">"ex3"</span> <span class="na">width</span><span class="o">=</span><span class="s">"200px"</span> <span class="na">height</span><span class="o">=</span><span class="s">"200px"</span> <span class="na">style</span><span class="o">=</span><span class="s">"border: 1.5px solid #000; background-color: #fff"</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;</span>
 <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
   <span class="kd">var</span> <span class="nx">Canvas</span><span class="p">;</span>
   <span class="kd">var</span> <span class="nx">Context</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">RectEdgeColor</span> <span class="o">=</span> <span class="s2">&quot;#FB0&quot;</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">RectInnerColor</span> <span class="o">=</span> <span class="s2">&quot;rgba(255,230,174,0.3)&quot;</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">IndicatorColor</span> <span class="o">=</span> <span class="s2">&quot;#0082af&quot;</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">RectEdgeColor</span> <span class="o">=</span> <span class="s2">"#FB0"</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">RectInnerColor</span> <span class="o">=</span> <span class="s2">"rgba(255,230,174,0.3)"</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">IndicatorColor</span> <span class="o">=</span> <span class="s2">"#0082af"</span><span class="p">;</span>
   <span class="kd">var</span> <span class="nx">index</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
   <span class="kd">var</span> <span class="nx">DrawingMemory</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="o">:</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">w</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">h</span><span class="o">:</span> <span class="kc">null</span><span class="p">}</span> <span class="p">};</span>
-  <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;load&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">Canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;ex3&#39;</span><span class="p">);</span>
-    <span class="nx">Context</span> <span class="o">=</span> <span class="nx">Canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">&#39;2d&#39;</span><span class="p">);</span>
+  <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'load'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">Canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'ex3'</span><span class="p">);</span>
+    <span class="nx">Context</span> <span class="o">=</span> <span class="nx">Canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
     <span class="nx">Context</span><span class="p">.</span><span class="nx">strokeStyle</span> <span class="o">=</span> <span class="nx">IndicatorColor</span><span class="p">;</span>
     <span class="nx">Context</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="nx">RectInnerColor</span><span class="p">;</span>
     <span class="nx">Context</span><span class="p">.</span><span class="nx">lineWidth</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
@@ -333,16 +324,16 @@
     <span class="p">}</span>
 
     <span class="kd">function</span> <span class="nx">mouseHandler</span><span class="p">(){</span>
-      <span class="nx">Canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;mousedown&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+      <span class="nx">Canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'mousedown'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
         <span class="nx">dragStart</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">layerX</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">layerY</span><span class="p">);</span>
       <span class="p">});</span>
-      <span class="nx">Canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;mouseup&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+      <span class="nx">Canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'mouseup'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
         <span class="nx">dragEnd</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">layerX</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">layerY</span><span class="p">);</span>
       <span class="p">});</span>
-      <span class="nx">Canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;mouseout&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+      <span class="nx">Canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'mouseout'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
         <span class="nx">dragEnd</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">layerX</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">layerY</span><span class="p">);</span>
       <span class="p">});</span>
-      <span class="nx">Canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;mousemove&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">Canvas</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'mousemove'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">draw</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">layerX</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">layerY</span><span class="p">);</span>
       <span class="p">});</span>
     <span class="p">}</span>
@@ -354,8 +345,6 @@
   <span class="p">}</span>
 <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 </code></pre></div>
-
-
 <p>あとは、バウンディングボックスの情報を保持して、最後にラベルデータや <code>width</code>,<code>height</code> と一緒に <code>JSON.stringify</code> で <code>json</code> データにしてダウンロードすれば終了です。</p>
 
         </div><!-- /.entry-content -->

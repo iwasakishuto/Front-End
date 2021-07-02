@@ -39,13 +39,7 @@
     		}
     	});
     </script>
-    <!-- Mermaid -->
-    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
-    <script>
-      mermaid.initialize({
-        startOnLoad:true
-      });
-    </script>
+    <script type="text/javascript" src="https://iwasakishuto.github.io/js/smooth-scroll.polyfills.min.js"></script>
     <!--[if IE]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -79,6 +73,13 @@
           <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
           <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
         </header>
+
+          <aside class="toc">
+            <div class="col-lg-3 hidden-xs hidden-sm">
+              <h4>Table of Contents</h4>
+              <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.16 アノテーションデータ（バウンディングボックス）作成ツール">JS.16 アノテーションデータ（バウンディングボックス）作成ツール</a><ul><li><a class="toc-href" href="#jin-hou-yarubekikoto" title="今後やるべきこと">今後やるべきこと</a></li><li><a class="toc-href" href="#zuo-tsutamono_1" title="作ったもの">作ったもの</a></li></ul></li></ul></div>
+            </div>
+          </aside>
     
         <div class="entry-content">
           <footer class="post-info">
@@ -88,33 +89,28 @@
 <!-- NOT "| indent(10, True)"  -->
 <p><a href="https://github.com/iwasakishuto/ML-From-Paper/tree/master/Biology/U-Net">U-Net</a>で大腸菌カウンターを作るなど、<span class="marker-pink">Object Detection</span> や <span class="marker-pink">Semantic Segmentation</span> のモデルを実際に作ってみたいなと思ったので、まずは<b>バウンディングボックス</b>のアノテーションデータ作成ツールを作りました。</p>
 <div class="frame">
-  <h3>今後やるべきこと</h3>
-  <li>画像サイズを「固定」 or 「可変」で選べるようにする。</li>
-  <li>バウンディングボックスを取り消せるようにする。</li>
-  <li>Semantic Segmentationのデータ作成ツールを作る。</li>
-  <li><code>width</code> が負の値を取るとデータの整形時に面倒なので、<code>to</code>,<code>right</code>,<code>bottom</code>,<code>left</code> の形にする。</li>
+<h3 id="jin-hou-yarubekikoto">今後やるべきこと</h3>
+<li>画像サイズを「固定」 or 「可変」で選べるようにする。</li>
+<li>バウンディングボックスを取り消せるようにする。</li>
+<li>Semantic Segmentationのデータ作成ツールを作る。</li>
+<li><code>width</code> が負の値を取るとデータの整形時に面倒なので、<code>to</code>,<code>right</code>,<code>bottom</code>,<code>left</code> の形にする。</li>
 </div>
-
-<h2>作ったもの</h2>
+<h2 id="zuo-tsutamono_1">作ったもの</h2>
 <div>
-  <input id="file" type="file" webkitdirectory>
-  <button id="next" onclick="nextImg()">NEXT</button>
-  <button id="download" onclick="downloadJson()">Download</button>
+<input id="file" type="file" webkitdirectory=""/>
+<button id="next" onclick="nextImg()">NEXT</button>
+<button id="download" onclick="downloadJson()">Download</button>
 </div>
-
 <div>
-  <label for="label">label</label><p style="display:inline;"><input type="number" id="label" value="0"></p>
-  <label for="imgWidth">width</label><p style="display:inline;"><input type="number" id="imgWidth" value="224" onchange="sizeChange()">px</p>
-  <label for="imgHeight">height</label><p style="display:inline;"><input type="number" id="imgHeight" value="224" onchange="sizeChange()">px</p>
+<label for="label">label</label><p style="display:inline;"><input id="label" type="number" value="0"/></p>
+<label for="imgWidth">width</label><p style="display:inline;"><input id="imgWidth" onchange="sizeChange()" type="number" value="224"/>px</p>
+<label for="imgHeight">height</label><p style="display:inline;"><input id="imgHeight" onchange="sizeChange()" type="number" value="224"/>px</p>
 </div>
-
-<div >
-  <img class="canvas __canvas" id="preview" width="224px" height="224px" >
-  <canvas class="canvas" id="canvas" width="224px" height="224px" style="border: 0.5px solid #0082af;"></canvas>
+<div>
+<img class="canvas __canvas" height="224px" id="preview" width="224px"/>
+<canvas class="canvas" height="224px" id="canvas" style="border: 0.5px solid #0082af;" width="224px"></canvas>
 </div>
-
 <div id="space"></div>
-
 <style>
   .canvas {
     position: absolute;
@@ -133,7 +129,6 @@
     margin-top: 284px;
   }
 </style>
-
 <script>
   var Canvas;
   var Context;
@@ -293,7 +288,6 @@
     link.click();
   }
 </script>
-
 <p>なお、コードは<a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-17.html">ここ</a>で簡単に解説しています。</p>
 
         </div><!-- /.entry-content -->

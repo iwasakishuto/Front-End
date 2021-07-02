@@ -39,13 +39,7 @@
     		}
     	});
     </script>
-    <!-- Mermaid -->
-    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
-    <script>
-      mermaid.initialize({
-        startOnLoad:true
-      });
-    </script>
+    <script type="text/javascript" src="https://iwasakishuto.github.io/js/smooth-scroll.polyfills.min.js"></script>
     <!--[if IE]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -79,6 +73,13 @@
           <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
           <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
         </header>
+
+          <aside class="toc">
+            <div class="col-lg-3 hidden-xs hidden-sm">
+              <h4>Table of Contents</h4>
+              <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.34 GASでTrelloのタスクを定期的に通知する。">JS.34 GASでTrelloのタスクを定期的に通知する。</a><ul><li><a class="toc-href" href="#gastoha" title="GASとは">GASとは</a></li><li><a class="toc-href" href="#trello" title="Trello">Trello</a></li><li><a class="toc-href" href="#zuo-cheng-shitamono" title="作成したもの">作成したもの</a><ul><li><a class="toc-href" href="#bian-shu-ding-yi" title="変数定義">変数定義</a></li><li><a class="toc-href" href="#gettasks" title="getTasks">getTasks</a></li><li><a class="toc-href" href="#arrange_message" title="arrange_message">arrange_message</a></li><li><a class="toc-href" href="#postslack" title="postSlack">postSlack</a></li><li><a class="toc-href" href="#main" title="main">main</a></li></ul></li></ul></li></ul></div>
+            </div>
+          </aside>
     
         <div class="entry-content">
           <footer class="post-info">
@@ -86,16 +87,16 @@
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
           </footer><!-- /.post-info -->
 <!-- NOT "| indent(10, True)"  -->
-<h2>GASとは</h2>
+<h2 id="gastoha">GASとは</h2>
 <p><font color="red"><b>Google Apps Script(GAS, ガス)</b></font>とは、Googleが提供するサーバーサイド・スクリプト環境です。<code>JavaScript</code> ではありませんが、<code>JavaScript</code> っぽいのでここに記載しています。</p>
 <p>なお、どんなことができるかは以前の記事 <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-13.html">JS.13 GASでslackにメッセージを送る</a> を参照していただければと思います。</p>
-<h2>Trello</h2>
+<h2 id="trello">Trello</h2>
 <p><a href="https://trello.com/">Trello</a>は、カードを動かしながらタスクを視覚的に管理できるカンバン方式のツールです。付箋を貼るように直感的にタスクを管理できるのが使いやすく、普段から利用しているのですが、定期的にどのタスクが残っているのかslack等に通知できれば良いと思い、<a href="https://developer.atlassian.com/cloud/trello/">TrelloのAPI</a>を用いてこれを実現しました。</p>
 <p>※ APIを使うにあたり、API key と Token が必要になります。Trelloにログインした状態で <a href="https://trello.com/app-key">https://trello.com/app-key</a> にアクセスして取得してください。</p>
 <p>なお、ボードIDは <a href="https://developer.atlassian.com/cloud/trello/rest/api-group-boards/#api-boards-id-memberships-get">Get Memberships of a Board</a>というメソッドを用いればわかりますが、TrelloのAPIをPythonでWrapした<a href="https://github.com/iwasakishuto/Python-Charmers">Python-Charmers</a> の <a href="https://iwasakishuto.github.io/Python-Charmers/pycharmers.api.trello.html"><code>pycharmers.api.trello</code> というモジュール</a>を利用すると、以下のように簡単に取得できます。</p>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">pycharmers.api</span> <span class="kn">import</span> <span class="n">Trello</span>
-<span class="n">trello</span> <span class="o">=</span> <span class="n">Trello</span><span class="p">(</span><span class="n">apikey</span><span class="o">=</span><span class="s2">&quot;APIKEY&quot;</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="s2">&quot;TOKEN&quot;</span><span class="p">)</span>
-<span class="n">trello</span><span class="o">.</span><span class="n">show_memberships_of_a_board</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;iwasakishuto&quot;</span><span class="p">)</span>
+<span class="n">trello</span> <span class="o">=</span> <span class="n">Trello</span><span class="p">(</span><span class="n">apikey</span><span class="o">=</span><span class="s2">"APIKEY"</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="s2">"TOKEN"</span><span class="p">)</span>
+<span class="n">trello</span><span class="o">.</span><span class="n">show_memberships_of_a_board</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">"iwasakishuto"</span><span class="p">)</span>
 <span class="o">+--------------+---------------------+--------------------------------------+</span>
 <span class="o">|</span>     <span class="n">name</span>     <span class="o">|</span>         <span class="nb">id</span>          <span class="o">|</span>             <span class="n">url</span>                      <span class="o">|</span>
 <span class="o">+==============+=====================+======================================+</span>
@@ -104,87 +105,77 @@
 <span class="o">|</span>  <span class="n">boardname2</span>  <span class="o">|</span>  <span class="nb">id</span> <span class="k">for</span> <span class="n">boardname1</span>  <span class="o">|</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">trello</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">XXXX</span><span class="o">/</span><span class="n">boardname2</span> <span class="o">|</span>
 <span class="o">+--------------+---------------------+--------------------------------------+</span>
 </code></pre></div>
-
-
-<h2>作成したもの</h2>
-<p><img alt="Trelloタスク管理" src="https://iwasakishuto.github.io/Front-End/tips/images/gas_trello.png"></p>
-<h3>変数定義</h3>
+<h2 id="zuo-cheng-shitamono">作成したもの</h2>
+<p><img alt="Trelloタスク管理" src="https://iwasakishuto.github.io/Front-End/tips/images/gas_trello.png"/></p>
+<h3 id="bian-shu-ding-yi">変数定義</h3>
 <p>セキュリティの観点から、API key や Token はコード内に直書きするのではなく、Propertyに書き、<code>PropertiesService.getScriptProperties()</code> で取得します。</p>
 <div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">PropertiesService</span><span class="p">.</span><span class="nx">getScriptProperties</span><span class="p">();</span>
 <span class="kr">const</span> <span class="nx">add_trello_params</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">url</span><span class="p">){</span>
-  <span class="k">return</span> <span class="nx">url</span> <span class="o">+</span> <span class="s2">&quot;?key=&quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;TRELLO_APIKEY&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&amp;token=&quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;TRELLO_TOKEN&quot;</span><span class="p">)</span>
+  <span class="k">return</span> <span class="nx">url</span> <span class="o">+</span> <span class="s2">"?key="</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">"TRELLO_APIKEY"</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"&amp;token="</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">"TRELLO_TOKEN"</span><span class="p">)</span>
 <span class="p">}</span>
-<span class="kr">const</span> <span class="nx">url_get_lists_on_a_board</span> <span class="o">=</span> <span class="nx">add_trello_params</span><span class="p">(</span><span class="s2">&quot;https://api.trello.com/1/boards/&quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;TRELLO_BOARDID&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/lists&quot;</span><span class="p">);</span>
-<span class="kr">const</span> <span class="nx">url_cards_in_a_list</span>      <span class="o">=</span> <span class="nx">add_trello_params</span><span class="p">(</span><span class="s2">&quot;https://api.trello.com/1/boards/&quot;</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;TRELLO_BOARDID&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/cards&quot;</span><span class="p">);</span>
-<span class="kr">const</span> <span class="nx">private_list_names</span>       <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Trash&quot;</span><span class="p">]</span>
+<span class="kr">const</span> <span class="nx">url_get_lists_on_a_board</span> <span class="o">=</span> <span class="nx">add_trello_params</span><span class="p">(</span><span class="s2">"https://api.trello.com/1/boards/"</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">"TRELLO_BOARDID"</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"/lists"</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">url_cards_in_a_list</span>      <span class="o">=</span> <span class="nx">add_trello_params</span><span class="p">(</span><span class="s2">"https://api.trello.com/1/boards/"</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">"TRELLO_BOARDID"</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"/cards"</span><span class="p">);</span>
+<span class="kr">const</span> <span class="nx">private_list_names</span>       <span class="o">=</span> <span class="p">[</span><span class="s2">"Trash"</span><span class="p">]</span>
 </code></pre></div>
-
-
-<h3><code>getTasks</code></h3>
+<h3 id="gettasks"><code>getTasks</code></h3>
 <p>Trello から予定を取得します。</p>
 <div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">getTasks</span><span class="p">(){</span>
   <span class="kd">var</span> <span class="nx">boardId2name</span> <span class="o">=</span> <span class="p">{}</span>
   <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url_get_lists_on_a_board</span><span class="p">).</span><span class="nx">getContentText</span><span class="p">()).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
-    <span class="nx">boardId2name</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">e</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span>
+    <span class="nx">boardId2name</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">e</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
   <span class="p">})</span>
   <span class="kd">var</span> <span class="nx">list2cards</span> <span class="o">=</span> <span class="p">{}</span>
   <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url_cards_in_a_list</span><span class="p">).</span><span class="nx">getContentText</span><span class="p">()).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
-    <span class="kd">var</span> <span class="nx">boardname</span> <span class="o">=</span> <span class="nx">boardId2name</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="s2">&quot;idList&quot;</span><span class="p">]];</span>
+    <span class="kd">var</span> <span class="nx">boardname</span> <span class="o">=</span> <span class="nx">boardId2name</span><span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="s2">"idList"</span><span class="p">]];</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">boardname</span> <span class="k">in</span> <span class="nx">list2cards</span><span class="p">){</span>
-      <span class="nx">list2cards</span><span class="p">[</span><span class="nx">boardname</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">e</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span>
+      <span class="nx">list2cards</span><span class="p">[</span><span class="nx">boardname</span><span class="p">].</span><span class="nx">push</span><span class="p">(</span><span class="nx">e</span><span class="p">[</span><span class="s2">"name"</span><span class="p">])</span>
     <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-      <span class="nx">list2cards</span><span class="p">[</span><span class="nx">boardname</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]]</span>
+      <span class="nx">list2cards</span><span class="p">[</span><span class="nx">boardname</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">e</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]]</span>
     <span class="p">}</span>
   <span class="p">})</span>
   <span class="k">return</span> <span class="nx">list2cards</span>
 <span class="p">}</span>
 </code></pre></div>
-
-
-<h3><code>arrange_message</code></h3>
+<h3 id="arrange_message"><code>arrange_message</code></h3>
 <p>取得したタスクを、slackで見やすいように整形します。</p>
 <div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">arrange_message</span><span class="p">(</span><span class="nx">list2cards</span><span class="p">){</span>
-  <span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+  <span class="nx">text</span> <span class="o">=</span> <span class="s2">""</span>
   <span class="kd">var</span> <span class="nx">num_tasks</span> <span class="o">=</span> <span class="mi">0</span>
   <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">list2cards</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">l</span><span class="p">){</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">private_list_names</span><span class="p">.</span><span class="nx">includes</span><span class="p">(</span><span class="nx">l</span><span class="p">)){</span>
       <span class="nx">cards</span> <span class="o">=</span> <span class="nx">list2cards</span><span class="p">[</span><span class="nx">l</span><span class="p">]</span>
-      <span class="nx">text</span> <span class="o">+=</span> <span class="s2">&quot;\n*【&quot;</span> <span class="o">+</span> <span class="nx">l</span> <span class="o">+</span> <span class="s2">&quot;】(&quot;</span> <span class="o">+</span> <span class="nx">cards</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s2">&quot;)*&quot;</span>
+      <span class="nx">text</span> <span class="o">+=</span> <span class="s2">"\n*【"</span> <span class="o">+</span> <span class="nx">l</span> <span class="o">+</span> <span class="s2">"】("</span> <span class="o">+</span> <span class="nx">cards</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s2">")*"</span>
       <span class="nx">num_tasks</span> <span class="o">+=</span> <span class="nx">cards</span><span class="p">.</span><span class="nx">length</span>
       <span class="nx">cards</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">c</span><span class="p">){</span>
-        <span class="nx">text</span> <span class="o">+=</span> <span class="s2">&quot;\n\t\t* &quot;</span> <span class="o">+</span> <span class="nx">c</span>
+        <span class="nx">text</span> <span class="o">+=</span> <span class="s2">"\n\t\t* "</span> <span class="o">+</span> <span class="nx">c</span>
       <span class="p">})</span>
     <span class="p">}</span>
   <span class="p">})</span>
-  <span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;今の &lt;@UTANWKEBU&gt; のタスク *(&quot;</span> <span class="o">+</span> <span class="nx">num_tasks</span> <span class="o">+</span> <span class="s2">&quot;)*&quot;</span> <span class="o">+</span> <span class="nx">text</span>
+  <span class="nx">text</span> <span class="o">=</span> <span class="s2">"今の &lt;@UTANWKEBU&gt; のタスク *("</span> <span class="o">+</span> <span class="nx">num_tasks</span> <span class="o">+</span> <span class="s2">")*"</span> <span class="o">+</span> <span class="nx">text</span>
   <span class="k">return</span> <span class="nx">text</span>
 <span class="p">}</span>
 </code></pre></div>
-
-
-<h3><code>postSlack</code></h3>
+<h3 id="postslack"><code>postSlack</code></h3>
 <p>slack にメッセージを送ります。</p>
 <div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">postSlack</span><span class="p">(</span><span class="nx">payload</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;method&quot;</span> <span class="o">:</span> <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;payload&quot;</span> <span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">payload</span><span class="p">)</span>
+    <span class="s2">"method"</span> <span class="o">:</span> <span class="s2">"POST"</span><span class="p">,</span>
+    <span class="s2">"payload"</span> <span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">payload</span><span class="p">)</span>
   <span class="p">}</span>
-  <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">&quot;WEBHOOK_URL&quot;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">"WEBHOOK_URL"</span><span class="p">);</span>
   <span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-  <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">getContentText</span><span class="p">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">getContentText</span><span class="p">(</span><span class="s2">"UTF-8"</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
-
-
-<h3><code>main</code></h3>
+<h3 id="main"><code>main</code></h3>
 <p>以上をまとめた関数です。</p>
 <div class="highlight"><pre><span></span><code><span class="kd">function</span> <span class="nx">main</span><span class="p">(){</span>
   <span class="kd">var</span> <span class="nx">list2cards</span> <span class="o">=</span> <span class="nx">getTasks</span><span class="p">();</span>
   <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nx">arrange_message</span><span class="p">(</span><span class="nx">list2cards</span><span class="p">);</span>
   <span class="nx">postSlack</span><span class="p">({</span>
-    <span class="s2">&quot;channel&quot;</span>  <span class="o">:</span> <span class="s2">&quot;#002_tasks&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;username&quot;</span> <span class="o">:</span> <span class="s2">&quot;文乃【秘書】&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;text&quot;</span>     <span class="o">:</span> <span class="nx">text</span><span class="p">,</span>
+    <span class="s2">"channel"</span>  <span class="o">:</span> <span class="s2">"#002_tasks"</span><span class="p">,</span>
+    <span class="s2">"username"</span> <span class="o">:</span> <span class="s2">"文乃【秘書】"</span><span class="p">,</span>
+    <span class="s2">"text"</span>     <span class="o">:</span> <span class="nx">text</span><span class="p">,</span>
   <span class="p">})</span>
 <span class="p">}</span>
 </code></pre></div>

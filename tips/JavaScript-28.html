@@ -39,13 +39,7 @@
     		}
     	});
     </script>
-    <!-- Mermaid -->
-    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
-    <script>
-      mermaid.initialize({
-        startOnLoad:true
-      });
-    </script>
+    <script type="text/javascript" src="https://iwasakishuto.github.io/js/smooth-scroll.polyfills.min.js"></script>
     <!--[if IE]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -79,6 +73,13 @@
           <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
           <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
         </header>
+
+          <aside class="toc">
+            <div class="col-lg-3 hidden-xs hidden-sm">
+              <h4>Table of Contents</h4>
+              <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.28 ポケモンエメラルドでフロンティア マスターを目指す（その３）">JS.28 ポケモンエメラルドでフロンティア マスターを目指す（その３）</a><ul><li><a class="toc-href" href="#huronteia-masutahenodao-shi-she-wozhi-ru" title="フロンティア マスターへの道 〜施設を知る〜">フロンティア マスターへの道 〜施設を知る〜</a></li><li><a class="toc-href" href="#zi-fen-nopokemon" title="自分のポケモン ">自分のポケモン </a></li></ul></li></ul></div>
+            </div>
+          </aside>
     
         <div class="entry-content">
           <footer class="post-info">
@@ -86,866 +87,841 @@
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
           </footer><!-- /.post-info -->
 <!-- NOT "| indent(10, True)"  -->
-<h2>フロンティア マスターへの道 〜施設を知る〜</h2>
-
+<h2 id="huronteia-masutahenodao-shi-she-wozhi-ru">フロンティア マスターへの道 〜施設を知る〜</h2>
 <p>今回は、フロンティア内の7つの施設ごとのルールを確認しつつ、各施設を攻略する上で便利なツール群を作成します。</p>
-
 <p>見たい施設のタイトルをクリックして、各ツールを利用してください！！</p>
-
-<p style="color:red">※ 今回の記事も完全に自己満ツール群です🙇‍♂️多分これで終わりです。</p>
-
+<p style="color:red">※ 今回の記事も完全に自己満ツール群です🙇&zwj;♂️多分これで終わりです。</p>
 <form id="mypoke_form" name="MYPOKE">
-  <h2>自分のポケモン <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Brendan.png"></div><div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/May.png"></div></h2>
-  <p>以下の表で自分のポケモンを設定してください。なお、レベルはバトルフロンティアのポケモンと共通しています。</p>
-  <table class="fixed" id="my-pokemon">
-    <thead><tr><th colspan="7"><label>自分のポケモン（Lv: <input id="lv" type="number" min="1" max="100" value="50" size="3" name="LV">）</label></th></tr></thead>
-    <tbody>
-      <tr class="g1">
-        <td colspan="3">ポケモン</td>
-        <td colspan="4"><select id="poke_name" name="poke"></select></td>
-      </tr>
-      <tr class="g1">
-        <td colspan="3">とくせい</td>
-        <td colspan="4"><select id="ability" name="ability"><option>----</option></select></td>
-      </tr>
-      <tr>
-        <td colspan="3">性別</td>
-        <td colspan="4"><select id="sex" name="sex"><option>--</option></select></td>
-      </tr>
-      <tr class="g2">
-        <td colspan="3">性格</td>
-        <td colspan="4"><select id="nature" name="nature"><option value="1">さみしがり (A↑ B↓)</option><option value="3">いじっぱり (A↑ C↓)</option><option value="4">やんちゃ　 (A↑ D↓)</option><option value="2">ゆうかん　 (A↑ S↓)</option><option value="5">ずぶとい　 (B↑ A↓)</option><option value="8">わんぱく　 (B↑ C↓)</option><option value="9">のうてんき (B↑ D↓)</option><option value="7">のんき　　 (B↑ S↓)</option><option value="15" selected>ひかえめ　 (C↑ A↓)</option><option value="16">おっとり　 (C↑ B↓)</option><option value="19">うっかりや (C↑ D↓)</option><option value="17">れいせい　 (C↑ S↓)</option><option value="20">おだやか　 (D↑ A↓)</option><option value="21">おとなしい (D↑ B↓)</option><option value="23">しんちょう (D↑ C↓)</option><option value="22">なまいき　 (D↑ S↓)</option><option value="10">おくびょう (S↑ A↓)</option><option value="11">せっかち　 (S↑ B↓)</option><option value="13">ようき　　 (S↑ C↓)</option><option value="14">むじゃき　 (S↑ D↓)</option><option value="18">てれや　　 </option><option value="0">がんばりや </option><option value="6">すなお　　 </option><option value="24">きまぐれ　 </option><option value="12">まじめ　　 </option></select></td>
-      </tr>
-    </tbody>
-    <thead>
-      <tr>
-        <th id="mypoke-icon"></th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="only-text">
-        <td>種族値</td><td></td><td></td><td></td><td></td><td></td><td></td>
-      </tr>
-      <tr class="g2">
-        <td>個体値</td>
-        <td><input type="number" min="0" max="31"  value="31" size="3" name="iH"></td>
-        <td><input type="number" min="0" max="31"  value="31" size="3" name="iA"></td>
-        <td><input type="number" min="0" max="31"  value="31" size="3" name="iB"></td>
-        <td><input type="number" min="0" max="31"  value="31" size="3" name="iC"></td>
-        <td><input type="number" min="0" max="31"  value="31" size="3" name="iD"></td>
-        <td><input type="number" min="0" max="31"  value="31" size="3" name="iS"></td>
-      </tr>
-      <tr class="g2">
-        <td>努力値</td>
-        <td><input type="number" min="0" max="255" value="0" size="3" name="eH"></td>
-        <td><input type="number" min="0" max="255" value="0" size="3" name="eA"></td>
-        <td><input type="number" min="0" max="255" value="0" size="3" name="eB"></td>
-        <td><input type="number" min="0" max="255" value="0" size="3" name="eC"></td>
-        <td><input type="number" min="0" max="255" value="0" size="3" name="eD"></td>
-        <td><input type="number" min="0" max="255" value="0" size="3" name="eS"></td>
-      </tr>
-      <tr class="g1 only-text">
-        <td>実数値</td>
-        <td><input type="number" min="1" max="999" value="1" size="3" name="H"></td>
-        <td><input type="number" min="1" max="999" value="1" size="3" name="A"></td>
-        <td><input type="number" min="1" max="999" value="1" size="3" name="B"></td>
-        <td><input type="number" min="1" max="999" value="1" size="3" name="C"></td>
-        <td><input type="number" min="1" max="999" value="1" size="3" name="D"></td>
-        <td><input type="number" min="1" max="999" value="1" size="3" name="S"></td>
-      </tr>
-    </tbody>
-  </table>  
+<h2 id="zi-fen-nopokemon">自分のポケモン <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Brendan.png"/></div><div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/May.png"/></div></h2>
+<p>以下の表で自分のポケモンを設定してください。なお、レベルはバトルフロンティアのポケモンと共通しています。</p>
+<table class="fixed" id="my-pokemon">
+<thead><tr><th colspan="7"><label>自分のポケモン（Lv: <input id="lv" max="100" min="1" name="LV" size="3" type="number" value="50"/>）</label></th></tr></thead>
+<tbody>
+<tr class="g1">
+<td colspan="3">ポケモン</td>
+<td colspan="4"><select id="poke_name" name="poke"></select></td>
+</tr>
+<tr class="g1">
+<td colspan="3">とくせい</td>
+<td colspan="4"><select id="ability" name="ability"><option>----</option></select></td>
+</tr>
+<tr>
+<td colspan="3">性別</td>
+<td colspan="4"><select id="sex" name="sex"><option>--</option></select></td>
+</tr>
+<tr class="g2">
+<td colspan="3">性格</td>
+<td colspan="4"><select id="nature" name="nature"><option value="1">さみしがり (A&uarr; B&darr;)</option><option value="3">いじっぱり (A&uarr; C&darr;)</option><option value="4">やんちゃ　 (A&uarr; D&darr;)</option><option value="2">ゆうかん　 (A&uarr; S&darr;)</option><option value="5">ずぶとい　 (B&uarr; A&darr;)</option><option value="8">わんぱく　 (B&uarr; C&darr;)</option><option value="9">のうてんき (B&uarr; D&darr;)</option><option value="7">のんき　　 (B&uarr; S&darr;)</option><option selected="" value="15">ひかえめ　 (C&uarr; A&darr;)</option><option value="16">おっとり　 (C&uarr; B&darr;)</option><option value="19">うっかりや (C&uarr; D&darr;)</option><option value="17">れいせい　 (C&uarr; S&darr;)</option><option value="20">おだやか　 (D&uarr; A&darr;)</option><option value="21">おとなしい (D&uarr; B&darr;)</option><option value="23">しんちょう (D&uarr; C&darr;)</option><option value="22">なまいき　 (D&uarr; S&darr;)</option><option value="10">おくびょう (S&uarr; A&darr;)</option><option value="11">せっかち　 (S&uarr; B&darr;)</option><option value="13">ようき　　 (S&uarr; C&darr;)</option><option value="14">むじゃき　 (S&uarr; D&darr;)</option><option value="18">てれや　　 </option><option value="0">がんばりや </option><option value="6">すなお　　 </option><option value="24">きまぐれ　 </option><option value="12">まじめ　　 </option></select></td>
+</tr>
+</tbody>
+<thead>
+<tr>
+<th id="mypoke-icon"></th><th>H</th><th>A</th><th>B</th><th>C</th><th>D</th><th>S</th>
+</tr>
+</thead>
+<tbody>
+<tr class="only-text">
+<td>種族値</td><td></td><td></td><td></td><td></td><td></td><td></td>
+</tr>
+<tr class="g2">
+<td>個体値</td>
+<td><input max="31" min="0" name="iH" size="3" type="number" value="31"/></td>
+<td><input max="31" min="0" name="iA" size="3" type="number" value="31"/></td>
+<td><input max="31" min="0" name="iB" size="3" type="number" value="31"/></td>
+<td><input max="31" min="0" name="iC" size="3" type="number" value="31"/></td>
+<td><input max="31" min="0" name="iD" size="3" type="number" value="31"/></td>
+<td><input max="31" min="0" name="iS" size="3" type="number" value="31"/></td>
+</tr>
+<tr class="g2">
+<td>努力値</td>
+<td><input max="255" min="0" name="eH" size="3" type="number" value="0"/></td>
+<td><input max="255" min="0" name="eA" size="3" type="number" value="0"/></td>
+<td><input max="255" min="0" name="eB" size="3" type="number" value="0"/></td>
+<td><input max="255" min="0" name="eC" size="3" type="number" value="0"/></td>
+<td><input max="255" min="0" name="eD" size="3" type="number" value="0"/></td>
+<td><input max="255" min="0" name="eS" size="3" type="number" value="0"/></td>
+</tr>
+<tr class="g1 only-text">
+<td>実数値</td>
+<td><input max="999" min="1" name="H" size="3" type="number" value="1"/></td>
+<td><input max="999" min="1" name="A" size="3" type="number" value="1"/></td>
+<td><input max="999" min="1" name="B" size="3" type="number" value="1"/></td>
+<td><input max="999" min="1" name="C" size="3" type="number" value="1"/></td>
+<td><input max="999" min="1" name="D" size="3" type="number" value="1"/></td>
+<td><input max="999" min="1" name="S" size="3" type="number" value="1"/></td>
+</tr>
+</tbody>
+</table>
 </form>
-
 <!-- Battle Tower -->
-
 <details>
-  <summary class="h2">バトルタワー <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Anabel.png"></div></summary>
-  <details>
-    <summary class="h3">ルール</summary>
+<summary class="h2">バトルタワー <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Anabel.png"/></div></summary>
+<details>
+<summary class="h3">ルール</summary>
     出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルタワー_(第三世代)">ポケモンWiki</a>
-    <div class="rule"><ul>
-      <li>シングルバトル、ダブルバトル、マルチバトル、マルチつうしんバトルができる。</li>
-      <li>LV50とオープンレベル(最低Lv60)が選択できる。</li>
-      <li>35戦目と70戦目にフロンティアブレーンのリラとのバトルとなる。</li>
-    </ul></div>
-  </details>
+<div class="rule"><ul>
+<li>シングルバトル、ダブルバトル、マルチバトル、マルチつうしんバトルができる。</li>
+<li>LV50とオープンレベル(最低Lv60)が選択できる。</li>
+<li>35戦目と70戦目にフロンティアブレーンのリラとのバトルとなる。</li>
+</ul></div>
 </details>
-
+</details>
 <!-- Battle Dome -->
-
 <details>
-  <summary class="h2">バトルドーム <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Tucker.png"></div></summary>
-  <details>
-    <summary class="h3">ルール</summary>
+<summary class="h2">バトルドーム <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Tucker.png"/></div></summary>
+<details>
+<summary class="h3">ルール</summary>
     出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルドーム">ポケモンWiki</a>
-    <div class="rule"><ul>
-      <li>手持ちポケモンから3匹を選択して参加。</li>
-      <li>16人が参加するトーナメントを勝ち抜く。つまり4回勝てば優勝。</li>
-      <li>試合前に対戦相手のポケモン・強さ・戦法・大まかな能力値が表示された対戦カードを見ることができる。</li>
-      <li>カードの情報をもとに、3匹の手持ちから試合に出す2匹を選択してバトル開始。</li>
-      <li>ダブルノックアウトで試合が終了した場合、ランキングの高い方が勝利となる。</li>
-      <li>4連勝で1周。5周目と10周目の決勝戦にはドームスーパースターのヒースが登場する。</li>
-    </ul></div>
-  </details>
-  <details>
-    <summary class="h3">トレーナーランキング</summary>
-    <table id="dome-trainer-ranking">
-      <thead><tr><th>順位</th><th>コメント</th></tr></thead>
-      <tbody>
-        <tr><td> 1位</td><td>「こんたいかいのゆうしょうこうほナンバー1！」</td></tr>
-        <tr><td> 2位</td><td>「けっしょうまではかくじつといわれるチーム」</td></tr>
-        <tr><td> 3位</td><td>「ベスト3にはいるちからをもったチーム」</td></tr>
-        <tr><td> 4位</td><td>「こんたいかいゆうしょうこうほの1チーム」</td></tr>
-        <tr><td> 5位</td><td>「トップクラスのちからをそなえたチーム」</td></tr>
-        <tr><td> 6位</td><td>「こんたいかいちゅうもくのダークホース」</td></tr>
-        <tr><td> 7位</td><td>「へいきんよりすこしちからがうえのチーム」</td></tr>
-        <tr><td> 8位</td><td>「こんたいかいのへいきんてきなチーム」</td></tr>
-        <tr><td> 9位</td><td>「へいきんレベルのちからをもったチーム」</td></tr>
-        <tr><td>10位</td><td>「へいきんよりややちからがおちるチーム」</td></tr>
-        <tr><td>11位</td><td>「まず1しょうがもくひょうとなるチーム」</td></tr>
-        <tr><td>12位</td><td>「1しょうできればじょうじょうのチーム」</td></tr>
-        <tr><td>13位</td><td>「ぜんたいのなかでしたのレベルのチーム」</td></tr>
-        <tr><td>14位</td><td>「じつりょくはかなりしたのレベルのチーム」</td></tr>
-        <tr><td>15位</td><td>「ゆうしょうはかなりむずかしいチーム」</td></tr>
-        <tr><td>16位</td><td>「ゆうしょうからもっともとおいチーム」</td></tr>
-      </tbody>
-    </table>
-  </details>
+<div class="rule"><ul>
+<li>手持ちポケモンから3匹を選択して参加。</li>
+<li>16人が参加するトーナメントを勝ち抜く。つまり4回勝てば優勝。</li>
+<li>試合前に対戦相手のポケモン・強さ・戦法・大まかな能力値が表示された対戦カードを見ることができる。</li>
+<li>カードの情報をもとに、3匹の手持ちから試合に出す2匹を選択してバトル開始。</li>
+<li>ダブルノックアウトで試合が終了した場合、ランキングの高い方が勝利となる。</li>
+<li>4連勝で1周。5周目と10周目の決勝戦にはドームスーパースターのヒースが登場する。</li>
+</ul></div>
 </details>
-
+<details>
+<summary class="h3">トレーナーランキング</summary>
+<table id="dome-trainer-ranking">
+<thead><tr><th>順位</th><th>コメント</th></tr></thead>
+<tbody>
+<tr><td> 1位</td><td>「こんたいかいのゆうしょうこうほナンバー1！」</td></tr>
+<tr><td> 2位</td><td>「けっしょうまではかくじつといわれるチーム」</td></tr>
+<tr><td> 3位</td><td>「ベスト3にはいるちからをもったチーム」</td></tr>
+<tr><td> 4位</td><td>「こんたいかいゆうしょうこうほの1チーム」</td></tr>
+<tr><td> 5位</td><td>「トップクラスのちからをそなえたチーム」</td></tr>
+<tr><td> 6位</td><td>「こんたいかいちゅうもくのダークホース」</td></tr>
+<tr><td> 7位</td><td>「へいきんよりすこしちからがうえのチーム」</td></tr>
+<tr><td> 8位</td><td>「こんたいかいのへいきんてきなチーム」</td></tr>
+<tr><td> 9位</td><td>「へいきんレベルのちからをもったチーム」</td></tr>
+<tr><td>10位</td><td>「へいきんよりややちからがおちるチーム」</td></tr>
+<tr><td>11位</td><td>「まず1しょうがもくひょうとなるチーム」</td></tr>
+<tr><td>12位</td><td>「1しょうできればじょうじょうのチーム」</td></tr>
+<tr><td>13位</td><td>「ぜんたいのなかでしたのレベルのチーム」</td></tr>
+<tr><td>14位</td><td>「じつりょくはかなりしたのレベルのチーム」</td></tr>
+<tr><td>15位</td><td>「ゆうしょうはかなりむずかしいチーム」</td></tr>
+<tr><td>16位</td><td>「ゆうしょうからもっともとおいチーム」</td></tr>
+</tbody>
+</table>
+</details>
+</details>
 <!-- Battle Factory -->
-
 <details>
-  <summary class="h2">バトルファクトリー <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Noland.png"></div></summary>
-  <details>
-    <summary class="h3">ルール</summary>
+<summary class="h2">バトルファクトリー <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Noland.png"/></div></summary>
+<details>
+<summary class="h3">ルール</summary>
     出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルファクトリー_(第三世代)">ポケモンWiki</a>
-    <div class="rule"><ul>
-      <li>ファクトリーでは自分の手持ちは使わず、レンタルポケモンを使ってバトルする。はじめに、表示される6匹のレンタルポケモンのうち3匹を選択し、手持ちとする。以後、そのポケモンで敵トレーナーと戦って勝てば、任意で敵トレーナーとポケモンを1匹交換することができる。</li>
-      <li>ポケモンバトルの前にヒントを教えてもらえる。内容は相手のポケモンの中で重複しているタイプと、相手の大まかな戦型である。</li>
-      <li>バトルの合間にポケモンの並び替えはできない。</li>
-      <li>7人抜きで1周。3周目と6周目の最後にはダツラとのバトルになる。</li>
-      <li>1周ごとにレンタルポケモンはリセットされる。次の周回では1からレンタルしなおすことになる。</li>
-    </ul></div>
-  </details>  
-  <form id="factory_form" name="FACTORY">
-    <details>
-      <summary class="h3">相手のバトルスタイル</summary>
-      <table id="factory-battle-style">
-        <thead><tr><th>スタイル</th><th>説明</th><th>必要な数</th></tr></thead>
-        <tbody>
-          <tr><td style="background-color:#F8D4CE">けんこんいってき</td><td>はかいこうせんなどリスクのある技</td><td>2</td></tr>
-          <tr><td style="background-color:#FFEEB8">じゅんびばんたん</td><td>つるぎのまいなど能力アップ系の技</td><td>3</td></tr>
-          <tr><td style="background-color:#C3E8B5">まだまだこれから</td><td>じこさいせいなど体力回復系の技</td><td>3</td></tr>
-          <tr><td style="background-color:#92CEEE">よそくふかのう</td><td>めざめるパワーなどタイプや威力が変わる技</td><td>2</td></tr>
-          <tr><td style="background-color:#9EABD6">じっくりじわじわ</td><td>どくどくなど状態異常にする技</td><td>3</td></tr>
-          <tr><td style="background-color:#DFC6DE">まずはよわめて</td><td>きんぞくおんなど能力ダウン系の技</td><td>2</td></tr>
-          <tr><td style="background-color:#BBBCC2">くもゆきしだい</td><td>にほんばれなど天気を変える技</td><td>2</td></tr>
-          <tr><td style="background-color:#FFFFFF">りんきおうへん</td><td>以上の条件に2つ以上当てはまっている</td><td>-</td></tr>
-          <tr><td style="background-color:#FFFFFF">じゆうほんぽう</td><td>どの条件にも当てはまらない</td><td>-</td></tr>
-        </tbody>
-      </table>
-    </details>
-    <details>
-      <summary class="h3">レンタルポケモン</summary>
-      <p>一覧は、<a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-27.html">JS.27 ポケモンエメラルドでフロンティア マスターを目指す（その２）</a>を参照。</p>
-      <table id="rental-pokemon-form" class="fixed">
-        <thead><tr><th colspan="4">ファクトリーの設定</th></tr></thead>
-        <tbody>
-          <tr><td>連勝数</td><td class="g1"><select name="winStreak"><option value="0">0 ~ 7</option><option value="1">7 ~ 14</option><option value="2">14 ~ 21</option><option value="3">21 ~ 28</option><option value="4">28 ~ 35</option><option value="5">35 ~ 42</option><option value="6">42 ~ 49</option><option value="7">49 ~ 56</option><option value="8" selected>56 ~</option></select></td><td>challengeNum</td><td id="challengeNum"></td></tr>
-          <tr><td>交換数</td><td class="g1"><select name="rentalCount"><option value="0">0 ~ 14</option><option value="1">15 ~ 21</option><option value="2">22 ~ 28</option><option value="3">29 ~ 35</option><option value="4">36 ~ 42</option><option value="5">43 ~</option></select></td><td>rentalRank</td><td id="rentalRank"></td></tr>
-          <tr><td>Lv モード</td><td class="g1"><select name="LvlMode"><option value="0">Lv.50</option><option value="8">LV.OPEN</option></select></td><td>出現ポケモン</td><td id="monRange"></td></tr>
-        </tbody>
-      </table>
-      <div style="width:100%; overflow:auto;" id="rental-pokemon-wrapper">
-      </div>
-      <table id="selected-rental-pokemon" class="fixed">
-        <thead id="selected-rental-pokemon-images">
-          <tr><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th><th><div class="overflow-ms"><img src=""></div></th></tr>
-          <tr><th colspan="6">レンタルポケモンの生成</th></tr>
-        </thead>
-        <tbody>
-          <tr><td colspan="3">[ボックス1]</td><td colspan="3">[にえィす　もけぬ]</td></tr>
-          <tr><td colspan="3">[ボックス2]</td><td colspan="3">[い　ゆｚ　　　ビ]</td></tr>
-          <tr><td colspan="3">[ボックス3]</td><td colspan="3">[にえィか　　　ビ]</td></tr>
-          <tr><td colspan="3">[ボックス4]</td><td colspan="3">[ゆｚ　]</td></tr>
-          <tr><td colspan="3">[ボックス5]</td><td colspan="3">[かッンＮテぞさタ]</td></tr>
-          <tr><td colspan="3">[ボックス6]</td><td colspan="3">[アぃＢＦＣ]</td></tr>
-          <tr><td colspan="3">[ボックス7]</td><td colspan="3">不問</td></tr>
-          <tr><td colspan="3">[ボックス8]</td><td colspan="3">[アｌコ　う]</td></tr>
-          <tr class="g2"><td colspan="3">[ボックス9]</td><td id="factory_box9" colspan="3">[]</td></tr>
-          <tr><td rowspan="2">seed</td><td class="g1"><input type="number" min="0" max="4294967296" value="0" size="3" name="lb"></td><td>~</td><td class="g1"><input type="number" min="0" max="4294967296" value="1000000" size="3" name="ub"></td><td colspan="2"><a class="btn--click btn--shadow btn--red" onclick="find_desired_rental_seed(document.FACTORY, is_noland=false)">Find a desired SEED</a></td></tr>
-          <tr><td class="g1" colspan="3"><input type="number" min="0" max="4294967296" value="0" size="3" name="frontierSeed"></td><td colspan="2"><a class="btn--click btn--shadow btn--blue" onclick="generate_rental_pokemon(document.FACTORY, is_noland=false)">Generate Rental Poke</a></td></tr>
-          <tr id="generated_rental_party"><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td><td><div class="overflow-ms"><img src=""></div></td></tr>
-        </tbody>
-        <thead><tr><th colspan="6">ダツラのポケモン生成 (Rental Monster Seed: <span id="rental_mon_seed"></span>)</th></tr></thead>
-        <tbody>
-          <tr><td rowspan="2">seed</td><td class="g1"><input type="number" min="0" max="4294967296" value="0" size="3" name="lb_noland"></td><td>~</td><td class="g1"><input type="number" min="0" max="4294967296" value="1000000" size="3" name="ub_noland"></td><td colspan="2"><a class="btn--click btn--shadow btn--red" onclick="find_desired_rental_seed(document.FACTORY, is_noland=true)">Find a desired SEED</a></td></tr>
-          <tr><td class="g1" colspan="3"><input type="number" min="0" max="4294967296" value="0" size="3" name="frontierSeed_noland"></td><td colspan="2"><a class="btn--click btn--shadow btn--goldenrod" onclick="generate_rental_pokemon(document.FACTORY, is_noland=true)">Generate Noland Poke</a></td></tr>
-          <tr class="g2"><td colspan="3">[ボックス9]</td><td id="factory_box9_noland" colspan="3">[]</td></tr>
-          <tr id="generated_rental_party_noland"><td colspan="2"><div class="overflow-ms"><img src=""></div></td><td colspan="2"><div class="overflow-ms"><img src=""></div></td><td colspan="2"><div class="overflow-ms"><img src=""></div></td></tr>
-        </tbody>
-        <thead><tr><th colspan="6">連勝数の変更</th></tr></thead>
-        <tbody>
-          <tr><td colspan="3">[ボックス1]</td><td colspan="3">[にえィい　　　ビ]</td></tr>
-          <tr class="g1"><td colspan="3">[ボックス2]</td><td colspan="3">[におィあ　　　ビ]</td></tr>
-          <tr class="g2"><td colspan="3">[ボックス3]</td><td id="factory_box3" colspan="3">[]</td></tr>
-          <tr><td colspan="3">[ボックス4]</td><td colspan="3">[にＵぞえ　　　ビ]</td></tr>
-          <tr><td colspan="3">[ボックス5]</td><td colspan="3">[にＴぞ　　　　ビ]</td></tr>
-          <tr><td colspan="3">[ボックス6]</td><td colspan="3">[ゆｚ　]</td></tr>
-        </tbody>
-        <thead><tr><th colspan="6">連勝数を"げんざい"に変更</th></tr></thead>
-        <tbody>
-          <tr><td colspan="3">[ボックス1]</td><td colspan="3">[にえィい　　　ビ]</td></tr>
-          <tr class="g1"><td colspan="3">[ボックス2]</td><td colspan="3">[におィい　　　ビ]</td></tr>
-          <tr class="g1"><td colspan="3">[ボックス3]</td><td colspan="3">[にかィあ　　　ビ]</td></tr>
-          <tr><td colspan="3">[ボックス4]</td><td colspan="3">[にＵぞえ　　　ビ]</td></tr>
-          <tr><td colspan="3">[ボックス5]</td><td colspan="3">[にＴぞ　　　　ビ]</td></tr>
-          <tr><td colspan="3">[ボックス6]</td><td colspan="3">[ゆｚ　]</td></tr>
-        </tbody>
-      </table>
-    </details>
-  </form>
+<div class="rule"><ul>
+<li>ファクトリーでは自分の手持ちは使わず、レンタルポケモンを使ってバトルする。はじめに、表示される6匹のレンタルポケモンのうち3匹を選択し、手持ちとする。以後、そのポケモンで敵トレーナーと戦って勝てば、任意で敵トレーナーとポケモンを1匹交換することができる。</li>
+<li>ポケモンバトルの前にヒントを教えてもらえる。内容は相手のポケモンの中で重複しているタイプと、相手の大まかな戦型である。</li>
+<li>バトルの合間にポケモンの並び替えはできない。</li>
+<li>7人抜きで1周。3周目と6周目の最後にはダツラとのバトルになる。</li>
+<li>1周ごとにレンタルポケモンはリセットされる。次の周回では1からレンタルしなおすことになる。</li>
+</ul></div>
 </details>
-
+<form id="factory_form" name="FACTORY">
+<details>
+<summary class="h3">相手のバトルスタイル</summary>
+<table id="factory-battle-style">
+<thead><tr><th>スタイル</th><th>説明</th><th>必要な数</th></tr></thead>
+<tbody>
+<tr><td style="background-color:#F8D4CE">けんこんいってき</td><td>はかいこうせんなどリスクのある技</td><td>2</td></tr>
+<tr><td style="background-color:#FFEEB8">じゅんびばんたん</td><td>つるぎのまいなど能力アップ系の技</td><td>3</td></tr>
+<tr><td style="background-color:#C3E8B5">まだまだこれから</td><td>じこさいせいなど体力回復系の技</td><td>3</td></tr>
+<tr><td style="background-color:#92CEEE">よそくふかのう</td><td>めざめるパワーなどタイプや威力が変わる技</td><td>2</td></tr>
+<tr><td style="background-color:#9EABD6">じっくりじわじわ</td><td>どくどくなど状態異常にする技</td><td>3</td></tr>
+<tr><td style="background-color:#DFC6DE">まずはよわめて</td><td>きんぞくおんなど能力ダウン系の技</td><td>2</td></tr>
+<tr><td style="background-color:#BBBCC2">くもゆきしだい</td><td>にほんばれなど天気を変える技</td><td>2</td></tr>
+<tr><td style="background-color:#FFFFFF">りんきおうへん</td><td>以上の条件に2つ以上当てはまっている</td><td>-</td></tr>
+<tr><td style="background-color:#FFFFFF">じゆうほんぽう</td><td>どの条件にも当てはまらない</td><td>-</td></tr>
+</tbody>
+</table>
+</details>
+<details>
+<summary class="h3">レンタルポケモン</summary>
+<p>一覧は、<a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-27.html">JS.27 ポケモンエメラルドでフロンティア マスターを目指す（その２）</a>を参照。</p>
+<table class="fixed" id="rental-pokemon-form">
+<thead><tr><th colspan="4">ファクトリーの設定</th></tr></thead>
+<tbody>
+<tr><td>連勝数</td><td class="g1"><select name="winStreak"><option value="0">0 ~ 7</option><option value="1">7 ~ 14</option><option value="2">14 ~ 21</option><option value="3">21 ~ 28</option><option value="4">28 ~ 35</option><option value="5">35 ~ 42</option><option value="6">42 ~ 49</option><option value="7">49 ~ 56</option><option selected="" value="8">56 ~</option></select></td><td>challengeNum</td><td id="challengeNum"></td></tr>
+<tr><td>交換数</td><td class="g1"><select name="rentalCount"><option value="0">0 ~ 14</option><option value="1">15 ~ 21</option><option value="2">22 ~ 28</option><option value="3">29 ~ 35</option><option value="4">36 ~ 42</option><option value="5">43 ~</option></select></td><td>rentalRank</td><td id="rentalRank"></td></tr>
+<tr><td>Lv モード</td><td class="g1"><select name="LvlMode"><option value="0">Lv.50</option><option value="8">LV.OPEN</option></select></td><td>出現ポケモン</td><td id="monRange"></td></tr>
+</tbody>
+</table>
+<div id="rental-pokemon-wrapper" style="width:100%; overflow:auto;">
+</div>
+<table class="fixed" id="selected-rental-pokemon">
+<thead id="selected-rental-pokemon-images">
+<tr><th><div class="overflow-ms"><img src=""/></div></th><th><div class="overflow-ms"><img src=""/></div></th><th><div class="overflow-ms"><img src=""/></div></th><th><div class="overflow-ms"><img src=""/></div></th><th><div class="overflow-ms"><img src=""/></div></th><th><div class="overflow-ms"><img src=""/></div></th></tr>
+<tr><th colspan="6">レンタルポケモンの生成</th></tr>
+</thead>
+<tbody>
+<tr><td colspan="3">[ボックス1]</td><td colspan="3">[にえィす　もけぬ]</td></tr>
+<tr><td colspan="3">[ボックス2]</td><td colspan="3">[い　ゆｚ　　　ビ]</td></tr>
+<tr><td colspan="3">[ボックス3]</td><td colspan="3">[にえィか　　　ビ]</td></tr>
+<tr><td colspan="3">[ボックス4]</td><td colspan="3">[ゆｚ　]</td></tr>
+<tr><td colspan="3">[ボックス5]</td><td colspan="3">[かッンＮテぞさタ]</td></tr>
+<tr><td colspan="3">[ボックス6]</td><td colspan="3">[アぃＢＦＣ]</td></tr>
+<tr><td colspan="3">[ボックス7]</td><td colspan="3">不問</td></tr>
+<tr><td colspan="3">[ボックス8]</td><td colspan="3">[アｌコ　う]</td></tr>
+<tr class="g2"><td colspan="3">[ボックス9]</td><td colspan="3" id="factory_box9">[]</td></tr>
+<tr><td rowspan="2">seed</td><td class="g1"><input max="4294967296" min="0" name="lb" size="3" type="number" value="0"/></td><td>~</td><td class="g1"><input max="4294967296" min="0" name="ub" size="3" type="number" value="1000000"/></td><td colspan="2"><a class="btn--click btn--shadow btn--red" onclick="find_desired_rental_seed(document.FACTORY, is_noland=false)">Find a desired SEED</a></td></tr>
+<tr><td class="g1" colspan="3"><input max="4294967296" min="0" name="frontierSeed" size="3" type="number" value="0"/></td><td colspan="2"><a class="btn--click btn--shadow btn--blue" onclick="generate_rental_pokemon(document.FACTORY, is_noland=false)">Generate Rental Poke</a></td></tr>
+<tr id="generated_rental_party"><td><div class="overflow-ms"><img src=""/></div></td><td><div class="overflow-ms"><img src=""/></div></td><td><div class="overflow-ms"><img src=""/></div></td><td><div class="overflow-ms"><img src=""/></div></td><td><div class="overflow-ms"><img src=""/></div></td><td><div class="overflow-ms"><img src=""/></div></td></tr>
+</tbody>
+<thead><tr><th colspan="6">ダツラのポケモン生成 (Rental Monster Seed: <span id="rental_mon_seed"></span>)</th></tr></thead>
+<tbody>
+<tr><td rowspan="2">seed</td><td class="g1"><input max="4294967296" min="0" name="lb_noland" size="3" type="number" value="0"/></td><td>~</td><td class="g1"><input max="4294967296" min="0" name="ub_noland" size="3" type="number" value="1000000"/></td><td colspan="2"><a class="btn--click btn--shadow btn--red" onclick="find_desired_rental_seed(document.FACTORY, is_noland=true)">Find a desired SEED</a></td></tr>
+<tr><td class="g1" colspan="3"><input max="4294967296" min="0" name="frontierSeed_noland" size="3" type="number" value="0"/></td><td colspan="2"><a class="btn--click btn--shadow btn--goldenrod" onclick="generate_rental_pokemon(document.FACTORY, is_noland=true)">Generate Noland Poke</a></td></tr>
+<tr class="g2"><td colspan="3">[ボックス9]</td><td colspan="3" id="factory_box9_noland">[]</td></tr>
+<tr id="generated_rental_party_noland"><td colspan="2"><div class="overflow-ms"><img src=""/></div></td><td colspan="2"><div class="overflow-ms"><img src=""/></div></td><td colspan="2"><div class="overflow-ms"><img src=""/></div></td></tr>
+</tbody>
+<thead><tr><th colspan="6">連勝数の変更</th></tr></thead>
+<tbody>
+<tr><td colspan="3">[ボックス1]</td><td colspan="3">[にえィい　　　ビ]</td></tr>
+<tr class="g1"><td colspan="3">[ボックス2]</td><td colspan="3">[におィあ　　　ビ]</td></tr>
+<tr class="g2"><td colspan="3">[ボックス3]</td><td colspan="3" id="factory_box3">[]</td></tr>
+<tr><td colspan="3">[ボックス4]</td><td colspan="3">[にＵぞえ　　　ビ]</td></tr>
+<tr><td colspan="3">[ボックス5]</td><td colspan="3">[にＴぞ　　　　ビ]</td></tr>
+<tr><td colspan="3">[ボックス6]</td><td colspan="3">[ゆｚ　]</td></tr>
+</tbody>
+<thead><tr><th colspan="6">連勝数を"げんざい"に変更</th></tr></thead>
+<tbody>
+<tr><td colspan="3">[ボックス1]</td><td colspan="3">[にえィい　　　ビ]</td></tr>
+<tr class="g1"><td colspan="3">[ボックス2]</td><td colspan="3">[におィい　　　ビ]</td></tr>
+<tr class="g1"><td colspan="3">[ボックス3]</td><td colspan="3">[にかィあ　　　ビ]</td></tr>
+<tr><td colspan="3">[ボックス4]</td><td colspan="3">[にＵぞえ　　　ビ]</td></tr>
+<tr><td colspan="3">[ボックス5]</td><td colspan="3">[にＴぞ　　　　ビ]</td></tr>
+<tr><td colspan="3">[ボックス6]</td><td colspan="3">[ゆｚ　]</td></tr>
+</tbody>
+</table>
+</details>
+</form>
+</details>
 <!-- Battle Palace -->
-
 <details>
-  <summary class="h2">バトルパレス <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Spenser.png"></div></summary>
-  <details>
-    <summary class="h3">ルール</summary>
+<summary class="h2">バトルパレス <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Spenser.png"/></div></summary>
+<details>
+<summary class="h3">ルール</summary>
     出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルパレス">ポケモンWiki</a>
-    <div class="rule"><ul>
-      <li>バトルパレスではトレーナーはポケモンに一切の指示を出すことができない。ただし、ポケモンチェンジはトレーナーの判断で行える。</li>
-      <li>繰り出す技はポケモン自身が考える。</li>
-      <li>ポケモンの性格によって好むわざの種類が異なる。</li>
-      <li>7 連勝で1周。3周目と6周目の最後にはウコンとのバトルになる。</li>
-    </ul></div>
-  </details>
-  <form id="palace_form" name="PALACE">
-    <details>
-      <summary class="h3">技の区表</summary>
-      <div style="width:100%;height:480px;overflow:auto;">
-        <table id="move_list">
-          <thead>
-            <tr><th colspan="5">
-              <label><input type="checkbox" name="palace_move_class" checked>攻撃技</label>
-              <label><input type="checkbox" name="palace_move_class" checked>防御技</label>
-              <label><input type="checkbox" name="palace_move_class" checked>補助技</label>
-            </th></tr>
-            <tr><th></td><th>技</td><th>タイプ</td><th>威力</td><th>区分</td></tr>
-          </thead>
-          <tbody><tr>
-          </tr></tbody>
-        </table>
-      </div>
-    </details>
-    <details>
-      <summary class="h3">性格別の傾向</summary>
-      <div style="width:100%;height:480px;overflow:auto;">
-        <table id="nature_trend">
-          <thead>
-            <tr><th></th><th colspan="3">通常時</th><th colspan="3">HP減少時</th></tr>
-            <tr><th>せいかく</th><th>攻撃</th><th>防御</th><th>補助</th><th>攻撃</th><th>防御</th><th>補助</th></tr>
-          </thead>
-          <tbody>
-            <tr><th>さみしがり (A↑ B↓)</th><td class="gp3">20%</td><td class="gp3">25%</td><td class="gp3">55%</td><td class="gp1">84%</td><td class="gp1">8%</td><td class="gp1">8%</td></tr>
-            <tr><th>いじっぱり (A↑ C↓)</th><td class="gp1">38%</td><td class="gp1">31%</td><td class="gp1">31%</td><td class="gp1">70%</td><td class="gp1">15%</td><td class="gp1">15%</td></tr>
-            <tr><th>やんちゃ　 (A↑ D↓)</th><td class="gp2">20%</td><td class="gp2">70%</td><td class="gp2">10%</td><td class="gp1">70%</td><td class="gp1">22%</td><td class="gp1">8%</td></tr>
-            <tr><th>ゆうかん　 (A↑ S↓)</th><td class="gp1">70%</td><td class="gp1">15%</td><td class="gp1">15%</td><td class="gp2">32%</td><td class="gp2">60%</td><td class="gp2">8%</td></tr>
-            <tr><th>ずぶとい　 (B↑ A↓)</th><td class="gp3">30%</td><td class="gp3">20%</td><td class="gp3">50%</td><td class="gp2">32%</td><td class="gp2">58%</td><td class="gp2">10%</td></tr>
-            <tr><th>わんぱく　 (B↑ C↓)</th><td class="gp1">69%</td><td class="gp1">6%</td><td class="gp1">25%</td><td class="gp2">28%</td><td class="gp2">55%</td><td class="gp2">17%</td></tr>
-            <tr><th>のうてんき (B↑ D↓)</th><td class="gp3">35%</td><td class="gp3">10%</td><td class="gp3">55%</td><td class="gp3">29%</td><td class="gp3">6%</td><td class="gp3">65%</td></tr>
-            <tr><th>のんき　　 (B↑ S↓)</th><td class="gp3">25%</td><td class="gp3">15%</td><td class="gp3">60%</td><td class="gp1">75%</td><td class="gp1">15%</td><td class="gp1">10%</td></tr>
-            <tr><th>ひかえめ　 (C↑ A↓)</th><td class="gp2">35%</td><td class="gp2">45%</td><td class="gp2">20%</td><td class="gp2">34%</td><td class="gp2">60%</td><td class="gp2">6%</td></tr>
-            <tr><th>おっとり　 (C↑ B↓)</th><td class="gp2">44%</td><td class="gp2">50%</td><td class="gp2">6%</td><td class="gp3">34%</td><td class="gp3">6%</td><td class="gp3">60%</td></tr>
-            <tr><th>うっかりや (C↑ D↓)</th><td class="gp3">30%</td><td class="gp3">13%</td><td class="gp3">57%</td><td class="gp3">27%</td><td class="gp3">6%</td><td class="gp3">67%</td></tr>
-            <tr><th>れいせい　 (C↑ S↓)</th><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td></tr>
-            <tr><th>おだやか　 (D↑ A↓)</th><td class="gp2">40%</td><td class="gp2">50%</td><td class="gp2">10%</td><td class="gp2">25%</td><td class="gp2">62%</td><td class="gp2">13%</td></tr>
-            <tr><th>おとなしい (D↑ B↓)</th><td class="gp2">18%</td><td class="gp2">70%</td><td class="gp2">12%</td><td class="gp1">90%</td><td class="gp1">5%</td><td class="gp1">5%</td></tr>
-            <tr><th>しんちょう (D↑ C↓)</th><td class="gp2">42%</td><td class="gp2">50%</td><td class="gp2">8%</td><td class="gp3">42%</td><td class="gp3">5%</td><td class="gp3">53%</td></tr>
-            <tr><th>なまいき　 (D↑ S↓)</th><td class="gp1">88%</td><td class="gp1">6%</td><td class="gp1">6%</td><td class="gp3">22%</td><td class="gp3">20%</td><td class="gp3">58%</td></tr>
-            <tr><th>おくびょう (S↑ A↓)</th><td class="gp1">62%</td><td class="gp1">10%</td><td class="gp1">28%</td><td class="gp3">30%</td><td class="gp3">20%</td><td class="gp3">50%</td></tr>
-            <tr><th>せっかち　 (S↑ B↓)</th><td class="gp1">58%</td><td class="gp1">37%</td><td class="gp1">5%</td><td class="gp1">88%</td><td class="gp1">6%</td><td class="gp1">6%</td></tr>
-            <tr><th>ようき　　 (S↑ C↓)</th><td class="gp3">35%</td><td class="gp3">5%</td><td class="gp3">60%</td><td class="gp2">35%</td><td class="gp2">60%</td><td class="gp2">5%</td></tr>
-            <tr><th>むじゃき　 (S↑ D↓)</th><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td></tr>
-            <tr><th>てれや　　 </th><td class="gp2">30%</td><td class="gp2">58%</td><td class="gp2">12%</td><td class="gp2">30%</td><td class="gp2">58%</td><td class="gp2">12%</td></tr>
-            <tr><th>がんばりや </th><td class="gp1">61%</td><td class="gp1">7%</td><td class="gp1">32%</td><td class="gp1">61%</td><td class="gp1">7%</td><td class="gp1">32%</td></tr>
-            <tr><th>すなお　　 </th><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td></tr>
-            <tr><th>きまぐれ　 </th><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td></tr>
-            <tr><th>まじめ　　 </th><td class="gp3">34%</td><td class="gp3">11%</td><td class="gp3">55%</td><td class="gp3">29%</td><td class="gp3">11%</td><td class="gp3">60%</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </details>
-  </form>
+<div class="rule"><ul>
+<li>バトルパレスではトレーナーはポケモンに一切の指示を出すことができない。ただし、ポケモンチェンジはトレーナーの判断で行える。</li>
+<li>繰り出す技はポケモン自身が考える。</li>
+<li>ポケモンの性格によって好むわざの種類が異なる。</li>
+<li>7 連勝で1周。3周目と6周目の最後にはウコンとのバトルになる。</li>
+</ul></div>
 </details>
-
+<form id="palace_form" name="PALACE">
+<details>
+<summary class="h3">技の区表</summary>
+<div style="width:100%;height:480px;overflow:auto;">
+<table id="move_list">
+<thead>
+<tr><th colspan="5">
+<label><input checked="" name="palace_move_class" type="checkbox"/>攻撃技</label>
+<label><input checked="" name="palace_move_class" type="checkbox"/>防御技</label>
+<label><input checked="" name="palace_move_class" type="checkbox"/>補助技</label>
+</th></tr>
+<tr><th><th>技<th>タイプ<th>威力<th>区分</th></th></th></th></th></tr>
+</thead>
+<tbody><tr>
+</tr></tbody>
+</table>
+</div>
+</details>
+<details>
+<summary class="h3">性格別の傾向</summary>
+<div style="width:100%;height:480px;overflow:auto;">
+<table id="nature_trend">
+<thead>
+<tr><th></th><th colspan="3">通常時</th><th colspan="3">HP減少時</th></tr>
+<tr><th>せいかく</th><th>攻撃</th><th>防御</th><th>補助</th><th>攻撃</th><th>防御</th><th>補助</th></tr>
+</thead>
+<tbody>
+<tr><th>さみしがり (A&uarr; B&darr;)</th><td class="gp3">20%</td><td class="gp3">25%</td><td class="gp3">55%</td><td class="gp1">84%</td><td class="gp1">8%</td><td class="gp1">8%</td></tr>
+<tr><th>いじっぱり (A&uarr; C&darr;)</th><td class="gp1">38%</td><td class="gp1">31%</td><td class="gp1">31%</td><td class="gp1">70%</td><td class="gp1">15%</td><td class="gp1">15%</td></tr>
+<tr><th>やんちゃ　 (A&uarr; D&darr;)</th><td class="gp2">20%</td><td class="gp2">70%</td><td class="gp2">10%</td><td class="gp1">70%</td><td class="gp1">22%</td><td class="gp1">8%</td></tr>
+<tr><th>ゆうかん　 (A&uarr; S&darr;)</th><td class="gp1">70%</td><td class="gp1">15%</td><td class="gp1">15%</td><td class="gp2">32%</td><td class="gp2">60%</td><td class="gp2">8%</td></tr>
+<tr><th>ずぶとい　 (B&uarr; A&darr;)</th><td class="gp3">30%</td><td class="gp3">20%</td><td class="gp3">50%</td><td class="gp2">32%</td><td class="gp2">58%</td><td class="gp2">10%</td></tr>
+<tr><th>わんぱく　 (B&uarr; C&darr;)</th><td class="gp1">69%</td><td class="gp1">6%</td><td class="gp1">25%</td><td class="gp2">28%</td><td class="gp2">55%</td><td class="gp2">17%</td></tr>
+<tr><th>のうてんき (B&uarr; D&darr;)</th><td class="gp3">35%</td><td class="gp3">10%</td><td class="gp3">55%</td><td class="gp3">29%</td><td class="gp3">6%</td><td class="gp3">65%</td></tr>
+<tr><th>のんき　　 (B&uarr; S&darr;)</th><td class="gp3">25%</td><td class="gp3">15%</td><td class="gp3">60%</td><td class="gp1">75%</td><td class="gp1">15%</td><td class="gp1">10%</td></tr>
+<tr><th>ひかえめ　 (C&uarr; A&darr;)</th><td class="gp2">35%</td><td class="gp2">45%</td><td class="gp2">20%</td><td class="gp2">34%</td><td class="gp2">60%</td><td class="gp2">6%</td></tr>
+<tr><th>おっとり　 (C&uarr; B&darr;)</th><td class="gp2">44%</td><td class="gp2">50%</td><td class="gp2">6%</td><td class="gp3">34%</td><td class="gp3">6%</td><td class="gp3">60%</td></tr>
+<tr><th>うっかりや (C&uarr; D&darr;)</th><td class="gp3">30%</td><td class="gp3">13%</td><td class="gp3">57%</td><td class="gp3">27%</td><td class="gp3">6%</td><td class="gp3">67%</td></tr>
+<tr><th>れいせい　 (C&uarr; S&darr;)</th><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td></tr>
+<tr><th>おだやか　 (D&uarr; A&darr;)</th><td class="gp2">40%</td><td class="gp2">50%</td><td class="gp2">10%</td><td class="gp2">25%</td><td class="gp2">62%</td><td class="gp2">13%</td></tr>
+<tr><th>おとなしい (D&uarr; B&darr;)</th><td class="gp2">18%</td><td class="gp2">70%</td><td class="gp2">12%</td><td class="gp1">90%</td><td class="gp1">5%</td><td class="gp1">5%</td></tr>
+<tr><th>しんちょう (D&uarr; C&darr;)</th><td class="gp2">42%</td><td class="gp2">50%</td><td class="gp2">8%</td><td class="gp3">42%</td><td class="gp3">5%</td><td class="gp3">53%</td></tr>
+<tr><th>なまいき　 (D&uarr; S&darr;)</th><td class="gp1">88%</td><td class="gp1">6%</td><td class="gp1">6%</td><td class="gp3">22%</td><td class="gp3">20%</td><td class="gp3">58%</td></tr>
+<tr><th>おくびょう (S&uarr; A&darr;)</th><td class="gp1">62%</td><td class="gp1">10%</td><td class="gp1">28%</td><td class="gp3">30%</td><td class="gp3">20%</td><td class="gp3">50%</td></tr>
+<tr><th>せっかち　 (S&uarr; B&darr;)</th><td class="gp1">58%</td><td class="gp1">37%</td><td class="gp1">5%</td><td class="gp1">88%</td><td class="gp1">6%</td><td class="gp1">6%</td></tr>
+<tr><th>ようき　　 (S&uarr; C&darr;)</th><td class="gp3">35%</td><td class="gp3">5%</td><td class="gp3">60%</td><td class="gp2">35%</td><td class="gp2">60%</td><td class="gp2">5%</td></tr>
+<tr><th>むじゃき　 (S&uarr; D&darr;)</th><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td></tr>
+<tr><th>てれや　　 </th><td class="gp2">30%</td><td class="gp2">58%</td><td class="gp2">12%</td><td class="gp2">30%</td><td class="gp2">58%</td><td class="gp2">12%</td></tr>
+<tr><th>がんばりや </th><td class="gp1">61%</td><td class="gp1">7%</td><td class="gp1">32%</td><td class="gp1">61%</td><td class="gp1">7%</td><td class="gp1">32%</td></tr>
+<tr><th>すなお　　 </th><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td></tr>
+<tr><th>きまぐれ　 </th><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td><td class="gp1">56%</td><td class="gp1">22%</td><td class="gp1">22%</td></tr>
+<tr><th>まじめ　　 </th><td class="gp3">34%</td><td class="gp3">11%</td><td class="gp3">55%</td><td class="gp3">29%</td><td class="gp3">11%</td><td class="gp3">60%</td></tr>
+</tbody>
+</table>
+</div>
+</details>
+</form>
+</details>
 <!-- Battle Pike -->
-
 <details>
-  <summary class="h2">バトルチューブ <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Lucy.png"></div></summary>
-  <details>
-    <summary class="h3">ルール</summary>
+<summary class="h2">バトルチューブ <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Lucy.png"/></div></summary>
+<details>
+<summary class="h3">ルール</summary>
     出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルチューブ">ポケモンWiki</a>
-    <div class="rule"><ul>
-      <li>手持ちポケモン3匹で参加。部屋の奥にある3つの扉から1つを選んで進む。そしてその部屋の中で起こる様々なイベントを突破し、チューブの出口までたどり着けばクリア。</li>
-      <li>扉の先でどんなイベントが起こるかは完全にランダム。ただし、3つの扉を選ぶ部屋にはメイドが立っており、彼女の発言からある程度の推測は立てられる。</li>
-      <li>戦闘後のポケモンの回復は行われない。回復するには特定のイベントを発生させる必要がある。</li>
-      <li>オボンのみなど消費系の道具をポケモンに持たせて使った場合、戦闘後には道具は復活しない。チューブを突破するかリタイアすれば元に戻る。</li>
-      <li>14部屋突破で1周。2周目と10周目の最後にはアザミとのバトルになる。</li>
-    </ul></div>
-  </details>
-  <form id="pike_form" name="PIKE">
-    <details>
-      <summary class="h3">野生ポケモン</summary>
-      <table id="pike-wild-mons-table" class="fixed">
-        <thead><tr><th colspan="6">ピラミッドの設定</th></tr></thead>
-        <tbody>
-          <tr><td colspan="3">周回数</td><td colspan="3" class="g1"><select name="winStreak"><option value="0">0~20[周] (0~280[部屋])</option><option value="1">21~40[周] (281~560[部屋])</option><option value="2">41~60[周] (561~840[部屋])</option><option value="3">61~[周] (841~[部屋])</option></select></td></tr>
-          <tr><td colspan="3">Lv モード</td><td colspan="3" class="g1"><select name="LvlMode"><option value="lv50">Lv.50</option><option value="lv_open">LV.OPEN</option></select></td></tr>
-        </tbody>
-        <thead>
-          <tr><th colspan="6">野生のポケモン</th></tr>
-          <tr><th>ポケモン</th><th>Lv</th><th colspan="4">技</th></tr>
-        </thead>
-        <tbody id="pike-wild-pokemon"></tbody>
-      </table>
-    </details>
-    <details>
-      <summary class="h3">状態異常部屋</summary>
-      <table id="pike-random-status-room" class="fixed">
-        <thead><tr><th>状態異常</th><th>確率</th></tr></thead>
-        <tbody>
-          <tr style="background:#C183C1"><td>どく <div class='overflow-ms'><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon/281.png" alt="キルリア"></div></td><td>35%</td></tr>
-          <tr style="background:#BCE6E6"><td>こおり <div class='overflow-ms'><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon/356.png" alt="サマヨール"></div></td><td>25%</td></tr>
-          <tr style="background:#FAE078"><td>まひ <div class='overflow-ms'><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon/281.png" alt="キルリア"></div></td><td>20%</td></tr>
-          <tr style="background:#FA92B2"><td>ねむり <div class='overflow-ms'><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon/281.png" alt="キルリア"></div></td><td>10%</td></tr>
-          <tr style="background:#F5AC78"><td>やけど <div class='overflow-ms'><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon/281.png" alt="キルリア"></div> <div class='overflow-ms'><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon/356.png" alt="サマヨール"></div></td><td>10%</td></tr>
-        </tbody>
-      </table>
-      <p>現在の部屋が1~4部屋目, 5~9部屋目, 10~部屋目の時に、それぞれ 1,2,3 体が状態異常となる。</p>
-    </details>
-    <details>
-      <summary class="h3">部屋のヒント</summary>
-      <table>
-        <thead><tr><th>ヒント</th><th>候補</th></tr></thead>
-        <tbody>
-          <tr><td>「トレーナー…でしょうか？ 人の気配を感じるのですが」</td><td>シングルバトル or 全回復</td></tr>
-          <tr><td>「ポケモンのにおいが漂ってくるような気がするのですが」</td><td>強いトレーナーとのバトル or 野生ポケモン</td></tr>
-          <tr><td>「なにかささやくような物音が聞こえたのですが」</td><td>ダブルバトル or 会話</td></tr>
-          <tr><td>「なぜか少しだけ懐かしい雰囲気がするのですが」</td><td>状態異常 or 回復</td></tr>
-        </tbody>
-      </table>
-    </details>
-  </form>
+<div class="rule"><ul>
+<li>手持ちポケモン3匹で参加。部屋の奥にある3つの扉から1つを選んで進む。そしてその部屋の中で起こる様々なイベントを突破し、チューブの出口までたどり着けばクリア。</li>
+<li>扉の先でどんなイベントが起こるかは完全にランダム。ただし、3つの扉を選ぶ部屋にはメイドが立っており、彼女の発言からある程度の推測は立てられる。</li>
+<li>戦闘後のポケモンの回復は行われない。回復するには特定のイベントを発生させる必要がある。</li>
+<li>オボンのみなど消費系の道具をポケモンに持たせて使った場合、戦闘後には道具は復活しない。チューブを突破するかリタイアすれば元に戻る。</li>
+<li>14部屋突破で1周。2周目と10周目の最後にはアザミとのバトルになる。</li>
+</ul></div>
 </details>
-
+<form id="pike_form" name="PIKE">
+<details>
+<summary class="h3">野生ポケモン</summary>
+<table class="fixed" id="pike-wild-mons-table">
+<thead><tr><th colspan="6">ピラミッドの設定</th></tr></thead>
+<tbody>
+<tr><td colspan="3">周回数</td><td class="g1" colspan="3"><select name="winStreak"><option value="0">0~20[周] (0~280[部屋])</option><option value="1">21~40[周] (281~560[部屋])</option><option value="2">41~60[周] (561~840[部屋])</option><option value="3">61~[周] (841~[部屋])</option></select></td></tr>
+<tr><td colspan="3">Lv モード</td><td class="g1" colspan="3"><select name="LvlMode"><option value="lv50">Lv.50</option><option value="lv_open">LV.OPEN</option></select></td></tr>
+</tbody>
+<thead>
+<tr><th colspan="6">野生のポケモン</th></tr>
+<tr><th>ポケモン</th><th>Lv</th><th colspan="4">技</th></tr>
+</thead>
+<tbody id="pike-wild-pokemon"></tbody>
+</table>
+</details>
+<details>
+<summary class="h3">状態異常部屋</summary>
+<table class="fixed" id="pike-random-status-room">
+<thead><tr><th>状態異常</th><th>確率</th></tr></thead>
+<tbody>
+<tr style="background:#C183C1"><td>どく <div class="overflow-ms"><img alt="キルリア" src="https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon/281.png"/></div></td><td>35%</td></tr>
+<tr style="background:#BCE6E6"><td>こおり <div class="overflow-ms"><img alt="サマヨール" src="https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon/356.png"/></div></td><td>25%</td></tr>
+<tr style="background:#FAE078"><td>まひ <div class="overflow-ms"><img alt="キルリア" src="https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon/281.png"/></div></td><td>20%</td></tr>
+<tr style="background:#FA92B2"><td>ねむり <div class="overflow-ms"><img alt="キルリア" src="https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon/281.png"/></div></td><td>10%</td></tr>
+<tr style="background:#F5AC78"><td>やけど <div class="overflow-ms"><img alt="キルリア" src="https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon/281.png"/></div> <div class="overflow-ms"><img alt="サマヨール" src="https://iwasakishuto.github.io/Front-End/tips/theme/images/pokemon/356.png"/></div></td><td>10%</td></tr>
+</tbody>
+</table>
+<p>現在の部屋が1~4部屋目, 5~9部屋目, 10~部屋目の時に、それぞれ 1,2,3 体が状態異常となる。</p>
+</details>
+<details>
+<summary class="h3">部屋のヒント</summary>
+<table>
+<thead><tr><th>ヒント</th><th>候補</th></tr></thead>
+<tbody>
+<tr><td>「トレーナー&hellip;でしょうか？ 人の気配を感じるのですが」</td><td>シングルバトル or 全回復</td></tr>
+<tr><td>「ポケモンのにおいが漂ってくるような気がするのですが」</td><td>強いトレーナーとのバトル or 野生ポケモン</td></tr>
+<tr><td>「なにかささやくような物音が聞こえたのですが」</td><td>ダブルバトル or 会話</td></tr>
+<tr><td>「なぜか少しだけ懐かしい雰囲気がするのですが」</td><td>状態異常 or 回復</td></tr>
+</tbody>
+</table>
+</details>
+</form>
+</details>
 <!-- Battle Arena -->
-
 <details>
-  <summary class="h2">バトルアリーナ <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Greta.png"></div></summary>
-  <details>
+<summary class="h2">バトルアリーナ <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Greta.png"/></div></summary>
+<details>
     出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルアリーナ">ポケモンWiki</a>
-    <summary class="h3">ルール</summary>
-    <div class="rule"><ul>
-      <li>手持ちポケモンから3匹を選択して参加。試合形式はシングルバトルのみ。</li>
-      <li>バトルアリーナではポケモンチェンジを行うことができない。ポケモンが倒れたときは次に出すポケモンを選択することはできず、必ず最初に決めた順番でポケモンを繰り出していく。</li>
-      <li>バトンタッチ・ほえる・ふきとばしは必ず失敗する。</li>
-      <li>3ターン以内に互いのポケモンを倒せなかった場合は、勝負は判定に持ち込まれる。ここで判定負けしたポケモンはひんし扱いとなる。</li>
-      <li>判定で引き分けになった場合、両方のポケモンがひんし扱いとなる。</li>
-      <li>試合中に道具は使用できないが、ポケモンに道具を持たせておくのはよい。</li>
-      <li>1試合ごとにポケモンを全回復してもらえる。</li>
-      <li>7試合で1周。4周目と8周目の最後にはコゴミが登場する。</li>
-      <li>バトルアリーナの判定においては、次の3つの観点で戦いが評価され、それぞれの評価を比較し、相手より評価が高ければ○(2点)、相手と同じ評価なら△(1点)、相手より評価が低ければ×(0点)とする。この合計点の多い方が判定での勝者となる。
+<summary class="h3">ルール</summary>
+<div class="rule"><ul>
+<li>手持ちポケモンから3匹を選択して参加。試合形式はシングルバトルのみ。</li>
+<li>バトルアリーナではポケモンチェンジを行うことができない。ポケモンが倒れたときは次に出すポケモンを選択することはできず、必ず最初に決めた順番でポケモンを繰り出していく。</li>
+<li>バトンタッチ・ほえる・ふきとばしは必ず失敗する。</li>
+<li>3ターン以内に互いのポケモンを倒せなかった場合は、勝負は判定に持ち込まれる。ここで判定負けしたポケモンはひんし扱いとなる。</li>
+<li>判定で引き分けになった場合、両方のポケモンがひんし扱いとなる。</li>
+<li>試合中に道具は使用できないが、ポケモンに道具を持たせておくのはよい。</li>
+<li>1試合ごとにポケモンを全回復してもらえる。</li>
+<li>7試合で1周。4周目と8周目の最後にはコゴミが登場する。</li>
+<li>バトルアリーナの判定においては、次の3つの観点で戦いが評価され、それぞれの評価を比較し、相手より評価が高ければ○(2点)、相手と同じ評価なら△(1点)、相手より評価が低ければ&times;(0点)とする。この合計点の多い方が判定での勝者となる。
       <ul>
-        <li>心：「攻める心を見せた者」。攻撃技(ねこだまし・カウンター・ミラーコートを除く)を多く選択するほど評価が上がり、まもる・みきり・こらえる・ねこだましを多く選択するほど評価が下がる。選択した技の種類で決まるので、技を出したかどうかは関係ない。</li>
-        <li>技：「的確に技を繰り出した者」。技を命中させるほど評価が上がり、命中しない・効果なし・失敗・PP切れの回数が多いほど評価が下がる。</li>
-        <li>体：「溢れる体力を持ちえる者」。判定のときに残っているHPの割合が多いほど評価が上がる。</li></ul>
-      </li>
-    </ul></div>
-  </details>
-  <details>
-    <summary class="h3">「心」のポイント</summary>
-     <div style="width:100%;height:480px;overflow:auto;">
-      <table id="mind_points">
-        <thead>
-          <tr><th>名前</th><th>タイプ</th><th>威力</th><th>命中率</th><th>ポイント</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>10まんボルト</td><td style="background-color:#F8D030">でんき</td><td>95</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>あくび</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>あくまのキッス</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>75</td><td>0</td></tr>
-          <tr><td>あくむ</td><td style="background-color:#705898">ゴースト</td><td>0</td><td>100</td><td>0</td></tr>
-          <tr><td>あさのひざし</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>あてみなげ</td><td style="background-color:#C03028">かくとう</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>あなをほる</td><td style="background-color:#E0C068">じめん</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>あばれる</td><td style="background-color:#A8A878">ノーマル</td><td>90</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>あまいかおり</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>あまえる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>あまごい</td><td style="background-color:#6890F0">みず</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>あやしいひかり</td><td style="background-color:#705898">ゴースト</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>あられ</td><td style="background-color:#98D8D8">こおり</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>あわ</td><td style="background-color:#6890F0">みず</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>いあいぎり</td><td style="background-color:#A8A878">ノーマル</td><td>50</td><td>95</td><td class="gp2">1</td></tr>
-          <tr><td>いかり</td><td style="background-color:#A8A878">ノーマル</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>いかりのまえば</td><td style="background-color:#A8A878">ノーマル</td><td>1</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>いたみわけ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>いちゃもん</td><td style="background-color:#705848">あく</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>いとをはく</td><td style="background-color:#A8B820">むし</td><td>--</td><td>95</td><td>0</td></tr>
-          <tr><td>いばる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>90</td><td>0</td></tr>
-          <tr><td>いびき</td><td style="background-color:#A8A878">ノーマル</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>いやしのすず</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>いやなおと</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>85</td><td>0</td></tr>
-          <tr><td>いわおとし</td><td style="background-color:#B8A038">いわ</td><td>50</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>いわくだき</td><td style="background-color:#C03028">かくとう</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>いわなだれ</td><td style="background-color:#B8A038">いわ</td><td>75</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>うずしお</td><td style="background-color:#6890F0">みず</td><td>15</td><td>70</td><td class="gp2">1</td></tr>
-          <tr><td>うそなき</td><td style="background-color:#705848">あく</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>うたう</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>55</td><td>0</td></tr>
-          <tr><td>うらみ</td><td style="background-color:#705898">ゴースト</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>えんまく</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>おいうち</td><td style="background-color:#705848">あく</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>おうふくビンタ</td><td style="background-color:#A8A878">ノーマル</td><td>15</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>おきみやげ</td><td style="background-color:#705848">あく</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>おだてる</td><td style="background-color:#705848">あく</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>おどろかす</td><td style="background-color:#705898">ゴースト</td><td>30</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>おにび</td><td style="background-color:#F08030">ほのお</td><td>--</td><td>75</td><td>0</td></tr>
-          <tr><td>おんがえし</td><td style="background-color:#A8A878">ノーマル</td><td>100</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>おんねん</td><td style="background-color:#705898">ゴースト</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>かいりき</td><td style="background-color:#A8A878">ノーマル</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>かえんぐるま</td><td style="background-color:#F08030">ほのお</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>かえんほうしゃ</td><td style="background-color:#F08030">ほのお</td><td>95</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>かぎわける</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>かくばる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>かげぶんしん</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>かぜおこし</td><td style="background-color:#A890F0">ひこう</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>かたくなる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>かなしばり</td><td style="background-color:#A8A878">ノーマル</td><td>-</td><td>55</td><td>0</td></tr>
-          <tr><td>かまいたち</td><td style="background-color:#A8A878">ノーマル</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>かみくだく</td><td style="background-color:#705848">あく</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>かみつく</td><td style="background-color:#705848">あく</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>かみなり</td><td style="background-color:#F8D030">でんき</td><td>120</td><td>70</td><td class="gp2">1</td></tr>
-          <tr><td>かみなりパンチ</td><td style="background-color:#F8D030">でんき</td><td>75</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>からげんき</td><td style="background-color:#A8A878">ノーマル</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>からてチョップ</td><td style="background-color:#C03028">かくとう</td><td>50</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>からではさむ</td><td style="background-color:#6890F0">みず</td><td>35</td><td>75</td><td class="gp2">1</td></tr>
-          <tr><td>からにこもる</td><td style="background-color:#6890F0">みず</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>からみつく</td><td style="background-color:#A8A878">ノーマル</td><td>10</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>かわらわり</td><td style="background-color:#C03028">かくとう</td><td>75</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>がまん</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>がむしゃら</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>がんせきふうじ</td><td style="background-color:#B8A038">いわ</td><td>50</td><td>80</td><td class="gp2">1</td></tr>
-          <tr><td>きあいだめ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>きあいパンチ</td><td style="background-color:#C03028">かくとう</td><td>150</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>きしかいせい</td><td style="background-color:#C03028">かくとう</td><td>--</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>きつけ</td><td style="background-color:#A8A878">ノーマル</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>きゅうけつ</td><td style="background-color:#A8B820">むし</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>きりさく</td><td style="background-color:#A8A878">ノーマル</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>きんぞくおん</td><td style="background-color:#B8B8D0">はがね</td><td>--</td><td>85</td><td>0</td></tr>
-          <tr><td>ぎんいろのかぜ</td><td style="background-color:#A8B820">むし</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>くさぶえ</td><td style="background-color:#78C850">くさ</td><td>--</td><td>55</td><td>0</td></tr>
-          <tr><td>くすぐる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>くろいきり</td><td style="background-color:#98D8D8">こおり</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>くろいまなざし</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>けたぐり</td><td style="background-color:#C03028">かくとう</td><td>--</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>げきりん</td><td style="background-color:#7038F8">ドラゴン</td><td>90</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>げんしのちから</td><td style="background-color:#B8A038">いわ</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>こうごうせい</td><td style="background-color:#78C850">くさ</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>こうそくいどう</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>こうそくスピン</td><td style="background-color:#A8A878">ノーマル</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>こころのめ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>こごえるかぜ</td><td style="background-color:#98D8D8">こおり</td><td>55</td><td>95</td><td class="gp2">1</td></tr>
-          <tr><td>こなゆき</td><td style="background-color:#98D8D8">こおり</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>このゆびとまれ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>こらえる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td class="gp1">-1</td></tr>
-          <tr><td>ころがる</td><td style="background-color:#B8A038">いわ</td><td>30</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>こわいかお</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>90</td><td>0</td></tr>
-          <tr><td>さいみんじゅつ</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>60</td><td>0</td></tr>
-          <tr><td>さわぐ</td><td style="background-color:#A8A878">ノーマル</td><td>50</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>しおふき</td><td style="background-color:#6890F0">みず</td><td>150</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>しぜんのちから</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>95</td><td>0</td></tr>
-          <tr><td>したでなめる</td><td style="background-color:#705898">ゴースト</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>しっぽをふる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>しびれごな</td><td style="background-color:#78C850">くさ</td><td>0</td><td>75</td><td>0</td></tr>
-          <tr><td>しめつける</td><td style="background-color:#A8A878">ノーマル</td><td>15</td><td>75</td><td class="gp2">1</td></tr>
-          <tr><td>しろいきり</td><td style="background-color:#98D8D8">こおり</td><td>--</td><td>0</td><td>0</td></tr>
-          <tr><td>しんそく</td><td style="background-color:#A8A878">ノーマル</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>しんぴのまもり</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>じこあんじ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>じこさいせい</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>0</td><td>0</td></tr>
-          <tr><td>じごくぐるま</td><td style="background-color:#C03028">かくとう</td><td>80</td><td>80</td><td class="gp2">1</td></tr>
-          <tr><td>じしん</td><td style="background-color:#E0C068">じめん</td><td>100</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>じたばた</td><td style="background-color:#A8A878">ノーマル</td><td>1</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>じばく</td><td style="background-color:#A8A878">ノーマル</td><td>200</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>じゅうでん</td><td style="background-color:#F8D030">でんき</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>じわれ</td><td style="background-color:#E0C068">じめん</td><td>--</td><td>30</td><td class="gp2">1</td></tr>
-          <tr><td>じんつうりき</td><td style="background-color:#F85888">エスパー</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>すいとる</td><td style="background-color:#78C850">くさ</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>すてみタックル</td><td style="background-color:#A8A878">ノーマル</td><td>120</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>すなあらし</td><td style="background-color:#B8A038">いわ</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>すなかけ</td><td style="background-color:#E0C068">じめん</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>すなじごく</td><td style="background-color:#E0C068">じめん</td><td>15</td><td>70</td><td class="gp2">1</td></tr>
-          <tr><td>ずつき</td><td style="background-color:#A8A878">ノーマル</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>せいちょう</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>せいなるほのお</td><td style="background-color:#F08030">ほのお</td><td>100</td><td>95</td><td class="gp2">1</td></tr>
-          <tr><td>ぜったいれいど</td><td style="background-color:#98D8D8">こおり</td><td>--</td><td>30</td><td class="gp2">1</td></tr>
-          <tr><td>そらをとぶ</td><td style="background-color:#A890F0">ひこう</td><td>70</td><td>95</td><td class="gp2">1</td></tr>
-          <tr><td>たいあたり</td><td style="background-color:#A8A878">ノーマル</td><td>35</td><td>95</td><td class="gp2">1</td></tr>
-          <tr><td>たきのぼり</td><td style="background-color:#6890F0">みず</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>たくわえる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>たたきつける</td><td style="background-color:#A8A878">ノーマル</td><td>80</td><td>75</td><td class="gp2">1</td></tr>
-          <tr><td>たつまき</td><td style="background-color:#7038F8">ドラゴン</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>たまなげ</td><td style="background-color:#A8A878">ノーマル</td><td>15</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>だいばくはつ</td><td style="background-color:#A8A878">ノーマル</td><td>250</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>だいもんじ</td><td style="background-color:#F08030">ほのお</td><td>120</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>だくりゅう</td><td style="background-color:#6890F0">みず</td><td>95</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>だましうち</td><td style="background-color:#705848">あく</td><td>60</td><td>0</td><td class="gp2">1</td></tr>
-          <tr><td>ちいさくなる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>ちきゅうなげ</td><td style="background-color:#C03028">かくとう</td><td>--</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ちょうおんぱ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>55</td><td>0</td></tr>
-          <tr><td>ちょうはつ</td><td style="background-color:#705848">あく</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>つきのひかり</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>つっぱり</td><td style="background-color:#C03028">かくとう</td><td>15</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>つつく</td><td style="background-color:#A890F0">ひこう</td><td>35</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>つのでつく</td><td style="background-color:#A8A878">ノーマル</td><td>65</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>つのドリル</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>30</td><td class="gp2">1</td></tr>
-          <tr><td>つばさでうつ</td><td style="background-color:#A890F0">ひこう</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>つばめがえし</td><td style="background-color:#A890F0">ひこう</td><td>60</td><td>--</td><td class="gp2">1</td></tr>
-          <tr><td>つららばり</td><td style="background-color:#98D8D8">こおり</td><td>10</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>つるぎのまい</td><td style="background-color:#A8A878">ノーマル</td><td>0</td><td>0</td><td>0</td></tr>
-          <tr><td>つるのムチ</td><td style="background-color:#78C850">くさ</td><td>35</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>てだすけ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>てっぺき</td><td style="background-color:#B8B8D0">はがね</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>てんしのキッス</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>75</td><td>0</td></tr>
-          <tr><td>でんきショック</td><td style="background-color:#F8D030">でんき</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>でんげきは</td><td style="background-color:#F8D030">でんき</td><td>60</td><td>--</td><td class="gp2">1</td></tr>
-          <tr><td>でんこうせっか</td><td style="background-color:#A8A878">ノーマル</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>でんじは</td><td style="background-color:#F8D030">でんき</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>でんじほう</td><td style="background-color:#F8D030">でんき</td><td>100</td><td>50</td><td class="gp2">1</td></tr>
-          <tr><td>とおせんぼ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>とおぼえ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>とける</td><td style="background-color:#A040A0">どく</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>とげキャノン</td><td style="background-color:#A8A878">ノーマル</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>とっしん</td><td style="background-color:#A8A878">ノーマル</td><td>90</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>とびげり</td><td style="background-color:#C03028">かくとう</td><td>70</td><td>95</td><td class="gp2">1</td></tr>
-          <tr><td>とびはねる</td><td style="background-color:#A890F0">ひこう</td><td>85</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>とびひざげり</td><td style="background-color:#C03028">かくとう</td><td>85</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>どくどく</td><td style="background-color:#A040A0">どく</td><td>--</td><td>85</td><td>0</td></tr>
-          <tr><td>どくどくのキバ</td><td style="background-color:#A040A0">どく</td><td>50</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>どくのこな</td><td style="background-color:#A040A0">どく</td><td>0</td><td>75</td><td>0</td></tr>
-          <tr><td>どくばり</td><td style="background-color:#A040A0">どく</td><td>15</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>どくガス</td><td style="background-color:#A040A0">どく</td><td>0</td><td>55</td><td>0</td></tr>
-          <tr><td>どろあそび</td><td style="background-color:#E0C068">じめん</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>どろかけ</td><td style="background-color:#E0C068">じめん</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>どろぼう</td><td style="background-color:#705848">あく</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>なきごえ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>なまける</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>なみのり</td><td style="background-color:#6890F0">みず</td><td>95</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>なりきり</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>にどげり</td><td style="background-color:#C03028">かくとう</td><td>30</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>にほんばれ</td><td style="background-color:#F08030">ほのお</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>にらみつける</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>ねがいごと</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>ねこだまし</td><td style="background-color:#A8A878">ノーマル</td><td>40</td><td>100</td><td class="gp1">-1</td></tr>
-          <tr><td>ねこにこばん</td><td style="background-color:#A8A878">ノーマル</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ねこのて</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>ねごと</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>ねっぷう</td><td style="background-color:#F08030">ほのお</td><td>100</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>ねむりごな</td><td style="background-color:#78C850">くさ</td><td>0</td><td>75</td><td>0</td></tr>
-          <tr><td>ねむる</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>ねをはる</td><td style="background-color:#78C850">くさ</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>ねんりき</td><td style="background-color:#F85888">エスパー</td><td>50</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>のしかかり</td><td style="background-color:#A8A878">ノーマル</td><td>85</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>のみこむ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>のろい</td><td style="background-color:#705898">ゴースト</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>はかいこうせん</td><td style="background-color:#A8A878">ノーマル</td><td>150</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>はがねのつばさ</td><td style="background-color:#B8B8D0">はがね</td><td>70</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>はきだす</td><td style="background-color:#A8A878">ノーマル</td><td>100</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>はさむ</td><td style="background-color:#A8A878">ノーマル</td><td>55</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>はたきおとす</td><td style="background-color:#705848">あく</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>はたく</td><td style="background-color:#A8A878">ノーマル</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>はっぱカッター</td><td style="background-color:#78C850">くさ</td><td>55</td><td>95</td><td class="gp2">1</td></tr>
-          <tr><td>はなびらのまい</td><td style="background-color:#78C850">くさ</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>はねる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>はめつのねがい</td><td style="background-color:#B8B8D0">はがね</td><td>120</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>はらだいこ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>ばかぢから</td><td style="background-color:#C03028">かくとう</td><td>120</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ばくれつパンチ</td><td style="background-color:#C03028">かくとう</td><td>100</td><td>50</td><td class="gp2">1</td></tr>
-          <tr><td>ひかりのかべ</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>ひっかく</td><td style="background-color:#A8A878">ノーマル</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ひっさつまえば</td><td style="background-color:#A8A878">ノーマル</td><td>80</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>ひのこ</td><td style="background-color:#F08030">ほのお</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ひみつのちから</td><td style="background-color:#A8A878">ノーマル</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ふういん</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>ふきとばし</td><td style="background-color:#A8A878">ノーマル</td><td>0</td><td>100</td><td>0</td></tr>
-          <tr><td>ふくろだたき</td><td style="background-color:#705848">あく</td><td>10</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ふぶき</td><td style="background-color:#98D8D8">こおり</td><td>120</td><td>70</td><td class="gp2">1</td></tr>
-          <tr><td>ふみつけ</td><td style="background-color:#A8A878">ノーマル</td><td>65</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ふんか</td><td style="background-color:#F08030">ほのお</td><td>150</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>へびにらみ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>75</td><td>0</td></tr>
-          <tr><td>へんしん</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>ほえる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>ほごしょく</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>ほしがる</td><td style="background-color:#A8A878">ノーマル</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ほたるび</td><td style="background-color:#A8B820">むし</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>ほのおのうず</td><td style="background-color:#F08030">ほのお</td><td>15</td><td>70</td><td class="gp2">1</td></tr>
-          <tr><td>ほのおのパンチ</td><td style="background-color:#F08030">ほのお</td><td>75</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ほろびのうた</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>まきつく</td><td style="background-color:#A8A878">ノーマル</td><td>15</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>まきびし</td><td style="background-color:#E0C068">じめん</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>まもる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td class="gp1">-1</td></tr>
-          <tr><td>まるくなる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>まわしげり</td><td style="background-color:#C03028">かくとう</td><td>60</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>みがわり</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>みきり</td><td style="background-color:#C03028">かくとう</td><td>--</td><td>--</td><td class="gp1">-1</td></tr>
-          <tr><td>みずあそび</td><td style="background-color:#6890F0">みず</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>みずでっぽう</td><td style="background-color:#6890F0">みず</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>みずのはどう</td><td style="background-color:#6890F0">みず</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>みだれづき</td><td style="background-color:#A8A878">ノーマル</td><td>15</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>みだれひっかき</td><td style="background-color:#A8A878">ノーマル</td><td>18</td><td>80</td><td class="gp2">1</td></tr>
-          <tr><td>みちづれ</td><td style="background-color:#705898">ゴースト</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>みねうち</td><td style="background-color:#A8A878">ノーマル</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>みやぶる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>みらいよち</td><td style="background-color:#F85888">エスパー</td><td>80</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>めいそう</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>めざめるパワー</td><td style="background-color:#A8A878">ノーマル</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ものまね</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>やつあたり</td><td style="background-color:#A8A878">ノーマル</td><td>100</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>やどりぎのタネ</td><td style="background-color:#78C850">くさ</td><td>--</td><td>90</td><td>0</td></tr>
-          <tr><td>ゆびをふる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>ゆめくい</td><td style="background-color:#F85888">エスパー</td><td>100</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ようかいえき</td><td style="background-color:#A040A0">どく</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>よこどり</td><td style="background-color:#705848">あく</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>りゅうのいかり</td><td style="background-color:#7038F8">ドラゴン</td><td>--</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>りゅうのいぶき</td><td style="background-color:#7038F8">ドラゴン</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>りゅうのまい</td><td style="background-color:#7038F8">ドラゴン</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>れいとうパンチ</td><td style="background-color:#98D8D8">こおり</td><td>75</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>れいとうビーム</td><td style="background-color:#98D8D8">こおり</td><td>95</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>れんぞくぎり</td><td style="background-color:#A8B820">むし</td><td>10</td><td>95</td><td class="gp2">1</td></tr>
-          <tr><td>れんぞくパンチ</td><td style="background-color:#A8A878">ノーマル</td><td>18</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>わたほうし</td><td style="background-color:#78C850">くさ</td><td>--</td><td>85</td><td>0</td></tr>
-          <tr><td>わるあがき</td><td style="background-color:#A8A878">ノーマル</td><td>50</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>アイアンテール</td><td style="background-color:#B8B8D0">はがね</td><td>100</td><td>75</td><td class="gp2">1</td></tr>
-          <tr><td>アイスボール</td><td style="background-color:#98D8D8">こおり</td><td>30</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>アロマセラピー</td><td style="background-color:#78C850">くさ</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>アンコール</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>ウェザーボール</td><td style="background-color:#A8A878">ノーマル</td><td>50</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>エアカッター</td><td style="background-color:#A890F0">ひこう</td><td>55</td><td>95</td><td class="gp2">1</td></tr>
-          <tr><td>エアロブラスト</td><td style="background-color:#A890F0">ひこう</td><td>100</td><td>95</td><td class="gp2">1</td></tr>
-          <tr><td>オウムがえし</td><td style="background-color:#A890F0">ひこう</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>オクタンほう</td><td style="background-color:#6890F0">みず</td><td>65</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>オーバーヒート</td><td style="background-color:#F08030">ほのお</td><td>140</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>オーロラビーム</td><td style="background-color:#98D8D8">こおり</td><td>65</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>カウンター</td><td style="background-color:#C03028">かくとう</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>キノコのほうし</td><td style="background-color:#78C850">くさ</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>ギガドレイン</td><td style="background-color:#78C850">くさ</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>クモのす</td><td style="background-color:#A8B820">むし</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>クラブハンマー</td><td style="background-color:#6890F0">みず</td><td>90</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>クロスチョップ</td><td style="background-color:#C03028">かくとう</td><td>100</td><td>80</td><td class="gp2">1</td></tr>
-          <tr><td>コスモパワー</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>コメットパンチ</td><td style="background-color:#B8B8D0">はがね</td><td>100</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>ゴッドバード</td><td style="background-color:#A890F0">ひこう</td><td>140</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>サイケこうせん</td><td style="background-color:#F85888">エスパー</td><td>65</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>サイコウェーブ</td><td style="background-color:#F85888">エスパー</td><td>1</td><td>80</td><td class="gp2">1</td></tr>
-          <tr><td>サイコキネシス</td><td style="background-color:#F85888">エスパー</td><td>90</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>サイコブースト</td><td style="background-color:#F85888">エスパー</td><td>140</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>シグナルビーム</td><td style="background-color:#A8B820">むし</td><td>75</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>シャドーパンチ</td><td style="background-color:#705898">ゴースト</td><td>60</td><td>0</td><td class="gp2">1</td></tr>
-          <tr><td>シャドーボール</td><td style="background-color:#705898">ゴースト</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>スカイアッパー</td><td style="background-color:#C03028">かくとう</td><td>85</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>スキルスワップ</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>スケッチ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>スパーク</td><td style="background-color:#F8D030">でんき</td><td>65</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>スピードスター</td><td style="background-color:#A8A878">ノーマル</td><td>60</td><td>0</td><td class="gp2">1</td></tr>
-          <tr><td>スプーンまげ</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>80</td><td>0</td></tr>
-          <tr><td>スモッグ</td><td style="background-color:#A040A0">どく</td><td>20</td><td>70</td><td class="gp2">1</td></tr>
-          <tr><td>ソニックブーム</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>ソーラービーム</td><td style="background-color:#78C850">くさ</td><td>120</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>タネマシンガン</td><td style="background-color:#78C850">くさ</td><td>10</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>タマゴうみ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>タマゴばくだん</td><td style="background-color:#A8A878">ノーマル</td><td>100</td><td>75</td><td class="gp2">1</td></tr>
-          <tr><td>ダイビング</td><td style="background-color:#6890F0">みず</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ダブルニードル</td><td style="background-color:#A8B820">むし</td><td>25</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>テクスチャー</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>テクスチャー2</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>テレポート</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>トライアタック</td><td style="background-color:#A8A878">ノーマル</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>トリック</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>トリプルキック</td><td style="background-color:#C03028">かくとう</td><td>10</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>ドわすれ</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>ドラゴンクロー</td><td style="background-color:#7038F8">ドラゴン</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ドリルくちばし</td><td style="background-color:#A890F0">ひこう</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ナイトヘッド</td><td style="background-color:#705898">ゴースト</td><td>--</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ニードルアーム</td><td style="background-color:#78C850">くさ</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ハイドロカノン</td><td style="background-color:#6890F0">みず</td><td>150</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>ハイドロポンプ</td><td style="background-color:#6890F0">みず</td><td>120</td><td>80</td><td class="gp2">1</td></tr>
-          <tr><td>ハイパーボイス</td><td style="background-color:#A8A878">ノーマル</td><td>90</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ハサミギロチン</td><td style="background-color:#A8A878">ノーマル</td><td>1</td><td>30</td><td class="gp2">1</td></tr>
-          <tr><td>ハードプラント</td><td style="background-color:#78C850">くさ</td><td>150</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>バトンタッチ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>バブルこうせん</td><td style="background-color:#6890F0">みず</td><td>65</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>バリアー</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>ビルドアップ</td><td style="background-color:#C03028">かくとう</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>ピヨピヨパンチ</td><td style="background-color:#A8A878">ノーマル</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>フェザーダンス</td><td style="background-color:#A890F0">ひこう</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>フラッシュ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>70</td><td>0</td></tr>
-          <tr><td>フラフラダンス</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>ブラストバーン</td><td style="background-color:#F08030">ほのお</td><td>150</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>ブレイククロー</td><td style="background-color:#A8A878">ノーマル</td><td>75</td><td>95</td><td class="gp2">1</td></tr>
-          <tr><td>ブレイズキック</td><td style="background-color:#F08030">ほのお</td><td>85</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>プレゼント</td><td style="background-color:#A8A878">ノーマル</td><td>1</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>ヘドロこうげき</td><td style="background-color:#A040A0">どく</td><td>65</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ヘドロばくだん</td><td style="background-color:#A040A0">どく</td><td>90</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ホネこんぼう</td><td style="background-color:#E0C068">じめん</td><td>65</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>ホネブーメラン</td><td style="background-color:#E0C068">じめん</td><td>50</td><td>90</td><td class="gp2">1</td></tr>
-          <tr><td>ボルテッカー</td><td style="background-color:#F8D030">でんき</td><td>120</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ボーンラッシュ</td><td style="background-color:#E0C068">じめん</td><td>25</td><td>80</td><td class="gp2">1</td></tr>
-          <tr><td>ポイズンテール</td><td style="background-color:#A040A0">どく</td><td>50</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>マグニチュード</td><td style="background-color:#E0C068">じめん</td><td>1</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>マジカルリーフ</td><td style="background-color:#78C850">くさ</td><td>60</td><td>0</td><td class="gp2">1</td></tr>
-          <tr><td>マジックコート</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>マッドショット</td><td style="background-color:#E0C068">じめん</td><td>55</td><td>95</td><td class="gp2">1</td></tr>
-          <tr><td>マッハパンチ</td><td style="background-color:#C03028">かくとう</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ミサイルばり</td><td style="background-color:#A8B820">むし</td><td>14</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>ミストボール</td><td style="background-color:#F85888">エスパー</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ミラーコート</td><td style="background-color:#F85888">エスパー</td><td>1</td><td>100</td><td>0</td></tr>
-          <tr><td>ミルクのみ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>メガトンキック</td><td style="background-color:#A8A878">ノーマル</td><td>120</td><td>75</td><td class="gp2">1</td></tr>
-          <tr><td>メガトンパンチ</td><td style="background-color:#A8A878">ノーマル</td><td>80</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>メガドレイン</td><td style="background-color:#78C850">くさ</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>メガホーン</td><td style="background-color:#A8B820">むし</td><td>120</td><td>85</td><td class="gp2">1</td></tr>
-          <tr><td>メタルクロー</td><td style="background-color:#B8B8D0">はがね</td><td>50</td><td>95</td><td class="gp2">1</td></tr>
-          <tr><td>メロメロ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>ヨガのポーズ</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>ラスターパージ</td><td style="background-color:#F85888">エスパー</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>リサイクル</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>リフレクター</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
-          <tr><td>リフレッシュ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>リベンジ</td><td style="background-color:#C03028">かくとう</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>リーフブレード</td><td style="background-color:#78C850">くさ</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ロケットずつき</td><td style="background-color:#A8A878">ノーマル</td><td>100</td><td>100</td><td class="gp2">1</td></tr>
-          <tr><td>ロックオン</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
-          <tr><td>ロックブラスト</td><td style="background-color:#B8A038">いわ</td><td>25</td><td>80</td><td class="gp2">1</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </details>
-  <details>
-    <summary class="h3">「技」のポイント</summary>
-    <table>
-      <thead><tr><th>技の結果</th><th>ポイント</th></tr></thead>
-      <tbody>
-        <tr><td>技が失敗・外した</td><td>-2</td></tr>
-        <tr><td>効果が抜群</td><td>+2</td></tr>
-        <tr><td>効果が普通</td><td>+1</td></tr>
-        <tr><td>効果がいまひとつ</td><td>-1</td></tr>
-        <tr><td>効果なし</td><td>-2</td></tr>
-        <tr><td>守られた</td><td>+1</td></tr>
-        <tr><td>相手ポケモンの性格によって[能力値の低下・状態異常・攻撃・交代]を防がられたり、逆にもらいび・ちょすい等のように相手のメリットになってしまった（というテキストメッセージが出た）</td><td>-3</td></tr>
-      </tbody>
-    </table>
-  </details>
+<li>心：「攻める心を見せた者」。攻撃技(ねこだまし・カウンター・ミラーコートを除く)を多く選択するほど評価が上がり、まもる・みきり・こらえる・ねこだましを多く選択するほど評価が下がる。選択した技の種類で決まるので、技を出したかどうかは関係ない。</li>
+<li>技：「的確に技を繰り出した者」。技を命中させるほど評価が上がり、命中しない・効果なし・失敗・PP切れの回数が多いほど評価が下がる。</li>
+<li>体：「溢れる体力を持ちえる者」。判定のときに残っているHPの割合が多いほど評価が上がる。</li></ul>
+</li>
+</ul></div>
 </details>
-
-<!-- Battle Pyramid -->
-
 <details>
-  <summary class="h2">バトルピラミッド <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Brandon.png"></div></summary>
-  <details>
-    <summary class="h3">ルール</summary>
-    出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルピラミッド">ポケモンWiki</a>
-    <div class="rule"><ul>
-      <li>手持ちポケモンから3匹を選択して参加。真っ暗なピラミッドの中を歩き回り、野生ポケモンやトレーナーと戦いながら上への階段を探す。7つの階層をクリアしてピラミッド最上階にたどり着けばクリアとなる。</li>
-      <li>ピラミッドの中は暗くて見通しがきかない。だが、野生ポケモンやトレーナーと戦って勝てば、主人公の周りが少しずつ明るくなって見えやすくなっていく。</li>
-      <li>トレーナーに勝つと、階段の位置や道具についてのヒントがもらえる。</li>
-      <li>バトルピラミッドの中には道具が落ちており、これを専用の鞄・「バトルバッグ」に入れて使うことができる。またピラミッド内で特性ものひろいの効果によって集めた道具も使える。使い切れなかったバトルバッグの道具は次回の挑戦に繰り越されるが、ピラミッド内でポケモンが全滅した場合は、集めた道具は没収される。</li>
-      <li>戦闘後のポケモンの回復は行われない。</li>
-      <li>野生ポケモンからは逃げることもできるが、逃走の成功率は低めになっている。特性「にげあし」を持つポケモンでも確定にはならない。</li>
-      <li>ピラミッドを7階層突破するごとに、出現する野生ポケモンが変わる。</li>
-      <li>移動中には回復道具の使用やポケモンの並び替えができる。</li>
-      <li>バトルバッグに入れられる道具は10種類まで。</li>
-      <li>7階層突破で1周。3周目と10周目の最後にはジンダイとのバトルになる。</li>
-    </ul></div>
-  </details>
-  <form id="pyramid_form" name="PYRAMID">
-    <details>
-      <summary class="h3">野生ポケモン</summary>
-      <table id="pyramid-wild-mons-table" class="fixed">
-        <thead><tr><th colspan="6">ピラミッドの設定</th></tr></thead>
-        <tbody>
-          <tr><td colspan="3">周回数</td><td colspan="3" class="g1"><input type="number" min="1" max="20" value="10" size="3" name="winStreak1"></td></tr>
-          <tr><td colspan="3">Lv モード</td><td colspan="3" class="g1"><select name="LvlMode1"><option value="lv50">Lv.50</option><option value="lv_open">LV.OPEN</option></select></td></tr>
-        </tbody>
-        <thead>
-          <tr><th colspan="6">野生のポケモン</th></tr>
-          <tr><th>ポケモン</th><th>Lv(±5)</th><th colspan="4">技</th></tr>
-        </thead>
-        <tbody id="pyramid-wild-pokemon"></tbody>
-      </table>
-    </details>
-    <details>
-      <summary class="h3">入手可能アイテム</summary>
-      <table id="pyramid-pickup-table">
-        <thead><tr><th colspan="8">ピラミッドの設定</th></tr></thead>
-        <tbody>
-          <tr><td colspan="4">周回数</td><td colspan="4" class="g1"><input type="number" min="1" max="20" value="10" size="3" name="winStreak2"></td></tr>
-          <tr><td colspan="4">Lv モード</td><td colspan="4" class="g1"><select name="LvlMode2"><option value="lv50">Lv.50</option><option value="lv_open">LV.OPEN</option></select></td></tr>
-        </tbody>
-        <thead>
-          <tr><th colspan="8">入手可能アイテム</th></tr></thead>
-          <tr><th class="g1"><select name="is_pickup_ability"><option value="0">落ちているアイテム</option><option value="1">特性ものひろい</option></select></th><th>1F</th><th>2F</th><th>3F</th><th>4F</th><th>5F</th><th>6F</th><th>7F</th></tr>
-        </thead>
-        <tbody id="pyramid-pickup-item"></tbody>
-      </table>
-    </details>
-    <details>
-      <summary class="h3">マップレイアウト</summary>
-      <table id="pyramid-layour-table" class="fixed">
-        <thead>
-          <tr><th colspan="21">マップレイアウト</th></tr>
-          <tr><th></th><th colspan="4">Pattern.1</th><th colspan="4">Pattern.2</th><th colspan="4">Pattern.3</th><th colspan="4">Pattern.4</th><th colspan="4">Pattern.5</th></tr>
-        </thead>
-        <tbody>
-          <tr><td rowspan="2">1階</td><td colspan="4">40%</td><td colspan="4">30%</td><td colspan="4">20%</td><td colspan="4">10%</td><td colspan="4">-</td></tr>
-          <tr><td class="g1">7</td><td class="g1">○</td><td class="g2">3</td><td class="g2">○</td><td class="g1">6</td><td class="g1">○</td><td class="g2">3</td><td class="g2">○</td><td class="g1">5</td><td class="g1">○</td><td class="g2">3</td><td class="g2">○</td><td class="g1">4</td><td class="g1">○</td><td class="g2">4</td><td class="g2">○</td><td class="g1">-</td><td class="g1">-</td><td class="g2">-</td><td class="g2">-</td></tr>
-          <tr><td rowspan="2">2階</td><td colspan="4">35%</td><td colspan="4">20%</td><td colspan="4">20%</td><td colspan="4">15%</td><td colspan="4">10%</td></tr>
-          <tr><td class="g1">6</td><td class="g1">○</td><td class="g2">3</td><td class="g2">○</td><td class="g1">5</td><td class="g1">○</td><td class="g2">3</td><td class="g2">○</td><td class="g1">4</td><td class="g1">○</td><td class="g2">4</td><td class="g2">○</td><td class="g1">4</td><td class="g1">○</td><td class="g2">4</td><td class="g2">+</td><td class="g1">2</td><td class="g1">○</td><td class="g2">3</td><td class="g2">○</td></tr>
-          <tr><td rowspan="2">3階</td><td colspan="4">35%</td><td colspan="4">20%</td><td colspan="4">20%</td><td colspan="4">15%</td><td colspan="4">10%</td></tr>
-          <tr><td class="g1">5</td><td class="g1">○</td><td class="g2">3</td><td class="g2">○</td><td class="g1">4</td><td class="g1">○</td><td class="g2">4</td><td class="g2">○</td><td class="g1">4</td><td class="g1">○</td><td class="g2">4</td><td class="g2">+</td><td class="g1">3</td><td class="g1">○</td><td class="g2">5</td><td class="g2">x</td><td class="g1">4</td><td class="g1">○</td><td class="g2">5</td><td class="g2">○</td></tr>
-          <tr><td rowspan="2">4階</td><td colspan="4">35%</td><td colspan="4">20%</td><td colspan="4">20%</td><td colspan="4">15%</td><td colspan="4">10%</td></tr>
-          <tr><td class="g1">4</td><td class="g1">○</td><td class="g2">4</td><td class="g2">○</td><td class="g1">4</td><td class="g1">○</td><td class="g2">4</td><td class="g2">+</td><td class="g1">3</td><td class="g1">○</td><td class="g2">5</td><td class="g2">x</td><td class="g1">3</td><td class="g1">○</td><td class="g2">5</td><td class="g2">○</td><td class="g1">3</td><td class="g1">○</td><td class="g2">7</td><td class="g2">○</td></tr>
-          <tr><td rowspan="2">5階</td><td colspan="4">35%</td><td colspan="4">20%</td><td colspan="4">20%</td><td colspan="4">15%</td><td colspan="4">10%</td></tr>
-          <tr><td class="g1">4</td><td class="g1">○</td><td class="g2">4</td><td class="g2">+</td><td class="g1">3</td><td class="g1">○</td><td class="g2">5</td><td class="g2">x</td><td class="g1">3</td><td class="g1">○</td><td class="g2">5</td><td class="g2">○</td><td class="g1">2</td><td class="g1">○</td><td class="g2">4</td><td class="g2">+</td><td class="g1">2</td><td class="g1">○</td><td class="g2">4</td><td class="g2">○</td></tr>
-          <tr><td rowspan="2">6階</td><td colspan="4">35%</td><td colspan="4">20%</td><td colspan="4">20%</td><td colspan="4">15%</td><td colspan="4">10%</td></tr>
-          <tr><td class="g1">3</td><td class="g1">○</td><td class="g2">5</td><td class="g2">x</td><td class="g1">3</td><td class="g1">○</td><td class="g2">5</td><td class="g2">○</td><td class="g1">2</td><td class="g1">○</td><td class="g2">4</td><td class="g2">+</td><td class="g1">4</td><td class="g1">○</td><td class="g2">5</td><td class="g2">x</td><td class="g1">3</td><td class="g1">○</td><td class="g2">6</td><td class="g2">○</td></tr>
-          <tr><td rowspan="2">7階</td><td colspan="4">35%</td><td colspan="4">20%</td><td colspan="4">20%</td><td colspan="4">15%</td><td colspan="4">10%</td></tr>
-          <tr><td class="g1">3</td><td class="g1">○</td><td class="g2">5</td><td class="g2">○</td><td class="g1">2</td><td class="g1">○</td><td class="g2">4</td><td class="g2">+</td><td class="g1">4</td><td class="g1">○</td><td class="g2">5</td><td class="g2">x</td><td class="g1">3</td><td class="g1">○</td><td class="g2">6</td><td class="g2">*</td><td class="g1">3</td><td class="g1">○</td><td class="g2">8</td><td class="g2">○</td></tr>        </tbody>
-      </table>
-      <p>※ 左から["アイテム数", "アイテムの配置", "トレーナー数", "トレーナーの配置"]を示す。配置の記号は、</p>
-      <ul>
-        <li>"+"： 開始点付近の四角形内部</li>
-        <li>"x"： 出口付近の四角形内部</li>
-        <li>"*"： 出口付近</li>
-        <li>"○"： 一様</li>
-      </ul>
-    </details>
-  </form>
+<summary class="h3">「心」のポイント</summary>
+<div style="width:100%;height:480px;overflow:auto;">
+<table id="mind_points">
+<thead>
+<tr><th>名前</th><th>タイプ</th><th>威力</th><th>命中率</th><th>ポイント</th></tr>
+</thead>
+<tbody>
+<tr><td>10まんボルト</td><td style="background-color:#F8D030">でんき</td><td>95</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>あくび</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>あくまのキッス</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>75</td><td>0</td></tr>
+<tr><td>あくむ</td><td style="background-color:#705898">ゴースト</td><td>0</td><td>100</td><td>0</td></tr>
+<tr><td>あさのひざし</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>あてみなげ</td><td style="background-color:#C03028">かくとう</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>あなをほる</td><td style="background-color:#E0C068">じめん</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>あばれる</td><td style="background-color:#A8A878">ノーマル</td><td>90</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>あまいかおり</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>あまえる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>あまごい</td><td style="background-color:#6890F0">みず</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>あやしいひかり</td><td style="background-color:#705898">ゴースト</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>あられ</td><td style="background-color:#98D8D8">こおり</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>あわ</td><td style="background-color:#6890F0">みず</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>いあいぎり</td><td style="background-color:#A8A878">ノーマル</td><td>50</td><td>95</td><td class="gp2">1</td></tr>
+<tr><td>いかり</td><td style="background-color:#A8A878">ノーマル</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>いかりのまえば</td><td style="background-color:#A8A878">ノーマル</td><td>1</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>いたみわけ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>いちゃもん</td><td style="background-color:#705848">あく</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>いとをはく</td><td style="background-color:#A8B820">むし</td><td>--</td><td>95</td><td>0</td></tr>
+<tr><td>いばる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>90</td><td>0</td></tr>
+<tr><td>いびき</td><td style="background-color:#A8A878">ノーマル</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>いやしのすず</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>いやなおと</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>85</td><td>0</td></tr>
+<tr><td>いわおとし</td><td style="background-color:#B8A038">いわ</td><td>50</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>いわくだき</td><td style="background-color:#C03028">かくとう</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>いわなだれ</td><td style="background-color:#B8A038">いわ</td><td>75</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>うずしお</td><td style="background-color:#6890F0">みず</td><td>15</td><td>70</td><td class="gp2">1</td></tr>
+<tr><td>うそなき</td><td style="background-color:#705848">あく</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>うたう</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>55</td><td>0</td></tr>
+<tr><td>うらみ</td><td style="background-color:#705898">ゴースト</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>えんまく</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>おいうち</td><td style="background-color:#705848">あく</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>おうふくビンタ</td><td style="background-color:#A8A878">ノーマル</td><td>15</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>おきみやげ</td><td style="background-color:#705848">あく</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>おだてる</td><td style="background-color:#705848">あく</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>おどろかす</td><td style="background-color:#705898">ゴースト</td><td>30</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>おにび</td><td style="background-color:#F08030">ほのお</td><td>--</td><td>75</td><td>0</td></tr>
+<tr><td>おんがえし</td><td style="background-color:#A8A878">ノーマル</td><td>100</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>おんねん</td><td style="background-color:#705898">ゴースト</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>かいりき</td><td style="background-color:#A8A878">ノーマル</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>かえんぐるま</td><td style="background-color:#F08030">ほのお</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>かえんほうしゃ</td><td style="background-color:#F08030">ほのお</td><td>95</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>かぎわける</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>かくばる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>かげぶんしん</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>かぜおこし</td><td style="background-color:#A890F0">ひこう</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>かたくなる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>かなしばり</td><td style="background-color:#A8A878">ノーマル</td><td>-</td><td>55</td><td>0</td></tr>
+<tr><td>かまいたち</td><td style="background-color:#A8A878">ノーマル</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>かみくだく</td><td style="background-color:#705848">あく</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>かみつく</td><td style="background-color:#705848">あく</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>かみなり</td><td style="background-color:#F8D030">でんき</td><td>120</td><td>70</td><td class="gp2">1</td></tr>
+<tr><td>かみなりパンチ</td><td style="background-color:#F8D030">でんき</td><td>75</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>からげんき</td><td style="background-color:#A8A878">ノーマル</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>からてチョップ</td><td style="background-color:#C03028">かくとう</td><td>50</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>からではさむ</td><td style="background-color:#6890F0">みず</td><td>35</td><td>75</td><td class="gp2">1</td></tr>
+<tr><td>からにこもる</td><td style="background-color:#6890F0">みず</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>からみつく</td><td style="background-color:#A8A878">ノーマル</td><td>10</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>かわらわり</td><td style="background-color:#C03028">かくとう</td><td>75</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>がまん</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>がむしゃら</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>がんせきふうじ</td><td style="background-color:#B8A038">いわ</td><td>50</td><td>80</td><td class="gp2">1</td></tr>
+<tr><td>きあいだめ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>きあいパンチ</td><td style="background-color:#C03028">かくとう</td><td>150</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>きしかいせい</td><td style="background-color:#C03028">かくとう</td><td>--</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>きつけ</td><td style="background-color:#A8A878">ノーマル</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>きゅうけつ</td><td style="background-color:#A8B820">むし</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>きりさく</td><td style="background-color:#A8A878">ノーマル</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>きんぞくおん</td><td style="background-color:#B8B8D0">はがね</td><td>--</td><td>85</td><td>0</td></tr>
+<tr><td>ぎんいろのかぜ</td><td style="background-color:#A8B820">むし</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>くさぶえ</td><td style="background-color:#78C850">くさ</td><td>--</td><td>55</td><td>0</td></tr>
+<tr><td>くすぐる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>くろいきり</td><td style="background-color:#98D8D8">こおり</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>くろいまなざし</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>けたぐり</td><td style="background-color:#C03028">かくとう</td><td>--</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>げきりん</td><td style="background-color:#7038F8">ドラゴン</td><td>90</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>げんしのちから</td><td style="background-color:#B8A038">いわ</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>こうごうせい</td><td style="background-color:#78C850">くさ</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>こうそくいどう</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>こうそくスピン</td><td style="background-color:#A8A878">ノーマル</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>こころのめ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>こごえるかぜ</td><td style="background-color:#98D8D8">こおり</td><td>55</td><td>95</td><td class="gp2">1</td></tr>
+<tr><td>こなゆき</td><td style="background-color:#98D8D8">こおり</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>このゆびとまれ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>こらえる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td class="gp1">-1</td></tr>
+<tr><td>ころがる</td><td style="background-color:#B8A038">いわ</td><td>30</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>こわいかお</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>90</td><td>0</td></tr>
+<tr><td>さいみんじゅつ</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>60</td><td>0</td></tr>
+<tr><td>さわぐ</td><td style="background-color:#A8A878">ノーマル</td><td>50</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>しおふき</td><td style="background-color:#6890F0">みず</td><td>150</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>しぜんのちから</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>95</td><td>0</td></tr>
+<tr><td>したでなめる</td><td style="background-color:#705898">ゴースト</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>しっぽをふる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>しびれごな</td><td style="background-color:#78C850">くさ</td><td>0</td><td>75</td><td>0</td></tr>
+<tr><td>しめつける</td><td style="background-color:#A8A878">ノーマル</td><td>15</td><td>75</td><td class="gp2">1</td></tr>
+<tr><td>しろいきり</td><td style="background-color:#98D8D8">こおり</td><td>--</td><td>0</td><td>0</td></tr>
+<tr><td>しんそく</td><td style="background-color:#A8A878">ノーマル</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>しんぴのまもり</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>じこあんじ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>じこさいせい</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>0</td><td>0</td></tr>
+<tr><td>じごくぐるま</td><td style="background-color:#C03028">かくとう</td><td>80</td><td>80</td><td class="gp2">1</td></tr>
+<tr><td>じしん</td><td style="background-color:#E0C068">じめん</td><td>100</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>じたばた</td><td style="background-color:#A8A878">ノーマル</td><td>1</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>じばく</td><td style="background-color:#A8A878">ノーマル</td><td>200</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>じゅうでん</td><td style="background-color:#F8D030">でんき</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>じわれ</td><td style="background-color:#E0C068">じめん</td><td>--</td><td>30</td><td class="gp2">1</td></tr>
+<tr><td>じんつうりき</td><td style="background-color:#F85888">エスパー</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>すいとる</td><td style="background-color:#78C850">くさ</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>すてみタックル</td><td style="background-color:#A8A878">ノーマル</td><td>120</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>すなあらし</td><td style="background-color:#B8A038">いわ</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>すなかけ</td><td style="background-color:#E0C068">じめん</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>すなじごく</td><td style="background-color:#E0C068">じめん</td><td>15</td><td>70</td><td class="gp2">1</td></tr>
+<tr><td>ずつき</td><td style="background-color:#A8A878">ノーマル</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>せいちょう</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>せいなるほのお</td><td style="background-color:#F08030">ほのお</td><td>100</td><td>95</td><td class="gp2">1</td></tr>
+<tr><td>ぜったいれいど</td><td style="background-color:#98D8D8">こおり</td><td>--</td><td>30</td><td class="gp2">1</td></tr>
+<tr><td>そらをとぶ</td><td style="background-color:#A890F0">ひこう</td><td>70</td><td>95</td><td class="gp2">1</td></tr>
+<tr><td>たいあたり</td><td style="background-color:#A8A878">ノーマル</td><td>35</td><td>95</td><td class="gp2">1</td></tr>
+<tr><td>たきのぼり</td><td style="background-color:#6890F0">みず</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>たくわえる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>たたきつける</td><td style="background-color:#A8A878">ノーマル</td><td>80</td><td>75</td><td class="gp2">1</td></tr>
+<tr><td>たつまき</td><td style="background-color:#7038F8">ドラゴン</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>たまなげ</td><td style="background-color:#A8A878">ノーマル</td><td>15</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>だいばくはつ</td><td style="background-color:#A8A878">ノーマル</td><td>250</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>だいもんじ</td><td style="background-color:#F08030">ほのお</td><td>120</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>だくりゅう</td><td style="background-color:#6890F0">みず</td><td>95</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>だましうち</td><td style="background-color:#705848">あく</td><td>60</td><td>0</td><td class="gp2">1</td></tr>
+<tr><td>ちいさくなる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>ちきゅうなげ</td><td style="background-color:#C03028">かくとう</td><td>--</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ちょうおんぱ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>55</td><td>0</td></tr>
+<tr><td>ちょうはつ</td><td style="background-color:#705848">あく</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>つきのひかり</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>つっぱり</td><td style="background-color:#C03028">かくとう</td><td>15</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>つつく</td><td style="background-color:#A890F0">ひこう</td><td>35</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>つのでつく</td><td style="background-color:#A8A878">ノーマル</td><td>65</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>つのドリル</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>30</td><td class="gp2">1</td></tr>
+<tr><td>つばさでうつ</td><td style="background-color:#A890F0">ひこう</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>つばめがえし</td><td style="background-color:#A890F0">ひこう</td><td>60</td><td>--</td><td class="gp2">1</td></tr>
+<tr><td>つららばり</td><td style="background-color:#98D8D8">こおり</td><td>10</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>つるぎのまい</td><td style="background-color:#A8A878">ノーマル</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>つるのムチ</td><td style="background-color:#78C850">くさ</td><td>35</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>てだすけ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>てっぺき</td><td style="background-color:#B8B8D0">はがね</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>てんしのキッス</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>75</td><td>0</td></tr>
+<tr><td>でんきショック</td><td style="background-color:#F8D030">でんき</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>でんげきは</td><td style="background-color:#F8D030">でんき</td><td>60</td><td>--</td><td class="gp2">1</td></tr>
+<tr><td>でんこうせっか</td><td style="background-color:#A8A878">ノーマル</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>でんじは</td><td style="background-color:#F8D030">でんき</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>でんじほう</td><td style="background-color:#F8D030">でんき</td><td>100</td><td>50</td><td class="gp2">1</td></tr>
+<tr><td>とおせんぼ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>とおぼえ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>とける</td><td style="background-color:#A040A0">どく</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>とげキャノン</td><td style="background-color:#A8A878">ノーマル</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>とっしん</td><td style="background-color:#A8A878">ノーマル</td><td>90</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>とびげり</td><td style="background-color:#C03028">かくとう</td><td>70</td><td>95</td><td class="gp2">1</td></tr>
+<tr><td>とびはねる</td><td style="background-color:#A890F0">ひこう</td><td>85</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>とびひざげり</td><td style="background-color:#C03028">かくとう</td><td>85</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>どくどく</td><td style="background-color:#A040A0">どく</td><td>--</td><td>85</td><td>0</td></tr>
+<tr><td>どくどくのキバ</td><td style="background-color:#A040A0">どく</td><td>50</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>どくのこな</td><td style="background-color:#A040A0">どく</td><td>0</td><td>75</td><td>0</td></tr>
+<tr><td>どくばり</td><td style="background-color:#A040A0">どく</td><td>15</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>どくガス</td><td style="background-color:#A040A0">どく</td><td>0</td><td>55</td><td>0</td></tr>
+<tr><td>どろあそび</td><td style="background-color:#E0C068">じめん</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>どろかけ</td><td style="background-color:#E0C068">じめん</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>どろぼう</td><td style="background-color:#705848">あく</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>なきごえ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>なまける</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>なみのり</td><td style="background-color:#6890F0">みず</td><td>95</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>なりきり</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>にどげり</td><td style="background-color:#C03028">かくとう</td><td>30</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>にほんばれ</td><td style="background-color:#F08030">ほのお</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>にらみつける</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>ねがいごと</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>ねこだまし</td><td style="background-color:#A8A878">ノーマル</td><td>40</td><td>100</td><td class="gp1">-1</td></tr>
+<tr><td>ねこにこばん</td><td style="background-color:#A8A878">ノーマル</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ねこのて</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>ねごと</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>ねっぷう</td><td style="background-color:#F08030">ほのお</td><td>100</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>ねむりごな</td><td style="background-color:#78C850">くさ</td><td>0</td><td>75</td><td>0</td></tr>
+<tr><td>ねむる</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>ねをはる</td><td style="background-color:#78C850">くさ</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>ねんりき</td><td style="background-color:#F85888">エスパー</td><td>50</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>のしかかり</td><td style="background-color:#A8A878">ノーマル</td><td>85</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>のみこむ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>のろい</td><td style="background-color:#705898">ゴースト</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>はかいこうせん</td><td style="background-color:#A8A878">ノーマル</td><td>150</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>はがねのつばさ</td><td style="background-color:#B8B8D0">はがね</td><td>70</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>はきだす</td><td style="background-color:#A8A878">ノーマル</td><td>100</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>はさむ</td><td style="background-color:#A8A878">ノーマル</td><td>55</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>はたきおとす</td><td style="background-color:#705848">あく</td><td>20</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>はたく</td><td style="background-color:#A8A878">ノーマル</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>はっぱカッター</td><td style="background-color:#78C850">くさ</td><td>55</td><td>95</td><td class="gp2">1</td></tr>
+<tr><td>はなびらのまい</td><td style="background-color:#78C850">くさ</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>はねる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>はめつのねがい</td><td style="background-color:#B8B8D0">はがね</td><td>120</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>はらだいこ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>ばかぢから</td><td style="background-color:#C03028">かくとう</td><td>120</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ばくれつパンチ</td><td style="background-color:#C03028">かくとう</td><td>100</td><td>50</td><td class="gp2">1</td></tr>
+<tr><td>ひかりのかべ</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>ひっかく</td><td style="background-color:#A8A878">ノーマル</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ひっさつまえば</td><td style="background-color:#A8A878">ノーマル</td><td>80</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>ひのこ</td><td style="background-color:#F08030">ほのお</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ひみつのちから</td><td style="background-color:#A8A878">ノーマル</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ふういん</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>ふきとばし</td><td style="background-color:#A8A878">ノーマル</td><td>0</td><td>100</td><td>0</td></tr>
+<tr><td>ふくろだたき</td><td style="background-color:#705848">あく</td><td>10</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ふぶき</td><td style="background-color:#98D8D8">こおり</td><td>120</td><td>70</td><td class="gp2">1</td></tr>
+<tr><td>ふみつけ</td><td style="background-color:#A8A878">ノーマル</td><td>65</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ふんか</td><td style="background-color:#F08030">ほのお</td><td>150</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>へびにらみ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>75</td><td>0</td></tr>
+<tr><td>へんしん</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>ほえる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>ほごしょく</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>ほしがる</td><td style="background-color:#A8A878">ノーマル</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ほたるび</td><td style="background-color:#A8B820">むし</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>ほのおのうず</td><td style="background-color:#F08030">ほのお</td><td>15</td><td>70</td><td class="gp2">1</td></tr>
+<tr><td>ほのおのパンチ</td><td style="background-color:#F08030">ほのお</td><td>75</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ほろびのうた</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>まきつく</td><td style="background-color:#A8A878">ノーマル</td><td>15</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>まきびし</td><td style="background-color:#E0C068">じめん</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>まもる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td class="gp1">-1</td></tr>
+<tr><td>まるくなる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>まわしげり</td><td style="background-color:#C03028">かくとう</td><td>60</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>みがわり</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>みきり</td><td style="background-color:#C03028">かくとう</td><td>--</td><td>--</td><td class="gp1">-1</td></tr>
+<tr><td>みずあそび</td><td style="background-color:#6890F0">みず</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>みずでっぽう</td><td style="background-color:#6890F0">みず</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>みずのはどう</td><td style="background-color:#6890F0">みず</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>みだれづき</td><td style="background-color:#A8A878">ノーマル</td><td>15</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>みだれひっかき</td><td style="background-color:#A8A878">ノーマル</td><td>18</td><td>80</td><td class="gp2">1</td></tr>
+<tr><td>みちづれ</td><td style="background-color:#705898">ゴースト</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>みねうち</td><td style="background-color:#A8A878">ノーマル</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>みやぶる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>みらいよち</td><td style="background-color:#F85888">エスパー</td><td>80</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>めいそう</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>めざめるパワー</td><td style="background-color:#A8A878">ノーマル</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ものまね</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>やつあたり</td><td style="background-color:#A8A878">ノーマル</td><td>100</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>やどりぎのタネ</td><td style="background-color:#78C850">くさ</td><td>--</td><td>90</td><td>0</td></tr>
+<tr><td>ゆびをふる</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>ゆめくい</td><td style="background-color:#F85888">エスパー</td><td>100</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ようかいえき</td><td style="background-color:#A040A0">どく</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>よこどり</td><td style="background-color:#705848">あく</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>りゅうのいかり</td><td style="background-color:#7038F8">ドラゴン</td><td>--</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>りゅうのいぶき</td><td style="background-color:#7038F8">ドラゴン</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>りゅうのまい</td><td style="background-color:#7038F8">ドラゴン</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>れいとうパンチ</td><td style="background-color:#98D8D8">こおり</td><td>75</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>れいとうビーム</td><td style="background-color:#98D8D8">こおり</td><td>95</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>れんぞくぎり</td><td style="background-color:#A8B820">むし</td><td>10</td><td>95</td><td class="gp2">1</td></tr>
+<tr><td>れんぞくパンチ</td><td style="background-color:#A8A878">ノーマル</td><td>18</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>わたほうし</td><td style="background-color:#78C850">くさ</td><td>--</td><td>85</td><td>0</td></tr>
+<tr><td>わるあがき</td><td style="background-color:#A8A878">ノーマル</td><td>50</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>アイアンテール</td><td style="background-color:#B8B8D0">はがね</td><td>100</td><td>75</td><td class="gp2">1</td></tr>
+<tr><td>アイスボール</td><td style="background-color:#98D8D8">こおり</td><td>30</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>アロマセラピー</td><td style="background-color:#78C850">くさ</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>アンコール</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>ウェザーボール</td><td style="background-color:#A8A878">ノーマル</td><td>50</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>エアカッター</td><td style="background-color:#A890F0">ひこう</td><td>55</td><td>95</td><td class="gp2">1</td></tr>
+<tr><td>エアロブラスト</td><td style="background-color:#A890F0">ひこう</td><td>100</td><td>95</td><td class="gp2">1</td></tr>
+<tr><td>オウムがえし</td><td style="background-color:#A890F0">ひこう</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>オクタンほう</td><td style="background-color:#6890F0">みず</td><td>65</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>オーバーヒート</td><td style="background-color:#F08030">ほのお</td><td>140</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>オーロラビーム</td><td style="background-color:#98D8D8">こおり</td><td>65</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>カウンター</td><td style="background-color:#C03028">かくとう</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>キノコのほうし</td><td style="background-color:#78C850">くさ</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>ギガドレイン</td><td style="background-color:#78C850">くさ</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>クモのす</td><td style="background-color:#A8B820">むし</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>クラブハンマー</td><td style="background-color:#6890F0">みず</td><td>90</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>クロスチョップ</td><td style="background-color:#C03028">かくとう</td><td>100</td><td>80</td><td class="gp2">1</td></tr>
+<tr><td>コスモパワー</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>コメットパンチ</td><td style="background-color:#B8B8D0">はがね</td><td>100</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>ゴッドバード</td><td style="background-color:#A890F0">ひこう</td><td>140</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>サイケこうせん</td><td style="background-color:#F85888">エスパー</td><td>65</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>サイコウェーブ</td><td style="background-color:#F85888">エスパー</td><td>1</td><td>80</td><td class="gp2">1</td></tr>
+<tr><td>サイコキネシス</td><td style="background-color:#F85888">エスパー</td><td>90</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>サイコブースト</td><td style="background-color:#F85888">エスパー</td><td>140</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>シグナルビーム</td><td style="background-color:#A8B820">むし</td><td>75</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>シャドーパンチ</td><td style="background-color:#705898">ゴースト</td><td>60</td><td>0</td><td class="gp2">1</td></tr>
+<tr><td>シャドーボール</td><td style="background-color:#705898">ゴースト</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>スカイアッパー</td><td style="background-color:#C03028">かくとう</td><td>85</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>スキルスワップ</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>スケッチ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>スパーク</td><td style="background-color:#F8D030">でんき</td><td>65</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>スピードスター</td><td style="background-color:#A8A878">ノーマル</td><td>60</td><td>0</td><td class="gp2">1</td></tr>
+<tr><td>スプーンまげ</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>80</td><td>0</td></tr>
+<tr><td>スモッグ</td><td style="background-color:#A040A0">どく</td><td>20</td><td>70</td><td class="gp2">1</td></tr>
+<tr><td>ソニックブーム</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>ソーラービーム</td><td style="background-color:#78C850">くさ</td><td>120</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>タネマシンガン</td><td style="background-color:#78C850">くさ</td><td>10</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>タマゴうみ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>タマゴばくだん</td><td style="background-color:#A8A878">ノーマル</td><td>100</td><td>75</td><td class="gp2">1</td></tr>
+<tr><td>ダイビング</td><td style="background-color:#6890F0">みず</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ダブルニードル</td><td style="background-color:#A8B820">むし</td><td>25</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>テクスチャー</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>テクスチャー2</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>テレポート</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>トライアタック</td><td style="background-color:#A8A878">ノーマル</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>トリック</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>トリプルキック</td><td style="background-color:#C03028">かくとう</td><td>10</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>ドわすれ</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>ドラゴンクロー</td><td style="background-color:#7038F8">ドラゴン</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ドリルくちばし</td><td style="background-color:#A890F0">ひこう</td><td>80</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ナイトヘッド</td><td style="background-color:#705898">ゴースト</td><td>--</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ニードルアーム</td><td style="background-color:#78C850">くさ</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ハイドロカノン</td><td style="background-color:#6890F0">みず</td><td>150</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>ハイドロポンプ</td><td style="background-color:#6890F0">みず</td><td>120</td><td>80</td><td class="gp2">1</td></tr>
+<tr><td>ハイパーボイス</td><td style="background-color:#A8A878">ノーマル</td><td>90</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ハサミギロチン</td><td style="background-color:#A8A878">ノーマル</td><td>1</td><td>30</td><td class="gp2">1</td></tr>
+<tr><td>ハードプラント</td><td style="background-color:#78C850">くさ</td><td>150</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>バトンタッチ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>バブルこうせん</td><td style="background-color:#6890F0">みず</td><td>65</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>バリアー</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>ビルドアップ</td><td style="background-color:#C03028">かくとう</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>ピヨピヨパンチ</td><td style="background-color:#A8A878">ノーマル</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>フェザーダンス</td><td style="background-color:#A890F0">ひこう</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>フラッシュ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>70</td><td>0</td></tr>
+<tr><td>フラフラダンス</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>ブラストバーン</td><td style="background-color:#F08030">ほのお</td><td>150</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>ブレイククロー</td><td style="background-color:#A8A878">ノーマル</td><td>75</td><td>95</td><td class="gp2">1</td></tr>
+<tr><td>ブレイズキック</td><td style="background-color:#F08030">ほのお</td><td>85</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>プレゼント</td><td style="background-color:#A8A878">ノーマル</td><td>1</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>ヘドロこうげき</td><td style="background-color:#A040A0">どく</td><td>65</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ヘドロばくだん</td><td style="background-color:#A040A0">どく</td><td>90</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ホネこんぼう</td><td style="background-color:#E0C068">じめん</td><td>65</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>ホネブーメラン</td><td style="background-color:#E0C068">じめん</td><td>50</td><td>90</td><td class="gp2">1</td></tr>
+<tr><td>ボルテッカー</td><td style="background-color:#F8D030">でんき</td><td>120</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ボーンラッシュ</td><td style="background-color:#E0C068">じめん</td><td>25</td><td>80</td><td class="gp2">1</td></tr>
+<tr><td>ポイズンテール</td><td style="background-color:#A040A0">どく</td><td>50</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>マグニチュード</td><td style="background-color:#E0C068">じめん</td><td>1</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>マジカルリーフ</td><td style="background-color:#78C850">くさ</td><td>60</td><td>0</td><td class="gp2">1</td></tr>
+<tr><td>マジックコート</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>マッドショット</td><td style="background-color:#E0C068">じめん</td><td>55</td><td>95</td><td class="gp2">1</td></tr>
+<tr><td>マッハパンチ</td><td style="background-color:#C03028">かくとう</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ミサイルばり</td><td style="background-color:#A8B820">むし</td><td>14</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>ミストボール</td><td style="background-color:#F85888">エスパー</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ミラーコート</td><td style="background-color:#F85888">エスパー</td><td>1</td><td>100</td><td>0</td></tr>
+<tr><td>ミルクのみ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>メガトンキック</td><td style="background-color:#A8A878">ノーマル</td><td>120</td><td>75</td><td class="gp2">1</td></tr>
+<tr><td>メガトンパンチ</td><td style="background-color:#A8A878">ノーマル</td><td>80</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>メガドレイン</td><td style="background-color:#78C850">くさ</td><td>40</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>メガホーン</td><td style="background-color:#A8B820">むし</td><td>120</td><td>85</td><td class="gp2">1</td></tr>
+<tr><td>メタルクロー</td><td style="background-color:#B8B8D0">はがね</td><td>50</td><td>95</td><td class="gp2">1</td></tr>
+<tr><td>メロメロ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>ヨガのポーズ</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>ラスターパージ</td><td style="background-color:#F85888">エスパー</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>リサイクル</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>リフレクター</td><td style="background-color:#F85888">エスパー</td><td>--</td><td>--</td><td>0</td></tr>
+<tr><td>リフレッシュ</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>リベンジ</td><td style="background-color:#C03028">かくとう</td><td>60</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>リーフブレード</td><td style="background-color:#78C850">くさ</td><td>70</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ロケットずつき</td><td style="background-color:#A8A878">ノーマル</td><td>100</td><td>100</td><td class="gp2">1</td></tr>
+<tr><td>ロックオン</td><td style="background-color:#A8A878">ノーマル</td><td>--</td><td>100</td><td>0</td></tr>
+<tr><td>ロックブラスト</td><td style="background-color:#B8A038">いわ</td><td>25</td><td>80</td><td class="gp2">1</td></tr>
+</tbody>
+</table>
+</div>
 </details>
+<details>
+<summary class="h3">「技」のポイント</summary>
+<table>
+<thead><tr><th>技の結果</th><th>ポイント</th></tr></thead>
+<tbody>
+<tr><td>技が失敗・外した</td><td>-2</td></tr>
+<tr><td>効果が抜群</td><td>+2</td></tr>
+<tr><td>効果が普通</td><td>+1</td></tr>
+<tr><td>効果がいまひとつ</td><td>-1</td></tr>
+<tr><td>効果なし</td><td>-2</td></tr>
+<tr><td>守られた</td><td>+1</td></tr>
+<tr><td>相手ポケモンの性格によって[能力値の低下・状態異常・攻撃・交代]を防がられたり、逆にもらいび・ちょすい等のように相手のメリットになってしまった（というテキストメッセージが出た）</td><td>-3</td></tr>
+</tbody>
+</table>
+</details>
+</details>
+<!-- Battle Pyramid -->
+<details>
+<summary class="h2">バトルピラミッド <div class="overflow-ms"><img src="https://iwasakishuto.github.io/Front-End/tips/theme/images/trainer/overworld/Brandon.png"/></div></summary>
+<details>
+<summary class="h3">ルール</summary>
+    出典：<a href="https://wiki.xn--rckteqa2e.com/wiki/バトルピラミッド">ポケモンWiki</a>
+<div class="rule"><ul>
+<li>手持ちポケモンから3匹を選択して参加。真っ暗なピラミッドの中を歩き回り、野生ポケモンやトレーナーと戦いながら上への階段を探す。7つの階層をクリアしてピラミッド最上階にたどり着けばクリアとなる。</li>
+<li>ピラミッドの中は暗くて見通しがきかない。だが、野生ポケモンやトレーナーと戦って勝てば、主人公の周りが少しずつ明るくなって見えやすくなっていく。</li>
+<li>トレーナーに勝つと、階段の位置や道具についてのヒントがもらえる。</li>
+<li>バトルピラミッドの中には道具が落ちており、これを専用の鞄・「バトルバッグ」に入れて使うことができる。またピラミッド内で特性ものひろいの効果によって集めた道具も使える。使い切れなかったバトルバッグの道具は次回の挑戦に繰り越されるが、ピラミッド内でポケモンが全滅した場合は、集めた道具は没収される。</li>
+<li>戦闘後のポケモンの回復は行われない。</li>
+<li>野生ポケモンからは逃げることもできるが、逃走の成功率は低めになっている。特性「にげあし」を持つポケモンでも確定にはならない。</li>
+<li>ピラミッドを7階層突破するごとに、出現する野生ポケモンが変わる。</li>
+<li>移動中には回復道具の使用やポケモンの並び替えができる。</li>
+<li>バトルバッグに入れられる道具は10種類まで。</li>
+<li>7階層突破で1周。3周目と10周目の最後にはジンダイとのバトルになる。</li>
+</ul></div>
+</details>
+<form id="pyramid_form" name="PYRAMID">
+<details>
+<summary class="h3">野生ポケモン</summary>
+<table class="fixed" id="pyramid-wild-mons-table">
+<thead><tr><th colspan="6">ピラミッドの設定</th></tr></thead>
+<tbody>
+<tr><td colspan="3">周回数</td><td class="g1" colspan="3"><input max="20" min="1" name="winStreak1" size="3" type="number" value="10"/></td></tr>
+<tr><td colspan="3">Lv モード</td><td class="g1" colspan="3"><select name="LvlMode1"><option value="lv50">Lv.50</option><option value="lv_open">LV.OPEN</option></select></td></tr>
+</tbody>
+<thead>
+<tr><th colspan="6">野生のポケモン</th></tr>
+<tr><th>ポケモン</th><th>Lv(&plusmn;5)</th><th colspan="4">技</th></tr>
+</thead>
+<tbody id="pyramid-wild-pokemon"></tbody>
+</table>
+</details>
+<details>
+<summary class="h3">入手可能アイテム</summary>
+<table id="pyramid-pickup-table">
+<thead><tr><th colspan="8">ピラミッドの設定</th></tr></thead>
+<tbody>
+<tr><td colspan="4">周回数</td><td class="g1" colspan="4"><input max="20" min="1" name="winStreak2" size="3" type="number" value="10"/></td></tr>
+<tr><td colspan="4">Lv モード</td><td class="g1" colspan="4"><select name="LvlMode2"><option value="lv50">Lv.50</option><option value="lv_open">LV.OPEN</option></select></td></tr>
+</tbody>
+<thead>
+<tr><th colspan="8">入手可能アイテム</th></tr></thead>
+<tr><th class="g1"><select name="is_pickup_ability"><option value="0">落ちているアイテム</option><option value="1">特性ものひろい</option></select></th><th>1F</th><th>2F</th><th>3F</th><th>4F</th><th>5F</th><th>6F</th><th>7F</th></tr>
 
+<tbody id="pyramid-pickup-item"></tbody>
+</table>
+</details>
+<details>
+<summary class="h3">マップレイアウト</summary>
+<table class="fixed" id="pyramid-layour-table">
+<thead>
+<tr><th colspan="21">マップレイアウト</th></tr>
+<tr><th></th><th colspan="4">Pattern.1</th><th colspan="4">Pattern.2</th><th colspan="4">Pattern.3</th><th colspan="4">Pattern.4</th><th colspan="4">Pattern.5</th></tr>
+</thead>
+<tbody>
+<tr><td rowspan="2">1階</td><td colspan="4">40%</td><td colspan="4">30%</td><td colspan="4">20%</td><td colspan="4">10%</td><td colspan="4">-</td></tr>
+<tr><td class="g1">7</td><td class="g1">○</td><td class="g2">3</td><td class="g2">○</td><td class="g1">6</td><td class="g1">○</td><td class="g2">3</td><td class="g2">○</td><td class="g1">5</td><td class="g1">○</td><td class="g2">3</td><td class="g2">○</td><td class="g1">4</td><td class="g1">○</td><td class="g2">4</td><td class="g2">○</td><td class="g1">-</td><td class="g1">-</td><td class="g2">-</td><td class="g2">-</td></tr>
+<tr><td rowspan="2">2階</td><td colspan="4">35%</td><td colspan="4">20%</td><td colspan="4">20%</td><td colspan="4">15%</td><td colspan="4">10%</td></tr>
+<tr><td class="g1">6</td><td class="g1">○</td><td class="g2">3</td><td class="g2">○</td><td class="g1">5</td><td class="g1">○</td><td class="g2">3</td><td class="g2">○</td><td class="g1">4</td><td class="g1">○</td><td class="g2">4</td><td class="g2">○</td><td class="g1">4</td><td class="g1">○</td><td class="g2">4</td><td class="g2">+</td><td class="g1">2</td><td class="g1">○</td><td class="g2">3</td><td class="g2">○</td></tr>
+<tr><td rowspan="2">3階</td><td colspan="4">35%</td><td colspan="4">20%</td><td colspan="4">20%</td><td colspan="4">15%</td><td colspan="4">10%</td></tr>
+<tr><td class="g1">5</td><td class="g1">○</td><td class="g2">3</td><td class="g2">○</td><td class="g1">4</td><td class="g1">○</td><td class="g2">4</td><td class="g2">○</td><td class="g1">4</td><td class="g1">○</td><td class="g2">4</td><td class="g2">+</td><td class="g1">3</td><td class="g1">○</td><td class="g2">5</td><td class="g2">x</td><td class="g1">4</td><td class="g1">○</td><td class="g2">5</td><td class="g2">○</td></tr>
+<tr><td rowspan="2">4階</td><td colspan="4">35%</td><td colspan="4">20%</td><td colspan="4">20%</td><td colspan="4">15%</td><td colspan="4">10%</td></tr>
+<tr><td class="g1">4</td><td class="g1">○</td><td class="g2">4</td><td class="g2">○</td><td class="g1">4</td><td class="g1">○</td><td class="g2">4</td><td class="g2">+</td><td class="g1">3</td><td class="g1">○</td><td class="g2">5</td><td class="g2">x</td><td class="g1">3</td><td class="g1">○</td><td class="g2">5</td><td class="g2">○</td><td class="g1">3</td><td class="g1">○</td><td class="g2">7</td><td class="g2">○</td></tr>
+<tr><td rowspan="2">5階</td><td colspan="4">35%</td><td colspan="4">20%</td><td colspan="4">20%</td><td colspan="4">15%</td><td colspan="4">10%</td></tr>
+<tr><td class="g1">4</td><td class="g1">○</td><td class="g2">4</td><td class="g2">+</td><td class="g1">3</td><td class="g1">○</td><td class="g2">5</td><td class="g2">x</td><td class="g1">3</td><td class="g1">○</td><td class="g2">5</td><td class="g2">○</td><td class="g1">2</td><td class="g1">○</td><td class="g2">4</td><td class="g2">+</td><td class="g1">2</td><td class="g1">○</td><td class="g2">4</td><td class="g2">○</td></tr>
+<tr><td rowspan="2">6階</td><td colspan="4">35%</td><td colspan="4">20%</td><td colspan="4">20%</td><td colspan="4">15%</td><td colspan="4">10%</td></tr>
+<tr><td class="g1">3</td><td class="g1">○</td><td class="g2">5</td><td class="g2">x</td><td class="g1">3</td><td class="g1">○</td><td class="g2">5</td><td class="g2">○</td><td class="g1">2</td><td class="g1">○</td><td class="g2">4</td><td class="g2">+</td><td class="g1">4</td><td class="g1">○</td><td class="g2">5</td><td class="g2">x</td><td class="g1">3</td><td class="g1">○</td><td class="g2">6</td><td class="g2">○</td></tr>
+<tr><td rowspan="2">7階</td><td colspan="4">35%</td><td colspan="4">20%</td><td colspan="4">20%</td><td colspan="4">15%</td><td colspan="4">10%</td></tr>
+<tr><td class="g1">3</td><td class="g1">○</td><td class="g2">5</td><td class="g2">○</td><td class="g1">2</td><td class="g1">○</td><td class="g2">4</td><td class="g2">+</td><td class="g1">4</td><td class="g1">○</td><td class="g2">5</td><td class="g2">x</td><td class="g1">3</td><td class="g1">○</td><td class="g2">6</td><td class="g2">*</td><td class="g1">3</td><td class="g1">○</td><td class="g2">8</td><td class="g2">○</td></tr> </tbody>
+</table>
+<p>※ 左から["アイテム数", "アイテムの配置", "トレーナー数", "トレーナーの配置"]を示す。配置の記号は、</p>
+<ul>
+<li>"+"： 開始点付近の四角形内部</li>
+<li>"x"： 出口付近の四角形内部</li>
+<li>"*"： 出口付近</li>
+<li>"○"： 一様</li>
+</ul>
+</details>
+</form>
+</details>
 <!-- Load Scripts. -->
-
-<script type="text/javascript" src="https://iwasakishuto.github.io/js/jquery.js"></script>
-
-<script type="text/javascript" src="https://iwasakishuto.github.io/js/tablefilter.js"></script>
-
-<script type="text/javascript" src="https://iwasakishuto.github.io/Front-End/tips/theme/js/pokeutils.js"></script>
-
-<script type="text/javascript" src="https://iwasakishuto.github.io/js/custom.js"></script>
-
+<script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
+<script src="https://iwasakishuto.github.io/js/tablefilter.js" type="text/javascript"></script>
+<script src="https://iwasakishuto.github.io/Front-End/tips/theme/js/pokeutils.js" type="text/javascript"></script>
+<script src="https://iwasakishuto.github.io/js/custom.js" type="text/javascript"></script>
 <!-- My Pokemon Form -->
-
 <script>
   const MPtable = document.getElementById("my-pokemon");
   const MPT_base_statsIdx = 6;
@@ -1005,9 +981,7 @@
     }
   }
 </script>
-
 <!-- Move List -->
-
 <script>
   function generate_move_table(MYPOKE, PALACE){
     var move_table = PALACE.querySelector("table#move_list");
@@ -1028,9 +1002,7 @@
     move_table.querySelector("tbody").innerHTML = move_tbody
   }
 </script>
-
 <!-- Factory Rental Pokemon -->
-
 <script>
   const sFixedIVTable = [
       [3,  6], // Fixed Ivs of MyPokemon & OpTrainer(~6th), That of OpTrainer(7th)
@@ -1381,9 +1353,7 @@
     return monId;
   }
 </script>
-
 <!-- Palace TableFilter Settings -->
-
 <script>
   var filtersConfig_palace = {
     btn_reset: true,
@@ -1407,9 +1377,7 @@
   var tf_palace = new TableFilter('nature_trend', filtersConfig_palace, 2);
   tf_palace.init();
 </script>
-
 <!-- Pike Wild Monsters -->
-
 <script>
 const PikeWildMons = {lv50:[[['ハブネーク', 4, 'のしかかり', 'へびにらみ', 'ヘドロばくだん', 'どくどく'], ['ミロカロス', 4, 'さいみんじゅつ', 'なみのり', 'のしかかり', 'どくどく'], ['サマヨール', 5, 'シャドーパンチ', 'くろいまなざし', 'おにび', 'どくどく']], [['ハブネーク', 4, 'のしかかり', 'へびにらみ', 'ヘドロばくだん', 'どくどく'], ['ミロカロス', 4, 'さいみんじゅつ', 'なみのり', 'のしかかり', 'どくどく'], ['マルマイン', 5, 'じばく', 'どくどく', 'だいばくはつ', 'かみなり']], [['ハブネーク', 4, 'のしかかり', 'へびにらみ', 'ヘドロばくだん', 'どくどく'], ['ミロカロス', 4, 'さいみんじゅつ', 'なみのり', 'のしかかり', 'どくどく'], ['キノガッサ', 5, 'めざめるパワー', 'しびれごな', 'キノコのほうし', 'どくのこな']], [['ハブネーク', 4, 'のしかかり', 'へびにらみ', 'ヘドロばくだん', 'どくどく'], ['ミロカロス', 4, 'さいみんじゅつ', 'なみのり', 'のしかかり', 'どくどく'], ['ソーナンス', 5, 'カウンター', 'ミラーコート', 'しんぴのまもり', 'みちづれ']]], lv_open: [[['ハブネーク', 4, 'どくどくのキバ', 'へびにらみ', 'ヘドロばくだん', 'どくどく'], ['ミロカロス', 4, 'さいみんじゅつ', 'れいとうビーム', 'のしかかり', 'どくどく'], ['サマヨール', 5, 'くろいまなざし', 'れいとうビーム', 'おにび', 'どくどく']], [['ハブネーク', 4, 'どくどくのキバ', 'へびにらみ', 'ヘドロばくだん', 'どくどく'], ['ミロカロス', 4, 'さいみんじゅつ', 'れいとうビーム', 'のしかかり', 'どくどく'], ['マルマイン', 5, 'じばく', 'どくどく', 'だいばくはつ', 'かみなり']], [['ハブネーク', 4, 'どくどくのキバ', 'へびにらみ', 'ヘドロばくだん', 'どくどく'], ['ミロカロス', 4, 'さいみんじゅつ', 'れいとうビーム', 'のしかかり', 'どくどく'], ['キノガッサ', 5, 'めざめるパワー', 'しびれごな', 'キノコのほうし', 'どくのこな']], [['ハブネーク', 4, 'どくどくのキバ', 'へびにらみ', 'ヘドロばくだん', 'どくどく'], ['ミロカロス', 4, 'さいみんじゅつ', 'れいとうビーム', 'のしかかり', 'どくどく'], ['ソーナンス', 5, 'カウンター', 'ミラーコート', 'しんぴのまもり', 'アンコール']]]}
 const PikeWild_nameIdx = 0;
@@ -1435,9 +1403,7 @@ function generate_pike_wild_mons(PIKE){
   document.getElementById("pike-wild-pokemon").innerHTML = pike_wild_pokemon_tbody;
 }
 </script>
-
 <!-- Arena TableFilter Settings -->
-
 <script>
   var filtersConfig_arena = {
     btn_reset: true,
@@ -1456,9 +1422,7 @@ function generate_pike_wild_mons(PIKE){
   var tf_arena = new TableFilter('mind_points', filtersConfig_arena);
   tf_arena.init();
 </script>
-
 <!-- Pyramid Wild Monsters & Item -->
-
 <script>
   const PyramidWildMons={lv50: [[['プラスル', 35, 'アンコール', 'でんじは', '', 'スパーク'], ['マイナン', 35, '', 'でんじは', '10まんボルト', 'でんこうせっか'], ['ピカチュウ', 37, 'たたきつける', 'でんじは', '10まんボルト', ''], ['エレブー', 37, 'スピードスター', 'かみなりパンチ', '', 'いやなおと'], ['ラフレシア', 39, 'しびれごな', 'ギガドレイン', '', 'まもる'], ['ライボルト', 39, 'でんこうせっか', 'でんじは', '', 'かみなり'], ['キノガッサ', 40, 'マッハパンチ', 'しびれごな', 'ギガドレイン', 'きあいパンチ'], ['サンダース', 40, 'ミサイルばり', 'でんじは', 'でんこうせっか', 'かみなり']], [['ゴクリン', 36, 'ヘドロこうげき', 'まもる', '', 'どくどく'], ['ロゼリア', 36, 'マジカルリーフ', 'はなびらのまい', 'ギガドレイン', 'どくどく'], ['バタフリー', 38, 'かぜおこし', 'サイケこうせん', '', 'どくのこな'], ['ハブネーク', 38, 'どくどくのキバ', 'かみくだく', 'ポイズンテール', 'いばる'], ['エアームド', 40, 'はがねのつばさ', 'そらをとぶ', '', 'どくどく'], ['ルンパッパ', 40, 'ダイビング', 'あまごい', 'まもる', 'どくどく'], ['クロバット', 41, 'かみつく', 'くろいまなざし', 'あやしいひかり', 'どくどく'], ['ゲンガー', 41, 'シャドーパンチ', 'ナイトヘッド', '', 'どくどく']], [['ガーディ', 37, 'とっしん', 'かえんぐるま', '', ''], ['ロコン', 37, 'かえんほうしゃ', 'おにび', '', ''], ['マグカルゴ', 39, 'かえんほうしゃ', 'いわなだれ', '', 'まもる'], ['キュウコン', 39, 'かえんほうしゃ', 'おにび', '', 'でんこうせっか'], ['チャーレム', 41, 'ほのおのパンチ', 'とびひざげり', '', ''], ['マタドガス', 41, 'かえんほうしゃ', 'おにび', 'まもる', ''], ['サマヨール', 42, 'シャドーパンチ', 'くろいまなざし', 'おにび', 'あやしいひかり'], ['ヘルガー', 42, 'ソーラービーム', 'かえんほうしゃ', 'オーバーヒート', 'かみつく']], [['ノコッチ', 42, 'うらみ', 'まもる', 'どくどく', ''], ['ジュペッタ', 41, 'おんねん', 'おにび', 'ナイトヘッド', ''], ['ムウマ', 42, 'おんねん', 'シャドーボール', 'うらみ', ''], ['キュウコン', 42, 'おんねん', 'オーバーヒート', 'おにび', ''], ['アブソル', 44, 'シャドーボール', 'かみつく', 'つばめがえし', 'まもる'], ['サマヨール', 44, 'どくどく', 'シャドーボール', 'おにび', 'まもる'], ['ヌケニン', 45, 'おんねん', 'うらみ', '', 'どくどく'], ['ゲンガー', 45, 'おんねん', 'うらみ', '', 'ナイトヘッド']], [['ゴースト', 41, 'ヘドロばくだん', '10まんボルト', '', 'ナイトヘッド'], ['チリーン', 41, 'すてみタックル', 'まもる', 'サイコキネシス', 'どくどく'], ['ソルロック', 42, 'じしん', 'いわなだれ', 'だいもんじ', 'どくどく'], ['ムウマ', 42, 'いたみわけ', 'シャドーボール', 'うらみ', 'サイコキネシス'], ['ネンドール', 44, 'げんしのちから', 'じしん', 'サイコキネシス', 'じばく'], ['マタドガス', 44, 'ヘドロばくだん', '', 'まもる', 'じばく'], ['フライゴン', 45, 'ドラゴンクロー', 'じしん', 'かみくだく', 'りゅうのいぶき'], ['ゲンガー', 45, 'ナイトヘッド', 'ギガドレイン', 'サイコキネシス', '10まんボルト']], [['ディグダ', 41, 'いわなだれ', 'きりさく', '', 'あなをほる'], ['ナックラー', 41, 'じしん', 'いわなだれ', 'ギガドレイン', ''], ['ソーナノ', 42, 'カウンター', 'ミラーコート', 'はねる', 'みちづれ'], ['ディグダ', 42, 'マグニチュード', 'じしん', 'いわなだれ', 'どくどく'], ['ナックラー', 44, 'じしん', 'いわなだれ', 'ギガドレイン', 'まもる'], ['ソーナノ', 44, 'カウンター', 'ミラーコート', 'みちづれ', ''], ['ソーナンス', 45, 'カウンター', 'ミラーコート', 'みちづれ', ''], ['ダグトリオ', 45, 'ヘドロばくだん', 'いわなだれ', 'まもる', 'じしん']], [['オニゴーリ', 41, 'かみくだく', 'れいとうビーム', '', 'まもる'], ['ニューラ', 41, 'ブレイククロー', 'れいとうビーム', '', 'うらみ'], ['ジュゴン', 42, 'ふぶき', 'なみのり', '', 'すてみタックル'], ['イノムー', 42, 'じしん', 'れいとうビーム', '', 'どくどく'], ['ルージュラ', 44, 'ふぶき', 'あくまのキッス', '', 'サイコキネシス'], ['パルシェン', 44, 'なみのり', 'れいとうビーム', '', 'まもる'], ['トドゼルガ', 45, 'のしかかり', 'ふぶき', 'なみのり', ''], ['ラプラス', 45, 'のしかかり', 'うたう', 'れいとうビーム', 'サイコキネシス']], [['マタドガス', 41, 'ヘドロばくだん', 'じばく', 'だいもんじ', ''], ['マルマイン', 41, 'じばく', 'ころがる', '', '10まんボルト'], ['ゲンガー', 42, 'したでなめる', 'シャドーボール', 'みちづれ', ''], ['ゴローニャ', 42, 'じばく', '', 'まもる', 'じしん'], ['クヌギダマ', 44, 'すてみタックル', 'ギガドレイン', '', 'だいばくはつ'], ['ソルロック', 44, 'ほのおのうず', 'サイコウェーブ', '', 'だいばくはつ'], ['フォレトス', 45, 'どくどく', 'いわなだれ', '', 'だいばくはつ'], ['ダーテング', 45, 'ソーラービーム', 'ギガドレイン', 'まもる', 'だいばくはつ']], [['ソーナンス', 41, 'カウンター', 'ミラーコート', 'しんぴのまもり', 'みちづれ'], ['メタング', 41, 'ヘドロばくだん', 'じしん', 'サイコキネシス', 'どくどく'], ['ナッシー', 42, 'さいみんじゅつ', 'タマゴばくだん', '', 'サイコキネシス'], ['ヤドキング', 42, 'シャドーボール', 'なみのり', 'れいとうビーム', 'かえんほうしゃ'], ['ネイティオ', 44, 'シャドーボール', 'はがねのつばさ', 'あやしいひかり', 'サイコキネシス'], ['フーディン', 44, 'れいとうパンチ', 'どくどく', 'ほのおのパンチ', 'サイコキネシス'], ['スターミー', 45, 'なみのり', '10まんボルト', 'れいとうビーム', 'サイコキネシス'], ['エーフィ', 45, 'シャドーボール', '', 'サイコキネシス', 'あなをほる']], [['ゴローニャ', 41, 'じばく', '', 'まもる', 'じしん'], ['ハガネール', 41, 'かみくだく', 'じしん', 'アイアンテール', ''], ['オムスター', 42, 'げんしのちから', 'なみのり', 'マッドショット', ''], ['ルナトーン', 42, 'さいみんじゅつ', 'だいばくはつ', '', 'サイコウェーブ'], ['ツボツボ', 44, 'まもる', 'まきつく', 'どくどく', ''], ['アーマルド', 44, 'げんしのちから', 'つばめがえし', 'まもる', ''], ['ユレイドル', 45, 'ヘドロばくだん', 'ギガドレイン', 'あやしいひかり', ''], ['プテラ', 45, 'いわなだれ', 'はかいこうせん', 'かみつく', '']], [['ニョロボン', 41, 'じごくぐるま', 'なみのり', 'きあいパンチ', ''], ['ハリテヤマ', 41, 'ねこだまし', 'なみのり', 'きあいパンチ', ''], ['キノガッサ', 42, 'キノコのほうし', 'きあいパンチ', 'まもる', ''], ['チャーレム', 42, 'れいとうパンチ', 'かみなりパンチ', 'ほのおのパンチ', 'きあいパンチ'], ['エビワラー', 44, 'れいとうパンチ', 'かみなりパンチ', 'ほのおのパンチ', 'きあいパンチ'], ['サワムラー', 44, 'メガトンキック', 'きあいパンチ', '', ''], ['ヘラクロス', 45, 'じしん', 'いわなだれ', 'きあいパンチ', 'メガホーン'], ['カイリキー', 50, 'ちきゅうなげ', 'じしん', 'いわなだれ', 'きあいパンチ']], [['ヌオー', 41, 'あまごい', 'なみのり', '', 'まもる'], ['トロピウス', 41, 'ソーラービーム', '', 'にほんばれ', ''], ['サナギラス', 42, 'じしん', 'いわなだれ', '', 'すなあらし'], ['ラプラス', 42, 'あられ', 'れいとうビーム', '', ''], ['ノクタス', 44, 'ソーラービーム', 'ギガドレイン', '', 'すなあらし'], ['ブースター', 44, 'かえんほうしゃ', 'まもる', '', 'にほんばれ'], ['トドゼルガ', 45, 'あられ', 'れいとうビーム', '', ''], ['ギャラドス', 50, 'あまごい', 'ハイドロポンプ', '', 'かみなり']], [['クヌギダマ', 42, 'とっしん', '', 'だいばくはつ', ''], ['ツボツボ', 42, 'じしん', 'まもる', '', 'どくどく'], ['モルフォン', 46, 'ぎんいろのかぜ', 'ねむりごな', 'サイコキネシス', 'どくのこな'], ['ハッサム', 46, 'れんぞくぎり', 'メタルクロー', 'おいうち', 'でんこうせっか'], ['ヘラクロス', 48, 'じしん', 'いわなだれ', 'かわらわり', 'メガホーン'], ['フォレトス', 48, 'じしん', 'まもる', '', 'だいばくはつ'], ['アーマルド', 50, 'いわなだれ', 'みずのはどう', '', 'まもる'], ['ヌケニン', 50, 'おんねん', 'シャドーボール', 'うらみ', 'どくどく']], [['ヤミラミ', 42, 'つばめがえし', 'サイコキネシス', 'ナイトヘッド', ''], ['ニューラ', 42, 'ちょうはつ', 'れいとうビーム', 'だましうち', 'でんこうせっか'], ['シザリガー', 46, 'なみのり', 'れいとうビーム', '', 'クラブハンマー'], ['ダーテング', 46, 'シャドーボール', 'ギガドレイン', 'つばめがえし', 'だいばくはつ'], ['ノクタス', 48, 'ニードルアーム', 'ギガドレイン', '', 'どくどく'], ['アブソル', 48, 'かみつく', 'きりさく', 'まもる', ''], ['ヘルガー', 50, 'かみくだく', 'シャドーボール', 'オーバーヒート', 'まもる'], ['ブラッキー', 50, 'シャドーボール', 'アイアンテール', 'サイコキネシス', 'でんこうせっか']], [['オクタン', 42, 'オクタンほう', 'だいもんじ', 'れいとうビーム', ''], ['ジュゴン', 42, 'れいとうビーム', 'みずのはどう', '', 'ずつき'], ['ペリッパー', 46, 'なみのり', 'ちょうおんぱ', '', 'まもる'], ['ヌオー', 46, 'じしん', 'なみのり', '', 'がんせきふうじ'], ['ルンパッパ', 48, 'ソーラービーム', 'どくどく', 'れいとうビーム', 'まもる'], ['ヤドキング', 48, 'ずつき', 'いばる', 'サイコキネシス', ''], ['スターミー', 50, 'ふぶき', 'みずのはどう', 'あやしいひかり', '10まんボルト'], ['カメックス', 50, 'ハイドロポンプ', 'れいとうビーム', 'かみつく', '']], [['ヨマワル', 42, 'シャドーボール', 'まもる', 'おにび', 'ナイトヘッド'], ['ゴースト', 42, 'さいみんじゅつ', 'シャドーボール', 'うらみ', 'どくどく'], ['ジュペッタ', 46, 'シャドーボール', 'うらみ', 'おにび', ''], ['ムウマ', 46, 'ほろびのうた', 'うらみ', '', 'くろいまなざし'], ['ヤミラミ', 48, 'シャドーボール', 'ナイトヘッド', 'くろいまなざし', 'あなをほる'], ['サマヨール', 48, 'シャドーボール', 'おにび', 'どくどく', ''], ['ヌケニン', 50, 'おんねん', 'シャドーボール', 'うらみ', 'まもる'], ['ゲンガー', 50, 'ナイトヘッド', 'うらみ', 'みちづれ', 'サイコキネシス']], [['クチート', 42, 'かみくだく', 'れいとうビーム', '', 'どくどく'], ['レアコイル', 42, 'でんじは', '10まんボルト', '', ''], ['ハガネール', 46, 'いわおとし', 'すてみタックル', '', 'じしん'], ['ハッサム', 46, 'メタルクロー', 'きりさく', '', ''], ['フォレトス', 48, 'どくどく', '', 'だいばくはつ', ''], ['エアームド', 48, 'はがねのつばさ', 'そらをとぶ', 'まもる', 'どくどく'], ['ボスゴドラ', 50, 'じしん', 'なみのり', 'とっしん', 'れいとうビーム'], ['メタグロス', 50, 'じしん', 'シャドーボール', 'サイコキネシス', 'かわらわり']], [['ハクリュー', 42, 'れいとうビーム', 'でんじは', 'どくどく', ''], ['ビブラーバ', 42, 'りゅうのいぶき', 'じしん', 'はがねのつばさ', 'かみくだく'], ['チルタリス', 46, 'ドラゴンクロー', 'じしん', 'うたう', 'まもる'], ['フライゴン', 46, 'ドラゴンクロー', 'じしん', 'だいもんじ', ''], ['プテラ', 48, 'ドラゴンクロー', 'じしん', 'いわなだれ', ''], ['ギャラドス', 48, 'あばれる', 'じしん', 'なみのり', 'かみつく'], ['キングドラ', 50, 'ハイドロポンプ', 'れいとうビーム', '', 'まもる'], ['リザードン', 50, 'アイアンテール', 'かえんほうしゃ', 'だいもんじ', 'きあいパンチ']], [['ウインディ', 42, 'とっしん', 'だいもんじ', '', ''], ['ニョロボン', 42, 'ハイドロポンプ', 'れいとうビーム', '', ''], ['ライチュウ', 46, 'たたきつける', 'でんじは', '', 'かみなり'], ['シャワーズ', 46, 'なみのり', 'れいとうビーム', '', ''], ['サンダース', 48, 'ミサイルばり', '', '10まんボルト', ''], ['ブースター', 48, 'かえんほうしゃ', 'かみつく', '', ''], ['キュウコン', 50, 'かえんほうしゃ', 'おにび', 'まもる', ''], ['スターミー', 50, 'なみのり', 'れいとうビーム', 'サイコキネシス', '10まんボルト']], [['ガルーラ', 42, 'なみのり', 'かえんほうしゃ', 'はかいこうせん', 'ピヨピヨパンチ'], ['オオスバメ', 42, 'はかいこうせん', 'つばめがえし', 'どくどく', ''], ['リングマ', 46, 'じしん', 'はかいこうせん', 'きあいパンチ', 'まもる'], ['ポリゴン2', 46, 'シャドーボール', 'はかいこうせん', 'れいとうビーム', 'サイケこうせん'], ['ケンタロス', 48, 'じしん', 'なみのり', 'はかいこうせん', '10まんボルト'], ['オニドリル', 48, 'はかいこうせん', 'そらをとぶ', 'まもる', 'オウムがえし'], ['カビゴン', 50, 'のしかかり', 'じしん', 'シャドーボール', 'はかいこうせん'], ['ケッキング', 50, 'じしん', 'シャドーボール', 'はかいこうせん', 'れいとうビーム']]], lv_open: [[['プラスル', 85, 'アンコール', 'でんじは', '', 'スパーク'], ['マイナン', 85, '', 'でんじは', '10まんボルト', 'でんこうせっか'], ['ピカチュウ', 87, 'たたきつける', 'でんじは', '10まんボルト', ''], ['エレブー', 87, 'スピードスター', 'かみなりパンチ', '', 'いやなおと'], ['ラフレシア', 92, 'しびれごな', 'ギガドレイン', '', 'まもる'], ['ライボルト', 92, 'でんこうせっか', 'でんじは', '', 'かみなり'], ['キノガッサ', 94, 'マッハパンチ', 'しびれごな', 'ギガドレイン', 'きあいパンチ'], ['サンダース', 94, 'ミサイルばり', 'でんじは', 'でんこうせっか', 'かみなり']], [['ゴクリン', 86, 'ヘドロこうげき', 'まもる', '', 'どくどく'], ['ロゼリア', 86, 'マジカルリーフ', 'はなびらのまい', 'ギガドレイン', 'どくどく'], ['バタフリー', 88, 'かぜおこし', 'サイケこうせん', '', 'どくのこな'], ['ハブネーク', 88, 'どくどくのキバ', 'かみくだく', 'ポイズンテール', 'いばる'], ['エアームド', 93, 'はがねのつばさ', 'そらをとぶ', '', 'どくどく'], ['ルンパッパ', 93, 'ダイビング', 'あまごい', 'まもる', 'どくどく'], ['クロバット', 95, 'かみつく', 'くろいまなざし', 'あやしいひかり', 'どくどく'], ['ゲンガー', 95, 'シャドーパンチ', 'ナイトヘッド', '', 'どくどく']], [['ガーディ', 87, 'とっしん', 'かえんぐるま', '', ''], ['ロコン', 87, 'かえんほうしゃ', 'おにび', '', ''], ['マグカルゴ', 89, 'かえんほうしゃ', 'いわなだれ', '', 'まもる'], ['キュウコン', 89, 'かえんほうしゃ', 'おにび', '', 'でんこうせっか'], ['チャーレム', 94, 'ほのおのパンチ', 'とびひざげり', '', ''], ['マタドガス', 94, 'かえんほうしゃ', 'おにび', 'まもる', ''], ['サマヨール', 95, 'シャドーパンチ', 'くろいまなざし', 'おにび', 'あやしいひかり'], ['ヘルガー', 95, 'ソーラービーム', 'かえんほうしゃ', 'オーバーヒート', 'かみつく']], [['ノコッチ', 90, 'うらみ', 'まもる', 'どくどく', ''], ['ジュペッタ', 92, 'おんねん', 'おにび', 'ナイトヘッド', ''], ['ムウマ', 92, 'おんねん', 'シャドーボール', 'うらみ', ''], ['キュウコン', 94, 'おんねん', 'オーバーヒート', 'おにび', ''], ['アブソル', 90, 'シャドーボール', 'かみつく', 'つばめがえし', 'まもる'], ['サマヨール', 94, 'どくどく', 'シャドーボール', 'おにび', 'まもる'], ['ヌケニン', 95, 'おんねん', 'うらみ', '', 'どくどく'], ['ゲンガー', 95, 'おんねん', 'うらみ', '', 'ナイトヘッド']], [['ゴースト', 90, 'ヘドロばくだん', '10まんボルト', '', 'ナイトヘッド'], ['チリーン', 90, 'すてみタックル', 'まもる', 'サイコキネシス', 'どくどく'], ['ソルロック', 92, 'じしん', 'いわなだれ', 'だいもんじ', 'どくどく'], ['ムウマ', 92, 'いたみわけ', 'シャドーボール', 'うらみ', 'サイコキネシス'], ['ネンドール', 94, 'げんしのちから', 'じしん', 'サイコキネシス', 'じばく'], ['マタドガス', 94, 'ヘドロばくだん', '', 'まもる', 'じばく'], ['フライゴン', 95, 'ドラゴンクロー', 'じしん', 'かみくだく', 'りゅうのいぶき'], ['ゲンガー', 95, 'ナイトヘッド', 'ギガドレイン', 'サイコキネシス', '10まんボルト']], [['ディグダ', 90, 'いわなだれ', 'きりさく', '', 'あなをほる'], ['ナックラー', 90, 'じしん', 'いわなだれ', 'ギガドレイン', ''], ['ソーナノ', 92, 'カウンター', 'ミラーコート', 'はねる', 'みちづれ'], ['ディグダ', 92, 'マグニチュード', 'じしん', 'いわなだれ', 'どくどく'], ['ナックラー', 94, 'じしん', 'いわなだれ', 'ギガドレイン', 'まもる'], ['ソーナノ', 94, 'カウンター', 'ミラーコート', 'みちづれ', ''], ['ソーナンス', 95, 'カウンター', 'ミラーコート', 'みちづれ', ''], ['ダグトリオ', 95, 'ヘドロばくだん', 'いわなだれ', 'まもる', 'じしん']], [['オニゴーリ', 90, 'かみくだく', 'れいとうビーム', '', 'まもる'], ['ニューラ', 90, 'ブレイククロー', 'れいとうビーム', '', 'うらみ'], ['ジュゴン', 92, 'ふぶき', 'なみのり', '', 'すてみタックル'], ['イノムー', 92, 'じしん', 'れいとうビーム', '', 'どくどく'], ['ルージュラ', 94, 'ふぶき', 'あくまのキッス', '', 'サイコキネシス'], ['パルシェン', 94, 'なみのり', 'れいとうビーム', '', 'まもる'], ['トドゼルガ', 95, 'のしかかり', 'ふぶき', 'なみのり', ''], ['ラプラス', 95, 'のしかかり', 'うたう', 'れいとうビーム', 'サイコキネシス']], [['マタドガス', 90, 'ヘドロばくだん', 'じばく', 'だいもんじ', ''], ['マルマイン', 90, 'じばく', 'ころがる', '', '10まんボルト'], ['ゲンガー', 92, 'したでなめる', 'シャドーボール', 'みちづれ', ''], ['ゴローニャ', 92, 'じばく', '', 'まもる', 'じしん'], ['クヌギダマ', 94, 'すてみタックル', 'ギガドレイン', '', 'だいばくはつ'], ['ソルロック', 95, 'ほのおのうず', 'サイコウェーブ', '', 'だいばくはつ'], ['フォレトス', 95, 'どくどく', 'いわなだれ', '', 'だいばくはつ'], ['ダーテング', 95, 'ソーラービーム', 'ギガドレイン', 'まもる', 'だいばくはつ']], [['ソーナンス', 90, 'カウンター', 'ミラーコート', 'しんぴのまもり', 'みちづれ'], ['メタング', 90, 'ヘドロばくだん', 'じしん', 'サイコキネシス', 'どくどく'], ['ナッシー', 92, 'さいみんじゅつ', 'タマゴばくだん', '', 'サイコキネシス'], ['ヤドキング', 92, 'シャドーボール', 'なみのり', 'れいとうビーム', 'かえんほうしゃ'], ['ネイティオ', 94, 'シャドーボール', 'はがねのつばさ', 'あやしいひかり', 'サイコキネシス'], ['フーディン', 94, 'れいとうパンチ', 'どくどく', 'ほのおのパンチ', 'サイコキネシス'], ['スターミー', 95, 'なみのり', '10まんボルト', 'れいとうビーム', 'サイコキネシス'], ['エーフィ', 95, 'シャドーボール', '', 'サイコキネシス', 'あなをほる']], [['ゴローニャ', 90, 'じばく', '', 'まもる', 'じしん'], ['ハガネール', 90, 'かみくだく', 'じしん', 'アイアンテール', ''], ['オムスター', 92, 'げんしのちから', 'なみのり', 'マッドショット', ''], ['ルナトーン', 92, 'さいみんじゅつ', 'だいばくはつ', '', 'サイコウェーブ'], ['ツボツボ', 94, 'まもる', 'まきつく', 'どくどく', ''], ['アーマルド', 94, 'げんしのちから', 'つばめがえし', 'まもる', ''], ['ユレイドル', 95, 'ヘドロばくだん', 'ギガドレイン', 'あやしいひかり', ''], ['プテラ', 95, 'いわなだれ', 'はかいこうせん', 'かみつく', '']], [['ニョロボン', 90, 'じごくぐるま', 'なみのり', 'きあいパンチ', ''], ['ハリテヤマ', 90, 'ねこだまし', 'なみのり', 'きあいパンチ', ''], ['キノガッサ', 92, 'キノコのほうし', 'きあいパンチ', 'まもる', ''], ['チャーレム', 92, 'れいとうパンチ', 'かみなりパンチ', 'ほのおのパンチ', 'きあいパンチ'], ['エビワラー', 94, 'れいとうパンチ', 'かみなりパンチ', 'ほのおのパンチ', 'きあいパンチ'], ['サワムラー', 94, 'メガトンキック', 'きあいパンチ', '', ''], ['ヘラクロス', 95, 'じしん', 'いわなだれ', 'きあいパンチ', 'メガホーン'], ['カイリキー', 95, 'ちきゅうなげ', 'じしん', 'いわなだれ', 'きあいパンチ']], [['ヌオー', 90, 'あまごい', 'なみのり', '', 'まもる'], ['トロピウス', 90, 'ソーラービーム', '', 'にほんばれ', ''], ['サナギラス', 92, 'じしん', 'いわなだれ', '', 'すなあらし'], ['ラプラス', 92, 'あられ', 'れいとうビーム', '', ''], ['ノクタス', 94, 'ソーラービーム', 'ギガドレイン', '', 'すなあらし'], ['ブースター', 94, 'かえんほうしゃ', 'まもる', '', 'にほんばれ'], ['トドゼルガ', 95, 'あられ', 'れいとうビーム', '', ''], ['ギャラドス', 95, 'あまごい', 'ハイドロポンプ', '', 'かみなり']], [['クヌギダマ', 90, 'とっしん', '', 'だいばくはつ', ''], ['ツボツボ', 92, 'じしん', 'まもる', '', 'どくどく'], ['モルフォン', 92, 'ぎんいろのかぜ', 'ねむりごな', 'サイコキネシス', 'どくのこな'], ['ハッサム', 94, 'れんぞくぎり', 'メタルクロー', 'おいうち', 'でんこうせっか'], ['ヘラクロス', 94, 'じしん', 'いわなだれ', 'かわらわり', 'メガホーン'], ['フォレトス', 95, 'じしん', 'まもる', '', 'だいばくはつ'], ['アーマルド', 95, 'いわなだれ', 'みずのはどう', '', 'まもる'], ['ヌケニン', 95, 'おんねん', 'シャドーボール', 'うらみ', 'どくどく']], [['ヤミラミ', 90, 'つばめがえし', 'サイコキネシス', 'ナイトヘッド', ''], ['ニューラ', 90, 'ちょうはつ', 'れいとうビーム', 'だましうち', 'でんこうせっか'], ['シザリガー', 92, 'なみのり', 'れいとうビーム', '', 'クラブハンマー'], ['ダーテング', 92, 'シャドーボール', 'ギガドレイン', 'つばめがえし', 'だいばくはつ'], ['ノクタス', 94, 'ニードルアーム', 'ギガドレイン', '', 'どくどく'], ['アブソル', 94, 'かみつく', 'きりさく', 'まもる', ''], ['ヘルガー', 95, 'かみくだく', 'シャドーボール', 'オーバーヒート', 'まもる'], ['ブラッキー', 95, 'シャドーボール', 'アイアンテール', 'サイコキネシス', 'でんこうせっか']], [['オクタン', 90, 'オクタンほう', 'だいもんじ', 'れいとうビーム', ''], ['ジュゴン', 90, 'れいとうビーム', 'みずのはどう', '', 'ずつき'], ['ペリッパー', 92, 'なみのり', 'ちょうおんぱ', '', 'まもる'], ['ヌオー', 92, 'じしん', 'なみのり', '', 'がんせきふうじ'], ['ルンパッパ', 94, 'ソーラービーム', 'どくどく', 'れいとうビーム', 'まもる'], ['ヤドキング', 94, 'ずつき', 'いばる', 'サイコキネシス', ''], ['スターミー', 95, 'ふぶき', 'みずのはどう', 'あやしいひかり', '10まんボルト'], ['カメックス', 95, 'ハイドロポンプ', 'れいとうビーム', 'かみつく', '']], [['ヨマワル', 90, 'シャドーボール', 'まもる', 'おにび', 'ナイトヘッド'], ['ゴースト', 90, 'さいみんじゅつ', 'シャドーボール', 'うらみ', 'どくどく'], ['ジュペッタ', 92, 'シャドーボール', 'うらみ', 'おにび', ''], ['ムウマ', 92, 'ほろびのうた', 'うらみ', '', 'くろいまなざし'], ['ヤミラミ', 94, 'シャドーボール', 'ナイトヘッド', 'くろいまなざし', 'あなをほる'], ['サマヨール', 94, 'シャドーボール', 'おにび', 'どくどく', ''], ['ヌケニン', 95, 'おんねん', 'シャドーボール', 'うらみ', 'まもる'], ['ゲンガー', 95, 'ナイトヘッド', 'うらみ', 'みちづれ', 'サイコキネシス']], [['クチート', 90, 'かみくだく', 'れいとうビーム', '', 'どくどく'], ['レアコイル', 90, 'でんじは', '10まんボルト', '', ''], ['ハガネール', 92, 'いわおとし', 'すてみタックル', '', 'じしん'], ['ハッサム', 92, 'メタルクロー', 'きりさく', '', ''], ['フォレトス', 94, 'どくどく', '', 'だいばくはつ', ''], ['エアームド', 94, 'はがねのつばさ', 'そらをとぶ', 'まもる', 'どくどく'], ['ボスゴドラ', 95, 'じしん', 'なみのり', 'とっしん', 'れいとうビーム'], ['メタグロス', 95, 'じしん', 'シャドーボール', 'サイコキネシス', 'かわらわり']], [['ハクリュー', 90, 'れいとうビーム', 'でんじは', 'どくどく', ''], ['ビブラーバ', 90, 'りゅうのいぶき', 'じしん', 'はがねのつばさ', 'かみくだく'], ['チルタリス', 92, 'ドラゴンクロー', 'じしん', 'うたう', 'まもる'], ['フライゴン', 92, 'ドラゴンクロー', 'じしん', 'だいもんじ', ''], ['プテラ', 94, 'ドラゴンクロー', 'じしん', 'いわなだれ', ''], ['ギャラドス', 94, 'あばれる', 'じしん', 'なみのり', 'かみつく'], ['キングドラ', 95, 'ハイドロポンプ', 'れいとうビーム', '', 'まもる'], ['リザードン', 95, 'アイアンテール', 'かえんほうしゃ', 'だいもんじ', 'きあいパンチ']], [['ウインディ', 90, 'とっしん', 'だいもんじ', '', ''], ['ニョロボン', 90, 'ハイドロポンプ', 'れいとうビーム', '', ''], ['ライチュウ', 92, 'たたきつける', 'でんじは', '', 'かみなり'], ['シャワーズ', 92, 'なみのり', 'れいとうビーム', '', ''], ['サンダース', 94, 'ミサイルばり', '', '10まんボルト', ''], ['ブースター', 94, 'かえんほうしゃ', 'かみつく', '', ''], ['キュウコン', 95, 'かえんほうしゃ', 'おにび', 'まもる', ''], ['スターミー', 95, 'なみのり', 'れいとうビーム', 'サイコキネシス', '10まんボルト']], [['ガルーラ', 90, 'なみのり', 'かえんほうしゃ', 'はかいこうせん', 'ピヨピヨパンチ'], ['オオスバメ', 90, 'はかいこうせん', 'つばめがえし', 'どくどく', ''], ['リングマ', 92, 'じしん', 'はかいこうせん', 'きあいパンチ', 'まもる'], ['ポリゴン2', 92, 'シャドーボール', 'はかいこうせん', 'れいとうビーム', 'サイケこうせん'], ['ケンタロス', 94, 'じしん', 'なみのり', 'はかいこうせん', '10まんボルト'], ['オニドリル', 94, 'はかいこうせん', 'そらをとぶ', 'まもる', 'オウムがえし'], ['カビゴン', 95, 'のしかかり', 'じしん', 'シャドーボール', 'はかいこうせん'], ['ケッキング', 95, 'じしん', 'シャドーボール', 'はかいこうせん', 'れいとうビーム']]]};
   const PyramidWild_nameIdx = 0;
@@ -1518,9 +1482,7 @@ function generate_pike_wild_mons(PIKE){
     pyramid_pickup_tbody.innerHTML = tbody;
   }
 </script>
-
 <!-- On load -->
-
 <script>
   window.onload = function(){
     // My Pokemon Forms.
@@ -1602,9 +1564,7 @@ function generate_pike_wild_mons(PIKE){
     generate_pyramid_pickup_table(document.PYRAMID);
   }
 </script>
-
 <!-- Stylesheet -->
-
 <style>
   table#my-pokemon *, 
   table#dome-trainer-ranking *,

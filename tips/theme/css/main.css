@@ -93,7 +93,29 @@ img.social-img {
 	padding: 0 5px 0 0!important;
 	vertical-align: middle!important;
 }
-/* --- Add by iwasakishuto <https://github.com/iwasakishuto> ---> */
+aside.toc {
+	display: none;
+	position: fixed;
+	top: 10vh;
+	right: 20px;
+	width: calc((100vw - 900px) / 2);
+	padding: 10px;
+	border-radius: 10px;
+  background-color: black;
+	color: white!important;	
+}
+aside.toc ul {
+	list-style-type: disc;
+	display: block;
+	padding-block-start: 1em 0;
+	padding-inline-start: 1.5em;
+}
+@media screen and (min-width:1400px) { 
+	aside.toc{
+		display: block;
+	}
+}
+
 div#loading{
 	width: 50%;
   margin: 0 auto;
@@ -106,6 +128,7 @@ div#loading p.loading_info {
 	font-size: 4em;
 	color: #008db8;
 }
+/* --- Add by iwasakishuto <https://github.com/iwasakishuto> ---> */
 
 code {
 	font-family: monaco;
@@ -520,10 +543,8 @@ details summary.h3 {
 *****************/
 #content {
 	background: #fff;
-	/*margin-bottom: 2em;*/
 	overflow: hidden;
 	padding: 20px 20px;
-	max-width: calc(100% - 40px);
 	width: 760px;
 
 	border-radius: 10px 10px 0 0;

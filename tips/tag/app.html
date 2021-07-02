@@ -28,13 +28,7 @@
     		}
     	});
     </script>
-    <!-- Mermaid -->
-    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
-    <script>
-      mermaid.initialize({
-        startOnLoad:true
-      });
-    </script>
+    <script type="text/javascript" src="https://iwasakishuto.github.io/js/smooth-scroll.polyfills.min.js"></script>
     <!--[if IE]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -61,130 +55,120 @@
             <span>2021-02-10(Wed)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tensorflowjs.html">TensorFlow.js</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/app.html">app</a></span>
           </footer><!-- /.post-info --><script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"> </script>
-
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"> </script>
-
 <div class="nunkiru">
-  <h1>ヌンキル (눈길)</h1>
-  <p>Tensorflow.js を用いて、<a href="https://www.netflix.com/title/81290293">Start-Up(Netflix)</a>に出てくる<b>ヌンキル (눈길)</b>のようなものを作成しました。<b>※音声が出ます</b></p>
-  <button id="switchCamera" onclick="switchFrontBackCamera()">switch Camera</button>
-  <div id="video-canvas-wrapper" class="video-and-canvas">
-    <video id="video" style="z-index: 30;" playsinline muted autoplay ></video>
-    <canvas id="canvas" style="z-index: 20;"></canvas>
-  </div>
-  <button id="predict-button" class="predict" style="margin-top:10px;" onclick="detection()">
-    Loading Model <br><i id="loading" class="fa fa-spinner fa-spin" style="visibility: none;"></i>
-  </button>
+<h1 id="nunkiru-nungil">ヌンキル (눈길)</h1>
+<p>Tensorflow.js を用いて、<a href="https://www.netflix.com/title/81290293">Start-Up(Netflix)</a>に出てくる<b>ヌンキル (눈길)</b>のようなものを作成しました。<b>※音声が出ます</b></p>
+<button id="switchCamera" onclick="switchFrontBackCamera()">switch Camera</button>
+<div class="video-and-canvas" id="video-canvas-wrapper">
+<video autoplay="" id="video" muted="" playsinline="" style="z-index: 30;"></video>
+<canvas id="canvas" style="z-index: 20;"></canvas>
 </div>
-
+<button class="predict" id="predict-button" onclick="detection()" style="margin-top:10px;">
+    Loading Model <br/><i class="fa fa-spinner fa-spin" id="loading" style="visibility: none;"></i>
+</button>
+</div>
 <p>喋る部分は、以下のようなコードで実装しています。</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">u</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SpeechSynthesisUtterance</span><span class="p">();</span>
-<span class="nx">u</span><span class="p">.</span><span class="nx">lang</span> <span class="o">=</span> <span class="s1">&#39;en-US&#39;</span><span class="p">;</span>
+<span class="nx">u</span><span class="p">.</span><span class="nx">lang</span> <span class="o">=</span> <span class="s1">'en-US'</span><span class="p">;</span>
 <span class="nx">u</span><span class="p">.</span><span class="nx">rate</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
-<span class="nx">u</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="s2">&quot;Hello World!&quot;</span><span class="p">;</span>
+<span class="nx">u</span><span class="p">.</span><span class="nx">text</span> <span class="o">=</span> <span class="s2">"Hello World!"</span><span class="p">;</span>
 <span class="nx">speechSynthesis</span><span class="p">.</span><span class="nx">speak</span><span class="p">(</span><span class="nx">u</span><span class="p">);</span>
 </code></pre></div>
-
-
 <p>また、モデルは<a href="https://github.com/tensorflow/tfjs-models/tree/master/coco-ssd">Object Detection (coco-ssd)</a>を利用しています。判断できるクラスは80種（<a href="#class-list">以下</a>に記載。）</p>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/@tensorflow/tfjs&quot;</span><span class="p">&gt;</span> <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd&quot;</span><span class="p">&gt;</span> <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">"https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"</span><span class="p">&gt;</span> <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">"https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"</span><span class="p">&gt;</span> <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
 // Load COCO SSD model.
 cocoSsd.load().then(function(pretrainedModel){
   model = pretrainedModel;
-  predictition_button.innerHTML = &quot;ヌンキル（눈길）&quot;;  
+  predictition_button.innerHTML = "ヌンキル（눈길）";  
 });
 </code></pre></div>
-
-
 <h3 id="class-list">Class List</h3>
-
 <p>※ 詳しくは<a href="https://github.com/tensorflow/tfjs-models/blob/master/coco-ssd/src/classes.ts"><code>classes.ts</code></a>を見てください。</p>
 <div class="highlight"><pre><span></span><code><span class="n">classes</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="s1">&#39;person&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;bicycle&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;car&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;motorcycle&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;airplane&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;bus&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;train&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;truck&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;boat&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;traffic light&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;fire hydrant&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;stop sign&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;parking meter&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;bench&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;bird&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;cat&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;dog&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;horse&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;sheep&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;cow&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;elephant&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;bear&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;zebra&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;giraffe&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;backpack&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;umbrella&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;handbag&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;tie&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;suitcase&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;frisbee&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;skis&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;snowboard&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;sports ball&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;kite&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;baseball bat&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;baseball glove&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;skateboard&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;surfboard&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;tennis racket&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;bottle&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;wine glass&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;cup&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;fork&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;knife&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;spoon&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;bowl&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;banana&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;apple&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;sandwich&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;orange&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;broccoli&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;carrot&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;hot dog&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;pizza&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;donut&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;cake&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;chair&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;couch&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;potted plant&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;bed&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;dining table&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;toilet&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;tv&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;laptop&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;mouse&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;remote&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;keyboard&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;cell phone&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;microwave&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;oven&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;toaster&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;sink&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;refrigerator&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;book&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;clock&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;vase&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;scissors&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;teddy bear&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;hair drier&#39;</span><span class="p">,</span>
-  <span class="s1">&#39;toothbrush&#39;</span>
+  <span class="s1">'person'</span><span class="p">,</span>
+  <span class="s1">'bicycle'</span><span class="p">,</span>
+  <span class="s1">'car'</span><span class="p">,</span>
+  <span class="s1">'motorcycle'</span><span class="p">,</span>
+  <span class="s1">'airplane'</span><span class="p">,</span>
+  <span class="s1">'bus'</span><span class="p">,</span>
+  <span class="s1">'train'</span><span class="p">,</span>
+  <span class="s1">'truck'</span><span class="p">,</span>
+  <span class="s1">'boat'</span><span class="p">,</span>
+  <span class="s1">'traffic light'</span><span class="p">,</span>
+  <span class="s1">'fire hydrant'</span><span class="p">,</span>
+  <span class="s1">'stop sign'</span><span class="p">,</span>
+  <span class="s1">'parking meter'</span><span class="p">,</span>
+  <span class="s1">'bench'</span><span class="p">,</span>
+  <span class="s1">'bird'</span><span class="p">,</span>
+  <span class="s1">'cat'</span><span class="p">,</span>
+  <span class="s1">'dog'</span><span class="p">,</span>
+  <span class="s1">'horse'</span><span class="p">,</span>
+  <span class="s1">'sheep'</span><span class="p">,</span>
+  <span class="s1">'cow'</span><span class="p">,</span>
+  <span class="s1">'elephant'</span><span class="p">,</span>
+  <span class="s1">'bear'</span><span class="p">,</span>
+  <span class="s1">'zebra'</span><span class="p">,</span>
+  <span class="s1">'giraffe'</span><span class="p">,</span>
+  <span class="s1">'backpack'</span><span class="p">,</span>
+  <span class="s1">'umbrella'</span><span class="p">,</span>
+  <span class="s1">'handbag'</span><span class="p">,</span>
+  <span class="s1">'tie'</span><span class="p">,</span>
+  <span class="s1">'suitcase'</span><span class="p">,</span>
+  <span class="s1">'frisbee'</span><span class="p">,</span>
+  <span class="s1">'skis'</span><span class="p">,</span>
+  <span class="s1">'snowboard'</span><span class="p">,</span>
+  <span class="s1">'sports ball'</span><span class="p">,</span>
+  <span class="s1">'kite'</span><span class="p">,</span>
+  <span class="s1">'baseball bat'</span><span class="p">,</span>
+  <span class="s1">'baseball glove'</span><span class="p">,</span>
+  <span class="s1">'skateboard'</span><span class="p">,</span>
+  <span class="s1">'surfboard'</span><span class="p">,</span>
+  <span class="s1">'tennis racket'</span><span class="p">,</span>
+  <span class="s1">'bottle'</span><span class="p">,</span>
+  <span class="s1">'wine glass'</span><span class="p">,</span>
+  <span class="s1">'cup'</span><span class="p">,</span>
+  <span class="s1">'fork'</span><span class="p">,</span>
+  <span class="s1">'knife'</span><span class="p">,</span>
+  <span class="s1">'spoon'</span><span class="p">,</span>
+  <span class="s1">'bowl'</span><span class="p">,</span>
+  <span class="s1">'banana'</span><span class="p">,</span>
+  <span class="s1">'apple'</span><span class="p">,</span>
+  <span class="s1">'sandwich'</span><span class="p">,</span>
+  <span class="s1">'orange'</span><span class="p">,</span>
+  <span class="s1">'broccoli'</span><span class="p">,</span>
+  <span class="s1">'carrot'</span><span class="p">,</span>
+  <span class="s1">'hot dog'</span><span class="p">,</span>
+  <span class="s1">'pizza'</span><span class="p">,</span>
+  <span class="s1">'donut'</span><span class="p">,</span>
+  <span class="s1">'cake'</span><span class="p">,</span>
+  <span class="s1">'chair'</span><span class="p">,</span>
+  <span class="s1">'couch'</span><span class="p">,</span>
+  <span class="s1">'potted plant'</span><span class="p">,</span>
+  <span class="s1">'bed'</span><span class="p">,</span>
+  <span class="s1">'dining table'</span><span class="p">,</span>
+  <span class="s1">'toilet'</span><span class="p">,</span>
+  <span class="s1">'tv'</span><span class="p">,</span>
+  <span class="s1">'laptop'</span><span class="p">,</span>
+  <span class="s1">'mouse'</span><span class="p">,</span>
+  <span class="s1">'remote'</span><span class="p">,</span>
+  <span class="s1">'keyboard'</span><span class="p">,</span>
+  <span class="s1">'cell phone'</span><span class="p">,</span>
+  <span class="s1">'microwave'</span><span class="p">,</span>
+  <span class="s1">'oven'</span><span class="p">,</span>
+  <span class="s1">'toaster'</span><span class="p">,</span>
+  <span class="s1">'sink'</span><span class="p">,</span>
+  <span class="s1">'refrigerator'</span><span class="p">,</span>
+  <span class="s1">'book'</span><span class="p">,</span>
+  <span class="s1">'clock'</span><span class="p">,</span>
+  <span class="s1">'vase'</span><span class="p">,</span>
+  <span class="s1">'scissors'</span><span class="p">,</span>
+  <span class="s1">'teddy bear'</span><span class="p">,</span>
+  <span class="s1">'hair drier'</span><span class="p">,</span>
+  <span class="s1">'toothbrush'</span>
 <span class="p">]</span>
 </code></pre></div>
-
-
 <script>
   // Define global variables.
   var predictition_button = document.getElementById('predict-button');
@@ -270,7 +254,6 @@ cocoSsd.load().then(function(pretrainedModel){
     }
   }  
 </script>
-
 <style>
   body {
     background-image: url("https://upload.wikimedia.org/wikipedia/en/1/12/Start-Up_2020.jpg");

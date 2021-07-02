@@ -39,13 +39,7 @@
     		}
     	});
     </script>
-    <!-- Mermaid -->
-    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
-    <script>
-      mermaid.initialize({
-        startOnLoad:true
-      });
-    </script>
+    <script type="text/javascript" src="https://iwasakishuto.github.io/js/smooth-scroll.polyfills.min.js"></script>
     <!--[if IE]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -79,6 +73,13 @@
           <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
           <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
         </header>
+
+          <aside class="toc">
+            <div class="col-lg-3 hidden-xs hidden-sm">
+              <h4>Table of Contents</h4>
+              <div id="toc"><ul><li><a class="toc-href" href="#" title="css.1 蛍光ペンを引く">css.1 蛍光ペンを引く</a><ul><li><a class="toc-href" href="#chi-imaka" title="赤いマーカー">赤いマーカー</a></li><li><a class="toc-href" href="#qing-imaka" title="青いマーカー">青いマーカー</a></li></ul></li></ul></div>
+            </div>
+          </aside>
     
         <div class="entry-content">
           <footer class="post-info">
@@ -87,11 +88,11 @@
           </footer><!-- /.post-info -->
 <!-- NOT "| indent(10, True)"  -->
 <p>ここでは、大学の講義ノート<a href="https://iwasakishuto.github.io/University/3S/%E7%94%9F%E7%89%A9%E6%83%85%E5%A0%B1%E7%A7%91%E5%AD%A6%E7%89%B9%E5%88%A5%E8%AC%9B%E7%BE%A9%E2%85%A2-part1-1.html">（例）</a>で使っている、<span class="marker-pink">蛍光ペンでマークしたかのようなスタイル</span>を記述しておきます。</p>
-<h3>赤いマーカー</h3>
+<h3 id="chi-imaka">赤いマーカー</h3>
 <p>赤いマーカーは、単純に重要なことをマークする時に使っています。</p>
 <ul>
 <li><font color="#c45a5a">「色がついて」</font></li>
-<li><span style="background: linear-gradient(transparent 70%, #ff66ff 60%);">「線が引いてあって」</style></li>
+<li><span style="background: linear-gradient(transparent 70%, #ff66ff 60%);">「線が引いてあって」</span></li>
 <li><span style="font-weight: bold;">「文字が太い」</span></li>
 </ul>
 <p>の三点を組み合わせています。</p>
@@ -101,10 +102,8 @@
   <span class="k">font-weight</span><span class="p">:</span> <span class="kc">bold</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
-
-
-<h3>青いマーカー</h3>
-<p>青いマーカーは、知識の補足が必要な時に用いています。特に生物系の用語はわからなくなることが多いので、<span class="marker-info" aria-label="これのこと！">ホバーした時に一言説明が出る</span>ようにしています。</p>
+<h3 id="qing-imaka">青いマーカー</h3>
+<p>青いマーカーは、知識の補足が必要な時に用いています。特に生物系の用語はわからなくなることが多いので、<span aria-label="これのこと！" class="marker-info">ホバーした時に一言説明が出る</span>ようにしています。</p>
 <div class="highlight"><pre><span></span><code><span class="p">.</span><span class="nc">marker-info</span> <span class="p">{</span>
     <span class="k">color</span><span class="p">:</span> <span class="mh">#5C7DC4</span><span class="p">;</span>
     <span class="k">background</span><span class="p">:</span> <span class="nb">linear-gradient</span><span class="p">(</span><span class="kc">transparent</span> <span class="mi">70</span><span class="kt">%</span><span class="p">,</span> <span class="mh">#66FFCC</span> <span class="mi">60</span><span class="kt">%</span><span class="p">);</span>

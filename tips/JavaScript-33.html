@@ -39,13 +39,7 @@
     		}
     	});
     </script>
-    <!-- Mermaid -->
-    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
-    <script>
-      mermaid.initialize({
-        startOnLoad:true
-      });
-    </script>
+    <script type="text/javascript" src="https://iwasakishuto.github.io/js/smooth-scroll.polyfills.min.js"></script>
     <!--[if IE]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -79,6 +73,13 @@
           <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
           <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
         </header>
+
+          <aside class="toc">
+            <div class="col-lg-3 hidden-xs hidden-sm">
+              <h4>Table of Contents</h4>
+              <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.33 ボイスチェンジャーモデルの訓練データ作成ツールを作成する">JS.33 ボイスチェンジャーモデルの訓練データ作成ツールを作成する</a><ul><li><a class="toc-href" href="#shi-ifang" title="使い方">使い方</a></li></ul></li></ul></div>
+            </div>
+          </aside>
     
         <div class="entry-content">
           <footer class="post-info">
@@ -86,50 +87,48 @@
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
           </footer><!-- /.post-info -->
 <!-- NOT "| indent(10, True)"  -->
-<ul><h3>使い方</h3>
-  <li><label class="btn--click btn--purple btn--upload btn--discription">Upload Audio (Training Data)</label>から音声フォルダ（<code>.wav</code>のみ）をアップロードします。</li>
-  <li>上にアップロードした各データの波形が表示されるので、それを参考にしながら同じ言葉を <a class="btn--click btn--red btn--retry-recording btn--discription">Retry Recording</a> <kbd>r</kbd> を押して録音開始し、<a class="btn--click btn--blue btn--stop-recording btn--discription">End Recording</a> <kbd>e</kbd> を押して終了してください。</li>
-  </li>
-  <li><a class="btn--click btn--green btn--back btn--discription">Previous Audio</a> <kbd>←</kbd> ・<a class="btn--click btn--green btn--next btn--discription">Next Audio</a> <kbd>→</kbd> を押してそれぞれの音声データに対して録音を行ってください。この時、<kbd>space</kbd>で音声を停止したり再生したりできます。</li>
-  <li><a class="btn--click btn--download btn--discription">Download Recorded Audio</a> <kbd>d</kbd> を押すと、それまでに録音されたデータが<code>zip</code>形式でダウンロードできます。</li>
+<ul><h3 id="shi-ifang">使い方</h3>
+<li><label class="btn--click btn--purple btn--upload btn--discription">Upload Audio (Training Data)</label>から音声フォルダ（<code>.wav</code>のみ）をアップロードします。</li>
+<li>上にアップロードした各データの波形が表示されるので、それを参考にしながら同じ言葉を <a class="btn--click btn--red btn--retry-recording btn--discription">Retry Recording</a> <kbd>r</kbd> を押して録音開始し、<a class="btn--click btn--blue btn--stop-recording btn--discription">End Recording</a> <kbd>e</kbd> を押して終了してください。</li>
+
+<li><a class="btn--click btn--green btn--back btn--discription">Previous Audio</a> <kbd>&larr;</kbd> ・<a class="btn--click btn--green btn--next btn--discription">Next Audio</a> <kbd>&rarr;</kbd> を押してそれぞれの音声データに対して録音を行ってください。この時、<kbd>space</kbd>で音声を停止したり再生したりできます。</li>
+<li><a class="btn--click btn--download btn--discription">Download Recorded Audio</a> <kbd>d</kbd> を押すと、それまでに録音されたデータが<code>zip</code>形式でダウンロードできます。</li>
 </ul>
-
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js" type="text/javascript"></script>
 <p><audio id="uploaded-audio" style="display:none;"></audio>
 <table>
-  <thead><tr><th colspan="2">見本データ</th><th colspan="2"><code id="current-uploaded-file"></code></th><th colspan="2">[<span id="current-file-idx">0</span> / <span id="num-total-files">0</span>]</th></tr></thead>
-  <tbody>
-    <tr>
-      <td colspan="2"><a class="btn--click btn--green btn--back" id="prev-btn">Previous Audio</a></td>
-      <td colspan="2"><a class="btn--click btn--to-play btn--blue" id="audio-play-pause-btn">Pause Audio</a></td>
-      <td colspan="2"><a class="btn--click btn--green btn--next" id="next-btn">Next Audio</a></td>
-    </tr>
-    <tr>
-      <td colspan="6" style="position:relative;">
-        <canvas id="data-canvas"></canvas>
-        <input id="data-position" type="range" min="0" value="0"step="0.01" max="10">
-        <span id="data-start-time" class="left">0[s]</span><span id="data-end-time" class="right">10[s]</span>
-      </td>
-    </tr>
-  </tbody>
-  <thead><tr><th colspan="2">録音データ</th><th colspan="2"><code id="current-record-file">data.wav</code></th><th colspan="2">[<span id="num-record-data">0</span>データ]</th></tr></thead>
-  <tbody>
-    <tr>
-      <td colspan="3"><a class="btn--click btn--red btn--retry-recording" id="retry-btn">Retry Recording</a></td>
-      <td colspan="3"><a class="btn--click btn--blue btn--stop-recording" id="stop-btn">End Recording</a></td>
-    </tr>
-    <tr>
-      <td colspan="6">
-        <canvas id="recorded-canvas"></canvas>
-        <span id="record-start-time" class="left">0[s]</span><span id="record-end-time" class="right">10[s]</span>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="3"><label class="btn--click btn--purple btn--upload"><input type="file" id="upload-btn" accept="audio/wav" webkitdirectory>Upload Audio (Training Data)</label></td>
-      <td colspan="3"><a class="btn--click btn--download btn--yellow" id="download-btn">Download Recorded Audio</a></td>
-    </tr>
-  </tbody>
+<thead><tr><th colspan="2">見本データ</th><th colspan="2"><code id="current-uploaded-file"></code></th><th colspan="2">[<span id="current-file-idx">0</span> / <span id="num-total-files">0</span>]</th></tr></thead>
+<tbody>
+<tr>
+<td colspan="2"><a class="btn--click btn--green btn--back" id="prev-btn">Previous Audio</a></td>
+<td colspan="2"><a class="btn--click btn--to-play btn--blue" id="audio-play-pause-btn">Pause Audio</a></td>
+<td colspan="2"><a class="btn--click btn--green btn--next" id="next-btn">Next Audio</a></td>
+</tr>
+<tr>
+<td colspan="6" style="position:relative;">
+<canvas id="data-canvas"></canvas>
+<input id="data-position" max="10" min="0" step="0.01" type="range" value="0"/>
+<span class="left" id="data-start-time">0[s]</span><span class="right" id="data-end-time">10[s]</span>
+</td>
+</tr>
+</tbody>
+<thead><tr><th colspan="2">録音データ</th><th colspan="2"><code id="current-record-file">data.wav</code></th><th colspan="2">[<span id="num-record-data">0</span>データ]</th></tr></thead>
+<tbody>
+<tr>
+<td colspan="3"><a class="btn--click btn--red btn--retry-recording" id="retry-btn">Retry Recording</a></td>
+<td colspan="3"><a class="btn--click btn--blue btn--stop-recording" id="stop-btn">End Recording</a></td>
+</tr>
+<tr>
+<td colspan="6">
+<canvas id="recorded-canvas"></canvas>
+<span class="left" id="record-start-time">0[s]</span><span class="right" id="record-end-time">10[s]</span>
+</td>
+</tr>
+<tr>
+<td colspan="3"><label class="btn--click btn--purple btn--upload"><input accept="audio/wav" id="upload-btn" type="file" webkitdirectory=""/>Upload Audio (Training Data)</label></td>
+<td colspan="3"><a class="btn--click btn--download btn--yellow" id="download-btn">Download Recorded Audio</a></td>
+</tr>
+</tbody>
 </table></p>
 <script>
   const num_total_files_view     = document.querySelector("span#num-total-files");
@@ -581,7 +580,6 @@
         addEventListener("keydown", keydownfunc);
   } 
 </script>
-
 <style>
   ul {
     margin: 1em;

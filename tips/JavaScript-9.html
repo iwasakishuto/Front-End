@@ -39,13 +39,7 @@
     		}
     	});
     </script>
-    <!-- Mermaid -->
-    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js" charset="UTF-8"></script>
-    <script>
-      mermaid.initialize({
-        startOnLoad:true
-      });
-    </script>
+    <script type="text/javascript" src="https://iwasakishuto.github.io/js/smooth-scroll.polyfills.min.js"></script>
     <!--[if IE]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -79,6 +73,13 @@
           <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
           <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
         </header>
+
+          <aside class="toc">
+            <div class="col-lg-3 hidden-xs hidden-sm">
+              <h4>Table of Contents</h4>
+              <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.9 ブロック崩しを作る">JS.9 ブロック崩しを作る</a><ul><li><a class="toc-href" href="#zuo-tsutamono" title="作ったもの">作ったもの</a></li><li><a class="toc-href" href="#dong-ji" title="動機">動機</a></li><li><a class="toc-href" href="#kodo" title="コード">コード</a><ul><li><a class="toc-href" href="#html" title="html">html</a></li><li><a class="toc-href" href="#javascript" title="javascript">javascript</a></li><li><a class="toc-href" href="#css" title="css">css</a></li></ul></li></ul></li></ul></div>
+            </div>
+          </aside>
     
         <div class="entry-content">
           <footer class="post-info">
@@ -86,17 +87,16 @@
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/game.html">game</a></span>
           </footer><!-- /.post-info -->
 <!-- NOT "| indent(10, True)"  -->
-<h2>作ったもの</h2>
+<h2 id="zuo-tsutamono">作ったもの</h2>
 <div class="breakout">
-  <header>BREAKOUT</header>
-  <canvas id="canvas" width="480" height="500"></canvas>
-  <a id="start" onclick="gameButton();startTimer()" class="btn-circle-border-double">START</a>
-  <audio id="soundBrick" src="https://taira-komori.jpn.org/sfxr/sfxrse/02laser/shoot01.mp3"       type="audio/mp3" preload="auto"></audio>
-  <audio id="soundBar"   src="https://taira-komori.jpn.org/sfxr/sfxrse/02laser/shoot03.mp3"       type="audio/mp3" preload="auto"></audio>
-  <audio id="soundFail"  src="https://taira-komori.jpn.org/sfxr/sfxrse/04powerup/powerdown02.mp3" type="audio/mp3" preload="auto"></audio>
-  <audio id="soundUp"    src="https://taira-komori.jpn.org/sfxr/sfxrse/04powerup/powerup05.mp3"   type="audio/mp3" preload="auto"></audio>
+<header>BREAKOUT</header>
+<canvas height="500" id="canvas" width="480"></canvas>
+<a class="btn-circle-border-double" id="start" onclick="gameButton();startTimer()">START</a>
+<audio id="soundBrick" preload="auto" src="https://taira-komori.jpn.org/sfxr/sfxrse/02laser/shoot01.mp3" type="audio/mp3"></audio>
+<audio id="soundBar" preload="auto" src="https://taira-komori.jpn.org/sfxr/sfxrse/02laser/shoot03.mp3" type="audio/mp3"></audio>
+<audio id="soundFail" preload="auto" src="https://taira-komori.jpn.org/sfxr/sfxrse/04powerup/powerdown02.mp3" type="audio/mp3"></audio>
+<audio id="soundUp" preload="auto" src="https://taira-komori.jpn.org/sfxr/sfxrse/04powerup/powerup05.mp3" type="audio/mp3"></audio>
 </div>
-
 <script>
   var canvas = document.getElementById("canvas");
   var ctx = canvas.getContext("2d");
@@ -364,7 +364,6 @@
     document.getElementById("start").style.fontSize = "10px";
   }
 </script>
-
 <style>
   @import url('https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap');
   .breakout {
@@ -396,36 +395,30 @@
     transform: rotateY(360deg);
   }
 </style>
-
-<h2>動機</h2>
+<h2 id="dong-ji">動機</h2>
 <p>「ゲームを作る」ということが <code>JavaScript</code> の熟達度合いを測る良い指標になると聞いたので、試しにブロック崩しを作ってみた。見た目は1979年に任天堂が発売したブロック崩しを参考にしている。当時のゲームのように、5種類作ることも考えたが、とりあえずシンプルなものだけ作成した。</p>
-<iframe width="560" height="315" src="https://www.youtube.com/embed/0FVHG6KmFV4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-<h2>コード</h2>
+<iframe allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/0FVHG6KmFV4" width="560"></iframe>
+<h2 id="kodo">コード</h2>
 <p>ゲームを作る上でのポイントは以下の関数で、これによってボールが動いているように見せています。</p>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;Canvas id&quot;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;2d&quot;</span><span class="p">);</span>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"Canvas id"</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">"2d"</span><span class="p">);</span>
 <span class="c1">// これが重要。キャンバスに描画した指定範囲内の絵を削除している</span>
 <span class="nx">context</span><span class="p">.</span><span class="nx">clearRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span>
 </code></pre></div>
-
-
-<h3><code>html</code></h3>
-<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;breakout&quot;</span><span class="p">&gt;</span>
+<h3 id="html"><code>html</code></h3>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"breakout"</span><span class="p">&gt;</span>
   <span class="p">&lt;</span><span class="nt">header</span><span class="p">&gt;</span>BREAKOUT<span class="p">&lt;/</span><span class="nt">header</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;canvas&quot;</span> <span class="na">width</span><span class="o">=</span><span class="s">&quot;480&quot;</span> <span class="na">height</span><span class="o">=</span><span class="s">&quot;500&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;start&quot;</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&quot;gameButton();startTimer()&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;btn-circle-border-double&quot;</span><span class="p">&gt;</span>START<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">audio</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;soundBrick&quot;</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://taira-komori.jpn.org/sfxr/sfxrse/02laser/shoot01.mp3&quot;</span>       <span class="na">type</span><span class="o">=</span><span class="s">&quot;audio/mp3&quot;</span> <span class="na">preload</span><span class="o">=</span><span class="s">&quot;auto&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">audio</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">audio</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;soundBar&quot;</span>   <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://taira-komori.jpn.org/sfxr/sfxrse/02laser/shoot03.mp3&quot;</span>       <span class="na">type</span><span class="o">=</span><span class="s">&quot;audio/mp3&quot;</span> <span class="na">preload</span><span class="o">=</span><span class="s">&quot;auto&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">audio</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">audio</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;soundFail&quot;</span>  <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://taira-komori.jpn.org/sfxr/sfxrse/04powerup/powerdown02.mp3&quot;</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;audio/mp3&quot;</span> <span class="na">preload</span><span class="o">=</span><span class="s">&quot;auto&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">audio</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">audio</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;soundUp&quot;</span>    <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://taira-komori.jpn.org/sfxr/sfxrse/04powerup/powerup05.mp3&quot;</span>   <span class="na">type</span><span class="o">=</span><span class="s">&quot;audio/mp3&quot;</span> <span class="na">preload</span><span class="o">=</span><span class="s">&quot;auto&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">audio</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">canvas</span> <span class="na">id</span><span class="o">=</span><span class="s">"canvas"</span> <span class="na">width</span><span class="o">=</span><span class="s">"480"</span> <span class="na">height</span><span class="o">=</span><span class="s">"500"</span><span class="p">&gt;&lt;/</span><span class="nt">canvas</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">a</span> <span class="na">id</span><span class="o">=</span><span class="s">"start"</span> <span class="na">onclick</span><span class="o">=</span><span class="s">"gameButton();startTimer()"</span> <span class="na">class</span><span class="o">=</span><span class="s">"btn-circle-border-double"</span><span class="p">&gt;</span>START<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">audio</span> <span class="na">id</span><span class="o">=</span><span class="s">"soundBrick"</span> <span class="na">src</span><span class="o">=</span><span class="s">"https://taira-komori.jpn.org/sfxr/sfxrse/02laser/shoot01.mp3"</span>       <span class="na">type</span><span class="o">=</span><span class="s">"audio/mp3"</span> <span class="na">preload</span><span class="o">=</span><span class="s">"auto"</span><span class="p">&gt;&lt;/</span><span class="nt">audio</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">audio</span> <span class="na">id</span><span class="o">=</span><span class="s">"soundBar"</span>   <span class="na">src</span><span class="o">=</span><span class="s">"https://taira-komori.jpn.org/sfxr/sfxrse/02laser/shoot03.mp3"</span>       <span class="na">type</span><span class="o">=</span><span class="s">"audio/mp3"</span> <span class="na">preload</span><span class="o">=</span><span class="s">"auto"</span><span class="p">&gt;&lt;/</span><span class="nt">audio</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">audio</span> <span class="na">id</span><span class="o">=</span><span class="s">"soundFail"</span>  <span class="na">src</span><span class="o">=</span><span class="s">"https://taira-komori.jpn.org/sfxr/sfxrse/04powerup/powerdown02.mp3"</span> <span class="na">type</span><span class="o">=</span><span class="s">"audio/mp3"</span> <span class="na">preload</span><span class="o">=</span><span class="s">"auto"</span><span class="p">&gt;&lt;/</span><span class="nt">audio</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">audio</span> <span class="na">id</span><span class="o">=</span><span class="s">"soundUp"</span>    <span class="na">src</span><span class="o">=</span><span class="s">"https://taira-komori.jpn.org/sfxr/sfxrse/04powerup/powerup05.mp3"</span>   <span class="na">type</span><span class="o">=</span><span class="s">"audio/mp3"</span> <span class="na">preload</span><span class="o">=</span><span class="s">"auto"</span><span class="p">&gt;&lt;/</span><span class="nt">audio</span><span class="p">&gt;</span>
 <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
 </code></pre></div>
-
-
-<h3><code>javascript</code></h3>
-<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;canvas&quot;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">&quot;2d&quot;</span><span class="p">);</span>
+<h3 id="javascript"><code>javascript</code></h3>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"canvas"</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">"2d"</span><span class="p">);</span>
 <span class="c1">// パドルのパラメータ</span>
 <span class="kd">var</span> <span class="nx">paddleHeight</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">paddleWidth</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span>
@@ -437,7 +430,7 @@
 <span class="c1">// ブロックのパラメータ</span>
 <span class="kd">var</span> <span class="nx">brickColumnCount</span> <span class="o">=</span> <span class="mi">14</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">brickRowCount</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">brickColors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;#F39800&quot;</span><span class="p">,</span> <span class="s2">&quot;#FFF100&quot;</span><span class="p">,</span> <span class="s2">&quot;#8FC31F&quot;</span><span class="p">];</span>
+<span class="kd">var</span> <span class="nx">brickColors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"#F39800"</span><span class="p">,</span> <span class="s2">"#FFF100"</span><span class="p">,</span> <span class="s2">"#8FC31F"</span><span class="p">];</span>
 <span class="kd">var</span> <span class="nx">brickWidth</span> <span class="o">=</span> <span class="mi">25</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">brickHeight</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">brickPadding</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
@@ -465,9 +458,9 @@
 <span class="c1">// 3桁の数字で表示するため</span>
 <span class="kd">var</span> <span class="nx">addZero</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">){</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;00&#39;</span> <span class="o">+</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="nx">value</span> <span class="o">=</span> <span class="s1">'00'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">;</span>
   <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">value</span><span class="o">&lt;</span><span class="mi">100</span><span class="p">){</span>
-    <span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span> <span class="o">+</span> <span class="nx">value</span><span class="p">;</span>
+    <span class="nx">value</span> <span class="o">=</span> <span class="s1">'0'</span> <span class="o">+</span> <span class="nx">value</span><span class="p">;</span>
   <span class="p">}</span>
   <span class="k">return</span> <span class="nx">value</span><span class="p">;</span>
 <span class="p">}</span>
@@ -493,28 +486,28 @@
   <span class="p">}</span>
 <span class="p">}</span>
 <span class="c1">// ボタンの処理で制御する</span>
-<span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;keydown&quot;</span><span class="p">,</span> <span class="nx">keyDownHandler</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
-<span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;keyup&quot;</span><span class="p">,</span> <span class="nx">keyUpHandler</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">"keydown"</span><span class="p">,</span> <span class="nx">keyDownHandler</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">"keyup"</span><span class="p">,</span> <span class="nx">keyUpHandler</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
 <span class="c1">// ボタンが押された時のイベント(変数をTrueにする)</span>
 <span class="kd">function</span> <span class="nx">keyDownHandler</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">&quot;Right&quot;</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">&quot;ArrowRight&quot;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">"Right"</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">"ArrowRight"</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">rightPressed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
   <span class="p">}</span>
-  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">&quot;Left&quot;</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">&quot;ArrowLeft&quot;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">"Left"</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">"ArrowLeft"</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">leftPressed</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
   <span class="p">}</span>
 <span class="p">}</span>
 <span class="c1">// ボタンが押されなくなった時のイベント(変数をfalseに戻す)</span>
 <span class="kd">function</span> <span class="nx">keyUpHandler</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">&quot;Right&quot;</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">&quot;ArrowRight&quot;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">"Right"</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">"ArrowRight"</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">rightPressed</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
   <span class="p">}</span>
-  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">&quot;Left&quot;</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">&quot;ArrowLeft&quot;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">"Left"</span> <span class="o">||</span> <span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="s2">"ArrowLeft"</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">leftPressed</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
   <span class="p">}</span>
 <span class="p">}</span>
 <span class="c1">// マウスの位置で制御する</span>
-<span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;mousemove&quot;</span><span class="p">,</span> <span class="nx">mouseMoveHandler</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">"mousemove"</span><span class="p">,</span> <span class="nx">mouseMoveHandler</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
 <span class="c1">// マウスが動いた時のイベント。マウスのx座標がキャンバスのx座標内にあれば、その位置に持ってくる。</span>
 <span class="kd">function</span> <span class="nx">mouseMoveHandler</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
 <span class="kd">var</span> <span class="nx">relativeX</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">clientX</span> <span class="o">-</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">offsetLeft</span><span class="p">;</span>
@@ -541,7 +534,7 @@
               <span class="k">if</span> <span class="p">(</span><span class="nx">y</span><span class="o">&lt;</span><span class="nx">b</span><span class="p">.</span><span class="nx">y</span><span class="o">+</span><span class="nx">brickHeight</span><span class="p">){</span>
                 <span class="nx">dy</span> <span class="o">=</span> <span class="o">-</span><span class="nx">dy</span><span class="p">;</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="mi">8</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
-                  <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundUp&quot;</span><span class="p">);</span>
+                  <span class="nx">sound</span><span class="p">(</span><span class="s2">"soundUp"</span><span class="p">);</span>
                   <span class="k">if</span> <span class="p">(</span><span class="nx">dy</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">){</span>
                     <span class="nx">dy</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
                   <span class="p">}</span><span class="k">else</span><span class="p">{</span>
@@ -550,10 +543,10 @@
                 <span class="p">}</span>
                 <span class="nx">b</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
                 <span class="nx">score</span><span class="o">+=</span><span class="mi">3</span><span class="o">-</span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">r</span><span class="o">/</span><span class="mi">2</span><span class="p">);</span>
-                <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundBrick&quot;</span><span class="p">);</span>
+                <span class="nx">sound</span><span class="p">(</span><span class="s2">"soundBrick"</span><span class="p">);</span>
                 <span class="c1">// 全てのブロックを崩した場合</span>
                 <span class="k">if</span><span class="p">(</span><span class="nx">score</span> <span class="o">==</span> <span class="nx">maxscore</span><span class="p">)</span> <span class="p">{</span>
-                  <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;YOU WIN\nYour Time is &quot;</span> <span class="o">+</span> <span class="nx">timer</span><span class="p">);</span>
+                  <span class="nx">alert</span><span class="p">(</span><span class="s2">"YOU WIN\nYour Time is "</span> <span class="o">+</span> <span class="nx">timer</span><span class="p">);</span>
                   <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">reload</span><span class="p">();</span>
                 <span class="p">}</span>
               <span class="p">}</span>
@@ -567,14 +560,14 @@
 <span class="kd">function</span> <span class="nx">drawBall</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">arc</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">ballRadius</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="o">*</span><span class="mi">2</span><span class="p">);</span>
-  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">"#ffffff"</span><span class="p">;</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">fill</span><span class="p">();</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">closePath</span><span class="p">();</span>
 <span class="p">}</span>
 <span class="kd">function</span> <span class="nx">drawPaddle</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">rect</span><span class="p">(</span><span class="nx">paddleX</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="o">-</span><span class="nx">paddleHeight</span><span class="o">-</span><span class="nx">paddleOffsetBottom</span><span class="p">,</span> <span class="nx">paddleWidth</span><span class="p">,</span> <span class="nx">paddleHeight</span><span class="p">);</span>
-  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">"#ffffff"</span><span class="p">;</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">fill</span><span class="p">();</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">closePath</span><span class="p">();</span>
 <span class="p">}</span>
@@ -597,18 +590,18 @@
   <span class="p">}</span>
 <span class="p">}</span>
 <span class="kd">function</span> <span class="nx">drawScore</span><span class="p">()</span> <span class="p">{</span>
-  <span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="s2">&quot;30px &#39;Comic Sans MS&#39;&quot;</span><span class="p">;</span>
-  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="s2">"30px 'Comic Sans MS'"</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">"#ffffff"</span><span class="p">;</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span><span class="nx">score</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">);</span>
 <span class="p">}</span>
 <span class="kd">function</span> <span class="nx">drawTime</span><span class="p">()</span> <span class="p">{</span>
-  <span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="s2">&quot;30px &#39;Comic Sans MS&#39;&quot;</span><span class="p">;</span>
-  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="s2">"30px 'Comic Sans MS'"</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">"#ffffff"</span><span class="p">;</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span><span class="nx">timer</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">/</span><span class="mi">2</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">);</span>
 <span class="p">}</span>
 <span class="kd">function</span> <span class="nx">drawLives</span><span class="p">()</span> <span class="p">{</span>
-  <span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="s2">&quot;30px &#39;Comic Sans MS&#39;&quot;</span><span class="p">;</span>
-  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">font</span> <span class="o">=</span> <span class="s2">"30px 'Comic Sans MS'"</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="s2">"#ffffff"</span><span class="p">;</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillText</span><span class="p">(</span><span class="nx">lives</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">-</span><span class="mi">65</span><span class="p">,</span> <span class="mi">40</span><span class="p">);</span>
 <span class="p">}</span>
 <span class="kd">function</span> <span class="nx">draw</span><span class="p">()</span> <span class="p">{</span>
@@ -622,12 +615,12 @@
     <span class="nx">collisionDetection</span><span class="p">();</span>
   <span class="c1">// 左端と右端で弾ませる(ボールの半径を考える)</span>
   <span class="k">if</span><span class="p">(</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">dx</span><span class="o">&gt;</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="o">-</span><span class="nx">ballRadius</span> <span class="o">||</span> <span class="nx">x</span> <span class="o">+</span> <span class="nx">dx</span><span class="o">&lt;</span><span class="nx">ballRadius</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundBar&quot;</span><span class="p">);</span>
+    <span class="nx">sound</span><span class="p">(</span><span class="s2">"soundBar"</span><span class="p">);</span>
     <span class="nx">dx</span> <span class="o">=</span> <span class="o">-</span><span class="nx">dx</span><span class="p">;</span>
   <span class="p">}</span>
   <span class="c1">// 上端で弾ませる(ボールの半径を考える)</span>
   <span class="k">if</span><span class="p">(</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">dy</span><span class="o">&lt;</span><span class="nx">ballRadius</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundBar&quot;</span><span class="p">);</span>
+    <span class="nx">sound</span><span class="p">(</span><span class="s2">"soundBar"</span><span class="p">);</span>
     <span class="nx">dy</span> <span class="o">=</span> <span class="o">-</span><span class="nx">dy</span><span class="p">;</span>
   <span class="p">}</span>
   <span class="c1">// ボールがパドルの位置に到達した時</span>
@@ -636,18 +629,18 @@
       <span class="c1">// ボールのx座標がパドル上にあれば、跳ね返る</span>
       <span class="k">if</span><span class="p">(</span><span class="nx">x</span><span class="o">&gt;</span><span class="nx">paddleX</span><span class="p">){</span>
         <span class="k">if</span><span class="p">(</span><span class="nx">x</span><span class="o">&lt;</span><span class="nx">paddleX</span> <span class="o">+</span> <span class="nx">paddleWidth</span><span class="p">){</span>
-          <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundBar&quot;</span><span class="p">);</span>
+          <span class="nx">sound</span><span class="p">(</span><span class="s2">"soundBar"</span><span class="p">);</span>
           <span class="nx">dy</span> <span class="o">=</span> <span class="o">-</span><span class="nx">dy</span><span class="p">;</span>
         <span class="p">}</span>
       <span class="p">}</span>
     <span class="p">}</span>
     <span class="c1">// ボールが下端に到達した時</span>
     <span class="k">if</span><span class="p">(</span><span class="nx">y</span> <span class="o">+</span> <span class="nx">dy</span><span class="o">&gt;</span><span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="o">-</span><span class="nx">ballRadius</span><span class="p">){</span>
-      <span class="nx">sound</span><span class="p">(</span><span class="s2">&quot;soundFail&quot;</span><span class="p">);</span>
+      <span class="nx">sound</span><span class="p">(</span><span class="s2">"soundFail"</span><span class="p">);</span>
       <span class="nx">lives</span><span class="o">--</span><span class="p">;</span>
       <span class="c1">// 残機がなくなれば失敗する。</span>
       <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">lives</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;YOU LOSE&quot;</span><span class="p">);</span>
+        <span class="nx">alert</span><span class="p">(</span><span class="s2">"YOU LOSE"</span><span class="p">);</span>
         <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">reload</span><span class="p">();</span>
       <span class="p">}</span>
       <span class="k">else</span> <span class="p">{</span>
@@ -686,18 +679,16 @@
 <span class="nx">setCanvas</span><span class="p">();</span>
 <span class="kd">function</span> <span class="nx">gameButton</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">draw</span><span class="p">();</span>
-  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;SPEED UP&quot;</span><span class="p">;</span>
-  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">fontSize</span> <span class="o">=</span> <span class="s2">&quot;10px&quot;</span><span class="p">;</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"start"</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">"SPEED UP"</span><span class="p">;</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"start"</span><span class="p">).</span><span class="nx">style</span><span class="p">.</span><span class="nx">fontSize</span> <span class="o">=</span> <span class="s2">"10px"</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
-
-
-<h3><code>css</code></h3>
-<div class="highlight"><pre><span></span><code><span class="p">@</span><span class="k">import</span> <span class="nt">url</span><span class="o">(</span><span class="s1">&#39;https://fonts.googleapis.com/css?family=Press+Start+2P&amp;display=swap&#39;</span><span class="o">)</span><span class="p">;</span>
+<h3 id="css"><code>css</code></h3>
+<div class="highlight"><pre><span></span><code><span class="p">@</span><span class="k">import</span> <span class="nt">url</span><span class="o">(</span><span class="s1">'https://fonts.googleapis.com/css?family=Press+Start+2P&amp;display=swap'</span><span class="o">)</span><span class="p">;</span>
 <span class="p">.</span><span class="nc">breakout</span> <span class="p">{</span>
   <span class="k">text-align</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span>
   <span class="k">margin</span><span class="p">:</span> <span class="mi">0</span> <span class="kc">auto</span><span class="p">;</span>
-  <span class="k">font-family</span><span class="p">:</span> <span class="s1">&#39;Press Start 2P&#39;</span><span class="p">,</span> <span class="kc">cursive</span><span class="p">;</span>
+  <span class="k">font-family</span><span class="p">:</span> <span class="s1">'Press Start 2P'</span><span class="p">,</span> <span class="kc">cursive</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="nt">canvas</span> <span class="p">{</span>
   <span class="k">background</span><span class="p">:</span> <span class="mh">#000</span><span class="p">;</span>
