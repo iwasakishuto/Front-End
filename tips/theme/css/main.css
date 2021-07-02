@@ -110,6 +110,15 @@ aside.toc ul {
 	padding-block-start: 1em 0;
 	padding-inline-start: 1.5em;
 }
+aside.toc h4::before, aside.toc h4::after{
+	border-color: white;
+}
+aside.toc a.toc-href:link, aside.toc a.toc-href:visited{
+	color: white;
+}
+aside.toc a.toc-href:link::hover, aside.toc a.toc-href:visited::hover{
+	color: yellow;
+}
 @media screen and (min-width:1400px) { 
 	aside.toc{
 		display: block;
