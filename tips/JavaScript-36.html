@@ -22,6 +22,8 @@
     <meta name="twitter:description" content="GASでLINE BOTを作成し、User ID を取得する。">
     <title>JS.36 GASでLINE BOTを作成し、各種IDを取得する</title>
     <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
+    <link href="https://iwasakishuto.github.io/Front-End/tips/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Shuto's Front-End Atom Feed" />
+    <link href="https://iwasakishuto.github.io/Front-End/tips/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Shuto's Front-End RSS Feed" />
     <!-- Added by Shuto Iwasaki. -->
     <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
     <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
@@ -77,7 +79,7 @@
           <aside class="toc">
             <div class="col-lg-3 hidden-xs hidden-sm">
               <h4>Table of Contents</h4>
-              <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.36 GASでLINE BOTを作成し、各種IDを取得する">JS.36 GASでLINE BOTを作成し、各種IDを取得する</a><ul><li><a class="toc-href" href="#line-botnozuo-cheng" title="LINE BOTの作成">LINE BOTの作成</a></li><li><a class="toc-href" href="#gasnoshe-ding" title="GASの設定">GASの設定</a><ul><li><a class="toc-href" href="#get_profile" title="get_profile">get_profile</a></li><li><a class="toc-href" href="#store_message_info" title="store_message_info">store_message_info</a></li><li><a class="toc-href" href="#reply_message_echolalia" title="reply_message_echolalia">reply_message_echolalia</a></li><li><a class="toc-href" href="#store_new_followers_info" title="store_new_followers_info">store_new_followers_info</a></li></ul></li><li><a class="toc-href" href="#python-de-line-bot-wocao-zuo-suru_1" title="Python で LINE BOT を操作する">Python で LINE BOT を操作する</a><ul><li><a class="toc-href" href="#shinpurunatekisutowosong-xin-suru" title="シンプルなテキストを送信する">シンプルなテキストを送信する</a></li><li><a class="toc-href" href="#tenpuretotekisutowosong-xin-suru" title="テンプレートテキストを送信する">テンプレートテキストを送信する</a></li><li><a class="toc-href" href="#get-followers-profile-verified" title="認証済みアカウントでuserIdを収集する">認証済みアカウントでuserIdを収集する</a></li></ul></li></ul></li></ul></div>
+              <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.36 GASでLINE BOTを作成し、各種IDを取得する">JS.36 GASでLINE BOTを作成し、各種IDを取得する</a><ul><li><a class="toc-href" href="#line-botnozuo-cheng" title="LINE BOTの作成">LINE BOTの作成</a></li><li><a class="toc-href" href="#gasnoshe-ding" title="GASの設定">GASの設定</a><ul><li><a class="toc-href" href="#get_profile" title="get_profile">get_profile</a></li><li><a class="toc-href" href="#store_message_info" title="store_message_info">store_message_info</a></li><li><a class="toc-href" href="#reply_message_echolalia" title="reply_message_echolalia">reply_message_echolalia</a></li><li><a class="toc-href" href="#store_new_followers_info" title="store_new_followers_info">store_new_followers_info</a></li></ul></li><li><a class="toc-href" href="#python-de-line-bot-wocao-zuo-suru_1" title="Python で LINE BOT を操作する">Python で LINE BOT を操作する</a><ul><li><a class="toc-href" href="#shinpurunatekisutowosong-xin-suru" title="シンプルなテキストを送信する">シンプルなテキストを送信する</a></li><li><a class="toc-href" href="#tenpuretotekisutowosong-xin-suru" title="テンプレートテキストを送信する">テンプレートテキストを送信する</a></li></ul></li><li><a class="toc-href" href="#ren-zheng-ji-miakauntodeuseridwoshou-ji-suru_1" title="認証済みアカウントでuserIdを収集する">認証済みアカウントでuserIdを収集する</a></li></ul></li></ul></div>
             </div>
           </aside>
     
@@ -88,7 +90,7 @@
           </footer><!-- /.post-info -->
 <!-- NOT "| indent(10, True)"  -->
 <p>LINE Official Account に友達登録している人の user ID リストを作成したかったのですが、<a href="https://developers.line.biz/en/reference/messaging-api/#get-follower-ids">Messaging API reference</a>を見る限り、<strong>verified</strong> or <strong>premium</strong> アカウントでしかこの機能を使えないようなので、メッセージが送信された際に取得できる情報を利用することにしました。</p>
-<p>※ 認証済みアカウントで上記のAPIを用いる時のコードは<a href="#get-followers-profile-verified">認証済みアカウントでuserIdを収集する</a>に記載しました。（ページ下部）</p>
+<p>※ 認証済みアカウントで上記のAPIを用いる時のコードは<a href="#ren-zheng-ji-miakauntodeuseridwoshou-ji-suru_1">認証済みアカウントでuserIdを収集する</a>に記載しました。（ページ下部）</p>
 <h2 id="line-botnozuo-cheng">LINE BOTの作成</h2>
 <p><a href="https://developers.line.biz/console/">LINE developers Console</a>で必要な登録と設定を済ませ、LINE BOT(Channel)を作成します。それに関しては、<a href="https://qiita.com/nkjm/items/38808bbc97d6927837cd">LINEのBot開発 超入門（前編） ゼロから応答ができるまで</a>が参考になるかと思います。</p>
 <p>Channelが作成できたら、[LINE developer] -&gt; [Messaging API] から、<strong>Channel access token</strong> を取得してください。また、以下で作成するGAS(web application)のWebhook URLの設定箇所も同じ場所です。</p>
@@ -159,9 +161,9 @@
   <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">[[</span><span class="nx">e</span><span class="p">.</span><span class="nx">timestamp</span><span class="p">,</span> <span class="nx">profile</span><span class="p">.</span><span class="nx">displayName</span><span class="p">,</span> <span class="nx">userId</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">groupId</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">roomId</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">.</span><span class="nx">text</span><span class="p">]]</span>
   <span class="kd">var</span> <span class="nx">num_stored_messages</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">CHAT_LOG_COUNTER_CELL</span><span class="p">.</span><span class="nx">getValue</span><span class="p">());</span>
   <span class="nx">CHAT_LOG_SHEET</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span>
-    <span class="nx">CHAT_LOG_TABLE_OFFSET_ROW</span><span class="o">+</span><span class="nx">num_stored_messages</span><span class="p">,</span> 
-    <span class="nx">CHAT_LOG_TABLE_OFFSET_COL</span><span class="p">,</span> 
-    <span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> 
+    <span class="nx">CHAT_LOG_TABLE_OFFSET_ROW</span><span class="o">+</span><span class="nx">num_stored_messages</span><span class="p">,</span>
+    <span class="nx">CHAT_LOG_TABLE_OFFSET_COL</span><span class="p">,</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span>
     <span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span>
   <span class="p">).</span><span class="nx">setValues</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
   <span class="nx">CHAT_LOG_COUNTER_CELL</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="nx">num_stored_messages</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
@@ -209,9 +211,9 @@
   <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">[[</span><span class="nx">profile</span><span class="p">.</span><span class="nx">displayName</span><span class="p">,</span> <span class="nx">userId</span><span class="p">,</span> <span class="s2">""</span><span class="p">]];</span>
   <span class="kd">var</span> <span class="nx">num_stored_userIds</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">USER_ID_COUNTER_CELL</span><span class="p">.</span><span class="nx">getValue</span><span class="p">());</span>
   <span class="nx">USER_ID_SHEET</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span>
-    <span class="nx">USER_ID_TABLE_OFFSET_ROW</span><span class="o">+</span><span class="nx">num_stored_userIds</span><span class="p">,</span> 
-    <span class="nx">USER_ID_TABLE_OFFSET_COL</span><span class="p">,</span> 
-    <span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span> 
+    <span class="nx">USER_ID_TABLE_OFFSET_ROW</span><span class="o">+</span><span class="nx">num_stored_userIds</span><span class="p">,</span>
+    <span class="nx">USER_ID_TABLE_OFFSET_COL</span><span class="p">,</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span>
     <span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">,</span>
   <span class="p">).</span><span class="nx">setValues</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
   <span class="nx">USER_ID_COUNTER_CELL</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="nx">num_stored_userIds</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
@@ -264,7 +266,7 @@
 <div style="text-align:center;">
 <img alt="demo image" src="https://iwasakishuto.github.io/Front-End/tips/images/python_line_api_template_message.png" style="width:50%"/>
 </div>
-<h3 id="get-followers-profile-verified">認証済みアカウントでuserIdを収集する</h3>
+<h2 id="ren-zheng-ji-miakauntodeuseridwoshou-ji-suru_1">認証済みアカウントでuserIdを収集する</h2>
 <p>認証済みアカウントであれば <a href="https://developers.line.biz/en/reference/messaging-api/#get-follower-ids"><code>https://api.line.me/v2/bot/followers/ids</code></a> のAPIが使えるので、以下のコードで一度に全てのuserIdリストを作成することができます。</p>
 <div class="highlight"><pre><span></span><code><span class="cm">/** Get followers' userId list.</span>
 <span class="cm"> * @param {string} continuationToken Value of the continuation token found in the ``next`` property of the JSON object returned in the response. Include this parameter to get the next array of user IDs.</span>
@@ -318,6 +320,8 @@
       <div class="social">
         <h5>social</h5>
         <ul>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+          <li><a href="https://iwasakishuto.github.io/Front-End/tips/feeds/all.rss.xml" type="application/rss+xml" rel="alternate">rss feed</a></li>
           <li><a href="https://twitter.com/cabernet_rock">twitter</a></li>
           <li><a href="https://github.com/iwasakishuto">github</a></li>
         </ul>
