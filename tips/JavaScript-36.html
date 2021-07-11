@@ -79,7 +79,7 @@
           <aside class="toc">
             <div class="col-lg-3 hidden-xs hidden-sm">
               <h4>Table of Contents</h4>
-              <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.36 GASでLINE BOTを作成し、各種IDを取得する">JS.36 GASでLINE BOTを作成し、各種IDを取得する</a><ul><li><a class="toc-href" href="#line-botnozuo-cheng" title="LINE BOTの作成">LINE BOTの作成</a></li><li><a class="toc-href" href="#gasnoshe-ding" title="GASの設定">GASの設定</a><ul><li><a class="toc-href" href="#get_profile" title="get_profile">get_profile</a></li><li><a class="toc-href" href="#store_message_info" title="store_message_info">store_message_info</a></li><li><a class="toc-href" href="#reply_message_echolalia" title="reply_message_echolalia">reply_message_echolalia</a></li><li><a class="toc-href" href="#store_new_followers_info" title="store_new_followers_info">store_new_followers_info</a></li></ul></li><li><a class="toc-href" href="#python-de-line-bot-wocao-zuo-suru_1" title="Python で LINE BOT を操作する">Python で LINE BOT を操作する</a><ul><li><a class="toc-href" href="#shinpurunatekisutowosong-xin-suru" title="シンプルなテキストを送信する">シンプルなテキストを送信する</a></li><li><a class="toc-href" href="#tenpuretotekisutowosong-xin-suru" title="テンプレートテキストを送信する">テンプレートテキストを送信する</a></li></ul></li><li><a class="toc-href" href="#ren-zheng-ji-miakauntodeuseridwoshou-ji-suru_1" title="認証済みアカウントでuserIdを収集する">認証済みアカウントでuserIdを収集する</a></li></ul></li></ul></div>
+              <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.36 GASでLINE BOTを作成し、各種IDを取得する">JS.36 GASでLINE BOTを作成し、各種IDを取得する</a><ul><li><a class="toc-href" href="#line-botnozuo-cheng" title="LINE BOTの作成">LINE BOTの作成</a></li><li><a class="toc-href" href="#gasnoshe-ding" title="GASの設定">GASの設定</a><ul><li><a class="toc-href" href="#get_profile" title="get_profile">get_profile</a></li><li><a class="toc-href" href="#store_message_info" title="store_message_info">store_message_info</a></li><li><a class="toc-href" href="#reply_message_echolalia" title="reply_message_echolalia">reply_message_echolalia</a></li><li><a class="toc-href" href="#store_new_followers_info" title="store_new_followers_info">store_new_followers_info</a></li></ul></li><li><a class="toc-href" href="#python-de-line-bot-wocao-zuo-suru_1" title="Python で LINE BOT を操作する">Python で LINE BOT を操作する</a><ul><li><a class="toc-href" href="#shinpurunatekisutowosong-xin-suru" title="シンプルなテキストを送信する">シンプルなテキストを送信する</a></li><li><a class="toc-href" href="#tenpuretotekisutowosong-xin-suru" title="テンプレートテキストを送信する">テンプレートテキストを送信する</a></li></ul></li><li><a class="toc-href" href="#ren-zheng-ji-miakauntodeuseridwoshou-ji-suru_1" title="認証済みアカウントでuserIdを収集する">認証済みアカウントでuserIdを収集する</a><ul><li><a class="toc-href" href="#get_follower_ids" title="get_follower_ids">get_follower_ids</a></li><li><a class="toc-href" href="#get_all_follower_ids" title="get_all_follower_ids">get_all_follower_ids</a></li><li><a class="toc-href" href="#update_followers_profile" title="update_followers_profile">update_followers_profile</a></li></ul></li></ul></li></ul></div>
             </div>
           </aside>
     
@@ -116,19 +116,19 @@
 </code></pre></div>
 <h3 id="get_profile"><code>get_profile</code></h3>
 <p><code>userId</code> だけを収集してしまうとわからなくなってしまうので、<code>userId</code> からプロフィール情報を入手する関数を用意する。なお、この関数を使いながらデータをためても良いし、ある程度のデータがたまった後にまとめてこの関数でプロフィールに紐づけても良い。</p>
-<p>※ Property の <code>CHANNEL_ACCESS_TOKEN</code> に上記で取得した <strong>Channel access token</strong> の値を設定してください。</p>
 <div class="highlight"><pre><span></span><code><span class="cm">/** Get the profile information of users with ``userId``.</span>
 <span class="cm"> * @ref &lt;https://developers.line.biz/en/reference/messaging-api/#get-profile&gt;</span>
 <span class="cm"> * @param {string} userId User ID that is returned in a webhook event object. Do not use the LINE ID found on LINE.</span>
+<span class="cm"> * @param {string} acces_token Channel's Access Token.</span>
 <span class="cm"> * @return {Object} User profile Information.</span>
 <span class="cm">*/</span>
-<span class="kd">function</span> <span class="nx">get_profile</span><span class="p">(</span><span class="nx">userId</span><span class="p">){</span>
+<span class="kd">function</span> <span class="nx">get_profile</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">access_token</span><span class="p">){</span>
   <span class="k">try</span><span class="p">{</span>
     <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
       <span class="s2">"method"</span> <span class="o">:</span> <span class="s2">"GET"</span><span class="p">,</span>
       <span class="s2">"headers"</span> <span class="o">:</span> <span class="p">{</span>
         <span class="s2">"Content-Type"</span> <span class="o">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
-        <span class="s2">"Authorization"</span> <span class="o">:</span> <span class="s2">"Bearer "</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">"CHANNEL_ACCESS_TOKEN"</span><span class="p">),</span>
+        <span class="s2">"Authorization"</span> <span class="o">:</span> <span class="sb">`Bearer </span><span class="si">${</span><span class="nx">access_token</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span>
       <span class="p">},</span>
     <span class="p">};</span>
     <span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="sb">`https://api.line.me/v2/bot/profile/</span><span class="si">${</span><span class="nx">userId</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
@@ -146,6 +146,7 @@
 </code></pre></div>
 <h3 id="store_message_info"><code>store_message_info</code></h3>
 <p>例えば <code>func_message_event</code> に以下の関数を用いれば、user ID などを記録することができ、user ID の収集に非常に役立ちます。</p>
+<p>※ Property の <code>CHANNEL_ACCESS_TOKEN</code> に上記で取得した <strong>Channel access token</strong> の値を設定してください。</p>
 <div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nx">CHAT_LOG_SHEET</span> <span class="o">=</span> <span class="nx">ss</span><span class="p">.</span><span class="nx">getSheetByName</span><span class="p">(</span><span class="s2">"LINE_chat_logs"</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">CHAT_LOG_COUNTER_CELL</span> <span class="o">=</span> <span class="nx">CHAT_LOG_SHEET</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span><span class="s2">"B1"</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">CHAT_LOG_TABLE_A1</span>     <span class="o">=</span> <span class="nx">CHAT_LOG_SHEET</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span><span class="s2">"A3"</span><span class="p">);</span>
@@ -157,7 +158,7 @@
 <span class="cm">*/</span>
 <span class="kd">function</span> <span class="nx">store_message_info</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">userId</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">userId</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="nx">get_profile</span><span class="p">(</span><span class="nx">userId</span><span class="p">)</span>
+  <span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="nx">get_profile</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">"CHANNEL_ACCESS_TOKEN"</span><span class="p">))</span>
   <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">[[</span><span class="nx">e</span><span class="p">.</span><span class="nx">timestamp</span><span class="p">,</span> <span class="nx">profile</span><span class="p">.</span><span class="nx">displayName</span><span class="p">,</span> <span class="nx">userId</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">groupId</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">roomId</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">message</span><span class="p">.</span><span class="nx">text</span><span class="p">]]</span>
   <span class="kd">var</span> <span class="nx">num_stored_messages</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">CHAT_LOG_COUNTER_CELL</span><span class="p">.</span><span class="nx">getValue</span><span class="p">());</span>
   <span class="nx">CHAT_LOG_SHEET</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span>
@@ -207,7 +208,7 @@
 <span class="cm">*/</span>
 <span class="kd">function</span> <span class="nx">store_new_followers_info</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">userId</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">source</span><span class="p">.</span><span class="nx">userId</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="nx">get_profile</span><span class="p">(</span><span class="nx">userId</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="nx">get_profile</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">"CHANNEL_ACCESS_TOKEN"</span><span class="p">));</span>
   <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">[[</span><span class="nx">profile</span><span class="p">.</span><span class="nx">displayName</span><span class="p">,</span> <span class="nx">userId</span><span class="p">,</span> <span class="s2">""</span><span class="p">]];</span>
   <span class="kd">var</span> <span class="nx">num_stored_userIds</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">USER_ID_COUNTER_CELL</span><span class="p">.</span><span class="nx">getValue</span><span class="p">());</span>
   <span class="nx">USER_ID_SHEET</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span>
@@ -268,36 +269,107 @@
 </div>
 <h2 id="ren-zheng-ji-miakauntodeuseridwoshou-ji-suru_1">認証済みアカウントでuserIdを収集する</h2>
 <p>認証済みアカウントであれば <a href="https://developers.line.biz/en/reference/messaging-api/#get-follower-ids"><code>https://api.line.me/v2/bot/followers/ids</code></a> のAPIが使えるので、以下のコードで一度に全てのuserIdリストを作成することができます。</p>
-<div class="highlight"><pre><span></span><code><span class="cm">/** Get followers' userId list.</span>
-<span class="cm"> * @param {string} continuationToken Value of the continuation token found in the ``next`` property of the JSON object returned in the response. Include this parameter to get the next array of user IDs.</span>
+<h3 id="get_follower_ids"><code>get_follower_ids</code></h3>
+<p>（認証済）アカウントの <code>ACCESS_TOKEN</code> を用いて <a href="https://developers.line.biz/en/reference/messaging-api/#get-profile"><code>get_follower-ids</code></a>というAPIを叩きます。このとき、一度に300人分しか取れないため、それ以降のユーザーの情報を取得するためには <code>continuationToken</code> という引数に、この関数の返り値の <code>next</code> というパラメータを入れる必要があります。</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/** Get followers userId lists</span>
+<span class="cm"> * @param {string} access_token Channels Access token. (Must be verfied.)</span>
+<span class="cm"> * @param {string} continuationToken</span>
 <span class="cm"> * @ref &lt;https://developers.line.biz/en/reference/messaging-api/#get-follower-ids&gt;</span>
 <span class="cm">*/</span>
-<span class="kd">function</span> <span class="nx">get_followers_profile</span><span class="p">(</span><span class="nx">continuationToken</span><span class="o">=</span><span class="s2">""</span><span class="p">){</span>
+<span class="kd">function</span> <span class="nx">get_follower_ids</span><span class="p">(</span><span class="nx">access_token</span><span class="p">,</span> <span class="nx">continuationToken</span><span class="o">=</span><span class="s2">""</span><span class="p">){</span>
   <span class="nx">start_param</span> <span class="o">=</span> <span class="p">(</span><span class="nx">continuationToken</span><span class="p">.</span><span class="nx">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="s2">""</span> <span class="o">:</span> <span class="sb">`?start=</span><span class="si">${</span><span class="nx">continuationToken</span><span class="si">}</span><span class="sb">`</span><span class="p">;</span>
   <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">"method"</span> <span class="o">:</span> <span class="s2">"GET"</span><span class="p">,</span>
     <span class="s2">"headers"</span> <span class="o">:</span> <span class="p">{</span>
       <span class="s2">"Content-Type"</span> <span class="o">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
-      <span class="s2">"Authorization"</span> <span class="o">:</span> <span class="s2">"Bearer "</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">"CHANNEL_ACCESS_TOKEN_VERIFIED"</span><span class="p">),</span>
+      <span class="s2">"Authorization"</span> <span class="o">:</span> <span class="sb">`Bearer </span><span class="si">${</span><span class="nx">access_token</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span>
     <span class="p">},</span>
   <span class="p">};</span>
   <span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="sb">`https://api.line.me/v2/bot/followers/ids</span><span class="si">${</span><span class="nx">start_param</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
   <span class="k">return</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">getContentText</span><span class="p">());</span>
 <span class="p">}</span>
-
-<span class="cm">/** Get all followers' userId list.</span>
+</code></pre></div>
+<h3 id="get_all_follower_ids"><code>get_all_follower_ids</code></h3>
+<p>上述の通り、一度に取得できるユーザーIDの数に限りがあるので、<code>while</code> で全てのユーザーIdを取得するまで <code>get_follower_ids</code> を実行します。</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/** Get all followers' userId list.</span>
+<span class="cm"> * @param {string} access_token Channels Access token.</span>
 <span class="cm"> * @ref https://developers.line.biz/en/reference/messaging-api/#get-follower-ids&gt;</span>
 <span class="cm">*/</span>
-<span class="kd">function</span> <span class="nx">get_all_followers_profile</span><span class="p">(){</span>
+<span class="kd">function</span> <span class="nx">get_all_follower_ids</span><span class="p">(){</span>
   <span class="kd">var</span> <span class="nx">userIds</span> <span class="o">=</span> <span class="p">[];</span>
   <span class="kd">var</span> <span class="nx">continuationToken</span><span class="o">=</span><span class="s2">""</span><span class="p">;</span>
   <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">){</span>
-    <span class="nx">response</span> <span class="o">=</span> <span class="nx">get_followers_profile</span><span class="p">(</span><span class="nx">continuationToken</span><span class="p">)</span>
+    <span class="nx">response</span> <span class="o">=</span> <span class="nx">get_follower_ids</span><span class="p">(</span><span class="nx">continuationToken</span><span class="p">)</span>
     <span class="nx">userIds</span> <span class="o">=</span> <span class="nx">userIds</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">userIds</span><span class="p">)</span>
     <span class="nx">continuationToken</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">next</span><span class="p">;</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">continuationToken</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="k">break</span>
   <span class="p">}</span>
   <span class="k">return</span> <span class="nx">userIds</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="update_followers_profile"><code>update_followers_profile</code></h3>
+<p>もし、これらの関数を定期的に実行してスプレッドシートにまとめる、といったオペレーションがある場合、以下の関数を使うと便利だと思います。以下の関数では、</p>
+<ul>
+<li>取得していないuserIdがあった場合、それを表に追加する</li>
+<li>取得していたが、<code>displayName</code> に変更があった場合、更新する</li>
+</ul>
+<p>ことができます。</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/** Get user profile and organize it in a table while updating user's displayName.</span>
+<span class="cm"> * @param {string} access_token Channels Access token.</span>
+<span class="cm"> * @param {string} counter_cell The name of the cell which holds the number of acquired data.</span>
+<span class="cm"> * @param {string} table_A1 Upper left part (worth like a A1 cell) of the table to save data.</span>
+<span class="cm"> * @param {string} sheet_name Target Sheet Name.</span>
+<span class="cm">*/</span>
+<span class="kd">function</span> <span class="nx">update_followers_profile</span><span class="p">(</span><span class="nx">access_token</span><span class="p">,</span> <span class="nx">counter_cell</span><span class="p">,</span> <span class="nx">table_A1</span><span class="p">,</span> <span class="nx">sheet_name</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">FOLLOWERS_SHEET</span> <span class="o">=</span> <span class="nx">ss</span><span class="p">.</span><span class="nx">getSheetByName</span><span class="p">(</span><span class="nx">sheet_name</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">FOLLOWERS_COUNTER_CELL</span> <span class="o">=</span> <span class="nx">FOLLOWERS_SHEET</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span><span class="nx">counter_cell</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">FOLLOWERS_TABLE_A1</span>     <span class="o">=</span> <span class="nx">FOLLOWERS_SHEET</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span><span class="nx">table_A1</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">FOLLOWERS_TABLE_OFFSET_ROW</span> <span class="o">=</span> <span class="nx">FOLLOWERS_TABLE_A1</span><span class="p">.</span><span class="nx">getRow</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">FOLLOWERS_TABLE_OFFSET_COL</span> <span class="o">=</span> <span class="nx">FOLLOWERS_TABLE_A1</span><span class="p">.</span><span class="nx">getColumn</span><span class="p">();</span>
+
+  <span class="kd">var</span> <span class="nx">num_stored_users</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">FOLLOWERS_COUNTER_CELL</span><span class="p">.</span><span class="nx">getValue</span><span class="p">());</span>
+  <span class="kd">var</span> <span class="nx">follower_userIds</span> <span class="o">=</span> <span class="nx">get_all_followers_profile</span><span class="p">(</span><span class="nx">access_token</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">stored_userIds</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="kd">var</span> <span class="nx">stored_displayNames</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="kd">var</span> <span class="nx">stored_Names</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="nx">FOLLOWERS_SHEET</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span>
+    <span class="nx">FOLLOWERS_TABLE_OFFSET_ROW</span><span class="p">,</span>
+    <span class="nx">FOLLOWERS_TABLE_OFFSET_COL</span><span class="p">,</span>
+    <span class="nx">num_stored_users</span><span class="p">,</span>
+    <span class="mi">3</span>
+  <span class="p">).</span><span class="nx">getValues</span><span class="p">().</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+    <span class="nx">stored_userIds</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+    <span class="nx">stored_displayNames</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+    <span class="nx">stored_Names</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">e</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+  <span class="p">})</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">follower_userIds</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">userId</span> <span class="o">=</span> <span class="nx">follower_userIds</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+    <span class="kd">var</span> <span class="nx">idx</span> <span class="o">=</span> <span class="nx">stored_userIds</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">userId</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">profile</span> <span class="o">=</span> <span class="nx">get_profile</span><span class="p">(</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">access_token</span><span class="p">);</span>
+    <span class="nx">Logger</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span><span class="nx">i</span><span class="p">,</span> <span class="nx">idx</span><span class="p">,</span> <span class="nx">profile</span><span class="p">.</span><span class="nx">displayName</span><span class="p">]);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">idx</span><span class="o">==-</span><span class="mi">1</span><span class="p">){</span>
+      <span class="c1">// Register a new user.</span>
+      <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">[[</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">profile</span><span class="p">.</span><span class="nx">displayName</span><span class="p">,</span> <span class="s2">""</span><span class="p">]];</span>
+      <span class="nx">FOLLOWERS_SHEET</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span>
+        <span class="nx">FOLLOWERS_TABLE_OFFSET_ROW</span><span class="o">+</span><span class="nx">num_stored_users</span><span class="p">,</span>
+        <span class="nx">FOLLOWERS_TABLE_OFFSET_COL</span><span class="p">,</span>
+        <span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span>
+        <span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">,</span>
+      <span class="p">).</span><span class="nx">setValues</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+      <span class="nx">num_stored_users</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">stored_displayNames</span><span class="p">[</span><span class="nx">idx</span><span class="p">]</span> <span class="o">!=</span> <span class="nx">profile</span><span class="p">.</span><span class="nx">displayName</span><span class="p">){</span>
+      <span class="c1">// Update a stored user info.</span>
+      <span class="nx">Logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">stored_displayNames</span><span class="p">[</span><span class="nx">idx</span><span class="p">]</span><span class="si">}</span><span class="sb"> != </span><span class="si">${</span><span class="nx">profile</span><span class="p">.</span><span class="nx">displayName</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+      <span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">[[</span><span class="nx">userId</span><span class="p">,</span> <span class="nx">profile</span><span class="p">.</span><span class="nx">displayName</span><span class="p">,</span> <span class="nx">stored_Names</span><span class="p">[</span><span class="nx">idx</span><span class="p">]]];</span>
+      <span class="nx">FOLLOWERS_SHEET</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span>
+        <span class="nx">FOLLOWERS_TABLE_OFFSET_ROW</span><span class="o">+</span><span class="nx">idx</span><span class="p">,</span>
+        <span class="nx">FOLLOWERS_TABLE_OFFSET_COL</span><span class="p">,</span>
+        <span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">,</span>
+        <span class="nx">data</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span><span class="p">,</span>
+      <span class="p">).</span><span class="nx">setValues</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="nx">FOLLOWERS_COUNTER_CELL</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="nx">num_stored_users</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
 

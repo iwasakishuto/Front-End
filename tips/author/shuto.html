@@ -52,253 +52,124 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-38.html">JS.38 ブラウザで遊べるチェスを作る。</a></h1>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-39.html">JS.39 GASで"maximum execution time"を超えて処理を行う。</a></h1>
           <footer class="post-info">
-            <span>2021-06-25(Fri)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/game.html">game</a></span>
-          </footer><!-- /.post-info --><p>チェスを趣味にしたいな。と思ったのでチェスを作ります。なお、<a href="https://github.com/oakmac/chessboardjs/">chessboard.js</a> と <a href="https://github.com/jhlywa/chess.js">chess.js</a> の極めて有用なJavaScriptライブラリをフル活用します。</p>
-<!-- JQuery -->
-<script src="https://iwasakishuto.github.io/js/jquery.js" type="text/javascript"></script>
-<!-- Chess.js -->
-<script src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chess/chess.js"></script>
-<!-- ChessboardJs.js -->
-<script src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/chessboard-1.0.0.min.js" type="text/javascript"></script>
-<p><link href="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/chessboard-1.0.0.min.css" rel="stylesheet"/>
-<!-- Popup -->
-<script src="https://iwasakishuto.github.io/Front-End/tips/theme/utils/popup/popup.js" type="text/javascript"></script>
-<link href="https://iwasakishuto.github.io/Front-End/tips/theme/utils/popup/popup.css" rel="stylesheet"/>
-<!-- Button -->
-<link href="https://iwasakishuto.github.io/Front-End/tips/theme/css/button.css" rel="stylesheet"/></p>
-<h3 id="chiesu">チェス</h3>
-<p><a class="btn--click btn--green btn--book" id="js-popup-show">チェスのルールを見る</a>
-<div class="popup" id="js-popup">
-<h4 id="yin-yong">引用</h4>
-<ul style="list-style: disc; margin:0.3em 0 0 1.6em">
-<li><a href="https://ja.wikipedia.org/wiki/%E3%83%81%E3%82%A7%E3%82%B9">チェス - Wikipedia</a></li>
-<li><a href="https://www.bodoge-intl.com/column/chess_rule/">チェスで覚えるべき3つの要素【図解ルール説明】コマの動きだけじゃない！ | Board Game to Life</a></li>
-</ul>
-<h3 id="ruru_1">ルール</h3>
-<ul style="list-style: disc; margin:0.3em 0 0 1.6em">
-<li>ゲームは2人のプレイヤーにより、チェスボードの上で行われる。</li>
-<li>白が先手、黒が後手となる。</li>
-<li>双方のプレイヤーは、交互に盤上にある自分のコマを1回ずつ動かす。パスをすることはできない。</li>
-<li>味方のコマの動ける範囲に敵のコマがあれば、それを取ることができる。ただし<b><i class="fas fa-chess-pawn"></i>ポーン</b>だけは、敵のコマを取れる範囲が移動範囲と異なる。</li>
-<li>敵のコマを取ったコマは、取られたコマのあったマスへ移動する。これは<b><i class="fas fa-chess-pawn"></i>ポーン</b>も同じだが、<b><i class="fas fa-chess-pawn"></i>ポーン</b>同士による<b>アンパッサン</b>は例外である。
-    <li>取られたコマは盤上から取りのぞき、以降そのゲームが終わるまで使用しない。</li>
-<li>チェスのコマは、他のコマを飛び越して移動することはできない。ただし、<b><i class="fas fa-chess-knight"></i>ナイト</b>と、<b>キャスリング</b>時の<b><i class="fas fa-chess-king"></i>キング</b>・<b><i class="fas fa-chess-rook"></i>ルーク</b>は例外である。</li>
-<li><b><i class="fas fa-chess-king"></i>キング</b>は、<b>敵のコマが利いている（直後の手で取られるような）</b>場所には移動することができない。</li>
-<li>相手の<b><i class="fas fa-chess-king"></i>キング</b>に、自分のコマを利かせて取ろうとする手を「<b>チェック</b>」と呼ぶ。この状態では、相手側は次の手ですぐに<b><i class="fas fa-chess-king"></i>キング</b>の安全を確保しなければならない。</li>
-<li><b><i class="fas fa-chess-king"></i>キング</b>が次の手で絶対に逃げられないように追い詰めた<b>チェック</b>のことを、「<b>チェックメイト</b>」と呼ぶ。双方のプレイヤーは、相手の<b><i class="fas fa-chess-king"></i>キング</b>を<b>チェックメイト</b>することを目指す。</li>
-<li>ルール上動かせるコマがなくなったがチェックにはならない状態は、「<b>ステイルメイト</b>」と呼ばれ、引き分けとなる。どちらもチェックメイトができなくなるほどにコマを失った場合も引き分け。</li>
-</li></ul>
-<h3 id="chu-qi-pei-zhi">初期配置</h3>
-<p style="color:red">※ <b><i class="fas fa-chess-queen"></i>クイーン</b>と<b><i class="fas fa-chess-king"></i>キング</b>の初期配置は、白と黒とで異なります！！！</p>
-<h3 id="komanodong-kashifang">コマの動かし方</h3>
-<table>
-<thead><tr><th>画像</th><th>名前</th><th>Name</th><th style="text-align: left">説明</th></tr></thead>
-<tbody>
-<tr><td><img alt="KING" src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/img/chesspieces/wikipedia/wK.png" style="width:3em;"/></td><td><i class="fas fa-chess-king"></i>キング</td><td>King</td><td style="text-align: left">全方向に１マス勧めます。</td></tr>
-<tr><td><img alt="QUEEN" src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/img/chesspieces/wikipedia/wQ.png" style="width:3em;"/></td><td><i class="fas fa-chess-queen"></i>クイーン</td><td>Queen</td><td style="text-align: left">縦横斜めに好きなだけ進めます。</td></tr>
-<tr><td><img alt="ROOK" src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/img/chesspieces/wikipedia/wR.png" style="width:3em;"/></td><td><i class="fas fa-chess-rook"></i>ルーク</td><td>Rook</td><td style="text-align: left">縦横に好きなだけ進めます。</td></tr>
-<tr><td><img alt="BISHOP" src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/img/chesspieces/wikipedia/wB.png" style="width:3em;"/></td><td><i class="fas fa-chess-bishop"></i>ビショップ</td><td>Bishop</td><td style="text-align: left">斜めに好きなだけ進めます。</td></tr>
-<tr><td><img alt="KNIGHT" src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/img/chesspieces/wikipedia/wN.png" style="width:3em;"/></td><td><i class="fas fa-chess-knight"></i>ナイト</td><td>Knight</td><td style="text-align: left">桂馬と同じ動き（前に２マス・横に１マスの場所への移動）が全方向にできます。<td></td></td></tr>
-<tr><td><img alt="PAWN" src="https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/img/chesspieces/wikipedia/wP.png" style="width:3em;"/></td><td><i class="fas fa-chess-pawn"></i>ポーン</td><td>Pawn</td><td style="text-align: left">前に１マス進めます。敵陣まで進むとプロモーション（後述）ができます。</td></tr>
-</tbody>
-</table>
-<img src="https://www.bodoge-intl.com/wp-content/uploads/2019/05/%E9%A7%92%E5%8B%95%E3%81%8D-1.jpg"/>
-<p>※ しかし、<b><i class="fas fa-chess-pawn"></i>ポーン</b>は以下のように特殊な動きをいくつかするので、注意が必要です。</p>
-<h3 id="pon"><b><i class="fas fa-chess-pawn"></i>ポーン</b></h3>
-<p><i class="fas fa-chess-pawn"></i>ポーンはかなり特殊なコマです。</p>
-<h4 id="dong-kinote-shu-xing">動きの特殊性</h4>
-<ul style="list-style: disc; margin:0.3em 0 0 1.6em">
-<li><i class="fas fa-chess-pawn"></i>ポーンは、<b style="color:red">初期位置からの移動の場合のみ、2マス進むことができます。</b></li>
-<li><i class="fas fa-chess-pawn"></i>ポーンは、<b style="color:red">前にコマがある場合は前に進むことができず、そのコマを取ることができません。</b></li>
-<li><i class="fas fa-chess-pawn"></i>ポーンは、<b style="color:red">相手のコマをとるときだけは斜めに動くことができます。</b></li>
-</ul>
-<h4 id="puromoshiyon">プロモーション</h4>
-<p><b><i class="fas fa-chess-pawn"></i>ポーン</b>は、敵陣地（<b>の最奥</b>）まで進むと<b>プロモーション</b>と言って<b><i class="fas fa-chess-queen"></i>クイーン</b>・<b><i class="fas fa-chess-rook"></i>ルーク</b>・<b><i class="fas fa-chess-bishop"></i>ビショップ</b>・<b><i class="fas fa-chess-knight"></i>ナイト</b>の好きなどれかに変身することが出来ます。</p>
-<p>基本的には最強のコマである<b><i class="fas fa-chess-queen"></i>クイーン</b>に<b>プロモーション</b>しますが、<b><i class="fas fa-chess-queen"></i>クイーン</b>にできない動きの出来る<b><i class="fas fa-chess-knight"></i>ナイト</b>や、後述するドロー回避のために<b><i class="fas fa-chess-rook"></i>ルーク</b>・<b><i class="fas fa-chess-bishop"></i>ビショップ</b>に変わる事も稀にあります。</p>
-<h4 id="anpatsusan">アンパッサン</h4>
-<p>先述の通り、<i class="fas fa-chess-pawn"></i>ポーンは初期位置からのみ2マス進むことが出来るのですが、<b style="color:red">2マス進んだ場合はデメリットとしてその1マス後ろに敵のコマが来ると取られてしまいます。</b></p>
-<img alt="アンパッサン" src="https://www.bodoge-intl.com/wp-content/uploads/2019/05/S__18636830%E3%81%AE%E3%82%B3%E3%83%92%E3%82%9A%E3%83%BC-1024x342.jpg"/>
-<h3 id="kiyasuringu_1">キャスリング</h3>
-<p>以下の条件の時、一手で<b><i class="fas fa-chess-rook"></i>ルーク</b>を<b><i class="fas fa-chess-bishop"></i>ビショップ</b>の初期位置に、<b><i class="fas fa-chess-king"></i>キング</b>を<b><i class="fas fa-chess-knight"></i>ナイト</b>の初期位置に一手で移動させる事ができます。</p>
-<ul style="list-style: disc; margin:0.3em 0 0 1.6em">
-<li><b><i class="fas fa-chess-king"></i>キング</b>にチェック（＝王手）がかかっていないこと。</li>
-<li><b><i class="fas fa-chess-king"></i>キング</b>とキャスリングする<b><i class="fas fa-chess-rook"></i>ルーク</b>が一度も動いていないこと。</li>
-<li><b><i class="fas fa-chess-rook"></i>ルーク</b>と<b><i class="fas fa-chess-king"></i>キング</b>の間にコマがなく、敵のコマにも狙われていないこと。</li>
-</ul>
-<img alt="キャスリング" src="https://www.bodoge-intl.com/wp-content/uploads/2019/05/S__18636836%E3%81%AE%E3%82%B3%E3%83%92%E3%82%9A%E3%83%BC.jpg"/>
-</div>
-<div class="board-wrapper">
+            <span>2021-07-11(Sun)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
+          </footer><!-- /.post-info --><p>GASでプログラムを実行した際に、実行時間が <code>"maximum execution time"</code> （<a href="https://developers.google.com/apps-script/guides/services/quotas#current_limitations">ドキュメント</a>によると6分のようです）を超えてしまいプログラムが全て終了しない<b>（ループの途中で終了する）</b>、という事態に陥ってしまいました。</p>
+<p>そこで、最後まで終了しなかった場合に</p>
 <ul>
-<li>Status: <b id="status"></b></li>
+<li>どこまで処理したかをプロパティを介して引き継ぐ。</li>
+<li>再びプログラムを実行するために、新しいトリガーを設定する。</li>
 </ul>
-<div id="board"></div>
-</div></p>
-<h3 id="records">Records</h3>
-<div>
-<table>
-<thead><th>Forsyth&ndash;Edwards Notation</th><th><a class="btn--click btn--red btn--generate" onclick="load_fen()">Generate</a></th></thead>
-<tbody>
-<tr><td colspan="2"><input id="fen"/></td></tr>
-</tbody>
-<thead><th>Portable Game Notation</th><th><a class="btn--click btn--blue btn--replay" onclick="load_pgn()">Replay</a></th></thead>
-<tbody>
-<tr><td colspan="2"><input id="pgn"/></td></tr>
-</tbody>
-</table>
-</div>
-<!-- CSS -->
-<style>
-  .btn--replay::before {
-    content: "\f01e";
-  }
-  .btn--generate::before {
-    content: "\f43c";
-  }
-  .btn--book::before {
-    content: "\f5da";
-  }
-  table {
-    table-layout: fixed;
-  }
-  table th {
-    vertical-align: middle;
-    text-align: center;
-    background-color: black;
-    color: white;
-  }
-  table input {
-    width: 100%;
-    border: 0;
-  }
-  div.board-wrapper{
-    margin: 20px;
-  }
-  div.board-wrapper div#board{
-    width:100%
-  }
-</style>
-<!-- JavaScript -->
-<script>
-  var game = new Chess()
-  var $status = $('#status')
-  var $fen = $('#fen')
-  var $pgn = $('#pgn')
-  var whiteSquareGrey = '#ff94cc' // '#f0d9e7' // '#a9a9a9'
-  var blackSquareGrey = '#ff94cc' // '#696969'
-  function removeGreySquares () {
-    $('#board .square-55d63').css('background', '')
-  }
-  function greySquare (square) {
-    var $square = $('#board .square-' + square)
-    var background = $square.hasClass('black-3c85d') ? blackSquareGrey : whiteSquareGrey
-    $square.css('background', background)
-  }
-  function onDragStart (source, piece) {
-    // Do not pick up pieces if the game is over
-    if (game.game_over()) return false
-    // or if it's not that side's turn
-    if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-        (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
-      return false
-    }
-  }
-  function onDrop (source, target) {
-    removeGreySquares()
-    // <--- Added by iwasakishuto <https://github.com/iwasakishuto> ---
-    // Allow promotion to other than queen.
-    move_option = {from: source, to: target}
-    if ("81".includes(target[1]) && (source.length==2 && game.board()[8-parseInt(source[1])]["abcdefgh".indexOf(source[0])].type==game.PAWN)){
-      while (true){
-        // Which piece do you want to promote to??
-        var result = prompt(`どの駒へプロモートしますか？\n* ${game.PROMOTION_CANDIDATES.join("\n* ")}`, 'QUEEN');
-        if (result && game.PROMOTION_CANDIDATES.includes(result.toUpperCase())) break
-      }
-      move_option["promotion"] = game[result.toUpperCase()]
-    }
-    // --- Added by iwasakishuto <https://github.com/iwasakishuto> -->
-    // See if the move is legal
-    var move = game.move(move_option)
-    // illegal move
-    if (move === null) return 'snapback'
-    updateStatus()
-  }
-  function onMouseoverSquare (square, piece) {
-    // Get list of possible moves for this square
-    var moves = game.moves({
-      square: square,
-      verbose: true
-    })
-    // exit if there are no moves available for this square
-    if (moves.length === 0) return
-    // highlight the square they moused over
-    greySquare(square)
-    // highlight the possible squares for this piece
-    for (var i = 0; i < moves.length; i++) {
-      greySquare(moves[i].to)
-    }
-  }
-  function onMouseoutSquare (square, piece) {
-    removeGreySquares()
-  }
-  function onSnapEnd () {
-    board.position(game.fen())
-  }
-  function updateStatus(){
-    var status = ''
-    var moveColor = game.turn() === 'b' ? 'Black' : 'White';
-    if (moveColor=="Black"){ 
-      board_frame.style.borderTop = "solid 5px blue";
-      board_frame.style.borderBottom = "solid 2px black";
-    }else{
-      board_frame.style.borderTop = "solid 2px black";
-      board_frame.style.borderBottom = "solid 5px red";
-    }
-    // checkmate?
-    if (game.in_checkmate()) {
-      status = `Game over, ${moveColor} is in checkmate.`
-    } else if (game.in_draw()) {
-      status = 'Game over, drawn position'
-    } else {
-      status = `${moveColor} to move`;
-      if (game.in_check()) {
-        status += `, ${moveColor} is in check.`;
-      }
-    }
-    $status.html(status)
-    $fen.val(game.fen())
-    $pgn.val(game.pgn())
-  }
-  var chessboardConfig = {
-    draggable: true,
-    position: 'start',
-    pieceTheme: "https://iwasakishuto.github.io/Front-End/tips/theme/vendor/chessboardjs/img/chesspieces/wikipedia/{piece}.png",
-    onDragStart: onDragStart,
-    onDrop: onDrop,
-    onMouseoutSquare: onMouseoutSquare,
-    onMouseoverSquare: onMouseoverSquare,
-    onSnapEnd: onSnapEnd
-  };
-  var board = ChessBoard('board', chessboardConfig);
-  var board_frame = document.querySelector(".board-b72b1");
-  updateStatus();
-  const load_fen = function(){
-    game.load($fen.val());
-    board.position(game.fen());
-    updateStatus()
-  }
-  const load_png = function(){
-    game.load_pgn($pgn.val());
-    board.position(game.fen());
-    updateStatus()
-  }
-</script>                </article>
+<p>ことでプログラムを継続して実行し、何回かに分けて実行することで最後まで完了することを目指します。</p>
+<p>※ なお、<a href="https://kin29.info/gasの「起動時間の最大値を超えました」の壁を超/">"GASの「起動時間の最大値を超えました」の壁を超えてみる！！！"</a>を参考にさせていただきました。</p>
+<h3 id="bian-shu-ding-yi">変数定義</h3>
+<p><code>PropertiesService</code> をコード簡略化のために global変数として定義します。</p>
+<div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">PropertiesService</span><span class="p">.</span><span class="nx">getScriptProperties</span><span class="p">();</span>
+</code></pre></div>
+<h3 id="mainfunc"><code>mainFunc</code></h3>
+<p>以下がメインとなる関数です。定期実行等をしたい場合は、この関数をトリガーに（手動で）設定してください。</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Main function.</span>
+<span class="kd">function</span> <span class="nx">mainFunc</span><span class="p">(){</span>
+  <span class="nx">LongTimeProcess</span><span class="p">(</span>
+    <span class="nx">mainFuncName</span> <span class="o">=</span> <span class="s2">"mainFunc"</span><span class="p">,</span>
+    <span class="nx">prop_triggerKey</span> <span class="o">=</span> <span class="s2">"_tmp_trigger"</span><span class="p">,</span> <span class="c1">// Holds the ID of the trigger set in the program.</span>
+    <span class="nx">prop_curtIdx</span> <span class="o">=</span> <span class="s2">"_tmp_curtIdx"</span><span class="p">,</span> <span class="c1">// Holds the current idx. (indicates how much processing has been done.)</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="longtimeprocess"><code>LongTimeProcess</code></h3>
+<p>上記の関数でWrapしている、長い処理を実行する関数です。何かしらのリストを取得した後、for-loopで各データを取り扱います。<b>（※ リスト取得にも時間がかかる場合、このリストをスプレッドシート等に保存する、などの対応が必要です。）</b></p>
+<div class="highlight"><pre><span></span><code><span class="cm">/** Long process that can take 6 minutes (more than "maximum execution time") or more</span>
+<span class="cm"> * @param {string} mainFuncName The main (wrapper) function name.</span>
+<span class="cm"> * @param {string} prop_triggerKey The keyname of the temporarily used property which holds the trigger Id which set in the program.</span>
+<span class="cm"> * @param {string} prop_curtIdx The keyname of the temporarily used property which holds the idx which indicates how much processing has been done by the last process.</span>
+<span class="cm">*/</span>
+<span class="kd">function</span> <span class="nx">LongTimeProcess</span><span class="p">(</span><span class="nx">mainFuncName</span><span class="p">,</span> <span class="nx">prop_triggerKey</span><span class="p">,</span> <span class="nx">prop_curtIdx</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">startTime</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+  <span class="c1">// Get some list. (NOTE: If this process also takes time, it is also necessary</span>
+  <span class="c1">// to save this data in a SpreadSheet or the like.)</span>
+  <span class="kd">var</span> <span class="nx">some_list</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="c1">// Last idx of the previous process</span>
+  <span class="kd">var</span> <span class="nx">lastIdx</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="nx">_tmp_property_curtIdx</span><span class="p">);</span>
+  <span class="nx">lastIdx</span> <span class="o">=</span> <span class="nx">lastIdx</span><span class="o">==</span><span class="kc">undefined</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="nx">parseInd</span><span class="p">(</span><span class="nx">lastIdx</span><span class="p">)</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">some_list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">i</span><span class="o">&gt;</span><span class="nx">lastIdx</span><span class="p">){</span>
+      <span class="c1">// DO WHAT YOU WANT</span>
+
+      <span class="c1">// If more than 330[s] have passed since the start.</span>
+      <span class="k">if</span> <span class="p">((</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()</span><span class="o">-</span><span class="nx">startTime</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span> <span class="o">&gt;=</span> <span class="mi">330</span><span class="p">){</span>
+        <span class="nx">setTrigger</span><span class="p">(</span><span class="nx">mainFuncName</span><span class="p">,</span> <span class="nx">prop_triggerKey</span><span class="p">);</span>
+        <span class="c1">// Store current information in properties.</span>
+        <span class="nx">prop</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="nx">prop_curtIdx</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="c1">// When all the processes are finished, delete the temporarily saved data.</span>
+  <span class="nx">deleteTrigger</span><span class="p">(</span><span class="nx">prop_triggerKey</span><span class="p">);</span>
+  <span class="nx">prop</span><span class="p">.</span><span class="nx">deleteProperty</span><span class="p">(</span><span class="nx">prop_curtIdx</span><span class="p">);</span>
+  <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="settrigger"><code>setTrigger</code></h3>
+<p>途中までしか処理ができなかった場合、2分後に再び途中から実行させるために、トリガーを設定します。</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/** Set a temporarily trigger</span>
+<span class="cm"> * @param {string} mainFuncName The main (wrapper) function name.</span>
+<span class="cm"> * @param {string} prop_triggerKey The keyname of the temporarily used property which holds the trigger Id which set in the program.</span>
+<span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">setTrigger</span><span class="p">(</span><span class="nx">prop_triggerKey</span><span class="p">,</span> <span class="nx">mainFuncName</span><span class="p">){</span>
+  <span class="c1">// Delete a (past) trigger that has already been registered with the same name.</span>
+  <span class="nx">deleteTrigger</span><span class="p">(</span><span class="nx">prop_triggerKey</span><span class="p">)</span>
+  <span class="c1">// Register the trigger after 2 minute.</span>
+  <span class="kd">var</span> <span class="nx">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+  <span class="nx">date</span><span class="p">.</span><span class="nx">setMinutes</span><span class="p">(</span><span class="nx">date</span><span class="p">.</span><span class="nx">getMinutes</span><span class="p">()</span><span class="o">+</span><span class="mi">2</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">triggerId</span> <span class="o">=</span> <span class="nx">ScriptApp</span><span class="p">.</span><span class="nx">newTrigger</span><span class="p">(</span><span class="nx">mainFuncName</span><span class="p">).</span><span class="nx">timeBased</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">date</span><span class="p">).</span><span class="nx">create</span><span class="p">().</span><span class="nx">getUniqueId</span><span class="p">();</span>
+  <span class="nx">Logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'setTrigger function_name "%s".'</span><span class="p">,</span> <span class="nx">mainFuncName</span><span class="p">);</span>
+  <span class="c1">// Store the trigger ID in a property so you can delete it later.</span>
+  <span class="nx">prop</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="nx">prop_triggerKey</span><span class="p">,</span> <span class="nx">triggerId</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="deletetrigger"><code>deleteTrigger</code></h3>
+<p>プログラム（上記の<a href="settrigger"><code>setTrigger</code></a>）で作成したトリガーを削除します。</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Delete the trigger using the trigger ID saved in the specified key.</span>
+<span class="cm"> * @param {string} prop_triggerKey The keyname of the temporarily used property which holds the trigger Id which set in the program.</span>
+<span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">deleteTrigger</span><span class="p">(</span><span class="nx">prop_triggerKey</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">triggerId</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="nx">prop_triggerKey</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">triggerId</span> <span class="o">!=</span> <span class="kc">undefined</span><span class="p">){</span>
+    <span class="nx">ScriptApp</span><span class="p">.</span><span class="nx">getProjectTriggers</span><span class="p">().</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">trigger</span><span class="p">){</span>
+      <span class="k">return</span> <span class="nx">trigger</span><span class="p">.</span><span class="nx">getUniqueId</span><span class="p">()</span> <span class="o">==</span> <span class="nx">triggerId</span><span class="p">;</span>
+    <span class="p">}).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">trigger</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">ScriptApp</span><span class="p">.</span><span class="nx">deleteTrigger</span><span class="p">(</span><span class="nx">trigger</span><span class="p">);</span>
+    <span class="p">});</span>
+    <span class="nx">prop</span><span class="p">.</span><span class="nx">deleteProperty</span><span class="p">(</span><span class="nx">prop_triggerKey</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
                     <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-38.html" rel="bookmark"
+                           title="Permalink to JS.38 ブラウザで遊べるチェスを作る。">JS.38 ブラウザで遊べるチェスを作る。</a></h1>
+                </header>
+
+                <div class="entry-content">
+          <footer class="post-info">
+            <span>2021-06-25(Fri)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/game.html">game</a></span>
+          </footer><!-- /.post-info -->                <p>
+                    <p>chessboard.js と chess.js をフル活用してブラウザで遊べるチェスゲームを作成する。</p>
+                    <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-38.html">read more →</a>
+                </p>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>
@@ -432,23 +303,6 @@
           </footer><!-- /.post-info -->                <p>
                     <p>Pose-Estimation で正解の動きとの誤差を知る。</p>
                     <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-30.html">read more →</a>
-                </p>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-29.html" rel="bookmark"
-                           title="Permalink to JS.29 TensorflowJS で Pose-Estimation">JS.29 TensorflowJS で Pose-Estimation</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-03-06(Sat)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tensorflowjs.html">TensorFlow.js</a></span>
-          </footer><!-- /.post-info -->                <p>
-                    <p>TensorflowJS で Pose-Estimationを動かす。</p>
-                    <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-29.html">read more →</a>
                 </p>
                 </div><!-- /.entry-content -->
             </article></li>

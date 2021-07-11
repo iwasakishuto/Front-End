@@ -52,226 +52,124 @@
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-37.html">JS.37 GASでLINE Botからの送信を自動化する</a></h1>
+                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-39.html">JS.39 GASで"maximum execution time"を超えて処理を行う。</a></h1>
           <footer class="post-info">
-            <span>2021-06-22(Tue)</span>
+            <span>2021-07-11(Sun)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
-          </footer><!-- /.post-info --><p><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-36.html">JS.36 GASでLINE BOTを作成し、各種IDを取得する</a>で、LINE BOTを作成し、userIDを取得したり、そのuserID宛にメッセージを送る方法を理解したので、ここではそれらを自動化し、GASを用いて定期実行等を実現する。</p>
-<p><img alt="LINE API Automation" src="https://iwasakishuto.github.io/Front-End/tips/images/gas_line_api_automation.png"/></p>
-<h3 id="bian-shu-ding-yi">変数定義</h3>
+          </footer><!-- /.post-info --><p>GASでプログラムを実行した際に、実行時間が <code>"maximum execution time"</code> （<a href="https://developers.google.com/apps-script/guides/services/quotas#current_limitations">ドキュメント</a>によると6分のようです）を超えてしまいプログラムが全て終了しない<b>（ループの途中で終了する）</b>、という事態に陥ってしまいました。</p>
+<p>そこで、最後まで終了しなかった場合に</p>
 <ul>
-<li>スプレッドシート</li>
-<li><code>WEBHOOK_URL</code> 等の外部から隠すべき変数を保持する <code>PropertiesService</code></li>
+<li>どこまで処理したかをプロパティを介して引き継ぐ。</li>
+<li>再びプログラムを実行するために、新しいトリガーを設定する。</li>
 </ul>
-<p>は、global変数として定義する。</p>
+<p>ことでプログラムを継続して実行し、何回かに分けて実行することで最後まで完了することを目指します。</p>
+<p>※ なお、<a href="https://kin29.info/gasの「起動時間の最大値を超えました」の壁を超/">"GASの「起動時間の最大値を超えました」の壁を超えてみる！！！"</a>を参考にさせていただきました。</p>
+<h3 id="bian-shu-ding-yi">変数定義</h3>
+<p><code>PropertiesService</code> をコード簡略化のために global変数として定義します。</p>
 <div class="highlight"><pre><span></span><code><span class="kr">const</span> <span class="nx">prop</span> <span class="o">=</span> <span class="nx">PropertiesService</span><span class="p">.</span><span class="nx">getScriptProperties</span><span class="p">();</span>
-<span class="kr">const</span> <span class="nx">ss</span> <span class="o">=</span> <span class="nx">SpreadsheetApp</span><span class="p">.</span><span class="nx">getActiveSpreadsheet</span><span class="p">();</span>
-<span class="kr">const</span> <span class="nx">sheet</span> <span class="o">=</span> <span class="nx">ss</span><span class="p">.</span><span class="nx">getSheetByName</span><span class="p">(</span><span class="s1">'SHEET NAME'</span><span class="p">);</span>
 </code></pre></div>
-<h3 id="send_all_table_messages"><code>send_all_table_messages</code></h3>
-<p><code>${getColName(col)}${row} : ${getColName(col+2)}</code> のテーブルデータを用いて各ユーザーにメッセージを送信し、各行の右端列（<code>getColName(col+3)</code>）に結果を記録する。</p>
-<div class="highlight"><pre><span></span><code><span class="cm">/** Send all messages in table[`${getColName(col)}${row}:${getColName(col+3)}`] in "自動送信" tab.</span>
-<span class="cm"> * @param {Number} col Column index (1-based).</span>
-<span class="cm"> * @param {Number} row Row index (1-based)</span>
-<span class="cm">*/</span>
-<span class="kd">function</span> <span class="nx">send_all_table_messages</span><span class="p">(</span><span class="nx">col</span><span class="p">,</span> <span class="nx">row</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">table</span> <span class="o">=</span> <span class="nx">sheet</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">getColName</span><span class="p">(</span><span class="nx">col</span><span class="p">)</span><span class="si">}${</span><span class="nx">row</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">getColName</span><span class="p">(</span><span class="nx">col</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="sb">`</span><span class="p">).</span><span class="nx">getValues</span><span class="p">();</span>
-  <span class="kd">var</span> <span class="nx">rowIdx</span> <span class="o">=</span> <span class="mi">0</span>
-  <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">){</span>
-    <span class="nx">user</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">User</span><span class="p">(</span><span class="nx">rowData</span><span class="o">=</span><span class="nx">table</span><span class="p">[</span><span class="nx">rowIdx</span><span class="p">],</span> <span class="nx">result_cell</span><span class="o">=</span><span class="nx">sheetn</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">getColName</span><span class="p">(</span><span class="nx">col</span><span class="o">+</span><span class="mi">3</span><span class="p">)</span><span class="si">}${</span><span class="mi">4</span><span class="o">+</span><span class="nx">rowIdx</span><span class="si">}</span><span class="sb">`</span><span class="p">))</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="o">==</span><span class="s2">""</span><span class="p">)</span> <span class="k">break</span>
-    <span class="nx">user</span><span class="p">.</span><span class="nx">send_message</span><span class="p">()</span>
-    <span class="nx">rowIdx</span><span class="o">++</span><span class="p">;</span>
-  <span class="p">}</span>
+<h3 id="mainfunc"><code>mainFunc</code></h3>
+<p>以下がメインとなる関数です。定期実行等をしたい場合は、この関数をトリガーに（手動で）設定してください。</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Main function.</span>
+<span class="kd">function</span> <span class="nx">mainFunc</span><span class="p">(){</span>
+  <span class="nx">LongTimeProcess</span><span class="p">(</span>
+    <span class="nx">mainFuncName</span> <span class="o">=</span> <span class="s2">"mainFunc"</span><span class="p">,</span>
+    <span class="nx">prop_triggerKey</span> <span class="o">=</span> <span class="s2">"_tmp_trigger"</span><span class="p">,</span> <span class="c1">// Holds the ID of the trigger set in the program.</span>
+    <span class="nx">prop_curtIdx</span> <span class="o">=</span> <span class="s2">"_tmp_curtIdx"</span><span class="p">,</span> <span class="c1">// Holds the current idx. (indicates how much processing has been done.)</span>
+  <span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
-<h3 id="user"><code>User</code></h3>
-<p>上記の関数でやりたいことが実行できるよう以下の <code>User</code> クラスを作成し、「メッセージの送信」や「結果の報告等」を楽に記述できるようにする。</p>
-<p>なお、以下のような表形式でデータが格納されていることを想定している。</p>
-<table>
-<thead>
-<tr>
-<th align="center">Name</th>
-<th align="center">userId</th>
-<th align="center">message</th>
-<th align="center">Result</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td align="center">iwasakishuto</td>
-<td align="center"><code>Uxxx</code></td>
-<td align="center">Hello world</td>
-<td align="center">OK</td>
-</tr>
-<tr>
-<td align="center">tanakataro</td>
-<td align="center"><code>Uxxx</code></td>
-<td align="center">Hello world!!</td>
-<td align="center">OK</td>
-</tr>
-</tbody>
-</table>
-<div class="highlight"><pre><span></span><code><span class="c1">// A class that handles sending messages and reporting results (to Slack and Spread Sheet)</span>
-<span class="kr">class</span> <span class="nx">User</span> <span class="p">{</span>
-  <span class="cm">/** Construct the user class.</span>
-<span class="cm">   * @param {list} rowData A row data that holds ``["name","userId","message"]`` in this order. Corresponds to one row in the spreadsheet.</span>
-<span class="cm">   * @param {Range} result_cell Location of the sheet that describes the result. ( ``Spreadsheet.getRange("")`` )</span>
-<span class="cm">  */</span>
-  <span class="nx">constructor</span><span class="p">(</span><span class="nx">rowData</span><span class="p">,</span> <span class="nx">result_cell</span><span class="p">){</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">name</span>    <span class="o">=</span> <span class="nx">rowData</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">userId</span>  <span class="o">=</span> <span class="nx">rowData</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">message</span> <span class="o">=</span> <span class="nx">rowData</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">result_cell</span> <span class="o">=</span> <span class="nx">result_cell</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="cm">/** Set result to ``this.result_cell``</span>
-<span class="cm">   * @param {string} message Contents to be described in ``this.reault_cell``. (Function result) </span>
-<span class="cm">  */</span>
-  <span class="nx">set_result</span><span class="p">(</span><span class="nx">message</span><span class="p">){</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">result_cell</span><span class="p">.</span><span class="nx">setValue</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
-  <span class="p">}</span>
-  <span class="cm">/** Report the function result to the administrator.</span>
-<span class="cm">   * @param {string} message Message to report.</span>
-<span class="cm">   * @param {boolean} to_slack Whether to send a message to slack.</span>
-<span class="cm">  */</span>
-  <span class="nx">report_result</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">to_slack</span><span class="o">=</span><span class="kc">false</span><span class="p">){</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">set_result</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">to_slack</span><span class="p">){</span>
-      <span class="c1">// postSlack(`${now_str()}\n${this.userId}: ${message}`)</span>
-      <span class="nx">postSlack</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="c1">// Get ``this.userId``'s profile information.</span>
-  <span class="nx">get_profile</span><span class="p">(){</span>
-    <span class="k">try</span><span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">"method"</span> <span class="o">:</span> <span class="s2">"GET"</span><span class="p">,</span>
-        <span class="s2">"headers"</span> <span class="o">:</span> <span class="p">{</span>
-          <span class="s2">"Content-Type"</span> <span class="o">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
-          <span class="s2">"Authorization"</span> <span class="o">:</span> <span class="s2">"Bearer "</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">"CHANNEL_ACCESS_TOKEN"</span><span class="p">)</span>
-        <span class="p">},</span>
-      <span class="p">};</span>
-      <span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="sb">`https://api.line.me/v2/bot/profile/</span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">userId</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-      <span class="k">return</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">getContentText</span><span class="p">());</span>
-    <span class="p">}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">ex</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">"displayName"</span><span class="o">:</span> <span class="s2">""</span><span class="p">,</span>
-        <span class="s2">"userId"</span><span class="o">:</span> <span class="s2">""</span><span class="p">,</span>
-        <span class="s2">"language"</span><span class="o">:</span> <span class="s2">""</span><span class="p">,</span>
-        <span class="s2">"pictureUrl"</span><span class="o">:</span> <span class="s2">""</span><span class="p">,</span>
-        <span class="s2">"statusMessage"</span><span class="o">:</span> <span class="s2">""</span>
+<h3 id="longtimeprocess"><code>LongTimeProcess</code></h3>
+<p>上記の関数でWrapしている、長い処理を実行する関数です。何かしらのリストを取得した後、for-loopで各データを取り扱います。<b>（※ リスト取得にも時間がかかる場合、このリストをスプレッドシート等に保存する、などの対応が必要です。）</b></p>
+<div class="highlight"><pre><span></span><code><span class="cm">/** Long process that can take 6 minutes (more than "maximum execution time") or more</span>
+<span class="cm"> * @param {string} mainFuncName The main (wrapper) function name.</span>
+<span class="cm"> * @param {string} prop_triggerKey The keyname of the temporarily used property which holds the trigger Id which set in the program.</span>
+<span class="cm"> * @param {string} prop_curtIdx The keyname of the temporarily used property which holds the idx which indicates how much processing has been done by the last process.</span>
+<span class="cm">*/</span>
+<span class="kd">function</span> <span class="nx">LongTimeProcess</span><span class="p">(</span><span class="nx">mainFuncName</span><span class="p">,</span> <span class="nx">prop_triggerKey</span><span class="p">,</span> <span class="nx">prop_curtIdx</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">startTime</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+  <span class="c1">// Get some list. (NOTE: If this process also takes time, it is also necessary</span>
+  <span class="c1">// to save this data in a SpreadSheet or the like.)</span>
+  <span class="kd">var</span> <span class="nx">some_list</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="c1">// Last idx of the previous process</span>
+  <span class="kd">var</span> <span class="nx">lastIdx</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="nx">_tmp_property_curtIdx</span><span class="p">);</span>
+  <span class="nx">lastIdx</span> <span class="o">=</span> <span class="nx">lastIdx</span><span class="o">==</span><span class="kc">undefined</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="nx">parseInd</span><span class="p">(</span><span class="nx">lastIdx</span><span class="p">)</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">some_list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">i</span><span class="o">&gt;</span><span class="nx">lastIdx</span><span class="p">){</span>
+      <span class="c1">// DO WHAT YOU WANT</span>
+
+      <span class="c1">// If more than 330[s] have passed since the start.</span>
+      <span class="k">if</span> <span class="p">((</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()</span><span class="o">-</span><span class="nx">startTime</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span> <span class="o">&gt;=</span> <span class="mi">330</span><span class="p">){</span>
+        <span class="nx">setTrigger</span><span class="p">(</span><span class="nx">mainFuncName</span><span class="p">,</span> <span class="nx">prop_triggerKey</span><span class="p">);</span>
+        <span class="c1">// Store current information in properties.</span>
+        <span class="nx">prop</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="nx">prop_curtIdx</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
-  <span class="cm">/** Send a message to ``this.userId``</span>
-<span class="cm">   * @param {string} message A message to send to ``this.userId``.</span>
-<span class="cm">  */</span>
-  <span class="nx">send_message</span><span class="p">(</span><span class="nx">message</span><span class="o">=</span><span class="kc">undefined</span><span class="p">){</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">message</span> <span class="o">==</span> <span class="kc">undefined</span><span class="p">){</span>
-      <span class="nx">message</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">message</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="kd">var</span> <span class="nx">postData</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="s2">"to"</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">userId</span><span class="p">,</span>
-      <span class="s2">"messages"</span> <span class="o">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-          <span class="s2">"type"</span> <span class="o">:</span> <span class="s2">"text"</span><span class="p">,</span>
-          <span class="s2">"text"</span> <span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">message</span><span class="p">,</span>
-        <span class="p">}</span>
-      <span class="p">]</span>
-    <span class="p">};</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">send_push_message</span><span class="p">(</span><span class="nx">postData</span><span class="p">)</span>
-  <span class="p">}</span>
-  <span class="cm">/** Post the data of ``postData``.</span>
-<span class="cm">   * @reference https://developers.line.biz/en/reference/messaging-api/#send-reply-message</span>
-<span class="cm">   * @param {Object} postData A data structure for "https://api.line.me/v2/bot/message/push"</span>
-<span class="cm">  */</span>
-  <span class="nx">send_push_message</span><span class="p">(</span><span class="nx">postData</span><span class="p">){</span>
-    <span class="kd">var</span> <span class="nx">displayName</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get_profile</span><span class="p">().</span><span class="nx">displayName</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">==</span> <span class="nx">displayName</span><span class="p">){</span>
-      <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">"method"</span> <span class="o">:</span> <span class="s2">"POST"</span><span class="p">,</span>
-        <span class="s2">"headers"</span> <span class="o">:</span> <span class="p">{</span>
-          <span class="s2">"Content-Type"</span> <span class="o">:</span> <span class="s2">"application/json"</span><span class="p">,</span>
-          <span class="s2">"Authorization"</span> <span class="o">:</span> <span class="s2">"Bearer "</span> <span class="o">+</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">"CHANNEL_ACCESS_TOKEN"</span><span class="p">)</span>
-        <span class="p">},</span>
-        <span class="s2">"payload"</span> <span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">postData</span><span class="p">)</span>
-      <span class="p">};</span>
-      <span class="k">try</span><span class="p">{</span>
-        <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="s2">"https://api.line.me/v2/bot/message/push"</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">report_result</span><span class="p">(</span><span class="s2">"OK"</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>     
-      <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">ex</span><span class="p">){</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">report_result</span><span class="p">(</span><span class="nx">ex</span><span class="p">.</span><span class="nx">message</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
-      <span class="p">}</span>
-    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">report_result</span><span class="p">(</span><span class="sb">`名前 != displayName (</span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="sb">!=</span><span class="si">${</span><span class="nx">displayName</span><span class="si">}</span><span class="sb">)`</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
+  <span class="c1">// When all the processes are finished, delete the temporarily saved data.</span>
+  <span class="nx">deleteTrigger</span><span class="p">(</span><span class="nx">prop_triggerKey</span><span class="p">);</span>
+  <span class="nx">prop</span><span class="p">.</span><span class="nx">deleteProperty</span><span class="p">(</span><span class="nx">prop_curtIdx</span><span class="p">);</span>
+  <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
-<h3 id="postslack"><code>postSlack</code></h3>
-<p>エラーや、実行結果などをslackに通知する関数。</p>
-<div class="highlight"><pre><span></span><code><span class="cm">/** Post a Message to Slack using Incoming Webhook</span>
-<span class="cm"> * @param {string} text A default message to send to ``this.userId``.</span>
-<span class="cm"> * @param {string} channel Where to report the result.</span>
-<span class="cm"> * @param {string} username Bot's user name.</span>
-<span class="cm"> * @param {string} icon_url Image url for Bot Icon</span>
-<span class="cm">*/</span>
-<span class="kd">function</span> <span class="nx">postSlack</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> 
-                   <span class="nx">username</span><span class="o">=</span><span class="s2">"USERNAME"</span><span class="p">,</span> 
-                   <span class="nx">channel</span><span class="o">=</span><span class="s2">"#CHANNEL_NAME"</span><span class="p">,</span> 
-                   <span class="nx">icon_url</span><span class="o">=</span><span class="s2">"https://iwasakishuto.github.io/images/profile/twitter.png"</span><span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">payload</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"text"</span>     <span class="o">:</span> <span class="nx">text</span><span class="p">,</span>
-    <span class="s2">"channel"</span>  <span class="o">:</span> <span class="nx">channel</span><span class="p">,</span>
-    <span class="s2">"username"</span> <span class="o">:</span> <span class="nx">username</span><span class="p">,</span>
-    <span class="s2">"icon_url"</span> <span class="o">:</span> <span class="nx">icon_url</span><span class="p">,</span>
-  <span class="p">}</span>
-  <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"method"</span> <span class="o">:</span> <span class="s2">"POST"</span><span class="p">,</span>
-    <span class="s2">"payload"</span> <span class="o">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">payload</span><span class="p">)</span>
-  <span class="p">}</span>
-  <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="s2">"WEBHOOK_URL"</span><span class="p">);</span>
-  <span class="kd">var</span> <span class="nx">response</span> <span class="o">=</span> <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-  <span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">getContentText</span><span class="p">(</span><span class="s2">"UTF-8"</span><span class="p">);</span>
+<h3 id="settrigger"><code>setTrigger</code></h3>
+<p>途中までしか処理ができなかった場合、2分後に再び途中から実行させるために、トリガーを設定します。</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/** Set a temporarily trigger</span>
+<span class="cm"> * @param {string} mainFuncName The main (wrapper) function name.</span>
+<span class="cm"> * @param {string} prop_triggerKey The keyname of the temporarily used property which holds the trigger Id which set in the program.</span>
+<span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">setTrigger</span><span class="p">(</span><span class="nx">prop_triggerKey</span><span class="p">,</span> <span class="nx">mainFuncName</span><span class="p">){</span>
+  <span class="c1">// Delete a (past) trigger that has already been registered with the same name.</span>
+  <span class="nx">deleteTrigger</span><span class="p">(</span><span class="nx">prop_triggerKey</span><span class="p">)</span>
+  <span class="c1">// Register the trigger after 2 minute.</span>
+  <span class="kd">var</span> <span class="nx">date</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">();</span>
+  <span class="nx">date</span><span class="p">.</span><span class="nx">setMinutes</span><span class="p">(</span><span class="nx">date</span><span class="p">.</span><span class="nx">getMinutes</span><span class="p">()</span><span class="o">+</span><span class="mi">2</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">triggerId</span> <span class="o">=</span> <span class="nx">ScriptApp</span><span class="p">.</span><span class="nx">newTrigger</span><span class="p">(</span><span class="nx">mainFuncName</span><span class="p">).</span><span class="nx">timeBased</span><span class="p">().</span><span class="nx">at</span><span class="p">(</span><span class="nx">date</span><span class="p">).</span><span class="nx">create</span><span class="p">().</span><span class="nx">getUniqueId</span><span class="p">();</span>
+  <span class="nx">Logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'setTrigger function_name "%s".'</span><span class="p">,</span> <span class="nx">mainFuncName</span><span class="p">);</span>
+  <span class="c1">// Store the trigger ID in a property so you can delete it later.</span>
+  <span class="nx">prop</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="nx">prop_triggerKey</span><span class="p">,</span> <span class="nx">triggerId</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
-<h3 id="now_str"><code>now_str</code></h3>
-<p>エラー等の報告には、当時の時間情報が必要になるため、「現在の時間を取得し、文字列に整形する」関数を作成する。</p>
-<div class="highlight"><pre><span></span><code><span class="cm">/** Return the current time as a string.</span>
-<span class="cm"> * @return {string} The current time as a string.</span>
-<span class="cm">*/</span>
-<span class="kd">function</span> <span class="nx">now_str</span><span class="p">(){</span>
-  <span class="cm">/** Fill in the numbers with 0 to make it beautiful.</span>
-<span class="cm">   * @param {Number} no The input number.</span>
-<span class="cm">   * @return {string} 0 filled number.</span>
-<span class="cm">  */</span>
-  <span class="kd">function</span> <span class="nx">padLeft</span><span class="p">(</span><span class="nx">no</span><span class="p">){</span>
-    <span class="nx">no</span> <span class="o">=</span> <span class="nb">String</span><span class="p">(</span><span class="nx">no</span><span class="p">);</span>
-    <span class="kd">let</span> <span class="nx">len</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">-</span><span class="nx">no</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
-    <span class="k">return</span> <span class="nx">len</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">?</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">len</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s1">'0'</span><span class="p">)</span><span class="o">+</span><span class="nx">no</span> <span class="o">:</span> <span class="nx">no</span><span class="p">;</span>  
+<h3 id="deletetrigger"><code>deleteTrigger</code></h3>
+<p>プログラム（上記の<a href="settrigger"><code>setTrigger</code></a>）で作成したトリガーを削除します。</p>
+<div class="highlight"><pre><span></span><code><span class="cm">/**</span>
+<span class="cm"> * Delete the trigger using the trigger ID saved in the specified key.</span>
+<span class="cm"> * @param {string} prop_triggerKey The keyname of the temporarily used property which holds the trigger Id which set in the program.</span>
+<span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">deleteTrigger</span><span class="p">(</span><span class="nx">prop_triggerKey</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">triggerId</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="nx">prop_triggerKey</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">triggerId</span> <span class="o">!=</span> <span class="kc">undefined</span><span class="p">){</span>
+    <span class="nx">ScriptApp</span><span class="p">.</span><span class="nx">getProjectTriggers</span><span class="p">().</span><span class="nx">filter</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">trigger</span><span class="p">){</span>
+      <span class="k">return</span> <span class="nx">trigger</span><span class="p">.</span><span class="nx">getUniqueId</span><span class="p">()</span> <span class="o">==</span> <span class="nx">triggerId</span><span class="p">;</span>
+    <span class="p">}).</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">trigger</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">ScriptApp</span><span class="p">.</span><span class="nx">deleteTrigger</span><span class="p">(</span><span class="nx">trigger</span><span class="p">);</span>
+    <span class="p">});</span>
+    <span class="nx">prop</span><span class="p">.</span><span class="nx">deleteProperty</span><span class="p">(</span><span class="nx">prop_triggerKey</span><span class="p">);</span>
   <span class="p">}</span>
-  <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span>
-  <span class="k">return</span> <span class="sb">`</span><span class="si">${</span><span class="nx">d</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">()</span><span class="si">}</span><span class="sb">/</span><span class="si">${</span><span class="nx">padLeft</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="sb">/</span><span class="si">${</span><span class="nx">padLeft</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getDate</span><span class="p">())</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">padLeft</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getHours</span><span class="p">())</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">padLeft</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getMinutes</span><span class="p">())</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">padLeft</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getSeconds</span><span class="p">())</span><span class="si">}</span><span class="sb">`</span>
-<span class="p">}</span>
-</code></pre></div>
-<h3 id="getcolname"><code>getColName</code></h3>
-<p>スプレッドシート特有の列名を、列のindexから取得できるようにする関数。</p>
-<div class="highlight"><pre><span></span><code><span class="cm">/** Get the column name on the spreadsheet from index.</span>
-<span class="cm"> * @param {Number} idx Column name specified by 1-based index.</span>
-<span class="cm"> * @return {string} Column Name.</span>
-<span class="cm">*/</span>
-<span class="kd">function</span> <span class="nx">getColName</span><span class="p">(</span><span class="nx">idx</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">sheet</span> <span class="o">=</span> <span class="nx">SpreadsheetApp</span><span class="p">.</span><span class="nx">getActiveSheet</span><span class="p">();</span>
-  <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">sheet</span><span class="p">.</span><span class="nx">getRange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">idx</span><span class="p">);</span>
-  <span class="nx">result</span> <span class="o">=</span> <span class="nx">result</span><span class="p">.</span><span class="nx">getA1Notation</span><span class="p">();</span>
-  <span class="nx">result</span> <span class="o">=</span> <span class="nx">result</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\d/</span><span class="p">,</span><span class="s1">''</span><span class="p">);</span>
-  <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>                </article>
             </aside><!-- /#featured -->
                 <section id="content" class="body">
                     <h1>Other articles</h1>
                     <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-37.html" rel="bookmark"
+                           title="Permalink to JS.37 GASでLINE Botからの送信を自動化する">JS.37 GASでLINE Botからの送信を自動化する</a></h1>
+                </header>
+
+                <div class="entry-content">
+          <footer class="post-info">
+            <span>2021-06-22(Tue)</span>
+            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
+          </footer><!-- /.post-info -->                <p>
+                    <p>GASでLINE Botからの送信を自動化し、定期実行をも可能にする。</p>
+                    <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-37.html">read more →</a>
+                </p>
+                </div><!-- /.entry-content -->
+            </article></li>
 
             <li><article class="hentry">
                 <header>

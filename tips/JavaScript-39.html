@@ -9,7 +9,18 @@
     <meta name="twitter:site" content="@cabernet_rock">
     <meta property="og:type" content="article" />
     <meta name="twitter:card" content="summary">
-    <title>Shuto's Front-End - JavaScript</title>
+    <meta name="keywords" content="GAS, JavaScript, maximum execution time" />
+    <meta property="og:image" content="https://iwasakishuto.github.io/Front-End/tips/images/gas_long_time_process.png"/>
+    <meta property="og:title" content="JS.39 GASで&#34;maximum execution time&#34;を超えて処理を行う。 "/>
+    <meta property="og:url" content="https://iwasakishuto.github.io/Front-End/tips/JavaScript-39.html" />
+    <meta property="og:description" content="GASで&#34;maximum execution time&#34;を超えて処理を行う。" />
+    <meta property="og:site_name" content="Shuto&#39;s Front-End" />
+    <meta property="og:article:author" content="Shuto" />
+    <meta property="og:article:published_time" content="2021-07-11T15:20:00+09:00" />
+    <meta property="og:article:modified_time" content="2021-07-11T15:20:00+09:00" />
+    <meta name="twitter:title" content="JS.39 GASで&#34;maximum execution time&#34;を超えて処理を行う。 ">
+    <meta name="twitter:description" content="GASで&#34;maximum execution time&#34;を超えて処理を行う。">
+    <title>JS.39 GASで"maximum execution time"を超えて処理を行う。</title>
     <link rel="stylesheet" href="https://iwasakishuto.github.io/Front-End/tips/theme/css/main.css" />
     <link href="https://iwasakishuto.github.io/Front-End/tips/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Shuto's Front-End Atom Feed" />
     <link href="https://iwasakishuto.github.io/Front-End/tips/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Shuto's Front-End RSS Feed" />
@@ -49,14 +60,36 @@
         </form>
       </nav>
     </header><!-- /#banner -->
+    <div id="loading" style="display: none;">
+      <div class="loading_wrapper">
+        <img class="loading_img" src="https://iwasakishuto.github.io/Front-End/tips/images/Bean Eater-1s-400px.gif">
+        <p class="loading_info">Loading...</p>
+      </div>
+    </div>
+    <section id="content" class="body" style="display: block;">
+      <article>
+        <header>
+          <h1 class="entry-title">
+            <a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-39.html" rel="bookmark" title="Permalink to JS.39 GASで"maximum execution time"を超えて処理を行う。">JS.39 GASで"maximum execution time"を超えて処理を行う。</a>
+          </h1>
+          <a href="https://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="cabernet_rock">Tweet</a>
+          <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
+        </header>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-39.html">JS.39 GASで"maximum execution time"を超えて処理を行う。</a></h1>
+          <aside class="toc">
+            <div class="col-lg-3 hidden-xs hidden-sm">
+              <h4>Table of Contents</h4>
+              <div id="toc"><ul><li><a class="toc-href" href="#" title='JS.39 GASで"maximum execution time"を超えて処理を行う。'>JS.39 GASで"maximum execution time"を超えて処理を行う。</a><ul><li><a class="toc-href" href="#bian-shu-ding-yi" title="変数定義">変数定義</a></li><li><a class="toc-href" href="#mainfunc" title="mainFunc">mainFunc</a></li><li><a class="toc-href" href="#longtimeprocess" title="LongTimeProcess">LongTimeProcess</a></li><li><a class="toc-href" href="#settrigger" title="setTrigger">setTrigger</a></li><li><a class="toc-href" href="#deletetrigger" title="deleteTrigger">deleteTrigger</a></li></ul></li></ul></div>
+            </div>
+          </aside>
+    
+        <div class="entry-content">
           <footer class="post-info">
             <span>2021-07-11(Sun)</span>
             <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
-          </footer><!-- /.post-info --><p>GASでプログラムを実行した際に、実行時間が <code>"maximum execution time"</code> （<a href="https://developers.google.com/apps-script/guides/services/quotas#current_limitations">ドキュメント</a>によると6分のようです）を超えてしまいプログラムが全て終了しない<b>（ループの途中で終了する）</b>、という事態に陥ってしまいました。</p>
+          </footer><!-- /.post-info -->
+<!-- NOT "| indent(10, True)"  -->
+<p>GASでプログラムを実行した際に、実行時間が <code>"maximum execution time"</code> （<a href="https://developers.google.com/apps-script/guides/services/quotas#current_limitations">ドキュメント</a>によると6分のようです）を超えてしまいプログラムが全て終了しない<b>（ループの途中で終了する）</b>、という事態に陥ってしまいました。</p>
 <p>そこで、最後まで終了しなかった場合に</p>
 <ul>
 <li>どこまで処理したかをプロパティを介して引き継ぐ。</li>
@@ -148,172 +181,12 @@
     <span class="nx">prop</span><span class="p">.</span><span class="nx">deleteProperty</span><span class="p">(</span><span class="nx">prop_triggerKey</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div>                </article>
-            </aside><!-- /#featured -->
-                <section id="content" class="body">
-                    <h1>Other articles</h1>
-                    <ol id="posts-list" class="hfeed">
+</code></pre></div>
 
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-38.html" rel="bookmark"
-                           title="Permalink to JS.38 ブラウザで遊べるチェスを作る。">JS.38 ブラウザで遊べるチェスを作る。</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-06-25(Fri)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/game.html">game</a></span>
-          </footer><!-- /.post-info -->                <p>
-                    <p>chessboard.js と chess.js をフル活用してブラウザで遊べるチェスゲームを作成する。</p>
-                    <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-38.html">read more →</a>
-                </p>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-37.html" rel="bookmark"
-                           title="Permalink to JS.37 GASでLINE Botからの送信を自動化する">JS.37 GASでLINE Botからの送信を自動化する</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-06-22(Tue)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
-          </footer><!-- /.post-info -->                <p>
-                    <p>GASでLINE Botからの送信を自動化し、定期実行をも可能にする。</p>
-                    <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-37.html">read more →</a>
-                </p>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-36.html" rel="bookmark"
-                           title="Permalink to JS.36 GASでLINE BOTを作成し、各種IDを取得する">JS.36 GASでLINE BOTを作成し、各種IDを取得する</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-06-21(Mon)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
-          </footer><!-- /.post-info -->                <p>
-                    <p>GASでLINE BOTを作成し、User ID を取得する。</p>
-                    <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-36.html">read more →</a>
-                </p>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-35.html" rel="bookmark"
-                           title="Permalink to JS.35 タイピング風動画を楽に作成する">JS.35 タイピング風動画を楽に作成する</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-06-07(Mon)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
-          </footer><!-- /.post-info -->                <p>
-                    <p>タイピング風動画を楽に作成するためのJSONファイルを作成します。</p>
-                    <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-35.html">read more →</a>
-                </p>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-34.html" rel="bookmark"
-                           title="Permalink to JS.34 GASでTrelloのタスクを定期的に通知する。">JS.34 GASでTrelloのタスクを定期的に通知する。</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-05-14(Fri)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/gas.html">GAS</a></span>
-          </footer><!-- /.post-info -->                <p>
-                    <p>GASでTrelloのタスクを定期的に通知する。</p>
-                    <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-34.html">read more →</a>
-                </p>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-33.html" rel="bookmark"
-                           title="Permalink to JS.33 ボイスチェンジャーモデルの訓練データ作成ツールを作成する">JS.33 ボイスチェンジャーモデルの訓練データ作成ツールを作成する</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-05-01(Sat)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
-          </footer><!-- /.post-info -->                <p>
-                    <p>ボイスチェンジャーをDeepLearningで作成する際の訓練データを簡単に作成する。</p>
-                    <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-33.html">read more →</a>
-                </p>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-32.html" rel="bookmark"
-                           title="Permalink to JS.32 ポケモンエメラルドでフロンティア マスターを目指す（その４）">JS.32 ポケモンエメラルドでフロンティア マスターを目指す（その４）</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-04-28(Wed)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tools.html">tools</a></span>
-          </footer><!-- /.post-info -->                <p>
-                    <p>ポケモンエメラルドでバトルフロンティアを攻略する</p>
-                    <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-32.html">read more →</a>
-                </p>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-31.html" rel="bookmark"
-                           title="Permalink to JS.31 ポケモンしりとりクイズ">JS.31 ポケモンしりとりクイズ</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-04-24(Sat)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/pokemon.html">pokemon</a>, <a href="https://iwasakishuto.github.io/Front-End/tips/tag/game.html">game</a></span>
-          </footer><!-- /.post-info -->                <p>
-                    <p>ポケモンしりとりクイズで遊ぼう。</p>
-                    <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-31.html">read more →</a>
-                </p>
-                </div><!-- /.entry-content -->
-            </article></li>
-
-            <li><article class="hentry">
-                <header>
-                    <h1><a href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-30.html" rel="bookmark"
-                           title="Permalink to JS.30 Pose-Estimation で正解の動きとの誤差を知る。">JS.30 Pose-Estimation で正解の動きとの誤差を知る。</a></h1>
-                </header>
-
-                <div class="entry-content">
-          <footer class="post-info">
-            <span>2021-03-10(Wed)</span>
-            <span>| tags: <a href="https://iwasakishuto.github.io/Front-End/tips/tag/tensorflowjs.html">TensorFlow.js</a></span>
-          </footer><!-- /.post-info -->                <p>
-                    <p>Pose-Estimation で正解の動きとの誤差を知る。</p>
-                    <a class="readmore" href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-30.html">read more →</a>
-                </p>
-                </div><!-- /.entry-content -->
-            </article></li>
-            </ol><!-- /#posts-list -->
-<p class="paginator">
-    Page 1 / 4
-        <a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript2.html">&gt;</a>
-        <a href="https://iwasakishuto.github.io/Front-End/tips/category/javascript4.html">&raquo;</a>
-    <sub>(10 articles per page)</small>
-</p>
-            </section><!-- /#content -->
+        </div><!-- /.entry-content -->
+    
+      </article>
+    </section>
     <section id="extras" class="body">
       <div class="blogroll">
         <h5>other contents</h5>
