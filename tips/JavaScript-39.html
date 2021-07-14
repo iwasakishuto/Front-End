@@ -91,7 +91,7 @@
 <!-- NOT "| indent(10, True)"  -->
 <p>GASでプログラムを実行した際に、実行時間が <code>"maximum execution time"</code> （<a href="https://developers.google.com/apps-script/guides/services/quotas#current_limitations">ドキュメント</a>によると6分のようです）を超えてしまいプログラムが全て終了しない<b>（ループの途中で終了する）</b>、という事態に陥ってしまいました。</p>
 <p>そこで、最後まで終了しなかった場合に</p>
-<ul>
+<ul style="list-style:disc;margin-left:2em;">
 <li>どこまで処理したかをプロパティを介して引き継ぐ。</li>
 <li>再びプログラムを実行するために、新しいトリガーを設定する。</li>
 </ul>
@@ -125,19 +125,18 @@
   <span class="c1">// to save this data in a SpreadSheet or the like.)</span>
   <span class="kd">var</span> <span class="nx">some_list</span> <span class="o">=</span> <span class="p">[];</span>
   <span class="c1">// Last idx of the previous process</span>
-  <span class="kd">var</span> <span class="nx">lastIdx</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="nx">_tmp_property_curtIdx</span><span class="p">);</span>
-  <span class="nx">lastIdx</span> <span class="o">=</span> <span class="nx">lastIdx</span><span class="o">==</span><span class="kc">undefined</span> <span class="o">?</span> <span class="o">-</span><span class="mi">1</span> <span class="o">:</span> <span class="nx">parseInd</span><span class="p">(</span><span class="nx">lastIdx</span><span class="p">)</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">some_list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">i</span><span class="o">&gt;</span><span class="nx">lastIdx</span><span class="p">){</span>
-      <span class="c1">// DO WHAT YOU WANT</span>
+  <span class="kd">var</span> <span class="nx">lastIdx</span> <span class="o">=</span> <span class="nx">prop</span><span class="p">.</span><span class="nx">getProperty</span><span class="p">(</span><span class="nx">prop_curtIdx</span><span class="p">);</span>
+  <span class="nx">lastIdx</span> <span class="o">=</span> <span class="nx">lastIdx</span><span class="o">==</span><span class="kc">undefined</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="nx">parseInd</span><span class="p">(</span><span class="nx">lastIdx</span><span class="p">)</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="nx">lastIdx</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">some_list</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">){</span>
 
-      <span class="c1">// If more than 330[s] have passed since the start.</span>
-      <span class="k">if</span> <span class="p">((</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()</span><span class="o">-</span><span class="nx">startTime</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span> <span class="o">&gt;=</span> <span class="mi">330</span><span class="p">){</span>
-        <span class="nx">setTrigger</span><span class="p">(</span><span class="nx">mainFuncName</span><span class="p">,</span> <span class="nx">prop_triggerKey</span><span class="p">);</span>
-        <span class="c1">// Store current information in properties.</span>
-        <span class="nx">prop</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="nx">prop_curtIdx</span><span class="p">,</span> <span class="nx">i</span><span class="p">);</span>
-        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-      <span class="p">}</span>
+    <span class="c1">// DO WHAT YOU WANT</span>
+
+    <span class="c1">// If more than 330[s] have passed since the start.</span>
+    <span class="k">if</span> <span class="p">((</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()</span><span class="o">-</span><span class="nx">startTime</span><span class="p">)</span><span class="o">/</span><span class="mi">1000</span> <span class="o">&gt;=</span> <span class="mi">330</span><span class="p">){</span>
+      <span class="nx">setTrigger</span><span class="p">(</span><span class="nx">mainFuncName</span><span class="p">,</span> <span class="nx">prop_triggerKey</span><span class="p">);</span>
+      <span class="c1">// Store current information in properties.</span>
+      <span class="nx">prop</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="nx">prop_curtIdx</span><span class="p">,</span> <span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
     <span class="p">}</span>
   <span class="p">}</span>
   <span class="c1">// When all the processes are finished, delete the temporarily saved data.</span>
@@ -165,7 +164,7 @@
 <span class="p">}</span>
 </code></pre></div>
 <h3 id="deletetrigger"><code>deleteTrigger</code></h3>
-<p>プログラム（上記の<a href="settrigger"><code>setTrigger</code></a>）で作成したトリガーを削除します。</p>
+<p>プログラム（上記の<a href="#settrigger"><code>setTrigger</code></a>）で作成したトリガーを削除します。</p>
 <div class="highlight"><pre><span></span><code><span class="cm">/**</span>
 <span class="cm"> * Delete the trigger using the trigger ID saved in the specified key.</span>
 <span class="cm"> * @param {string} prop_triggerKey The keyname of the temporarily used property which holds the trigger Id which set in the program.</span>

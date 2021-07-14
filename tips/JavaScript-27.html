@@ -259,9 +259,9 @@
       cols: [0, 21],
       texts: [
         [
-          'Lv50 1周目', 'Lv50 2周目', 'Lv50 3周目', 'Lv50 4周目', 
+          'Lv50 1周目', 'Lv50 2周目', 'Lv50 3周目', 'Lv50 4周目',
           'Lv50 5周目', 'Lv50 6周目', 'Lv50 7周目', 'Lv50 8周目以降',
-          'オープン 1周目', 'オープン 2周目', 'オープン 3周目', 'オープン 4周目', 
+          'オープン 1周目', 'オープン 2周目', 'オープン 3周目', 'オープン 4周目',
           'オープン 5周目', 'オープン 6周目', 'オープン 7周目', 'オープン 8周目以降',
         ],
         [
@@ -279,9 +279,9 @@
           '>372 && <=882', '>372 && <=882', '>372 && <=882', '>372 && <=882',
         ],
         [
-          'リラ銀 || ヒース銀 || ウコン銀 || アザミ銀 || コゴミ銀 || ジンダイ銀 || リラ金 || ヒース金 || ウコン金 || アザミ金 || コゴミ金 || ジンダイ金', 
-          'リラ銀 || ヒース銀 || ウコン銀 || アザミ銀 || コゴミ銀 || ジンダイ銀', 
-          'リラ金 || ヒース金 || ウコン金 || アザミ金 || コゴミ金 || ジンダイ金', 
+          'リラ銀 || ヒース銀 || ウコン銀 || アザミ銀 || コゴミ銀 || ジンダイ銀 || リラ金 || ヒース金 || ウコン金 || アザミ金 || コゴミ金 || ジンダイ金',
+          'リラ銀 || ヒース銀 || ウコン銀 || アザミ銀 || コゴミ銀 || ジンダイ銀',
+          'リラ金 || ヒース金 || ウコン金 || アザミ金 || コゴミ金 || ジンダイ金',
           'リラ銀', 'リラ金', 'ヒース銀', 'ヒース金', 'ウコン銀', 'ウコン金',
           'アザミ銀', 'アザミ金', 'コゴミ銀', 'コゴミ金', 'ジンダイ銀', 'ジンダイ金',
           'Group1', 'Group2', 'Group3',
@@ -336,7 +336,7 @@
       }
     }
   })
-  // Calculate statistics based on the 
+  // Calculate statistics based on the
   function calculate_BF_statistics(BFT){
     var tds, name, nature;
     var lv = parseInt(BFT.LV.value);
@@ -487,7 +487,7 @@
       }else{
         e.addEventListener("change", function(){
           calculate_damage_rates(document.DAMAGE);
-        })        
+        })
       }
     })
     calculate_damage_rates(document.DAMAGE);
@@ -550,7 +550,7 @@
       op_item = tds[RT_oppokeitemIdx].textContent;
       if (document.getElementById("switchAD").checked){
         // Battle Frontier: Defense, My Pokemon: Attack.
-        move_name = my_move; 
+        move_name = my_move;
         MYPOKE = document.MYPOKE;
         move_type = MYPOKE.move_type.value; move_class = MYPOKE.move_class.value; move_range = MYPOKE.move_range.value; move_base_power = MYPOKE.move_base_power.value;
         Astats=my_stats, Atypes=my_types, Aability=my_ability, Aitem=my_item, Aranks=my_ranks,
@@ -564,12 +564,12 @@
       }
       var ret = calculate_damage(
         move_name=move_name, move_type=move_type, move_class=move_class, move_range=move_range, move_base_power=move_base_power,
-        lv=lv, Astats=Astats, Dstats=Dstats, Atypes=Atypes, Dtypes=Dtypes, 
-        Aability=Aability, Dability=Dability, Aitem=Aitem, Ditem=Ditem, Aranks=Aranks, 
-        Dranks=Dranks, AHP=1.0, DHP=1.0, helping_hand=helping_hand, 
-        is_charged=is_charged, is_mudsport_field=is_mudsport_field, 
-        is_watersport_field=is_watersport_field, is_single=is_single, 
-        has_shield=has_shield, is_flash_fire=false, weather=weather, 
+        lv=lv, Astats=Astats, Dstats=Dstats, Atypes=Atypes, Dtypes=Dtypes,
+        Aability=Aability, Dability=Dability, Aitem=Aitem, Ditem=Ditem, Aranks=Aranks,
+        Dranks=Dranks, AHP=1.0, DHP=1.0, helping_hand=helping_hand,
+        is_charged=is_charged, is_mudsport_field=is_mudsport_field,
+        is_watersport_field=is_watersport_field, is_single=is_single,
+        has_shield=has_shield, is_flash_fire=false, weather=weather,
         is_burned_state=is_burned_state, hit_critical=hit_critical,
       )
       tds[RT_damageIdx].innerHTML = ret[0] + " ~ " + ret[1];
@@ -648,7 +648,7 @@
 <style>
   table.fixed {
     table-layout: fixed;
-  } 
+  }
   .fixed-tcol {
     position: sticky;
     left: 0;
@@ -659,7 +659,7 @@
     text-align: center;
     text-align: center;
   }
-  table#battle-frontier td:nth-of-type(4), 
+  table#battle-frontier td:nth-of-type(4),
   table#battle-frontier td:nth-of-type(8),
   table#battle-frontier td:nth-of-type(14),
   table#battle-frontier td:nth-of-type(15),
@@ -675,7 +675,7 @@
     text-align: center;
   }
   table#result_property input,
-  table#my-pokemon select, table#my-pokemon input, 
+  table#my-pokemon select, table#my-pokemon input,
   table#situation select, table#situation input,
   table#results select, table#results input{
     border: 0;
@@ -684,11 +684,11 @@
     font-family: Monaco, monospace, sans-serif;
   }
   table#result_property input,
-  table#my-pokemon select, table#my-pokemon input, 
+  table#my-pokemon select, table#my-pokemon input,
   table#situation select, table#results select{
     width: 100%;
   }
-  table#my-pokemon tr:not(.only-text) td, 
+  table#my-pokemon tr:not(.only-text) td,
   table#situation tr:not(.only-text) td,
   table#results tr:not(.only-text) td{
     padding: 0;
@@ -713,6 +713,7 @@
     margin: 0!important;
     padding: 0 !important;
     width: 200%!important;
+    max-width: none;
     vertical-align: middle;
   }
 </style>

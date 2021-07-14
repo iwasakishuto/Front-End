@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>Shuto's Front-End - Shuto</title><link href="https://iwasakishuto.github.io/Front-End/tips/" rel="alternate"></link><link href="https://iwasakishuto.github.io/Front-End/tips/feeds/shuto.atom.xml" rel="self"></link><id>https://iwasakishuto.github.io/Front-End/tips/</id><updated>2021-07-11T15:20:00+09:00</updated><entry><title>JS.39 GASで"maximum execution time"を超えて処理を行う。</title><link href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-39.html" rel="alternate"></link><published>2021-07-11T15:20:00+09:00</published><updated>2021-07-11T15:20:00+09:00</updated><author><name>Shuto</name></author><id>tag:iwasakishuto.github.io,2021-07-11:/Front-End/tips/JavaScript-39.html</id><summary type="html">&lt;p&gt;GASで"maximum execution time"を超えて処理を行う。&lt;/p&gt;</summary><content type="html">&lt;p&gt;GASでプログラムを実行した際に、実行時間が &lt;code&gt;"maximum execution time"&lt;/code&gt; （&lt;a href="https://developers.google.com/apps-script/guides/services/quotas#current_limitations"&gt;ドキュメント&lt;/a&gt;によると6分のようです）を超えてしまいプログラムが全て終了しない&lt;b&gt;（ループの途中で終了する）&lt;/b&gt;、という事態に陥ってしまいました。&lt;/p&gt;
 &lt;p&gt;そこで、最後まで終了しなかった場合に&lt;/p&gt;
-&lt;ul&gt;
+&lt;ul style="list-style:disc;margin-left:2em;"&gt;
 &lt;li&gt;どこまで処理したかをプロパティを介して引き継ぐ。&lt;/li&gt;
 &lt;li&gt;再びプログラムを実行するために、新しいトリガーを設定する。&lt;/li&gt;
 &lt;/ul&gt;
@@ -35,19 +35,18 @@
   &lt;span class="c1"&gt;// to save this data in a SpreadSheet or the like.)&lt;/span&gt;
   &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;some_list&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[];&lt;/span&gt;
   &lt;span class="c1"&gt;// Last idx of the previous process&lt;/span&gt;
-  &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;lastIdx&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;prop&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getProperty&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;_tmp_property_curtIdx&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-  &lt;span class="nx"&gt;lastIdx&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;lastIdx&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="kc"&gt;undefined&lt;/span&gt; &lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;parseInd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;lastIdx&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-  &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nx"&gt;some_list&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;length&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="p"&gt;){&lt;/span&gt;
-    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="nx"&gt;lastIdx&lt;/span&gt;&lt;span class="p"&gt;){&lt;/span&gt;
-      &lt;span class="c1"&gt;// DO WHAT YOU WANT&lt;/span&gt;
+  &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;lastIdx&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;prop&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;getProperty&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;prop_curtIdx&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+  &lt;span class="nx"&gt;lastIdx&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;lastIdx&lt;/span&gt;&lt;span class="o"&gt;==&lt;/span&gt;&lt;span class="kc"&gt;undefined&lt;/span&gt; &lt;span class="o"&gt;?&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;parseInd&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;lastIdx&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nx"&gt;lastIdx&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="nx"&gt;some_list&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;length&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="o"&gt;++&lt;/span&gt;&lt;span class="p"&gt;){&lt;/span&gt;
 
-      &lt;span class="c1"&gt;// If more than 330[s] have passed since the start.&lt;/span&gt;
-      &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;Date&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nx"&gt;startTime&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;=&lt;/span&gt; &lt;span class="mi"&gt;330&lt;/span&gt;&lt;span class="p"&gt;){&lt;/span&gt;
-        &lt;span class="nx"&gt;setTrigger&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;mainFuncName&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;prop_triggerKey&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-        &lt;span class="c1"&gt;// Store current information in properties.&lt;/span&gt;
-        &lt;span class="nx"&gt;prop&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;setProperty&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;prop_curtIdx&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
-        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;false&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
-      &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="c1"&gt;// DO WHAT YOU WANT&lt;/span&gt;
+
+    &lt;span class="c1"&gt;// If more than 330[s] have passed since the start.&lt;/span&gt;
+    &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="nb"&gt;Date&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nx"&gt;startTime&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;=&lt;/span&gt; &lt;span class="mi"&gt;330&lt;/span&gt;&lt;span class="p"&gt;){&lt;/span&gt;
+      &lt;span class="nx"&gt;setTrigger&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;mainFuncName&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;prop_triggerKey&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+      &lt;span class="c1"&gt;// Store current information in properties.&lt;/span&gt;
+      &lt;span class="nx"&gt;prop&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;setProperty&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;prop_curtIdx&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;i&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+      &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;false&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
     &lt;span class="p"&gt;}&lt;/span&gt;
   &lt;span class="p"&gt;}&lt;/span&gt;
   &lt;span class="c1"&gt;// When all the processes are finished, delete the temporarily saved data.&lt;/span&gt;
@@ -75,7 +74,7 @@
 &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h3 id="deletetrigger"&gt;&lt;code&gt;deleteTrigger&lt;/code&gt;&lt;/h3&gt;
-&lt;p&gt;プログラム（上記の&lt;a href="settrigger"&gt;&lt;code&gt;setTrigger&lt;/code&gt;&lt;/a&gt;）で作成したトリガーを削除します。&lt;/p&gt;
+&lt;p&gt;プログラム（上記の&lt;a href="#settrigger"&gt;&lt;code&gt;setTrigger&lt;/code&gt;&lt;/a&gt;）で作成したトリガーを削除します。&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="cm"&gt;/**&lt;/span&gt;
 &lt;span class="cm"&gt; * Delete the trigger using the trigger ID saved in the specified key.&lt;/span&gt;
 &lt;span class="cm"&gt; * @param {string} prop_triggerKey The keyname of the temporarily used property which holds the trigger Id which set in the program.&lt;/span&gt;
@@ -5925,9 +5924,9 @@ function generate_pike_wild_mons(PIKE){
       cols: [0, 21],
       texts: [
         [
-          'Lv50 1周目', 'Lv50 2周目', 'Lv50 3周目', 'Lv50 4周目', 
+          'Lv50 1周目', 'Lv50 2周目', 'Lv50 3周目', 'Lv50 4周目',
           'Lv50 5周目', 'Lv50 6周目', 'Lv50 7周目', 'Lv50 8周目以降',
-          'オープン 1周目', 'オープン 2周目', 'オープン 3周目', 'オープン 4周目', 
+          'オープン 1周目', 'オープン 2周目', 'オープン 3周目', 'オープン 4周目',
           'オープン 5周目', 'オープン 6周目', 'オープン 7周目', 'オープン 8周目以降',
         ],
         [
@@ -5945,9 +5944,9 @@ function generate_pike_wild_mons(PIKE){
           '&gt;372 &amp;&amp; &lt;=882', '&gt;372 &amp;&amp; &lt;=882', '&gt;372 &amp;&amp; &lt;=882', '&gt;372 &amp;&amp; &lt;=882',
         ],
         [
-          'リラ銀 || ヒース銀 || ウコン銀 || アザミ銀 || コゴミ銀 || ジンダイ銀 || リラ金 || ヒース金 || ウコン金 || アザミ金 || コゴミ金 || ジンダイ金', 
-          'リラ銀 || ヒース銀 || ウコン銀 || アザミ銀 || コゴミ銀 || ジンダイ銀', 
-          'リラ金 || ヒース金 || ウコン金 || アザミ金 || コゴミ金 || ジンダイ金', 
+          'リラ銀 || ヒース銀 || ウコン銀 || アザミ銀 || コゴミ銀 || ジンダイ銀 || リラ金 || ヒース金 || ウコン金 || アザミ金 || コゴミ金 || ジンダイ金',
+          'リラ銀 || ヒース銀 || ウコン銀 || アザミ銀 || コゴミ銀 || ジンダイ銀',
+          'リラ金 || ヒース金 || ウコン金 || アザミ金 || コゴミ金 || ジンダイ金',
           'リラ銀', 'リラ金', 'ヒース銀', 'ヒース金', 'ウコン銀', 'ウコン金',
           'アザミ銀', 'アザミ金', 'コゴミ銀', 'コゴミ金', 'ジンダイ銀', 'ジンダイ金',
           'Group1', 'Group2', 'Group3',
@@ -6002,7 +6001,7 @@ function generate_pike_wild_mons(PIKE){
       }
     }
   })
-  // Calculate statistics based on the 
+  // Calculate statistics based on the
   function calculate_BF_statistics(BFT){
     var tds, name, nature;
     var lv = parseInt(BFT.LV.value);
@@ -6153,7 +6152,7 @@ function generate_pike_wild_mons(PIKE){
       }else{
         e.addEventListener("change", function(){
           calculate_damage_rates(document.DAMAGE);
-        })        
+        })
       }
     })
     calculate_damage_rates(document.DAMAGE);
@@ -6216,7 +6215,7 @@ function generate_pike_wild_mons(PIKE){
       op_item = tds[RT_oppokeitemIdx].textContent;
       if (document.getElementById("switchAD").checked){
         // Battle Frontier: Defense, My Pokemon: Attack.
-        move_name = my_move; 
+        move_name = my_move;
         MYPOKE = document.MYPOKE;
         move_type = MYPOKE.move_type.value; move_class = MYPOKE.move_class.value; move_range = MYPOKE.move_range.value; move_base_power = MYPOKE.move_base_power.value;
         Astats=my_stats, Atypes=my_types, Aability=my_ability, Aitem=my_item, Aranks=my_ranks,
@@ -6230,12 +6229,12 @@ function generate_pike_wild_mons(PIKE){
       }
       var ret = calculate_damage(
         move_name=move_name, move_type=move_type, move_class=move_class, move_range=move_range, move_base_power=move_base_power,
-        lv=lv, Astats=Astats, Dstats=Dstats, Atypes=Atypes, Dtypes=Dtypes, 
-        Aability=Aability, Dability=Dability, Aitem=Aitem, Ditem=Ditem, Aranks=Aranks, 
-        Dranks=Dranks, AHP=1.0, DHP=1.0, helping_hand=helping_hand, 
-        is_charged=is_charged, is_mudsport_field=is_mudsport_field, 
-        is_watersport_field=is_watersport_field, is_single=is_single, 
-        has_shield=has_shield, is_flash_fire=false, weather=weather, 
+        lv=lv, Astats=Astats, Dstats=Dstats, Atypes=Atypes, Dtypes=Dtypes,
+        Aability=Aability, Dability=Dability, Aitem=Aitem, Ditem=Ditem, Aranks=Aranks,
+        Dranks=Dranks, AHP=1.0, DHP=1.0, helping_hand=helping_hand,
+        is_charged=is_charged, is_mudsport_field=is_mudsport_field,
+        is_watersport_field=is_watersport_field, is_single=is_single,
+        has_shield=has_shield, is_flash_fire=false, weather=weather,
         is_burned_state=is_burned_state, hit_critical=hit_critical,
       )
       tds[RT_damageIdx].innerHTML = ret[0] + " ~ " + ret[1];
@@ -6314,7 +6313,7 @@ function generate_pike_wild_mons(PIKE){
 &lt;style&gt;
   table.fixed {
     table-layout: fixed;
-  } 
+  }
   .fixed-tcol {
     position: sticky;
     left: 0;
@@ -6325,7 +6324,7 @@ function generate_pike_wild_mons(PIKE){
     text-align: center;
     text-align: center;
   }
-  table#battle-frontier td:nth-of-type(4), 
+  table#battle-frontier td:nth-of-type(4),
   table#battle-frontier td:nth-of-type(8),
   table#battle-frontier td:nth-of-type(14),
   table#battle-frontier td:nth-of-type(15),
@@ -6341,7 +6340,7 @@ function generate_pike_wild_mons(PIKE){
     text-align: center;
   }
   table#result_property input,
-  table#my-pokemon select, table#my-pokemon input, 
+  table#my-pokemon select, table#my-pokemon input,
   table#situation select, table#situation input,
   table#results select, table#results input{
     border: 0;
@@ -6350,11 +6349,11 @@ function generate_pike_wild_mons(PIKE){
     font-family: Monaco, monospace, sans-serif;
   }
   table#result_property input,
-  table#my-pokemon select, table#my-pokemon input, 
+  table#my-pokemon select, table#my-pokemon input,
   table#situation select, table#results select{
     width: 100%;
   }
-  table#my-pokemon tr:not(.only-text) td, 
+  table#my-pokemon tr:not(.only-text) td,
   table#situation tr:not(.only-text) td,
   table#results tr:not(.only-text) td{
     padding: 0;
@@ -6379,6 +6378,7 @@ function generate_pike_wild_mons(PIKE){
     margin: 0!important;
     padding: 0 !important;
     width: 200%!important;
+    max-width: none;
     vertical-align: middle;
   }
 &lt;/style&gt;</content><category term="JavaScript"></category><category term="pokemon"></category><category term="tools"></category></entry><entry><title>JS.26 モーダル（ポップアップ）の作成</title><link href="https://iwasakishuto.github.io/Front-End/tips/JavaScript-26.html" rel="alternate"></link><published>2021-02-16T00:00:00+09:00</published><updated>2020-02-16T00:00:00+09:00</updated><author><name>Shuto</name></author><id>tag:iwasakishuto.github.io,2021-02-16:/Front-End/tips/JavaScript-26.html</id><summary type="html">&lt;p&gt;モーダル（ポップアップ）の作成&lt;/p&gt;</summary><content type="html">&lt;p&gt;画像や広告などが表示され、クリックや閉じるなどの操作をしないとページが閲覧できないような表現を&lt;b&gt;モーダル&lt;/b&gt;と呼ぶ。今回は、これをライブラリを使わない素のJavascriptによるDOM操作で作った。&lt;/p&gt;
