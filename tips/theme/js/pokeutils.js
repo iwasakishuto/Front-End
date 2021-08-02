@@ -1,5 +1,5 @@
 /** Useful data for Pokemon Emerald.
- * 
+ *
  * @Author  : iwasakishuto <https://github.com/iwasakishuto>
 */
 const POKETYPES = ['ノーマル', 'ほのお', 'みず', 'でんき', 'くさ', 'こおり', 'かくとう', 'どく', 'じめん', 'ひこう', 'エスパー', 'むし', 'いわ', 'ゴースト', 'ドラゴン', 'あく', 'はがね'];
@@ -47,7 +47,7 @@ const Pname2typeColor = function(pname){
   }
   let type_color = `linear-gradient(to right, ${type_colors[0]}88 20%, ${type_colors[1]}88 80%)`
   return {
-    color: type_color, 
+    color: type_color,
     string: type_str
   };
 }
@@ -78,7 +78,7 @@ const Pitem_img_create = function(iname){
   return `<div class='overflow-ms'><img src="${Pitem_img_baseurl+ITEMNAME2FILENAME[iname]}" alt="${iname}"></div>`
 }
 
-/** 
+/**
  * Calculate the type compatibility.
  * @param {string} Atype Attacker type.
  * @param {string} Dtype Defender type.
@@ -99,7 +99,7 @@ const nature2id = {'さみしがり': 1, 'いじっぱり': 3, 'やんちゃ': 4
 // nature ID → Personality correction [h,a,b,c,d,s]
 const natureid2corr = {1  : [1.1, 0.9, 1.0, 1.0, 1.0], 3  : [1.1, 1.0, 0.9, 1.0, 1.0], 4  : [1.1, 1.0, 1.0, 0.9, 1.0], 2  : [1.1, 1.0, 1.0, 1.0, 0.9], 5  : [0.9, 1.1, 1.0, 1.0, 1.0], 8  : [1.0, 1.1, 0.9, 1.0, 1.0], 9  : [1.0, 1.1, 1.0, 0.9, 1.0], 7  : [1.0, 1.1, 1.0, 1.0, 0.9], 15 : [0.9, 1.0, 1.1, 1.0, 1.0], 16 : [1.0, 0.9, 1.1, 1.0, 1.0], 19 : [1.0, 1.0, 1.1, 0.9, 1.0], 17 : [1.0, 1.0, 1.1, 1.0, 0.9], 20 : [0.9, 1.0, 1.0, 1.1, 1.0], 21 : [1.0, 0.9, 1.0, 1.1, 1.0], 23 : [1.0, 1.0, 0.9, 1.1, 1.0], 22 : [1.0, 1.0, 1.0, 1.1, 0.9], 10 : [0.9, 1.0, 1.0, 1.0, 1.1], 11 : [1.0, 0.9, 1.0, 1.0, 1.1], 13 : [1.0, 1.0, 0.9, 1.0, 1.1], 14 : [1.0, 1.0, 1.0, 0.9, 1.1], 18 : [1.0, 1.0, 1.0, 1.0, 1.0], 0  : [1.0, 1.0, 1.0, 1.0, 1.0], 6  : [1.0, 1.0, 1.0, 1.0, 1.0], 24 : [1.0, 1.0, 1.0, 1.0, 1.0], 12 : [1.0, 1.0, 1.0, 1.0, 1.0]}
 
-/** 
+/**
  * Generate ${tag}s which are colored by nature, or coloring ${tag}s.
  * @param {string|number} nature nature identifier.
  * @param {list} values Effort/Rstats [H,A,B,C,D,S] Values, or NodeList
@@ -124,7 +124,7 @@ function coloring_by_nature(nature, values, hp_idx, tag="td"){
   }
 }
 
-/** 
+/**
  * Calculate the real status.
  * @param {string} name Pokemon name.
  * @param {list} ivals Individual Values [H,A,B,C,D,S]
@@ -160,9 +160,9 @@ function calculate_statistics(name, ivals, evals, nature, lv=50){
     alert("ポケモン：" + name + "は対応していません。（エメラルドまでです。）")
   }
   return statistics
-} 
+}
 
-/** 
+/**
  * Calculate the type & power of "hidden power"
  * @param {list} ivals Individual Values [H,A,B,C,D,S]
  * @return {list} [type, power] Hidden Power Information.
@@ -203,8 +203,8 @@ const POKEWEATHERS = ["", "にほんばれ", "あめ", "すなあらし", "あ�
  * @param {number} DHP HP rate on the Defending side.
  * @param {bool} helping_hand Whether partner uses "Helping Hand".
  * @param {bool} is_charged Whether you used "Charge" before.
- * @param {bool} is_mudsport_field 
- * @param {bool} is_watersport_field 
+ * @param {bool} is_mudsport_field
+ * @param {bool} is_watersport_field
  * @param {bool} is_single Whether the battle is single.
  * @param {bool} has_shield Whether the Defender has shield such as "Light Screen" or "Reflect".
  * @param {bool} is_flash_fire Whether the Attacker's ability is "Flash Fire" and is activated.
@@ -215,10 +215,10 @@ const POKEWEATHERS = ["", "にほんばれ", "あめ", "すなあらし", "あ�
 */
 
 function calculate_damage(move_name, move_type=NaN, move_class=NaN, move_range=NaN, move_base_power=NaN, lv=50,
-                          Astats=[], Dstats=[], Atypes=[], Dtypes=[], Aability="", Dability="", 
-                          Aitem="", Ditem="", Aranks=[], Dranks=[], AHP=1.0, DHP=1.0, 
+                          Astats=[], Dstats=[], Atypes=[], Dtypes=[], Aability="", Dability="",
+                          Aitem="", Ditem="", Aranks=[], Dranks=[], AHP=1.0, DHP=1.0,
                           helping_hand=false, is_charged=false, is_mudsport_field=false, is_watersport_field=false,
-                          is_single=true, has_shield=false, is_flash_fire=false, 
+                          is_single=true, has_shield=false, is_flash_fire=false,
                           weather="", is_burned_state=false, hit_critical=false){
   var has_movedata = [move_type, move_class, move_range, move_base_power].every(e => !isNaN(e));
   if (move_name in MOVENAME2DATA){
@@ -303,7 +303,7 @@ const Rental_Pokemon_evsIdx = 10;
 const HEX2POKESTRINGS = {
   '00': '　','01': 'あ','02': 'い','03': 'う','04': 'え','05': 'お','06': 'か','07': 'き','08': 'く','09': 'け','0a': 'こ','0b': 'さ','0c': 'し','0d': 'す','0e': 'せ','0f': 'そ','10': 'た','11': 'ち','12': 'つ','13': 'て','14': 'と','15': 'な','16': 'に','17': 'ぬ','18': 'ね','19': 'の','1a': 'は','1b': 'ひ','1c': 'ふ','1d': 'へ','1e': 'ほ','1f': 'ま','20': 'み','21': 'む','22': 'め','23': 'も','24': 'や','25': 'ゆ','26': 'よ','27': 'ら','28': 'り','29': 'る','2a': 'れ','2b': 'ろ','2c': 'わ','2d': 'を','2e': 'ん','2f': 'ぁ','30': 'ぃ','31': 'ぅ','32': 'ぇ','33': 'ぉ','34': 'ゃ','35': 'ゅ','36': 'ょ','37': 'が','38': 'ぎ','39': 'ぐ','3a': 'げ','3b': 'ご','3c': 'ざ','3d': 'じ','3e': 'ず','3f': 'ぜ','40': 'ぞ','41': 'だ','42': 'ぢ','43': 'づ','44': 'で','45': 'ど','46': 'ば','47': 'び','48': 'ぶ','49': 'べ','4a': 'ぼ','4b': 'ぱ','4c': 'ぴ','4d': 'ぷ','4e': 'ぺ','4f': 'ぽ','50': 'っ','51': 'ア','52': 'イ','53': 'ウ','54': 'エ','55': 'オ','56': 'カ','57': 'キ','58': 'ク','59': 'ケ','5a': 'コ','5b': 'サ','5c': 'シ','5d': 'ス','5e': 'セ','5f': 'ソ','60': 'タ','61': 'チ','62': 'ツ','63': 'テ','64': 'ト','65': 'ナ','66': 'ニ','67': 'ヌ','68': 'ネ','69': 'ノ','6a': 'ハ','6b': 'ヒ','6c': 'フ','6d': 'ヘ','6e': 'ホ','6f': 'マ','70': 'ミ','71': 'ム','72': 'メ','73': 'モ','74': 'ヤ','75': 'ユ','76': 'ヨ','77': 'ラ','78': 'リ','79': 'ル','7a': 'レ','7b': 'ロ','7c': 'ワ','7d': 'ヲ','7e': 'ン','7f': 'ァ','80': 'ィ','81': 'ゥ','82': 'ェ','83': 'ォ','84': 'ャ','85': 'ュ','86': 'ョ','87': 'ガ','88': 'ギ','89': 'グ','8a': 'ゲ','8b': 'ゴ','8c': 'ザ','8d': 'ジ','8e': 'ズ','8f': 'ゼ','90': 'ゾ','91': 'ダ','92': 'ヂ','93': 'ヅ','94': 'デ','95': 'ド','96': 'バ','97': 'ビ','98': 'ブ','99': 'ベ','9a': 'ボ','9b': 'パ','9c': 'ピ','9d': 'プ','9e': 'ペ','9f': 'ポ','a0': 'ッ','a1': '０','a2': '１','a3': '２','a4': '３','a5': '４','a6': '５','a7': '６','a8': '７','a9': '８','aa': '９','ab': '！','ac': '？','ad': '。','ae': '－','af': '・','b0': '…','b1': '『','b2': '』','b3': '「','b4': '」','b5': '♂','b6': '♀',
   // 'b7': '円',
-  'b8': '．',
+  // 'b8': '．',
   // 'b9': '×',
   'ba': '／','bb': 'Ａ','bc': 'Ｂ','bd': 'Ｃ','be': 'Ｄ','bf': 'Ｅ','c0': 'Ｆ','c1': 'Ｇ','c2': 'Ｈ','c3': 'Ｉ','c4': 'Ｊ','c5': 'Ｋ','c6': 'Ｌ','c7': 'Ｍ','c8': 'Ｎ','c9': 'Ｏ','ca': 'Ｐ','cb': 'Ｑ','cc': 'Ｒ','cd': 'Ｓ','ce': 'Ｔ','cf': 'Ｕ','d0': 'Ｖ','d1': 'Ｗ','d2': 'Ｘ','d3': 'Ｙ','d4': 'Ｚ','d5': 'ａ','d6': 'ｂ','d7': 'ｃ','d8': 'ｄ','d9': 'ｅ','da': 'ｆ','db': 'ｇ','dc': 'ｈ','dd': 'ｉ','de': 'ｊ','df': 'ｋ','e0': 'ｌ','e1': 'ｍ','e2': 'ｎ','e3': 'ｏ','e4': 'ｐ','e5': 'ｑ','e6': 'ｒ','e7': 'ｓ','e8': 'ｔ','e9': 'ｕ','ea': 'ｖ','eb': 'ｗ','ec': 'ｘ','ed': 'ｙ','ee': 'ｚ',
   // 'ef': '(選択カーソル)',// 'f0': '：',// 'f1': 'Ä',// 'f2': 'Ö',// 'f3': 'Ü',// 'f4': 'ä',// 'f5': 'ö',// 'f6': 'ü'
