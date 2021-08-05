@@ -335,7 +335,7 @@ function decimal2hex(decimal){
   return "0x" + ("0000000" + Number(decimal).toString(16)).slice(-8);
 }
 // Assign Auxiliary data when seed length is 4.
-function useAuxiliary_4(query, max_iter=30){
+function useAuxiliary_4(query, max_iter=100){
   if (typeof(query) != "number"){
     query = query.toString();
     if (query.length==4){
