@@ -25,8 +25,8 @@
     <link href="https://iwasakishuto.github.io/Front-End/tips/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Shuto's Front-End Atom Feed" />
     <link href="https://iwasakishuto.github.io/Front-End/tips/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Shuto's Front-End RSS Feed" />
     <!-- Added by Shuto Iwasaki. -->
-    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
+    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/contents-icon/Front-End.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/contents-icon/Front-End.png" type="image/png" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
@@ -82,7 +82,7 @@
               <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.30 Pose-Estimation で正解の動きとの誤差を知る。">JS.30 Pose-Estimation で正解の動きとの誤差を知る。</a><ul><li><a class="toc-href" href="#pose-estimation" title="Pose-Estimation">Pose-Estimation</a></li></ul></li></ul></div>
             </div>
           </aside>
-    
+
         <div class="entry-content">
           <footer class="post-info">
             <span>2021-03-10(Wed)</span>
@@ -155,7 +155,7 @@
   const imageScaleFactor = 0.50;
   const flipHorizontal = false;
   const outputStride = 16;
-  var isFacing = true; 
+  var isFacing = true;
   var minPoseConfidence = 0.1;
   var minPartConfidence = 0.1;
   var showMethod, minPoseConfidence, minPartConfidence;
@@ -163,7 +163,7 @@
   var color = "red"
   var boundingBoxColor = "green";
   var ans_poses = your_poses = [{
-    score: 0, 
+    score: 0,
     keypoints: [
       {score: 0, part: "nose",          position: {x:0,y:0}},
       {score: 0, part: "leftEye",       position: {x:0,y:0}},
@@ -202,8 +202,8 @@
     }).then(function(stream){
       your_video.addEventListener("loadedmetadata", function(){
         w = your_video.offsetWidth; h = your_video.offsetHeight;
-        your_canvas.setAttribute('width', w.toString()); 
-        your_canvas.setAttribute('height', h.toString()); 
+        your_canvas.setAttribute('width', w.toString());
+        your_canvas.setAttribute('height', h.toString());
         your_video_canvas_wrapper.style.height = h.toString()+"px";
       })
       your_video.srcObject = stream;
@@ -217,11 +217,11 @@
     answer_video.play();
     answer_video.addEventListener("timeupdate", function(){
       w = answer_video.offsetWidth; h = answer_video.offsetHeight;
-      answer_canvas.setAttribute('width', w.toString()); 
-      answer_canvas.setAttribute('height', h.toString()); 
+      answer_canvas.setAttribute('width', w.toString());
+      answer_canvas.setAttribute('height', h.toString());
       answer_video_canvas_wrapper.style.height = h.toString()+"px";
       answer_video_controls.style.marginTop = (h+15).toString()+"px";
-      answer_canvas.getContext("2d").drawImage(answer_video, 0, 0, w, h); 
+      answer_canvas.getContext("2d").drawImage(answer_video, 0, 0, w, h);
       video_curt_position.textContent = answer_video.currentTime.toFixed(1);
     }, true);
   }
@@ -268,7 +268,7 @@
   * limitations under the License.
   * =============================================================================
   */
-  /** 
+  /**
   * Calculate Angles of 3 points.
   * @param {Number} x1, y1 Apex.
   * @param {string} x2, y2, x3, y3 Other Points.
@@ -283,10 +283,10 @@
     points = [
       [5,7,9],[7,5,11],[6,5,11],[5,11,12],[12,11,13],[11,13,15],[6,8,10],[8,6,12],[5,6,12],[6,12,11],[11,12,14],[12,14,16]
     ]
-    var max_score = -1; 
+    var max_score = -1;
     var max_idx = 0;
     points.forEach(function(point, idx){
-      if ((ans_keypoints[point[0]].score >= minPoseConfidence) 
+      if ((ans_keypoints[point[0]].score >= minPoseConfidence)
       && (ans_keypoints[point[1]].score >= minPoseConfidence)
       && (ans_keypoints[point[2]].score >= minPoseConfidence)
       && (your_keypoints[point[0]].score >= minPoseConfidence)
@@ -315,7 +315,7 @@
     })
     if (max_idx >=0){
       drawSegment(
-        toTuple(your_keypoints[points[max_idx][0]].position), 
+        toTuple(your_keypoints[points[max_idx][0]].position),
         toTuple(your_keypoints[points[max_idx][1]].position),
         "blue",
         1,
@@ -323,7 +323,7 @@
         your_context,
       )
       drawSegment(
-        toTuple(your_keypoints[points[max_idx][1]].position), 
+        toTuple(your_keypoints[points[max_idx][1]].position),
         toTuple(your_keypoints[points[max_idx][2]].position),
         "blue",
         1,
@@ -506,19 +506,19 @@
 </style>
 
         </div><!-- /.entry-content -->
-    
+
       </article>
     </section>
     <section id="extras" class="body">
       <div class="blogroll">
         <h5>other contents</h5>
         <ul>
-          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Home.png">Home</a></li>
-          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">Blog</a></li>
-          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">University</a></li>
-          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">Kerasy</a></li>
-          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">Python-Charmers</a></li>
-          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">Translation-Gummy</a></li>
+          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Home.png">Home</a></li>
+          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Blog.png">Blog</a></li>
+          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/University.png">University</a></li>
+          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Kerasy.png">Kerasy</a></li>
+          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Python-Charmers.png">Python-Charmers</a></li>
+          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Translation-Gummy.png">Translation-Gummy</a></li>
         </ul>
       </div><!-- /.blogroll -->
       <div class="social">

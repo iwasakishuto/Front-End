@@ -25,8 +25,8 @@
     <link href="https://iwasakishuto.github.io/Front-End/tips/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Shuto's Front-End Atom Feed" />
     <link href="https://iwasakishuto.github.io/Front-End/tips/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Shuto's Front-End RSS Feed" />
     <!-- Added by Shuto Iwasaki. -->
-    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
+    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/contents-icon/Front-End.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/contents-icon/Front-End.png" type="image/png" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
@@ -82,7 +82,7 @@
               <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.37 GASでLINE Botからの送信を自動化する">JS.37 GASでLINE Botからの送信を自動化する</a><ul><li><a class="toc-href" href="#bian-shu-ding-yi" title="変数定義">変数定義</a></li><li><a class="toc-href" href="#send_all_table_messages" title="send_all_table_messages">send_all_table_messages</a></li><li><a class="toc-href" href="#user" title="User">User</a></li><li><a class="toc-href" href="#postslack" title="postSlack">postSlack</a></li><li><a class="toc-href" href="#now_str" title="now_str">now_str</a></li><li><a class="toc-href" href="#getcolname" title="getColName">getColName</a></li></ul></li></ul></div>
             </div>
           </aside>
-    
+
         <div class="entry-content">
           <footer class="post-info">
             <span>2021-06-22(Tue)</span>
@@ -231,7 +231,7 @@
       <span class="p">};</span>
       <span class="k">try</span><span class="p">{</span>
         <span class="nx">UrlFetchApp</span><span class="p">.</span><span class="nx">fetch</span><span class="p">(</span><span class="s2">"https://api.line.me/v2/bot/message/push"</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">report_result</span><span class="p">(</span><span class="s2">"OK"</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>     
+        <span class="k">this</span><span class="p">.</span><span class="nx">report_result</span><span class="p">(</span><span class="s2">"OK"</span><span class="p">,</span> <span class="kc">false</span><span class="p">);</span>
       <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">ex</span><span class="p">){</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">report_result</span><span class="p">(</span><span class="nx">ex</span><span class="p">.</span><span class="nx">message</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
       <span class="p">}</span>
@@ -249,9 +249,9 @@
 <span class="cm"> * @param {string} username Bot's user name.</span>
 <span class="cm"> * @param {string} icon_url Image url for Bot Icon</span>
 <span class="cm">*/</span>
-<span class="kd">function</span> <span class="nx">postSlack</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> 
-                   <span class="nx">username</span><span class="o">=</span><span class="s2">"USERNAME"</span><span class="p">,</span> 
-                   <span class="nx">channel</span><span class="o">=</span><span class="s2">"#CHANNEL_NAME"</span><span class="p">,</span> 
+<span class="kd">function</span> <span class="nx">postSlack</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span>
+                   <span class="nx">username</span><span class="o">=</span><span class="s2">"USERNAME"</span><span class="p">,</span>
+                   <span class="nx">channel</span><span class="o">=</span><span class="s2">"#CHANNEL_NAME"</span><span class="p">,</span>
                    <span class="nx">icon_url</span><span class="o">=</span><span class="s2">"https://iwasakishuto.github.io/images/profile/twitter.png"</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">payload</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">"text"</span>     <span class="o">:</span> <span class="nx">text</span><span class="p">,</span>
@@ -281,7 +281,7 @@
   <span class="kd">function</span> <span class="nx">padLeft</span><span class="p">(</span><span class="nx">no</span><span class="p">){</span>
     <span class="nx">no</span> <span class="o">=</span> <span class="nb">String</span><span class="p">(</span><span class="nx">no</span><span class="p">);</span>
     <span class="kd">let</span> <span class="nx">len</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">-</span><span class="nx">no</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
-    <span class="k">return</span> <span class="nx">len</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">?</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">len</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s1">'0'</span><span class="p">)</span><span class="o">+</span><span class="nx">no</span> <span class="o">:</span> <span class="nx">no</span><span class="p">;</span>  
+    <span class="k">return</span> <span class="nx">len</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="o">?</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="nx">len</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s1">'0'</span><span class="p">)</span><span class="o">+</span><span class="nx">no</span> <span class="o">:</span> <span class="nx">no</span><span class="p">;</span>
   <span class="p">}</span>
   <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span>
   <span class="k">return</span> <span class="sb">`</span><span class="si">${</span><span class="nx">d</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">()</span><span class="si">}</span><span class="sb">/</span><span class="si">${</span><span class="nx">padLeft</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="si">}</span><span class="sb">/</span><span class="si">${</span><span class="nx">padLeft</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getDate</span><span class="p">())</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">padLeft</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getHours</span><span class="p">())</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">padLeft</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getMinutes</span><span class="p">())</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">padLeft</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">getSeconds</span><span class="p">())</span><span class="si">}</span><span class="sb">`</span>
@@ -303,19 +303,19 @@
 </code></pre></div>
 
         </div><!-- /.entry-content -->
-    
+
       </article>
     </section>
     <section id="extras" class="body">
       <div class="blogroll">
         <h5>other contents</h5>
         <ul>
-          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Home.png">Home</a></li>
-          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">Blog</a></li>
-          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">University</a></li>
-          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">Kerasy</a></li>
-          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">Python-Charmers</a></li>
-          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">Translation-Gummy</a></li>
+          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Home.png">Home</a></li>
+          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Blog.png">Blog</a></li>
+          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/University.png">University</a></li>
+          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Kerasy.png">Kerasy</a></li>
+          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Python-Charmers.png">Python-Charmers</a></li>
+          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Translation-Gummy.png">Translation-Gummy</a></li>
         </ul>
       </div><!-- /.blogroll -->
       <div class="social">

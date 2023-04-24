@@ -25,8 +25,8 @@
     <link href="https://iwasakishuto.github.io/Front-End/tips/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Shuto's Front-End Atom Feed" />
     <link href="https://iwasakishuto.github.io/Front-End/tips/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Shuto's Front-End RSS Feed" />
     <!-- Added by Shuto Iwasaki. -->
-    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
+    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/contents-icon/Front-End.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/contents-icon/Front-End.png" type="image/png" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
@@ -82,7 +82,7 @@
               <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.35 タイピング風動画を楽に作成する">JS.35 タイピング風動画を楽に作成する</a><ul><li><a class="toc-href" href="#zuo-cheng-shitamono" title="作成したもの">作成したもの</a></li></ul></li></ul></div>
             </div>
           </aside>
-    
+
         <div class="entry-content">
           <footer class="post-info">
             <span>2021-06-07(Mon)</span>
@@ -183,7 +183,7 @@
   function now_str(){
     function padLeft(no){
       let len = (2-String(no).length)+1;
-      return len > 0? new Array(len).join('0')+no : no;  
+      return len > 0? new Array(len).join('0')+no : no;
     }
     var d = new Date
     return `${d.getFullYear()}/${padLeft(d.getMonth()+1)}/${padLeft(d.getDate())} ${padLeft(d.getHours())}:${padLeft(d.getMinutes())}:${padLeft(d.getSeconds())}`
@@ -211,7 +211,7 @@
         demoBtn.focus()
       }else{
         typingTextarea.focus();
-      } 
+      }
     }
   })
   /* --- Utility Functions ---> */
@@ -262,7 +262,7 @@
     cursor: pointer;
     font-family: monaco, monospace;
   }
-  .btn--click:hover, .btn--click:hover:before, 
+  .btn--click:hover, .btn--click:hover:before,
   .btn--click:focus, .btn--click:focus:before,
   .btn--click:focus-visible, .btn--click:focus-visible:before {
     color: #ffd43b;
@@ -303,19 +303,19 @@
 </style>
 
         </div><!-- /.entry-content -->
-    
+
       </article>
     </section>
     <section id="extras" class="body">
       <div class="blogroll">
         <h5>other contents</h5>
         <ul>
-          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Home.png">Home</a></li>
-          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">Blog</a></li>
-          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">University</a></li>
-          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">Kerasy</a></li>
-          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">Python-Charmers</a></li>
-          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">Translation-Gummy</a></li>
+          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Home.png">Home</a></li>
+          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Blog.png">Blog</a></li>
+          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/University.png">University</a></li>
+          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Kerasy.png">Kerasy</a></li>
+          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Python-Charmers.png">Python-Charmers</a></li>
+          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Translation-Gummy.png">Translation-Gummy</a></li>
         </ul>
       </div><!-- /.blogroll -->
       <div class="social">

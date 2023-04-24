@@ -25,8 +25,8 @@
     <link href="https://iwasakishuto.github.io/Front-End/tips/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Shuto's Front-End Atom Feed" />
     <link href="https://iwasakishuto.github.io/Front-End/tips/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Shuto's Front-End RSS Feed" />
     <!-- Added by Shuto Iwasaki. -->
-    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
+    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/contents-icon/Front-End.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/contents-icon/Front-End.png" type="image/png" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
@@ -82,7 +82,7 @@
               <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.20 Formの登録内容を可視化する。">JS.20 Formの登録内容を可視化する。</a><ul><li><a class="toc-href" href="#registration" title="Registration">Registration</a></li><li><a class="toc-href" href="#registered-attributes" title="Registered Attributes">Registered Attributes</a></li><li><a class="toc-href" href="#kodo" title="コード">コード</a><ul><li><a class="toc-href" href="#html" title="html">html</a></li><li><a class="toc-href" href="#js" title="js">js</a></li></ul></li></ul></li></ul></div>
             </div>
           </aside>
-    
+
         <div class="entry-content">
           <footer class="post-info">
             <span>2020-11-08(Sun)</span>
@@ -176,7 +176,7 @@
   .registration-col th, .registration-col td {
     text-align: center;
     vertical-align: middle;
-  } 
+  }
   form#registration-attrs-form table input {
     padding: 8px;
     border-radius: 6px;
@@ -245,7 +245,7 @@
             }
           }
         });
-        anno_dataset[attr_name] = attrs;      
+        anno_dataset[attr_name] = attrs;
       }
     }else{
       msg += "[×] Please enter 'Attribute name'.\n";
@@ -282,7 +282,7 @@
         }
         row += "".concat("<td>", attrs[key], "</td>");
         row += "".concat("<td>", key, "</td>");
-        row += "</td>"      
+        row += "</td>"
       }
       registered_tbody.append(row);
     }
@@ -294,8 +294,8 @@
     var row = ""
     for (let attr_name in anno_dataset){
       var label = sample_img_annotation[attr_name];
-      var label = typeof(label) == "undefined" ? "" : label    
-      row += "".concat("<tr>", "<td>", attr_name, "</td>", "<td>", label, "</td>");   
+      var label = typeof(label) == "undefined" ? "" : label
+      row += "".concat("<tr>", "<td>", attr_name, "</td>", "<td>", label, "</td>");
     }
     annotation_tbody.append(row);
   }
@@ -435,7 +435,7 @@
           <span class="p">}</span>
         <span class="p">}</span>
       <span class="p">});</span>
-      <span class="nx">anno_dataset</span><span class="p">[</span><span class="nx">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">attrs</span><span class="p">;</span>      
+      <span class="nx">anno_dataset</span><span class="p">[</span><span class="nx">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">attrs</span><span class="p">;</span>
     <span class="p">}</span>
   <span class="p">}</span><span class="k">else</span><span class="p">{</span>
     <span class="nx">msg</span> <span class="o">+=</span> <span class="s2">"[&times;] Please enter 'Attribute name'.\n"</span><span class="p">;</span>
@@ -472,7 +472,7 @@
       <span class="p">}</span>
       <span class="nx">row</span> <span class="o">+=</span> <span class="s2">""</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">"&lt;td&gt;"</span><span class="p">,</span> <span class="nx">attrs</span><span class="p">[</span><span class="nx">key</span><span class="p">],</span> <span class="s2">"&lt;/td&gt;"</span><span class="p">);</span>
       <span class="nx">row</span> <span class="o">+=</span> <span class="s2">""</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">"&lt;td&gt;"</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="s2">"&lt;/td&gt;"</span><span class="p">);</span>
-      <span class="nx">row</span> <span class="o">+=</span> <span class="s2">"&lt;/td&gt;"</span>      
+      <span class="nx">row</span> <span class="o">+=</span> <span class="s2">"&lt;/td&gt;"</span>
     <span class="p">}</span>
     <span class="nx">registered_tbody</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
   <span class="p">}</span>
@@ -484,8 +484,8 @@
   <span class="kd">var</span> <span class="nx">row</span> <span class="o">=</span> <span class="s2">""</span>
   <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">attr_name</span> <span class="k">in</span> <span class="nx">anno_dataset</span><span class="p">){</span>
     <span class="kd">var</span> <span class="nx">label</span> <span class="o">=</span> <span class="nx">sample_img_annotation</span><span class="p">[</span><span class="nx">attr_name</span><span class="p">];</span>
-    <span class="kd">var</span> <span class="nx">label</span> <span class="o">=</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">label</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"undefined"</span> <span class="o">?</span> <span class="s2">""</span> <span class="o">:</span> <span class="nx">label</span>    
-    <span class="nx">row</span> <span class="o">+=</span> <span class="s2">""</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">"&lt;tr&gt;"</span><span class="p">,</span> <span class="s2">"&lt;td&gt;"</span><span class="p">,</span> <span class="nx">attr_name</span><span class="p">,</span> <span class="s2">"&lt;/td&gt;"</span><span class="p">,</span> <span class="s2">"&lt;td&gt;"</span><span class="p">,</span> <span class="nx">label</span><span class="p">,</span> <span class="s2">"&lt;/td&gt;"</span><span class="p">);</span>   
+    <span class="kd">var</span> <span class="nx">label</span> <span class="o">=</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">label</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"undefined"</span> <span class="o">?</span> <span class="s2">""</span> <span class="o">:</span> <span class="nx">label</span>
+    <span class="nx">row</span> <span class="o">+=</span> <span class="s2">""</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="s2">"&lt;tr&gt;"</span><span class="p">,</span> <span class="s2">"&lt;td&gt;"</span><span class="p">,</span> <span class="nx">attr_name</span><span class="p">,</span> <span class="s2">"&lt;/td&gt;"</span><span class="p">,</span> <span class="s2">"&lt;td&gt;"</span><span class="p">,</span> <span class="nx">label</span><span class="p">,</span> <span class="s2">"&lt;/td&gt;"</span><span class="p">);</span>
   <span class="p">}</span>
   <span class="nx">annotation_tbody</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">row</span><span class="p">);</span>
 <span class="p">}</span>
@@ -500,19 +500,19 @@
 </code></pre></div>
 
         </div><!-- /.entry-content -->
-    
+
       </article>
     </section>
     <section id="extras" class="body">
       <div class="blogroll">
         <h5>other contents</h5>
         <ul>
-          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Home.png">Home</a></li>
-          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">Blog</a></li>
-          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">University</a></li>
-          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">Kerasy</a></li>
-          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">Python-Charmers</a></li>
-          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">Translation-Gummy</a></li>
+          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Home.png">Home</a></li>
+          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Blog.png">Blog</a></li>
+          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/University.png">University</a></li>
+          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Kerasy.png">Kerasy</a></li>
+          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Python-Charmers.png">Python-Charmers</a></li>
+          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Translation-Gummy.png">Translation-Gummy</a></li>
         </ul>
       </div><!-- /.blogroll -->
       <div class="social">

@@ -25,8 +25,8 @@
     <link href="https://iwasakishuto.github.io/Front-End/tips/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Shuto's Front-End Atom Feed" />
     <link href="https://iwasakishuto.github.io/Front-End/tips/feeds/all.rss.xml" type="application/rss+xml" rel="alternate" title="Shuto's Front-End RSS Feed" />
     <!-- Added by Shuto Iwasaki. -->
-    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/apple-touch-icon/Front-End.png" type="image/png" />
+    <link rel="shortcut icon" href="https://iwasakishuto.github.io/images/contents-icon/Front-End.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="https://iwasakishuto.github.io/images/contents-icon/Front-End.png" type="image/png" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://iwasakishuto.github.io/css/custom.css" media="screen">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
@@ -82,7 +82,7 @@
               <div id="toc"><ul><li><a class="toc-href" href="#" title="JS.33 ボイスチェンジャーモデルの訓練データ作成ツールを作成する">JS.33 ボイスチェンジャーモデルの訓練データ作成ツールを作成する</a><ul><li><a class="toc-href" href="#shi-ifang" title="使い方">使い方</a></li></ul></li></ul></div>
             </div>
           </aside>
-    
+
         <div class="entry-content">
           <footer class="post-info">
             <span>2021-05-01(Sat)</span>
@@ -189,12 +189,12 @@
   var startTime        = null;
   var prev_pos_record  = pos_record = 0;
   const InitializeForRecording = function(){
-    audioData       = []; 
-    audioSampleRate = null; 
-    audioContext    = null; 
+    audioData       = [];
+    audioSampleRate = null;
+    audioContext    = null;
     startTime       = null;
     prev_pos_record = 0
-    pos_record      = 0; 
+    pos_record      = 0;
     recordedCtx.clearRect(0, 0, canvasWidth, canvasHeight);
   }
 
@@ -224,11 +224,11 @@
     dataCtx.clearRect(0, 0, canvasWidth, canvasHeight);
   }
 
-  /** 
+  /**
   * Generate Trainer Table.
-  * @param {DataView} view 
-  * @param {number} offset 
-  * @param {string} string 
+  * @param {DataView} view
+  * @param {number} offset
+  * @param {string} string
   */
   function writeString(view, offset, string) {
     [...string].forEach(function(char, i){
@@ -244,9 +244,9 @@
     return text
   }
 
-  /** 
+  /**
   * Convert data from 8bit to 16bit
-  * @param {DataView} output 
+  * @param {DataView} output
   * @param {number} offset headerSize.
   * @param {Float32Array} input input data.
   */
@@ -270,11 +270,11 @@
     return output
   }
 
-  /** 
+  /**
   * encode to WAV file.
   * @param {Float32Array} samples
-  * @param {number} sampleRate 
-  * @return {DataView} 
+  * @param {number} sampleRate
+  * @return {DataView}
   */
   function encodeToWAV(samples, sampleRate) {
     // Data size doubles (∵ 8bit -> 16bit)
@@ -325,7 +325,7 @@
     return samples
   }
 
-  /** 
+  /**
   * Merge the Float32Array arrays into one Float32Array.
   * @param {Array} audioData Audio data arrays stored in bufferSize units.
   * @return {Float32Array} Merged Audio Data.
@@ -339,8 +339,8 @@
     return totalBuffer;
   };
 
-  /** 
-  * Save recorded data in an array in bufferSize units. (∵ Don't know the total size of it.) 
+  /**
+  * Save recorded data in an array in bufferSize units. (∵ Don't know the total size of it.)
   * @ref <https://developer.mozilla.org/ja/docs/Web/API/AudioContext/createScriptProcessor>
   * @param {Float32Array} input
   * @param {number} buf_size Buffer Size
@@ -387,12 +387,12 @@
     })
   }
 
-  /** 
+  /**
   * Create a "ScriptProcessor" that stores audio data in "audioData"
   * @ref <https://developer.mozilla.org/ja/docs/Web/API/AudioContext/createScriptProcessor>
-  * @param {Array} audioData 
-  * @param {MediaStream} stream 
-  * @return {AudioWorklet} 
+  * @param {Array} audioData
+  * @param {MediaStream} stream
+  * @return {AudioWorklet}
   */
   function copyAudioData(audioData, stream) {
     let audioContext = new AudioContext();
@@ -454,8 +454,8 @@
   const moveAudio = async function(is_next=true){
     if (num_total_files>0){
       await endRecording();
-      curt_fileIdx = is_next ? 
-        Math.min(curt_fileIdx+1, num_total_files-1) : 
+      curt_fileIdx = is_next ?
+        Math.min(curt_fileIdx+1, num_total_files-1) :
         Math.max(curt_fileIdx-1, 0);
       readFile();
     }
@@ -514,7 +514,7 @@
     to_play_class_names.forEach(function(e){audioPlayPauseBtn.classList.add(e)})
     to_pause_class_names.forEach(function(e){audioPlayPauseBtn.classList.remove(e)})
     audioPlayPauseBtn.innerHTML = "Pause Audio"
-  } 
+  }
 
   const audioPlayPause = function(){
     if (audioPlayPauseBtn.classList.contains(to_play_class_names[0])){
@@ -549,7 +549,7 @@
       back2previousAudio();
     }else if (evt.keyCode===32){ // Space
       audioPlayPause();
-    } 
+    }
   }
 
   window.onload = function(){
@@ -580,7 +580,7 @@
     });
     audioPlayPauseBtn.addEventListener("click", audioPlayPause)
         addEventListener("keydown", keydownfunc);
-  } 
+  }
 </script>
 <style>
   ul {
@@ -809,19 +809,19 @@
 </style>
 
         </div><!-- /.entry-content -->
-    
+
       </article>
     </section>
     <section id="extras" class="body">
       <div class="blogroll">
         <h5>other contents</h5>
         <ul>
-          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Home.png">Home</a></li>
-          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Blog.png">Blog</a></li>
-          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/University.png">University</a></li>
-          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Kerasy.png">Kerasy</a></li>
-          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Python-Charmers.png">Python-Charmers</a></li>
-          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/apple-touch-icon/Translation-Gummy.png">Translation-Gummy</a></li>
+          <li><a href="https://iwasakishuto.github.io"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Home.png">Home</a></li>
+          <li><a href="https://iwasakishuto.github.io/Blog/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Blog.png">Blog</a></li>
+          <li><a href="https://iwasakishuto.github.io/University/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/University.png">University</a></li>
+          <li><a href="https://iwasakishuto.github.io/Kerasy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Kerasy.png">Kerasy</a></li>
+          <li><a href="https://iwasakishuto.github.io/Python-Charmers/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Python-Charmers.png">Python-Charmers</a></li>
+          <li><a href="https://iwasakishuto.github.io/Translation-Gummy/index.html"><img class="social-img" src="https://iwasakishuto.github.io/images/contents-icon/Translation-Gummy.png">Translation-Gummy</a></li>
         </ul>
       </div><!-- /.blogroll -->
       <div class="social">
